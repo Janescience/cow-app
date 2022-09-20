@@ -46,7 +46,7 @@ const menuClick = () => {
         />
       </NavBarItem>
       <div class="flex-1 px-3">
-        <span>ระบบจัดการบ้านแชร์</span>
+        <span>ระบบจัดการฟาร์มโคนม</span>
       </div>
     </div>
     <div>

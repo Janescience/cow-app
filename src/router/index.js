@@ -17,7 +17,7 @@ const routes = [
     // Document title tag
     // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
     meta: {
-      title: 'ภาพรวมบ้านแชร์',
+      title: 'ภาพรวมฟาร์ม',
       loginRequired : true
     },
     path: '/dashboard',
@@ -26,66 +26,12 @@ const routes = [
   },
   {
     meta: {
-      title: 'ยอดส่งวันนี้',
+      title: 'การแจ้งเตือน',
       loginRequired : true
     },
-    path: '/today-sends',
-    name: 'today-sends',
-    component: () => import('@/views/todays/SendTodayView.vue')
-  },
-  {
-    meta: {
-      title: 'ยอดค้างจ่าย',
-      loginRequired : true
-    },
-    path: '/debts',
-    name: 'debts',
-    component: () => import('@/views/DebtsView.vue')
-  },
-  {
-    meta: {
-      title: 'รายละเอียดยอดค้างจ่าย',
-      loginRequired : true
-    },
-    path: '/debt/detail/:id',
-    name: 'debt-detail',
-    component: () => import('@/views/DebtDetailView.vue')
-  },
-  {
-    meta: {
-      title: 'ลูกแชร์',
-      loginRequired : true
-    },
-    path: '/members',
-    name: 'member',
-    component: () => import('@/views/MemberView.vue')
-  },
-  {
-    meta: {
-      title: 'วงแชร์',
-      loginRequired : true
-    },
-    path: '/groups',
-    name: 'group',
-    component: () => import('@/views/GroupView.vue')
-  },
-  {
-    meta: {
-      title: 'จัดการวงแชร์',
-      loginRequired : true
-    },
-    path: '/group-manage/:id',
-    name: 'group-manage',
-    component: () => import('@/views/GroupManageView.vue')
-  },
-  {
-    meta: {
-      title: 'รายละเอียดวงแชร์',
-      loginRequired : true
-    },
-    path: '/group-detail/:id',
-    name: 'group-detail',
-    component: () => import('@/views/GroupDetailView.vue')
+    path: '/setting/notification',
+    name: 'notification',
+    component: () => import('@/views/setting/NotificationView.vue')
   },
   {
     meta: {

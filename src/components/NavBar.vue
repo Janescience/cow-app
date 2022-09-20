@@ -37,7 +37,7 @@ const mainStore = useMainStore()
 
 const router = useRouter()
 
-const nameHome = computed(() => mainStore.currentUser.userInfo.nameHome)
+const nameHome = computed(() => mainStore.currentUser.name)
 
 const styleStore = useStyleStore()
 
@@ -96,12 +96,12 @@ const logout = () => {
           size="24"
         />
       </NavBarItem>
-      <NavBarItem>
+      <!-- <NavBarItem>
         <BaseIcon
           path="calendarOutline"
         />
         {{ moment(new Date()).format('DD/MM/YYYY') }}
-      </NavBarItem>
+      </NavBarItem> -->
     </div>
     <div class="flex-none items-stretch flex h-14 lg:hidden">
       <NavBarItem @click.prevent="menuNavBarToggle">
@@ -180,26 +180,20 @@ const logout = () => {
             <NavBarItem to="/profile">
               <NavBarItemLabel
                 icon="account"
-                label="My Profile"
+                label="ข้อมูลส่วนตัว"
               />
             </NavBarItem>
             <NavBarItem>
               <NavBarItemLabel
                 icon="cogOutline"
-                label="Settings"
-              />
-            </NavBarItem>
-            <NavBarItem>
-              <NavBarItemLabel
-                icon="email"
-                label="Messages"
+                label="ตั้งค่า"
               />
             </NavBarItem>
             <BaseDivider nav-bar />
             <NavBarItem>
               <NavBarItemLabel
                 icon="logout"
-                label="Log Out"
+                label="ออกจากระบบ"
               />
             </NavBarItem>
           </template>

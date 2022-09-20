@@ -19,7 +19,7 @@ import FooterBar from '@/components/FooterBar.vue'
 
 const form = reactive({
   login: 'admin',
-  pass: 'admin',
+  pass: 'P@ssw0rd',
   remember: ['remember']
 })
 
@@ -49,7 +49,7 @@ const submit = () => {
           <UserAvatar avatar="src/assets/image/cow-logo.jpg" class="w-28" />
         </BaseLevel>
         <SectionTitle>
-          ระบบจัดการฟาร์มวัวนม
+          ระบบจัดการฟาร์มโคนม
         </SectionTitle>
         <FormField
           label="ชื่อผู้ใช้"
