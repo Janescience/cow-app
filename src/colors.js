@@ -1,6 +1,6 @@
 const sectionBgBase = 'bg-gradient-to-tr'
-export const sectionBgLogin = `${sectionBgBase} from-purple-400 via-pink-500 to-red-500`
-export const sectionBgLoginDark = `${sectionBgBase} from-purple-900 via-pink-900 to-red-900`
+export const sectionBgLogin = `${sectionBgBase}   from-gray-700 via-gray-900 to-black`
+export const sectionBgLoginDark = `${sectionBgBase} from-cyan-300 via-indigo-300 to-green-300`
 export const sectionBgError = `${sectionBgBase} from-pink-400 via-red-500 to-yellow-500`
 export const sectionBgErrorDark = `${sectionBgBase} from-pink-900 via-red-900 to-yellow-900`
 

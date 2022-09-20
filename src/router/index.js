@@ -132,7 +132,7 @@ const routes = [
   },
   {
     meta: {
-      title: 'Login'
+      title: 'เข้าสู่ระบบ'
     },
     path: '/login',
     name: 'login',

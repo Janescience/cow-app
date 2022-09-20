@@ -12,6 +12,10 @@ import BaseDivider from '@/components/BaseDivider.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
 import LayoutGuest from '@/layouts/LayoutGuest.vue'
+import SectionTitle from '@/components/SectionTitle.vue'
+import UserAvatar from '@/components/UserAvatar.vue'
+import BaseLevel from '@/components/BaseLevel.vue'
+import FooterBar from '@/components/FooterBar.vue'
 
 const form = reactive({
   login: 'admin',
@@ -37,10 +41,16 @@ const submit = () => {
       <CardBox
         :class="cardClass"
         form
-        title="ยินดีต้อนรับ"
+        title=""
         header-icon=""
         @submit.prevent="submit"
       >
+        <BaseLevel type="justify-center">
+          <UserAvatar avatar="src/assets/image/cow-logo.jpg" class="w-28" />
+        </BaseLevel>
+        <SectionTitle>
+          ระบบจัดการฟาร์มวัวนม
+        </SectionTitle>
         <FormField
           label="ชื่อผู้ใช้"
           help="กรุณากรอกชื่อผู้ใช้"
@@ -90,6 +100,8 @@ const submit = () => {
           /> -->
         </BaseButtons>
       </CardBox>
+      <FooterBar/>
+
     </SectionFullScreen>
   </LayoutGuest>
 </template>

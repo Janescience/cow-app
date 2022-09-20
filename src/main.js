@@ -44,7 +44,6 @@ const styleStore = useStyleStore(pinia)
 const layoutStore = useLayoutStore(pinia)
 
 
-
 /* App style */
 styleStore.setStyle(localStorage[styleKey] ?? 'basic')
 
@@ -54,7 +53,7 @@ if ((!localStorage[darkModeKey] && window.matchMedia('(prefers-color-scheme: dar
 }
 
 /* Default title tag */
-const defaultDocumentTitle = 'Thaosharehouse'
+const defaultDocumentTitle = 'Dairy Farm'
 
 /* Collapse mobile aside menu on route change */
 router.beforeEach(() => {

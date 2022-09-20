@@ -13,7 +13,7 @@ const props = defineProps({
   api: {
     type: String,
     default: 'avataaars'
-  }
+  },
 })
 
 const avatar = computed(
@@ -21,6 +21,7 @@ const avatar = computed(
 )
 
 const username = computed(() => props.username)
+
 </script>
 
 <template>
@@ -28,7 +29,7 @@ const username = computed(() => props.username)
     <img
       :src="avatar"
       :alt="username"
-      class="rounded-full block h-auto w-full max-w-full bg-gray-100 dark:bg-gray-800"
+      class="rounded-full block h-auto shadow w-full max-w-full bg-gray-100 dark:bg-gray-800"
     >
   </div>
 </template>
