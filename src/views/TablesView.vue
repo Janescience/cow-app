@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { mdiMonitorCellphone, mdiAccountMultiple, mdiTableBorder, mdiTableOff } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
-import TableGroupsToday from '@/components/TableGroupsToday.vue'
 import CardBox from '@/components/CardBox.vue'
 import SectionTitleBar from '@/components/SectionTitleBar.vue'
 import SectionHeroBar from '@/components/SectionHeroBar.vue'
@@ -47,12 +46,6 @@ const titleStack = ref(['Admin', 'Tables'])
         <b>Tightly wrapped</b> &mdash; table header becomes card header
       </NotificationBar>
 
-      <CardBox
-        class="mb-6"
-        has-table
-      >
-        <TableGroupsToday checkable />
-      </CardBox>
 
       <SectionTitleBarSub
         icon="tableOff"
