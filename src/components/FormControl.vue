@@ -2,6 +2,8 @@
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useMainStore } from '@/stores/main'
 import FormControlIcon from '@/components/FormControlIcon.vue'
+import datepicker from 'vue3-datepicker'
+
 
 const props = defineProps({
   name: {
@@ -139,6 +141,15 @@ if (props.ctrlKFocus) {
     </select>
     <textarea
       v-else-if="computedType === 'textarea'"
+      :id="id"
+      v-model="computedValue"
+      :class="inputElClass"
+      :name="name"
+      :placeholder="placeholder"
+      :required="required"
+    />
+    <datepicker
+      v-else-if="computedType === 'date'"
       :id="id"
       v-model="computedValue"
       :class="inputElClass"

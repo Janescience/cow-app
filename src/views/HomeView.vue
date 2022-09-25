@@ -5,7 +5,7 @@
         icon="chartLine"
         title="ภาพรวมฟาร์ม"
       />
-      
+       <FormControl type="date" v-model="date" placeholder="เลือกวันที่" icon="calendar"/>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
@@ -24,15 +24,16 @@ import CardBoxTransaction from '@/components/CardBoxTransaction.vue'
 import CardBoxClient from '@/components/CardBoxClient.vue'
 import SectionTitleBarSub from '@/components/SectionTitleBarSub.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
-
 import DashboardService from '@/services/dashboard'
+import FormControl from '@/components/FormControl.vue'
 
 export default {
   data(){
     return {
       chartData : null,
       chartColors : {primary: '#00D1B2',danger: '#FF3860'},
-      dashboard : null
+      dashboard : null,
+      date : null
     }
   },
   components : {
@@ -48,6 +49,7 @@ export default {
     CardBoxClient,
     SectionTitleBarSub,
     LayoutAuthenticated,
+    FormControl
   },
   created(){
     this.getDashboard()
