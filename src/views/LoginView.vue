@@ -16,6 +16,9 @@ import SectionTitle from '@/components/SectionTitle.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import FooterBar from '@/components/FooterBar.vue'
+import NotificationBar from '@/components/NotificationBar.vue'
+import NotificationBarInCard from '@/components/NotificationBarInCard.vue'
+import { ref } from '@vue/reactivity'
 
 const form = reactive({
   login: 'admin',
@@ -23,12 +26,26 @@ const form = reactive({
   remember: ['remember']
 })
 
+const loading = ref(false);
+
+const alert = reactive({
+  message: '',
+})
+
 const router = useRouter()
 
 const submit = () => {
-  AuthService.login({username:form.login,password:form.pass}).then(() => {
-    router.push("/dashboard")
-  })
+  loading.value = true;
+  alert.message = ''
+  AuthService.login({username:form.login,password:form.pass})
+    .then((res) => {
+      router.push("/dashboard")
+      loading.value = false;
+    })
+    .catch((error) => {
+      alert.message = error.response.data.message
+      loading.value = false;
+    })
 }
 </script>
 
@@ -45,12 +62,20 @@ const submit = () => {
         header-icon=""
         @submit.prevent="submit"
       >
+      
+
         <BaseLevel type="justify-center">
           <UserAvatar avatar="src/assets/image/cow-logo.jpg" class="w-28" />
         </BaseLevel>
+
         <SectionTitle>
           ระบบจัดการฟาร์มโคนม
         </SectionTitle>
+
+        <BaseLevel type="justify-center" class="text-sm">
+          ยังไม่มีบัญชี ? <a href="/register" class="ml-1 text-blue-500"><u>สร้างบัญชี</u></a>
+        </BaseLevel>
+        
         <FormField
           label="ชื่อผู้ใช้"
           help="กรุณากรอกชื่อผู้ใช้"
@@ -76,11 +101,23 @@ const submit = () => {
           />
         </FormField>
 
-        <FormCheckRadioPicker
-          v-model="form.remember"
-          name="remember"
-          :options="{ remember: 'จดจำการเข้าใช้งาน' }"
-        />
+        <BaseLevel>
+          <FormCheckRadioPicker
+            v-model="form.remember"
+            name="remember"
+            :options="{ remember: 'จดจำการเข้าใช้งาน' }"
+          />
+          <a href="/register" class="text-sm text-gray-600"><u>ลืมรหัสผ่าน ?</u></a>
+        </BaseLevel>
+        
+
+        <NotificationBar 
+          v-if="alert.message" 
+          color="danger" 
+          outline
+          icon="alertCircleOutline">
+            {{ alert.message }}
+        </NotificationBar>
 
         <BaseDivider />
 
@@ -91,15 +128,13 @@ const submit = () => {
             type="submit"
             color="info"
             label="เข้าสู่ระบบ"
+            :loading="loading"
+            :disabled="loading"
           />
-          <!-- <BaseButton
-            to="/dashboard"
-            color="info"
-            outline
-            label="Back"
-          /> -->
         </BaseButtons>
+
       </CardBox>
+
       <FooterBar/>
 
     </SectionFullScreen>

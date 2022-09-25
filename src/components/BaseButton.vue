@@ -40,7 +40,8 @@ const props = defineProps({
   small: Boolean,
   outline: Boolean,
   active: Boolean,
-  disabled: Boolean
+  disabled: Boolean,
+  loading: Boolean
 })
 
 const is = computed(() => {
@@ -105,6 +106,12 @@ const componentClass = computed(() => {
     :target="target"
     :disabled="disabled"
   >
+    <BaseIcon
+      v-if="loading"
+      path="dotsCircle"
+      size="18"
+      class="animate-spin"
+    />
     <BaseIcon
       v-if="icon"
       :path="icon"

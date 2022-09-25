@@ -37,31 +37,33 @@ const hasRightSlot = computed(() => slots.right)
   <div
     v-if="!isDismissed"
     :class="componentClass"
-    class="px-3 py-6 md:py-3 mx-6 md:mx-0 mb-6 last:mb-0 border rounded transition-colors duration-150"
+    class="px-3 py-1 mb-3 mt-3 last:mb-0 border rounded transition-colors duration-150"
   >
     <BaseLevel>
-      <div class="flex flex-col md:flex-row items-center">
+      <div class="flex flex-row items-center">
         <BaseIcon
           v-if="icon"
           :path="icon"
           w="w-10 md:w-5"
           h="h-10 md:h-5"
-          size="24"
+          size="20"
           class="md:mr-2"
         />
-        <span class="text-center md:text-left"><slot /></span>
+        <span class="text-center md:text-left text-sm"><slot /></span>
       </div>
-      <slot
-        v-if="hasRightSlot"
-        name="right"
-      />
-      <BaseButton
-        v-else
-        icon="close"
-        :outline="outline"
-        small
-        @click="dismiss"
-      />
+
+        <slot
+          v-if="hasRightSlot"
+          name="right"
+        />
+        <BaseButton
+          v-else
+          icon="close"
+          :outline="outline"
+          small
+          @click="dismiss"
+        />
+
     </BaseLevel>
   </div>
 </template>

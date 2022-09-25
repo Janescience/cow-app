@@ -36,9 +36,15 @@ module.exports = {
         fadeIn: {
           from: { opacity: 0 },
           to: { opacity: 1 }
+        },
+        spin: {
+          to:{
+            transform: 'rotate(-360deg)'
+          }
         }
       },
       animation: {
+        spinSlow : 'spin 5s linear infinite',
         fadeOut: 'fadeOut 250ms ease-in-out',
         fadeIn: 'fadeIn 250ms ease-in-out'
       }
