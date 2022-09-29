@@ -35,6 +35,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'จัดการวัว/โค',
+      loginRequired : true
+    },
+    path: '/manage/cow',
+    name: 'cow',
+    component: () => import('@/views/manage/CowView.vue')
+  },
+  {
+    meta: {
       title: 'Tables',
       loginRequired : true
     },

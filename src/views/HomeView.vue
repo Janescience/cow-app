@@ -5,7 +5,6 @@
         icon="chartLine"
         title="ภาพรวมฟาร์ม"
       />
-       <FormControl type="date" v-model="date" placeholder="เลือกวันที่" icon="calendar"/>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
@@ -33,7 +32,6 @@ export default {
       chartData : null,
       chartColors : {primary: '#00D1B2',danger: '#FF3860'},
       dashboard : null,
-      date : null
     }
   },
   components : {
