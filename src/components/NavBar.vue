@@ -37,7 +37,7 @@ const mainStore = useMainStore()
 
 const router = useRouter()
 
-const nameHome = computed(() => mainStore.currentUser.name)
+const nameHome = computed(() => mainStore.currentUser.farm.name)
 
 const styleStore = useStyleStore()
 
