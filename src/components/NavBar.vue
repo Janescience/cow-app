@@ -37,7 +37,8 @@ const mainStore = useMainStore()
 
 const router = useRouter()
 
-const nameHome = computed(() => mainStore.currentUser.farm.name)
+const farmName = computed(() => mainStore.currentUser.farm.name)
+const farmCode = computed(() => mainStore.currentUser.farm.code)
 
 const styleStore = useStyleStore()
 
@@ -74,8 +75,8 @@ const logout = () => {
 <template>
   <nav
     class="top-0 left-0 right-0 fixed flex bg-white h-14 border-b border-gray-100 z-30 w-screen
-    transition-position xl:pl-52 lg:w-auto lg:items-stretch dark:bg-gray-900 dark:border-gray-800"
-    :class="{'ml-52 lg:ml-0':isAsideMobileExpanded}"
+    transition-position xl:pl-64 lg:w-auto lg:items-stretch dark:bg-gray-900 dark:border-gray-800"
+    :class="{'ml-64 lg:ml-0':isAsideMobileExpanded}"
   >
     <div class="flex-1 items-stretch flex h-14">
       <NavBarItem
@@ -172,8 +173,8 @@ const logout = () => {
           </template>
         </NavBarMenu> -->
         <NavBarMenu has-divider>
-          <NavBarItemLabel :label="nameHome">
-            <UserAvatarCurrentUser class="w-6 h-6 mr-3 inline-flex" />
+          <NavBarItemLabel :label="farmName">
+            <UserAvatarCurrentUser :username="farmCode" class="w-6 h-6 mr-3 inline-flex" />
           </NavBarItemLabel>
 
           <template #dropdown>

@@ -71,7 +71,7 @@ const menuClick = event => {
       
       <BaseIcon
         v-if="hasDropdown"
-        :path="isDropdownActive ? mdiMinus : mdiPlus"
+        :path="isDropdownActive ? 'chevronDown' : 'chevronUp'"
         class="flex-none"
         :class="[ vSlot && vSlot.isExactActive ? styleStore.asideMenuItemActiveStyle : styleStore.asideMenuItemInactiveStyle ]"
         w="w-12"

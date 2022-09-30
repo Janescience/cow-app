@@ -3,12 +3,17 @@
     <SectionMain>
       <section class="px-6 sm:px-0 mb-6 flex items-center justify-between">
         <div class="flex items-center justify-start">
+          <BaseIcon
+            path="cow"
+            size="30"
+            class="mr-3"
+          />
           <h1 class="text-2xl">
-            วัว/โค
+            โค
           </h1>
         </div>
         <BaseButton
-          label="สร้างวัว/โค"
+          label="เพิ่มโค"
           color="success"
           @click="modalCreate = true"
         />
@@ -22,6 +27,7 @@
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionMain from '@/components/SectionMain.vue';
 import BaseButton from "@/components/BaseButton.vue";
+import BaseIcon from "@/components/BaseIcon.vue";
 import CreateCowModal from './CowModal.vue'
 
 export default {
@@ -34,6 +40,7 @@ export default {
     SectionMain,
     LayoutAuthenticated,
     BaseButton,
+    BaseIcon,
     CreateCowModal
   }
 }

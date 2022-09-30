@@ -5,6 +5,8 @@ import { mdiMenu } from '@mdi/js'
 import AsideMenuList from '@/components/AsideMenuList.vue'
 import NavBarItem from '@/components/NavBarItem.vue'
 import BaseIcon from '@/components/BaseIcon.vue'
+import UserAvatar from '@/components/UserAvatar.vue'
+import BaseLevel from '@/components/BaseLevel.vue'
 
 defineProps({
   menu: {
@@ -25,7 +27,7 @@ const menuClick = () => {
 <template>
   <aside
     id="aside"
-    class="w-52 fixed top-0 z-40 h-screen transition-position lg:left-0 overflow-y-auto
+    class="w-64 fixed top-0 z-40 h-screen transition-position lg:left-0 overflow-y-auto
     dark:border-r dark:border-gray-800 dark:bg-gray-900 xl:dark:bg-gray-900/70"
     :class="[ styleStore.asideStyle, layoutStore.isAsideMobileExpanded ? 'left-0' : '-left-60', layoutStore.isAsideLgActive ? 'block' : 'lg:hidden xl:block' ]"
   >
@@ -44,9 +46,14 @@ const menuClick = () => {
           class="cursor-pointer"
           size="24"
         />
+
       </NavBarItem>
       <div class="flex-1 px-3">
-        <span>ระบบจัดการฟาร์มโคนม</span>
+        <BaseLevel type="justify-start">
+          <UserAvatar avatar="../src/assets/image/cow-logo.jpg" class="w-8 mr-2" />
+          <span>Dairy Farm</span>
+        </BaseLevel>
+        
       </div>
     </div>
     <div>

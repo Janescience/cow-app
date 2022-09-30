@@ -1,11 +1,19 @@
 
 export default [
+  [
+    {
+      to: '/dashboard',
+      icon: 'chartPie',
+      label: 'ภาพรวมฟาร์ม'
+    }
+  ]
+  ,
   'การจัดการ',
   [
     {
       to: '/manage/cow',
       icon: 'cow',
-      label: 'วัว/โค'
+      label: 'โค'
     },
     {
       to: '/manage/milk',
@@ -51,20 +59,71 @@ export default [
   'รายงาน',
   [
     {
-      to: '/report/notification',
-      icon: 'chartLine',
-      label: 'ผลผลิตน้ำนมดิบของโค'
+      label: 'ผลผลิต',
+      icon: 'waterCircle',
+      menu: [
+        {
+          to: '/report/notification',
+          icon: 'chartLine',
+          label: 'ผลผลิตน้ำนมดิบของโค'
+        }
+      ]
     },
     {
-      to: '/report/parameter',
-      icon: 'chartLine',
-      label: 'รายได้จากผลผลิตน้ำนมดิบของฟาร์ม'
+      label: 'รายรับ-รายจ่าย',
+      icon: 'cashRegister',
+      menu: [
+        {
+          to: '/report/parameter',
+          icon: 'chartLine',
+          label: 'รายได้จากผลผลิตน้ำนมดิบ'
+        },
+
+        {
+          to: '/report/parameter',
+          icon: 'chartLine',
+          label: 'รายจ่ายไม่ก่อเกิดรายได้'
+        },
+      ]
     },
     {
-      to: '/report/parameter',
-      icon: 'chartLine',
-      label: 'ผลประกอบกิจการของฟาร์ม'
+      label: 'ประวัติต่างๆ',
+      icon: 'textBoxSearchOutline',
+      menu: [
+        {
+          to: '/report/parameter',
+          icon: 'chartLine',
+          label: 'ประวัติและคุณลักษณะของวัว'
+        },
+        {
+          to: '/report/parameter',
+          icon: 'chartLine',
+          label: 'ประวัติการรักษา ป้องกัน และฟื้นฟู'
+        },
+        {
+          to: '/report/parameter',
+          icon: 'chartLine',
+          label: 'ประวัติการสืบพันธุ์ และการคลอดลูก'
+        },
+      ]
     },
+    {
+      label: 'วิเคราะห์',
+      icon: 'chartWaterfall',
+      menu: [
+        {
+          to: '/report/parameter',
+          icon: 'chartLine',
+          label: 'ผลประกอบกิจการ'
+        },
+        {
+          to: '/report/parameter',
+          icon: 'chartLine',
+          label: 'ความคุ้มค่าของวัว'
+        },
+      ]
+    },
+    
   ],
   'ตั้งค่า',
   [
