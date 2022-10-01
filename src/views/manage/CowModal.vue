@@ -12,7 +12,21 @@
         @submit.prevent="submit"
         @header-icon-click="cancel"
       >
-        <div class="grid lg:grid-cols-4 grid-cols-2 gap-5">
+        
+        <BaseLevel type="justify-center mb-1">
+          <input
+            id="imageUpload"
+            @change="handleFile"
+            type="file"
+            accept="image/*"
+            hidden
+          />
+          <img class="w-56 cursor-pointer rounded-lg" @click="chooseImg" :src="url"/>
+        </BaseLevel>
+        <BaseLevel type="justify-center mb-6">
+          อัพโหลดรูปภาพ (คลิกที่รูป)
+        </BaseLevel>
+        <div class="grid lg:grid-cols-4 grid-cols-2 gap-5 mt-3">
           <FormField label="รหัสโค" help="* ห้ามว่าง">
             <FormControl
               v-model="cow.code"
@@ -102,6 +116,9 @@
   import FormField from '@/components/FormField.vue'
   import FormControl from '@/components/FormControl.vue'
   import NotificationBar from '@/components/NotificationBar.vue'
+  import UserAvatar from '@/components/UserAvatar.vue'
+  import BaseLevel from '@/components/BaseLevel.vue'
+  
   import { getCurrentUser } from '@/utils'
   import CowService from '@/services/cow'
   
@@ -109,6 +126,8 @@
     data () {
       return {
         cow : {
+          imgBase64 : "",
+          image : null,
           code : "",  
           name : "",
           status : "1",
@@ -130,13 +149,20 @@
     },
     emits:['update:modelValue', 'cancel', 'confirm'],
     computed:{
-        value:{
-        get(){
-            return this.modelValue
+        url(){
+          if(this.cow.image != null){
+            return URL.createObjectURL(this.cow.image);
+          }else{
+            return '../../src/assets/image/img-mockup.png'
+          }
         },
-        set(newValue){
-            this.$emit('update:modelValue', newValue)
-        }
+        value:{
+          get(){
+              return this.modelValue
+          },
+          set(newValue){
+              this.$emit('update:modelValue', newValue)
+          }
         }
     },
     watch:{
@@ -152,6 +178,8 @@
     methods: {
         clear(){
           this.$emit('update:dataEdit',null);
+          this.cow.imgBase64 = ""
+          this.cow.image = null
           this.cow.code = ""
           this.cow.name = ""
           this.cow.birthDate = null
@@ -198,7 +226,28 @@
                 this.alert = error.response.data.message
             }
             
-        }
+        },
+        chooseImg () {
+            let fileUpload = document.getElementById("imageUpload");
+
+            if (fileUpload != null) {
+                fileUpload.click();
+            }
+        },
+        handleFile (e) {
+          var files = e.target.files || e.dataTransfer.files;
+            if (!files.length)
+              return;
+            this.cow.image = files[0]
+            this.createBase64(files[0]);
+        },
+        createBase64(fileObj) {
+            var reader = new FileReader();
+            reader.onload = (e) => {
+              this.cow.imgBase64 = e.target.result;
+            };
+            reader.readAsDataURL(fileObj);
+        },
     },
     components : {
       BaseButton,
@@ -208,7 +257,9 @@
       OverlayLayer,
       FormField,
       FormControl,
-      NotificationBar
+      NotificationBar,
+      UserAvatar,
+      BaseLevel
     },
     props : {
         modelValue: {

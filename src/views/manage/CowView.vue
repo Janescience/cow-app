@@ -147,7 +147,6 @@
                   />
                   <td class="border-b-0 lg:w-6 before:hidden">
                       <UserAvatar
-                        :username="cow._id"
                         class="w-24 h-24 mx-auto lg:w-12 lg:h-12"
                       />
                   </td>

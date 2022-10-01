@@ -8,7 +8,7 @@ const props = defineProps({
   },
   avatar: {
     type: String,
-    default: null
+    default: '../src/assets/image/img-mockup.png'
   },
   api: {
     type: String,
@@ -17,10 +17,12 @@ const props = defineProps({
 })
 
 const avatar = computed(
-  () => props.avatar ?? `https://avatars.dicebear.com/api/${props.api}/${props.username}.svg`
+  () => props.username ? `https://avatars.dicebear.com/api/${props.api}/${props.username}.svg` : props.avatar
 )
 
-const username = computed(() => props.username)
+const username = computed(
+  () => props.username 
+)
 
 </script>
 
