@@ -60,7 +60,7 @@ export default [
   [
     {
       label: 'ผลผลิต',
-      icon: 'waterCircle',
+      icon: 'chartBoxOutline',
       menu: [
         {
           to: '/report/notification',
@@ -109,7 +109,7 @@ export default [
     },
     {
       label: 'วิเคราะห์',
-      icon: 'chartWaterfall',
+      icon: 'calculator',
       menu: [
         {
           to: '/report/parameter',

@@ -18,10 +18,11 @@ const props = defineProps({
   },
   rounded: {
     type: String,
-    default: 'rounded-2xl'
+    default: 'md:rounded-2xl'
   },
   hasTable: Boolean,
   empty: Boolean,
+  loading: Boolean,
   form: Boolean,
   hoverable: Boolean,
   modal: Boolean
@@ -92,6 +93,18 @@ const submit = e => {
       class="text-center py-10 text-gray-500 dark:text-gray-400 "
     >
       <p>ไม่มีรายการ...</p>
+    </div>
+    <div
+      v-else-if="loading"
+      class="text-center py-10 text-gray-500 dark:text-gray-400 "
+    >
+      <BaseIcon
+        v-if="loading"
+        path="dotsCircle"
+        size="22"
+        class="animate-spin"
+      />
+      <p> กำลังโหลดข้อมูล...</p>
     </div>
     <div
       v-else
