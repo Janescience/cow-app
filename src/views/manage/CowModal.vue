@@ -4,12 +4,12 @@
     >
       <CardBox
         v-show="value"
-        title="เพิ่มโค"
+        :title="mode === 'create' ? 'เพิ่มโค' : 'แก้ไขโค'"
         class="shadow-lg w-full  overflow-y-auto md:w-3/5 lg:w-1/1 z-50"
         header-icon="close"
         modal
         form
-        @submit.prevent="create"
+        @submit.prevent="submit"
         @header-icon-click="cancel"
       >
         <div class="grid lg:grid-cols-4 grid-cols-2 gap-5">
@@ -112,7 +112,7 @@
           code : "",  
           name : "",
           status : "1",
-          birthDate : new Date(),
+          birthDate : null,
           corral : "",
           dad : "",
           mom : "",
@@ -139,28 +139,61 @@
         }
         }
     },
+    watch:{
+      dataEdit : {
+        handler (n,o) {
+          if(n != null && this.mode == 'edit'){
+            this.cow = n
+          }
+        },
+        deep : true
+      }
+    },
     methods: {
+        clear(){
+          this.$emit('update:dataEdit',null);
+          this.cow.code = ""
+          this.cow.name = ""
+          this.cow.birthDate = null
+          this.cow.status = 1
+          this.cow.corral = ""
+          this.cow.dad = ""
+          this.cow.mom = ""
+          delete this.cow._id
+        },
         confirmCancel(mode){
             this.value = false
             this.$emit(mode)
         },
         confirm(){
+            this.clear()
             this.confirmCancel('confirm')
         },
         cancel(){
+            this.clear()
             this.confirmCancel('cancel')
         },
-        async create(){
+        async submit(){
             this.loading = true
             this.alert = ""
             try {
-                const resp = await CowService.create(this.cow);
-                if(resp){
-                    this.loading = false  
-                    this.value = false
-                    this.confirmCancel('confirm')
+                if(this.mode === 'create'){
+                  const resp = await CowService.create(this.cow);
+                  if(resp){
+                      this.loading = false  
+                      this.value = false
+                      this.confirmCancel('confirm')
+                  }
+                }else{
+                  const resp = await CowService.update(this.cow._id,this.cow);
+                  if(resp){
+                      this.loading = false  
+                      this.value = false
+                      this.confirmCancel('confirm')
+                  }
                 }
             } catch (error) {
+              console.error('Error : ',error)
                 this.loading = false  
                 this.alert = error.response.data.message
             }
@@ -181,6 +214,14 @@
         modelValue: {
             type: [String, Number, Boolean],
             default: null
+        },
+        mode : {
+          type : String,
+          default : ""
+        },
+        dataEdit : {
+          type : Object,
+          default : null
         }
     }
   }

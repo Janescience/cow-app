@@ -15,12 +15,12 @@
         <BaseButton
           label="เพิ่มโค"
           color="success"
-          @click="modalCreate = true"
+          @click="mode='create';modalCow = true;"
         />
       </section>
 
 
-      <CreateCowModal v-model="modalCreate" @confirm="getCows"/>
+      <CreateCowModal v-model="modalCow" @confirm="getCows" @cancel="getCows" :mode="mode" :dataEdit="dataEdit"/>
 
       <CardBoxModal
           v-model="modalConfirm"
@@ -254,7 +254,7 @@ import moment from "moment";
 export default {
   data (){
     return {
-      modalCreate : false,
+      modalCow : false,
       status : [
         { id: "", label: 'ทั้งหมด' },
         { id: 1, label: 'ท้อง' },
@@ -278,7 +278,9 @@ export default {
         flag : "Y",
         farm : getCurrentUser().farm._id
       },
-      loading : false
+      loading : false,
+      mode : "create",
+      dataEdit : null
     }
   },
   components : {
@@ -338,6 +340,12 @@ export default {
         this.getCows()
       }
       this.loading = false
+    },
+    edit(cow){
+      this.dataEdit = cow;
+      this.mode='edit';
+      this.dataEdit.birthDate = new Date(this.dataEdit.birthDate)
+      this.modalCow = true;
     },
     reset(){
       this.search.code = null

@@ -56,15 +56,15 @@ export default (dob) => {
     else if ( (age.years == 0) && (age.months == 0) && (age.days > 0) )  
        ageString = age.days + " วัน";  
     else if ( (age.years > 0) && (age.months == 0) && (age.days == 0) )  
-       ageageString = age.years +  " ปี (วันเกิด)";  
+      ageString = age.years +  " ปี (วันเกิด)";  
     else if ( (age.years > 0) && (age.months > 0) && (age.days == 0) )  
-       ageageString = age.years + " ปี " + age.months + " เดือน";  
+      ageString = age.years + " ปี " + age.months + " เดือน";  
     else if ( (age.years == 0) && (age.months > 0) && (age.days > 0) )  
-       ageageString = age.months + " เดือน " + age.days + " วัน";  
+      ageString = age.months + " เดือน " + age.days + " วัน";  
     else if ( (age.years > 0) && (age.months == 0) && (age.days > 0) )  
-       ageageString = age.years + " ปี " + age.days + " วัน";  
+      ageString = age.years + " ปี " + age.days + " วัน";  
     else if ( (age.years == 0) && (age.months > 0) && (age.days == 0) )  
-       ageageString = age.months + " เดือน";  
+      ageString = age.months + " เดือน";  
 
     return ageString; 
 }
