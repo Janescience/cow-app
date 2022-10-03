@@ -3,7 +3,7 @@ import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useMainStore } from '@/stores/main'
 import FormControlIcon from '@/components/FormControlIcon.vue'
 import datepicker from 'vue3-datepicker'
-
+import { th } from 'date-fns/locale'
 
 const props = defineProps({
   name: {
@@ -160,6 +160,9 @@ if (props.ctrlKFocus) {
       :name="name"
       :placeholder="placeholder"
       :required="required"
+      :locale="th"
+      :typeable="true"
+      inputFormat="dd/MM/yyyy"
     />
     <input
       v-else

@@ -9,7 +9,7 @@
             class="mr-3"
           />
           <h1 class="text-2xl">
-            น้ำนมดิบ (การรีดนม)
+            การรีดนม
           </h1>
         </div>
         <BaseButton
@@ -115,9 +115,9 @@
                       <th class="text-center whitespace-nowrap">เลือก</th>
                       <th class="text-center whitespace-nowrap">โค</th>
                       <th class="text-center whitespace-nowrap">วันที่รีดนม</th>
-                      <th class="text-center whitespace-nowrap">ปริมาณน้ำนมดิบ/เช้า</th>
-                      <th class="text-center whitespace-nowrap">ปริมาณน้ำนมดิบ/บ่าย</th>
-                      <th class="text-center whitespace-nowrap">ปริมาณน้ำนมดิบรวม</th>
+                      <th class="text-center whitespace-nowrap">ปริมาณน้ำนมดิบ/เช้า (กก.)</th>
+                      <th class="text-center whitespace-nowrap">ปริมาณน้ำนมดิบ/บ่าย (กก.)</th>
+                      <th class="text-center whitespace-nowrap">ปริมาณน้ำนมดิบรวม (กก.)</th>
                       <th class="text-center whitespace-nowrap">จำนวนเงินรวม</th>
                       <th />
                     </tr>
@@ -138,17 +138,17 @@
                   <td data-label="วันที่รีดนม" class="text-center">
                       {{ formatDate(milk.date) }}
                   </td>
-                  <td data-label="ปริมาณน้ำนมดิบ/เช้า" class="whitespace-nowrap text-center">
+                  <td data-label="ปริมาณน้ำนมดิบ/เช้า (กก.)" class="whitespace-nowrap text-center">
                       {{ milk.morningQty }}
                   </td>
                   <td data-label="ปริมาณน้ำนมดิบ/บ่าย" class="whitespace-nowrap text-center">
                       {{ milk.afternoonQty }}
                   </td>
-                  <td data-label="ปริมาณน้ำนมดิบรวม" class="whitespace-nowrap text-right">
+                  <td data-label="ปริมาณน้ำนมดิบรวม" class="whitespace-nowrap text-center">
                       {{ milk.morningQty + milk.afternoonQty }}
                   </td>
                   <td data-label="จำนวนเงินรวม" class="whitespace-nowrap text-right">
-                      {{ milk.amount  }}
+                      {{ formatCurrency(milk.amount)  }}
                   </td>
                   <td class="lg:w-6 whitespace-nowrap">
                       <BaseButtons
@@ -218,6 +218,7 @@ import MilkModal from './MilkModal.vue'
 import MilkingService from '@/services/milking'
 import { getCurrentUser } from "@/utils";
 import moment from "moment";
+import numeral from "numeral";
 
 export default {
   data (){
@@ -340,6 +341,9 @@ export default {
         }
       return moment(new Date(date)).format('DD/MM/YYYY');
     },
+    formatCurrency(amt){
+      return numeral(amt).format(0,0);
+    }
   }
 }
 </script>
