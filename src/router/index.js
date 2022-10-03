@@ -11,7 +11,7 @@ const routes = [
     path: '/',
     name: 'welcome',
     redirect: "/login",
-    component: () => import('@/views/LoginView.vue')
+    component: () => import('@/views/auth/LoginView.vue')
   },
   {
     // Document title tag
@@ -35,12 +35,21 @@ const routes = [
   },
   {
     meta: {
-      title: 'จัดการวัว/โค',
+      title: 'จัดการโค',
       loginRequired : true
     },
     path: '/manage/cow',
     name: 'cow',
-    component: () => import('@/views/manage/CowView.vue')
+    component: () => import('@/views/manage/cow/CowSearchView.vue')
+  },
+  {
+    meta: {
+      title: 'จัดการน้ำนมดิบ (การรีดนม)',
+      loginRequired : true
+    },
+    path: '/manage/milk',
+    name: 'milk',
+    component: () => import('@/views/manage/milk/MilkSearchView.vue')
   },
   {
     meta: {
@@ -91,7 +100,7 @@ const routes = [
     },
     path: '/login',
     name: 'login',
-    component: () => import('@/views/LoginView.vue')
+    component: () => import('@/views/auth/LoginView.vue')
   },
   {
     meta: {

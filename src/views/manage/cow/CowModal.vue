@@ -13,16 +13,7 @@
         @header-icon-click="cancel"
       >
         
-        <BaseLevel type="justify-center mb-1">
-          <input
-            id="imageUpload"
-            @change="handleFile"
-            type="file"
-            accept="image/*"
-            hidden
-          />
-          <img class="w-56 cursor-pointer rounded-lg" @click="chooseImg" :src="url"/>
-        </BaseLevel>
+        <ImageUpload v-model="cow.image" />
         <BaseLevel type="justify-center mb-6">
           อัพโหลดรูปภาพ (คลิกที่รูป)
         </BaseLevel>
@@ -118,6 +109,7 @@
   import NotificationBar from '@/components/NotificationBar.vue'
   import UserAvatar from '@/components/UserAvatar.vue'
   import BaseLevel from '@/components/BaseLevel.vue'
+  import ImageUpload from '@/components/ImageUpload.vue'
   
   import { getCurrentUser } from '@/utils'
   import CowService from '@/services/cow'
@@ -126,8 +118,7 @@
     data () {
       return {
         cow : {
-          imgBase64 : "",
-          image : null,
+          image : '../../src/assets/image/img-mockup.png',
           code : "",  
           name : "",
           status : "1",
@@ -149,13 +140,6 @@
     },
     emits:['update:modelValue', 'cancel', 'confirm'],
     computed:{
-        url(){
-          if(this.cow.image != null){
-            return URL.createObjectURL(this.cow.image);
-          }else{
-            return '../../src/assets/image/img-mockup.png'
-          }
-        },
         value:{
           get(){
               return this.modelValue
@@ -170,6 +154,7 @@
         handler (n,o) {
           if(n != null && this.mode == 'edit'){
             this.cow = n
+            this.cow.image = !this.cow.image ? '../../src/assets/image/img-mockup.png' : this.cow.image
           }
         },
         deep : true
@@ -178,8 +163,7 @@
     methods: {
         clear(){
           this.$emit('update:dataEdit',null);
-          this.cow.imgBase64 = ""
-          this.cow.image = null
+          this.cow.image = '../../src/assets/image/img-mockup.png'
           this.cow.code = ""
           this.cow.name = ""
           this.cow.birthDate = null
@@ -227,27 +211,6 @@
             }
             
         },
-        chooseImg () {
-            let fileUpload = document.getElementById("imageUpload");
-
-            if (fileUpload != null) {
-                fileUpload.click();
-            }
-        },
-        handleFile (e) {
-          var files = e.target.files || e.dataTransfer.files;
-            if (!files.length)
-              return;
-            this.cow.image = files[0]
-            this.createBase64(files[0]);
-        },
-        createBase64(fileObj) {
-            var reader = new FileReader();
-            reader.onload = (e) => {
-              this.cow.imgBase64 = e.target.result;
-            };
-            reader.readAsDataURL(fileObj);
-        },
     },
     components : {
       BaseButton,
@@ -259,7 +222,8 @@
       FormControl,
       NotificationBar,
       UserAvatar,
-      BaseLevel
+      BaseLevel,
+      ImageUpload
     },
     props : {
         modelValue: {

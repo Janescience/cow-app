@@ -4,23 +4,23 @@
       <section class="px-6 sm:px-0 mb-6 flex items-center justify-between">
         <div class="flex items-center justify-start">
           <BaseIcon
-            path="cow"
+            path="cupWater"
             size="30"
             class="mr-3"
           />
           <h1 class="text-2xl">
-            โค
+            น้ำนมดิบ (การรีดนม)
           </h1>
         </div>
         <BaseButton
-          label="เพิ่มโค"
+          label="เพิ่มการรีดนม"
           color="success"
-          @click="mode='create';modalCow = true;"
+          @click="mode='create';modalMilk = true;"
         />
       </section>
 
 
-      <CreateCowModal v-model="modalCow" @confirm="getCows" @cancel="getCows" :mode="mode" :dataEdit="dataEdit"/>
+      <MilkModal v-model="modalMilk" @confirm="getMilks" @cancel="getMilks" :mode="mode" :dataEdit="dataEdit"/>
 
       <CardBoxModal
           v-model="modalConfirm"
@@ -34,38 +34,28 @@
       </CardBoxModal>
 
       <CardBox
-          title="ค้นหาโค"
+          title="ค้นหาการรีดนม"
           icon=""
           form
           class="mb-3"
           header-icon=""
-          @submit.prevent="getCows"
+          @submit.prevent="getMilks"
           @reset.prevent="reset"
         >
 
-          <div class="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5">
-            <FormField label="โค">
-              <DDLCow v-model="search.code"/>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            
+            <FormField label="โค" class="lg:col-start-2">
+              <DDLCow v-model="search.cow"/>
             </FormField>
-            <FormField label="วันเกิด">
+            <FormField label="วันที่รีดนม">
               <FormControl
-                v-model="search.birthDate"
+                v-model="search.date"
                 icon="calendar"
                 type="date"
               />
             </FormField>
-            <FormField label="สถานะ">
-              <FormControl
-                v-model="search.status"
-                :options="status"
-              />
-            </FormField>
-            <FormField label="คอก">
-              <FormControl
-                v-model="search.corral"
-                icon="barn"
-              />
-            </FormField>
+            
           </div>
 
           <BaseDivider />
@@ -91,7 +81,7 @@
 
       <CardBox
             v-if="itemsPaginated.length > 0"
-            :title="'รายการโค ' + countChecked()"
+            :title="'รายการรีดนม ' + countChecked()"
             class="shadow-lg"
             has-table
             header-icon=""
@@ -105,16 +95,16 @@
                   :key="checkedRow._id"
                   class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-gray-700 mb-1"
               >
-                  {{ checkedRow.name }}
+                  {{ checkedRow.cow.name }}
               </span>
               <BaseButtons
                   type="justify-start lg:justify-end"
                   no-wrap
               >
                   <BaseButton
-                  color="danger"
-                  label="ลบทั้งหมด"
-                  @click="isModalActive = true"
+                    color="danger"
+                    label="ลบทั้งหมด"
+                    @click="isModalActive = true"
                   />
               </BaseButtons>
             </div>
@@ -123,56 +113,42 @@
                 <thead>
                     <tr >
                       <th class="text-center whitespace-nowrap">เลือก</th>
-                      <th class="text-center whitespace-nowrap">รูปภาพ</th>
-                      <th class="text-center whitespace-nowrap" >รหัสโค</th>
-                      <th class="text-center whitespace-nowrap">ชื่อโค </th>
-                      <th class="text-center whitespace-nowrap">วันเกิด</th>
-                      <th class="text-center">อายุ </th>
-                      <th class="text-center">สถานะ </th>
-                      <th class="text-center">คอก </th>
-                      <th class="text-center whitespace-nowrap">พ่อพันธุ์ </th>
-                      <th class="text-center whitespace-nowrap">แม่พันธุ์ </th>
+                      <th class="text-center whitespace-nowrap">โค</th>
+                      <th class="text-center whitespace-nowrap">วันที่รีดนม</th>
+                      <th class="text-center whitespace-nowrap">ปริมาณน้ำนมดิบ/เช้า</th>
+                      <th class="text-center whitespace-nowrap">ปริมาณน้ำนมดิบ/บ่าย</th>
+                      <th class="text-center whitespace-nowrap">ปริมาณน้ำนมดิบรวม</th>
+                      <th class="text-center whitespace-nowrap">จำนวนเงินรวม</th>
                       <th />
                     </tr>
                 </thead>
               <tbody>
                   <tr
-                    v-for="cow in itemsPaginated"
-                    :key="cow._id"
+                    v-for="milk in itemsPaginated"
+                    :key="milk._id"
                   >
                   <TableCheckboxCell
-                      :isChecked="cow.checked"
+                      :isChecked="milk.checked"
                       class="text-center border-b-0 lg:w-6 before:hidden"
-                      @checked="checked($event, cow)"
+                      @checked="checked($event, milk)"
                   />
-                  <td class="border-b-0 lg:w-6 before:hidden">
-                      <UserAvatar
-                        class="w-24 h-24 mx-auto lg:w-12 lg:h-12"
-                      />
+                  <td data-label="โค" class="whitespace-nowrap">
+                      {{ milk.cow.code +' : '+ milk.cow.name }}
                   </td>
-                  <td data-label="รหัสโค" class="whitespace-nowrap">
-                      <span >{{ cow.code }}</span>
+                  <td data-label="วันที่รีดนม" class="text-center">
+                      {{ formatDate(milk.date) }}
                   </td>
-                  <td data-label="ชื่อโค" class="whitespace-nowrap">
-                      {{ cow.name }}
+                  <td data-label="ปริมาณน้ำนมดิบ/เช้า" class="whitespace-nowrap text-center">
+                      {{ milk.morningQty }}
                   </td>
-                  <td data-label="วันเกิด" class="text-center">
-                      {{ formatDate(cow.birthDate) }}
+                  <td data-label="ปริมาณน้ำนมดิบ/บ่าย" class="whitespace-nowrap text-center">
+                      {{ milk.afternoonQty }}
                   </td>
-                  <td data-label="อายุ" class="whitespace-nowrap">
-                      {{ calAge(cow.birthDate) }}
+                  <td data-label="ปริมาณน้ำนมดิบรวม" class="whitespace-nowrap text-right">
+                      {{ milk.morningQty + milk.afternoonQty }}
                   </td>
-                  <td data-label="สถานะ" class="whitespace-nowrap">
-                      {{ status[cow.status].label }}
-                  </td>
-                  <td data-label="คอก" >
-                      {{ cow.corral }}
-                  </td>
-                  <td data-label="พ่อพันธุ์" class="whitespace-nowrap">
-                      {{ cow.dad }}
-                  </td>
-                  <td data-label="แม่พันธุ์" class="whitespace-nowrap">
-                      {{ cow.mom }}
+                  <td data-label="จำนวนเงินรวม" class="whitespace-nowrap text-right">
+                      {{ milk.amount  }}
                   </td>
                   <td class="lg:w-6 whitespace-nowrap">
                       <BaseButtons
@@ -183,20 +159,15 @@
                             color="danger"
                             label="ลบ"
                             @click="confirm(
-                                'ยืนยันลบโค '+cow.name+' ใช่หรือไม่ ?',
-                                cow._id,
-                                removeCow
+                                'ยืนยันลบการรีดนมของโค '+milk.cow.name+' ใช่หรือไม่ ?',
+                                milk._id,
+                                removeMilk
                             )"
                         />
                         <BaseButton
                             color="warning"
                             label="แก้ไข"
-                            @click="edit(cow)"
-                        />
-                        <BaseButton
-                            color="info"
-                            label="รายละเอียด"
-                            @click="detail(cow._id)"
+                            @click="edit(milk)"
                         />
                       </BaseButtons>
                   </td>
@@ -239,28 +210,19 @@ import BaseIcon from "@/components/BaseIcon.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import CardBox from "@/components/CardBox.vue";
 import CardBoxModal from '@/components/CardBoxModal.vue'
-import UserAvatar from "@/components/UserAvatar.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import DDLCow from '@/components/DDL/Cow.vue'
-import CreateCowModal from './CowModal.vue'
-import CowService from '@/services/cow'
+import MilkModal from './MilkModal.vue'
+import MilkingService from '@/services/milking'
 import { getCurrentUser } from "@/utils";
-import getAge from "@/utils/age-calculate";
 import moment from "moment";
 
 export default {
   data (){
     return {
-      modalCow : false,
-      status : [
-        { id: "", label: 'ทั้งหมด' },
-        { id: 1, label: 'ท้อง' },
-        { id: 2, label: 'นมแห้ง' },
-        { id: 3, label: 'ให้ผลผลิต' },
-        { id: 4, label: 'วัวเด็ก' }
-      ],
+      modalMilk : false,
       textConfirm : "",
       modalConfirm : false,
       funcConfirm : Function,
@@ -270,12 +232,8 @@ export default {
       checkedRows : [],
       items : [],
       search : {
-        code : null,
-        status : "",
-        birthDate : null,
-        corral : "",
-        flag : "Y",
-        farm : getCurrentUser().farm._id
+        cow : null,
+        date : null,
       },
       loading : false,
       mode : "create",
@@ -289,7 +247,6 @@ export default {
     BaseIcon,
     BaseButtons,
     CardBox,
-    UserAvatar,
     TableCheckboxCell,
     CardBoxModal,
     BaseLevel,
@@ -297,10 +254,10 @@ export default {
     FormField,
     BaseDivider,
     DDLCow,
-    CreateCowModal,
+    MilkModal,
 },
   created() {
-    this.getCows();
+    this.getMilks();
   },
   computed : {
     itemsPaginated() {
@@ -323,42 +280,40 @@ export default {
     }
   },
   methods : {
-    async getCows(){
+    async getMilks(){
       this.loading = true
-      const resp = await CowService.all(this.search);
+      const resp = await MilkingService.all(this.search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.cows
+        this.items = resp.data.milkings
       }
       this.loading = false
     },
-    async removeCow(){
+    async removeMilk(){
       this.loading = true
-      const resp = await CowService.update(this.idConfirm,{flag:"N"});
+      const resp = await MilkingService.delete(this.idConfirm);
       if(resp.data){
-        this.getCows()
+        this.getMilks()
       }
       this.loading = false
     },
-    edit(cow){
-      this.dataEdit = cow;
-      this.mode='edit';
-      this.dataEdit.birthDate = new Date(this.dataEdit.birthDate)
-      this.modalCow = true;
+    edit(milk){
+      this.dataEdit = milk;
+      this.dataEdit.cow = milk.cow._id;
+      this.mode = 'edit';
+      this.modalMilk = true;
     },
     reset(){
-      this.search.code = null
-      this.search.status = ""
-      this.search.birthDate = null
-      this.search.corral = ""
+      this.search.cow = null
+      this.search.date = null
     },
-    checked(isChecked, cow){
+    checked(isChecked, milk){
       if (isChecked) {
-        cow.checked = true
-        this.checkedRows.push(cow)
+        milk.checked = true
+        this.checkedRows.push(milk)
       } else {
-        cow.checked = false
-        this.checkedRows = this.removeArr(this.checkedRows, row => row._id === cow._id)
+        milk.checked = false
+        this.checkedRows = this.removeArr(this.checkedRows, row => row._id === milk._id)
       }
     },
     removeArr(arr,cb){
@@ -378,9 +333,6 @@ export default {
     },
     countChecked(){
       return (this.checkedRows.length > 0 ? '(เลือก ' + this.checkedRows.length + ' รายการ)':'')
-    },
-    calAge(bdDate){
-      return getAge(bdDate);
     },
     formatDate(date){
         if(!date){

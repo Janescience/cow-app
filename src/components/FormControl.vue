@@ -45,6 +45,7 @@ const props = defineProps({
   required: Boolean,
   borderless: Boolean,
   transparent: Boolean,
+  disabled: Boolean,
   ctrlKFocus: Boolean
 })
 
@@ -76,6 +77,8 @@ const inputElClass = computed(() => {
 
 const computedType = computed(() => props.options ? 'select' : props.type)
 
+const disabled = computed(() => props.disabled )
+
 const controlIconH = computed(() => props.type === 'textarea' ? 'h-full' : 'h-10')
 
 const mainStore = useMainStore()
@@ -85,6 +88,7 @@ const selectEl = ref(null)
 const textareaEl = ref(null)
 
 const inputEl = ref(null)
+
 
 onMounted(() => {
   if (selectEl.value) {
@@ -162,6 +166,7 @@ if (props.ctrlKFocus) {
       :id="id"
       ref="inputEl"
       v-model="computedValue"
+      step="any"
       :name="name"
       :inputmode="inputmode"
       :autocomplete="autocomplete"
@@ -169,6 +174,7 @@ if (props.ctrlKFocus) {
       :placeholder="placeholder"
       :type="computedType"
       :class="inputElClass"
+      :disabled="disabled"
     >
     <FormControlIcon
       v-if="icon"

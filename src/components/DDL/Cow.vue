@@ -77,7 +77,7 @@ export default {
                 return option;
             }
 
-            return option['code'];
+            return option[this.valueType];
         },
         handleInput (text) {
             this.$emit("update:value", text);
@@ -90,7 +90,8 @@ export default {
         clear: { default: true, type: Boolean },
         disabled: { default: false, type: Boolean },
         dataSelected: { default: null, type: Object },
-        defaultType: { default: 'code', type: Object },
+        defaultType: { default: null, type: Object },
+        valueType: { default: '_id', type: Object },
         defaultValue: { default: null, type: Object },
         modelValue: {
             type: [String, Number, Boolean, Array, Object],
