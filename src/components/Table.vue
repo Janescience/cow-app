@@ -1,11 +1,11 @@
 <template>
         <CardBoxModal
-          v-model="modalConfirm"
-          title="ยืนยันอีกครั้ง"
-          button-label="ยืนยัน"
-          @confirm="funcConfirm"
-          has-cancel
-          has-button
+            v-model="modalConfirm"
+            title="ยืนยันอีกครั้ง"
+            button-label="ยืนยัน"
+            @confirm="funcConfirm"
+            has-cancel
+            has-button
           >
           <p>{{ textConfirm }}</p>
         </CardBoxModal>
@@ -25,7 +25,7 @@
                   :key="checkedRow._id"
                   class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-gray-700 mb-1"
               >
-                  {{ checkedRow.name }}
+                  {{ checkedRow[getPropByString(checkedRow,checkedLabel)] }}
               </span>
               <BaseButtons
                   type="justify-start lg:justify-end"
@@ -176,7 +176,11 @@ export default {
             type : Object,
             default : null
         },
-        hasCheckbox : Boolean
+        hasCheckbox : Boolean,
+        checkedLabel : {
+            type : String,
+            default : 'name'
+        },
     },
     computed : {
         itemsPaginated() {
