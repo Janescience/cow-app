@@ -19,7 +19,6 @@
       />
 
       <Criteria
-        title="ค้นหาการรีดนม" 
         grid="grid-cols-2 lg:grid-cols-4"
         @search="getMilks" 
         @reset="reset" 

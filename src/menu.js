@@ -21,7 +21,7 @@ export default [
       label: 'น้ำนมดิบ (การรีดนม)'
     },
     {
-      to: '/manage/reproduce',
+      to: '/manage/reproduct',
       icon: 'reproduction',
       label: 'การสืบพันธุ์/ผสมพันธุ์'
     },

@@ -53,6 +53,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'จัดการสืบพันธุ์/ผสมพันธุ์',
+      loginRequired : true
+    },
+    path: '/manage/reproduct',
+    name: 'reproduct',
+    component: () => import('@/views/manage/reproduct/Main.vue')
+  },
+  {
+    meta: {
       title: 'Tables',
       loginRequired : true
     },

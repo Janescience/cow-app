@@ -1,6 +1,6 @@
 <template>
     <CardBox
-        :title="title"
+        title="ค้นหา"
         icon=""
         form
         class="mb-3"
@@ -61,10 +61,6 @@ import DDLCow from "@/components/DDL/Cow.vue";
 
 export default {
     props : {
-        title : {
-            type : String,
-            default : ''
-        },
         grid : {
             type : String,
             default : 'grid-cols-4'
