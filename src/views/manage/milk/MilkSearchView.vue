@@ -30,7 +30,7 @@
       <Table
         title="รายการรีดนม" 
         has-checkbox
-        checkedLabel="cow.name" 
+        :checked-data="checked" 
         :items="items" 
         :datas="datas" 
         :button="button" 
@@ -82,6 +82,15 @@ export default {
       loading : false,
       mode : "create",
       dataEdit : null,
+      checked : {
+        code : {
+          value : 'date',
+          type : 'date'
+        },
+        label : {
+          value : 'cow.name'
+        }
+      },
       datas : [
         {
           label : "วันที่รีดนม",

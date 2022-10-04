@@ -15,11 +15,16 @@
                 :label="form.label" 
                 :class="[form.class]"
             >
-                <DDLCow v-if="form.type === 'ddl' && form.module === 'cow' " v-model="search[form.value]"/>
+                <DDLCow 
+                    v-if="form.type === 'ddl' && form.module === 'cow' " 
+                    v-model="search[form.value]"
+                    :valueType="form.valueType"
+                />
                 <FormControl
                     v-else
                     v-model="search[form.value]"
                     :icon="form.icon"
+                    :options="form.options"
                     :type="form.type"
                 />
             </FormField>

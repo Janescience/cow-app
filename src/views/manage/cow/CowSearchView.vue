@@ -10,67 +10,27 @@
         @openModal="mode='create';modalCow = true;"
       />
       
-      <CreateCowModal v-model="modalCow" @confirm="getCows" @cancel="getCows" :mode="mode" :dataEdit="dataEdit"/>
+      <CreateCowModal 
+        v-model="modalCow" 
+        @confirm="getCows" 
+        @cancel="getCows" 
+        :mode="mode" 
+        :dataEdit="dataEdit"
+      />
 
-      <CardBox
-          title="ค้นหาโค"
-          icon=""
-          form
-          class="mb-3"
-          header-icon=""
-          @submit.prevent="getCows"
-          @reset.prevent="reset"
-        >
-
-          <div class="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5">
-            <FormField label="โค">
-              <DDLCow v-model="search.code" valueType="code"/>
-            </FormField>
-            <FormField label="วันเกิด">
-              <FormControl
-                v-model="search.birthDate"
-                icon="calendar"
-                type="date"
-              />
-            </FormField>
-            <FormField label="สถานะ">
-              <FormControl
-                v-model="search.status"
-                :options="status"
-              />
-            </FormField>
-            <FormField label="คอก">
-              <FormControl
-                v-model="search.corral"
-                icon="barn"
-              />
-            </FormField>
-          </div>
-
-          <BaseDivider />
-
-          <BaseButtons
-            type="justify-center"
-            no-wrap
-          >
-            <BaseButton
-              type="submit"
-              color="info"
-              label="ค้นหา"
-              
-            />
-            <BaseButton
-              type="reset"
-              color="danger"
-              label="ล้าง"
-              
-            />
-          </BaseButtons>
-        </CardBox>
+      <Criteria
+        title="ค้นหาโค" 
+        grid="grid-cols-2 lg:grid-cols-4"
+        @search="getCows" 
+        @reset="reset" 
+        :forms="forms" 
+        :search="search"
+      />
 
       <Table 
         title="รายการโค" 
-        has-checkbox 
+        has-checkbox
+        :checked-data="checked"
         :datas="datas" 
         :items="items" 
         :button="button"
@@ -93,27 +53,47 @@ import CardBox from "@/components/CardBox.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import Table from "@/components/Table.vue";
+import Criteria from "@/components/Criteria.vue";
+import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
+import CreateCowModal from './CowModal.vue'
 
 import DDLCow from '@/components/DDL/Cow.vue'
-import CreateCowModal from './CowModal.vue'
 import CowService from '@/services/cow'
 import { getCurrentUser } from "@/utils";
 import getAge from "@/utils/age-calculate";
-import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
+import { cowStatus } from '@/constants/cow'
 
 
 export default {
   data (){
     return {
       modalCow : false,
-      status : [
-        { id: "", label: 'ทั้งหมด' },
-        { id: 1, label: 'ท้อง' },
-        { id: 2, label: 'นมแห้ง' },
-        { id: 3, label: 'ให้ผลผลิต' },
-        { id: 4, label: 'วัวเด็ก' }
-      ],
       items : [],
+      forms : [
+        {
+          label : 'โค',
+          value : 'code',
+          type : 'ddl',
+          module : 'cow',
+          valueType : 'code'
+        },
+        {
+          label : 'วันเกิด',
+          value : 'birthDate',
+          icon : 'calendar',
+          type : 'date'
+        },
+        {
+          label : 'สถานะ',
+          value : 'status',
+          options : cowStatus()
+        },
+        {
+          label : 'คอก',
+          value : 'corral',
+          icon : 'barn',
+        },
+      ],
       search : {
         code : null,
         status : "",
@@ -125,6 +105,14 @@ export default {
       loading : false,
       mode : "create",
       dataEdit : null,
+      checked : {
+        code : {
+          value : 'code'
+        },
+        label : {
+          value : 'name'
+        }
+      },
       datas : [
         {
           label : 'รูปภาพ',
@@ -156,7 +144,7 @@ export default {
         {
           label : 'สถานะ',
           func : (obj) => {
-            return this.status[obj.status].label
+            return cowStatus()[obj.status].label
           },
         },
         {
@@ -194,7 +182,8 @@ export default {
     DDLCow,
     CreateCowModal,
     Table,
-    SectionTitleBarSub
+    SectionTitleBarSub,
+    Criteria
 },
   created() {
     this.getCows();

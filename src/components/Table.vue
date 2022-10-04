@@ -25,7 +25,7 @@
                   :key="checkedRow._id"
                   class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-gray-700 mb-1"
               >
-                  {{ checkedRow[getPropByString(checkedRow,checkedLabel)] }}
+                  {{ getValue(checkedRow,checkedData.code) + ' : ' + getValue(checkedRow,checkedData.label) }}
               </span>
               <BaseButtons
                   type="justify-start lg:justify-end"
@@ -177,9 +177,9 @@ export default {
             default : null
         },
         hasCheckbox : Boolean,
-        checkedLabel : {
-            type : String,
-            default : 'name'
+        checkedData : {
+            type : Object,
+            default : null
         },
     },
     computed : {

@@ -1,5 +1,6 @@
 import http from '@/constants/api';
 import authHeader from './auth-header'
+import moment from 'moment'
 
 async function getSearchQuery (opts = {}) {
     let query = "?";
@@ -19,7 +20,8 @@ async function getSearchQuery (opts = {}) {
         query = query + `status=${opts.status}&`;
     } 
     if (opts.birthDate) {
-        query = query + `birthDate=${opts.birthDate}&`;
+        const dateNoTime = moment(new Date(opts.birthDate)).format('YYYY-MM-DD') 
+        query = query + `birthDate=${dateNoTime}&`;
     } 
     if (opts.corral) {
         query = query + `corral=${opts.corral}&`;
@@ -38,6 +40,9 @@ class CowService{
         return http.get(`/cow/${id}`,{ headers : authHeader()});
     }
     create(payload){
+        if (payload.birthDate) {
+            payload.birthDate = moment(new Date(payload.birthDate)).format('YYYY-MM-DD') 
+        }
         return http.post(`/cow`,payload,{ headers : authHeader()});
     }
     delete(id){
