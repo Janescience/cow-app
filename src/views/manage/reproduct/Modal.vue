@@ -4,8 +4,8 @@
     >
       <CardBox
         v-show="value"
-        :title="mode === 'create' ? 'เพิ่มการรีดนม' : 'แก้ไขการรีดนม'"
-        class="shadow-lg w-full  overflow-y-auto lg:w-1/3 z-50"
+        :title="mode === 'create' ? 'เพิ่มการสืบพันธุ์' : 'แก้ไขการสืบพันธุ์'"
+        class="shadow-lg w-full  overflow-y-auto lg:w-1/2 z-50"
         header-icon="close"
         modal
         form
@@ -13,48 +13,70 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-1">
-          
-          <FormField label="วันที่รีดนม" help="* ห้ามว่าง">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-1">
+          <FormField label="โค" help="* ห้ามว่าง">
+            <DDLCow v-model="reproduct.cow" />
+          </FormField>
+          <FormField label="พ่อพันธุ์" help="">
             <FormControl
-              v-model="milk.date"
+              v-model="reproduct.dad"
+              icon="genderMale"
+            />
+          </FormField>
+          <FormField label="สถานะ" >
+            <FormControl
+              v-model="reproduct.status"
+              :options="status"
+            />
+          </FormField>
+          <FormField label="วันที่เข้าระบบสืบพันธุ์" help="* ห้ามว่าง">
+            <FormControl
+              v-model="reproduct.loginDate"
               icon="calendar"
               type="date"
               required
             />
           </FormField>
-          <FormField label="โค" help="* ห้ามว่าง">
-              <DDLCow v-model="milk.cow"/>
-          </FormField>
-          <FormField label="ปริมาณน้ำนม/เช้า" help="* ห้ามว่าง">
+          <FormField label="ผล" >
             <FormControl
-              v-model="milk.morningQty"
-              type="number"
-              icon="weatherSunsetUp"
+              v-model="reproduct.result"
+              :options="result"
             />
           </FormField>
-          <FormField label="ปริมาณน้ำนม/บ่าย" help="* ห้ามว่าง">
+          <FormField label="วิธีการรักษา" help="" >
             <FormControl
-              v-model="milk.afternoonQty"
-              type="number"
-              icon="weatherSunsetDown"
+              v-model="reproduct.howTo"
+              icon="doctor"
             />
           </FormField>
-          <FormField label="ปริมาณน้ำนมรวม" help="คำนวณอัตโนมัติ">
+          <FormField label="วันที่เป็นสัด" help="* ห้ามว่าง (วันที่เข้าระบบสืบพันธุ์ + 21 วัน)">
             <FormControl
-              v-model="sumQty"
-              type="number"
-              disabled
-              icon="water"
+              v-model="reproduct.estrusDate"
+              icon="calendar"
+              type="date"
+              :lower-limit="reproduct.loginDate"
+              required
             />
           </FormField>
-          <FormField label="จำนวนเงินรวม" help="คำนวณอัตโนมัติ (ราคานม/กก. = 100.00)">
+          <FormField label="วันที่ผสมพันธุ์" help="* ห้ามว่าง (วันเดียวกันกับ วันที่เป็นสัด)">
             <FormControl
-              v-model="calAmount"
-              type="number"
-              icon="cashMultiple"
+              v-model="reproduct.matingDate"
+              icon="calendar"
+              type="date"
+              :lower-limit="reproduct.estrusDate"
+              required
             />
           </FormField>
+          <FormField label="วันที่ตรวจท้อง" help="* ห้ามว่าง (วันที่ผสมพันธุ์ + 21 วัน)">
+            <FormControl
+              v-model="reproduct.checkDate"
+              icon="calendar"
+              type="date"
+              :lower-limit="reproduct.matingDate"
+              required
+            />
+          </FormField>
+          
         </div>
 
         <NotificationBar 
@@ -98,32 +120,35 @@
   import BaseLevel from '@/components/BaseLevel.vue'
   import DDLCow from '@/components/DDL/Cow.vue'
 
+  import { addDays } from 'date-fns'
   import { getCurrentUser } from '@/utils'
-  import MilkingService from '@/services/milking'
+
+  import { reproductStatus , reproductResult  } from '@/constants/reproduct'
+  import ReproductService from '@/services/reproduction'
   
   export default {
     data () {
       return {
-        milk : {
+        reproduct : {
           cow : null,  
-          date : new Date(),
-          morningQty : 0,
-          afternoonQty : 0,
-          amount : 0
+          loginDate : new Date(),
+          estrusDate : addDays(new Date(),21),
+          matingDate : addDays(new Date(),21),
+          checkDate : addDays(new Date(),42),
+          dad : "",
+          howTo : "",
+          status : 1,
+          result : 3,
+          farm : getCurrentUser().farm._id
         },
+        status : reproductStatus('create'),
+        result : reproductResult('create'),
         loading : false,
         alert : ""
       }
     },
     emits:['update:modelValue', 'cancel', 'confirm'],
     computed:{
-        sumQty(){
-          return this.milk.morningQty + this.milk.afternoonQty
-        },
-        calAmount(){
-            this.milk.amount = (this.milk.morningQty + this.milk.afternoonQty) * 100
-            return this.milk.amount
-        },
         value:{
           get(){
               return this.modelValue
@@ -134,11 +159,23 @@
         }
     },
     watch:{
+      'reproduct.loginDate'(n){
+        this.reproduct.estrusDate = addDays(n,21);
+      },
+      'reproduct.estrusDate'(n){
+        this.reproduct.matingDate = n;
+      },
+      'reproduct.matingDate'(n){
+        this.reproduct.checkDate = addDays(n,21);
+      },
       dataEdit : {
         handler (n,o) {
           if(n != null && this.mode == 'edit'){
-            this.milk = n
-            this.milk.date = new Date(n.date)
+            this.reproduct = n
+            this.reproduct.loginDate = new Date(n.loginDate)
+            this.reproduct.estrusDate = new Date(n.estrusDate)
+            this.reproduct.matingDate = new Date(n.matingDate)
+            this.reproduct.checkDate = new Date(n.loginDate)
           }
         },
         deep : true
@@ -148,12 +185,16 @@
         clear(){
           if(this.mode === 'edit')
             this.$emit('update:dataEdit',null);
-          this.milk.cow = null
-          this.milk.date = new Date()
-          this.milk.morningQty = 0
-          this.milk.afternoonQty = 0
-          this.milk.amount = 0
-          delete this.milk?._id
+          this.reproduct.cow = null
+          this.reproduct.loginDate = new Date()
+          this.reproduct.estrusDate = addDays(new Date(),21)
+          this.reproduct.matingDate = addDays(new Date(),21)
+          this.reproduct.checkDate = addDays(new Date(),42)
+          this.reproduct.dad = ""
+          this.reproduct.howTo = ""
+          this.reproduct.status = 1
+          this.reproduct.result = ""
+          delete this.reproduct?._id
         },
         confirmCancel(mode){
             this.value = false
@@ -172,14 +213,14 @@
             this.alert = ""
             try {
                 if(this.mode === 'create'){
-                  const resp = await MilkingService.create(this.milk);
+                  const resp = await ReproductService.create(this.reproduct);
                   if(resp){
                       this.loading = false  
                       this.value = false
                       this.confirmCancel('confirm')
                   }
                 }else{
-                  const resp = await MilkingService.update(this.milk._id,this.milk);
+                  const resp = await ReproductService.update(this.reproduct._id,this.reproduct);
                   if(resp){
                       this.loading = false  
                       this.value = false

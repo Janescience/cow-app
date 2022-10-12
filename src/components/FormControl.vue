@@ -38,6 +38,10 @@ const props = defineProps({
     type: String,
     default: 'text'
   },
+  lowerLimit: {
+    type: Date,
+    default: null
+  },
   modelValue: {
     type: [String, Number, Boolean, Array, Object],
     default: ''
@@ -162,6 +166,7 @@ if (props.ctrlKFocus) {
       :required="required"
       :locale="th"
       :typeable="true"
+      :lowerLimit="lowerLimit"
       inputFormat="dd/MM/yyyy"
     />
     <input

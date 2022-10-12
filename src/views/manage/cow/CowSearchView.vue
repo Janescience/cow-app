@@ -32,9 +32,10 @@
         :checked-data="checked"
         :datas="datas" 
         :items="items" 
-        :button="button"
+        :buttons="buttons"
         @edit="edit"
         @delete="removeCow"
+        :loading="loading"
       />
 
     </SectionMain>
@@ -159,13 +160,24 @@ export default {
           value : 'mom',
         },
       ],
-      button : {
-        edit : true,
-        delete : true,
-        detail : {
+      buttons : [
+        {
+          label : 'ลบ',
+          type : 'delete',
+          color : 'danger',
+        },
+        {
+          label : 'แก้ไข',
+          type : 'edit',
+          color : 'warning',
+        },
+        {
+          label : 'รายละเอียด',
+          type : 'detail',
+          color : 'info',
           path : '/manage/cow/detail'
         }
-      }
+      ]
     }
   },
   components : {
@@ -197,9 +209,9 @@ export default {
       }
       this.loading = false
     },
-    async removeCow(){
+    async removeCow(id){
       this.loading = true
-      const resp = await CowService.update(this.idConfirm,{flag:"N"});
+      const resp = await CowService.update(id,{flag:"N"});
       if(resp.data){
         this.getCows()
       }

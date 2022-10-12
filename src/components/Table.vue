@@ -77,33 +77,18 @@
                     />
                     <span v-else >{{ getValue(obj,row) }}</span>
                   </td>
-                  <td v-if="button" class="lg:w-6 whitespace-nowrap" >
+                  <td v-if="buttons.length > 0" class="lg:w-6 whitespace-nowrap" >
                       <BaseButtons
                         type="justify-end lg:justify-start"
                         no-wrap
                       >
                         <BaseButton
-                            v-if="button.delete"
-                            color="danger"
-                            label="ลบ"
-                            @click="confirm(
-                                'ยืนยันลบรายการนี้ ใช่หรือไม่ ?',
-                                obj._id,
-                                null,
-                                removeData
-                            )"
-                        />
-                        <BaseButton
-                            v-if="button.edit"
-                            color="warning"
-                            label="แก้ไข"
-                            @click="edit(obj)"
-                        />
-                        <BaseButton
-                            v-if="button.detail"
-                            color="info"
-                            label="รายละเอียด"
-                            @click="detail(button.detail.path+'/'+obj._id)"
+                            v-for="btn in buttons"
+                            :key="btn.label"
+                            :color="btn.color"
+                            :label="btn.label"
+                            v-show="btn.condition ? btn.condition(obj) : true"
+                            @click="btn.type === 'oth' ? btn.func(obj) : btnClick(btn.type,{data:obj,id:obj._id,path:btn.path})"
                         />
                       </BaseButtons>
                   </td>
@@ -172,15 +157,16 @@ export default {
             type : Array,
             default : []
         },
-        button : {
-            type : Object,
-            default : null
+        buttons : {
+            type : Array,
+            default : []
         },
         hasCheckbox : Boolean,
         checkedData : {
             type : Object,
             default : null
         },
+        loading : Boolean
     },
     computed : {
         itemsPaginated() {
@@ -249,6 +235,19 @@ export default {
                 }
             }
             return obj[props[i]];
+        },
+        btnClick(type,data){
+            switch (type) {
+                case 'edit':
+                    this.edit(data.data);
+                    break;
+                case 'delete':
+                    this.confirm('ยืนยันลบรายการนี้ ใช่หรือไม่ ?',data.id,null,this.removeData)
+                    break;
+                case 'detail':
+                    this.detail(data.path + '/' + data.id);
+                    break;
+            }
         },
         removeData(){
             this.$emit('delete',this.idConfirm);

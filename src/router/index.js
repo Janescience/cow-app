@@ -35,7 +35,7 @@ const routes = [
   },
   {
     meta: {
-      title: 'จัดการโค',
+      title: 'โค',
       loginRequired : true
     },
     path: '/manage/cow',
@@ -44,7 +44,7 @@ const routes = [
   },
   {
     meta: {
-      title: 'จัดการน้ำนมดิบ (การรีดนม)',
+      title: 'น้ำนมดิบ (การรีดนม)',
       loginRequired : true
     },
     path: '/manage/milk',
@@ -53,12 +53,21 @@ const routes = [
   },
   {
     meta: {
-      title: 'จัดการสืบพันธุ์/ผสมพันธุ์',
+      title: 'การสืบพันธุ์/ผสมพันธุ์',
       loginRequired : true
     },
     path: '/manage/reproduct',
     name: 'reproduct',
     component: () => import('@/views/manage/reproduct/Main.vue')
+  },
+  {
+    meta: {
+      title: 'การคลอดลูก',
+      loginRequired : true
+    },
+    path: '/manage/birth',
+    name: 'birth',
+    component: () => import('@/views/manage/birth/Main.vue')
   },
   {
     meta: {

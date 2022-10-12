@@ -2,6 +2,12 @@
     const now = new Date()
     return now.getHours() + ':' + now.getMinutes()
   }
+
+  export const addDays = (days) => {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
   
   export const getCurrentUser = () => {
     let user = null;

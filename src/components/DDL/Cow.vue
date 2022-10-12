@@ -118,6 +118,9 @@ export default {
         --vs-dropdown-option--active-bg: #111827;
         --vs-search-input-placeholder-color: #6b7280;
         --vs-controls-size: 0.8;
+        --vs-disabled-bg: #1f2937;
+        --vs-disabled-color: #ffffff;
+        --vs-disabled-controls-color: #6b7280;
 
         border-color: #374151;
         background: #1f2937;

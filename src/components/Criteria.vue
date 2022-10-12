@@ -20,6 +20,12 @@
                     v-model="search[form.value]"
                     :valueType="form.valueType"
                 />
+                <FormCheckRadioPicker
+                    v-else-if="form.type === 'radio' "
+                    v-model="search[form.value]"
+                    :type="form.type"
+                    :options="form.options"
+                />
                 <FormControl
                     v-else
                     v-model="search[form.value]"
@@ -57,6 +63,7 @@ import BaseDivider from "@/components/BaseDivider.vue";
 import CardBox from "@/components/CardBox.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
+import FormCheckRadioPicker from "@/components/FormCheckRadioPicker.vue";
 import DDLCow from "@/components/DDL/Cow.vue";
 
 export default {
@@ -81,6 +88,7 @@ export default {
         CardBox,
         FormField,
         FormControl,
+        FormCheckRadioPicker,
         DDLCow
     },
     methods : {

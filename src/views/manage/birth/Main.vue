@@ -3,31 +3,26 @@
     <SectionMain>
 
       <SectionTitleBarSub 
-        icon="reproduction" 
-        title="การสืบพันธุ์"
-        btnText="เพิ่มการสืบพันธุ์"
-        has-btn-add
-        @openModal="mode='create';openModal = true;"
+        icon="babyFaceOutline" 
+        title="การคลอดลูก"
       />
 
       <Modal
         v-model="openModal"
-        :mode="mode" 
-        :dataEdit="dataEdit" 
-        @confirm="getReproductions" 
-        @cancel="getReproductions" 
+        :data="birthData"
+        @confirm="getDatas" 
       />
 
       <Criteria
         grid="grid-cols-2 lg:grid-cols-4"
-        @search="getReproductions" 
+        @search="getDatas" 
         @reset="reset" 
         :forms="forms" 
         :search="search"
       />
 
       <Table
-        title="รายการสืบพันธุ์" 
+        title="รายการคลอดลูก" 
         has-checkbox
         :checked-data="checked" 
         :items="items" 
@@ -52,15 +47,17 @@ import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
 
 import Modal from './Modal.vue'
-import ReproductionService from '@/services/reproduction'
+import BirthService from '@/services/birth'
 
-import { reproductStatus,reproductResult } from '@/constants/reproduct'
 import { getCurrentUser } from "@/utils";
+import getAge from "@/utils/age-calculate";
+import { sex,overgrown } from '@/constants/birth'
 
 export default {
   data (){
     return {
       openModal : false,
+      birthData : null,
       items : [],
       forms : [
         {
@@ -70,49 +67,22 @@ export default {
           module : 'cow'
         },
         {
-          label : 'สถานะ',
-          value : 'status',
-          options : reproductStatus()
+          label : 'เพศ',
+          value : 'sex',
+          type : 'radio',
+          options : { "":"ทั้งหมด",M:"ตัวผู้",F:"ตัวเมีย"}
         },
         {
-          label : 'ผล',
-          value : 'result',
-          options : reproductResult()
-        },
-        {
-          label : 'วันที่เข้าระบบสืบพันธุ์',
-          value : 'loginDate',
+          label : 'วันที่คลอด',
+          value : 'date',
           icon : 'calendar',
           type : 'date'
-        },
-        {
-          label : 'วันที่เป็นสัด',
-          value : 'estrusDate',
-          icon : 'calendar',
-          type : 'date'
-        },
-        {
-          label : 'วันที่ผสมพันธุ์',
-          value : 'matingDate',
-          icon : 'calendar',
-          type : 'date'
-        },
-        {
-          label : 'วันที่ตรวจท้อง',
-          value : 'checkDate',
-          icon : 'calendar',
-          type : 'date'
-        },
-        
+        },  
       ],
       search : {
         cow : null,
-        loginDate : null,
-        estrusDate : null,
-        matingDate : null,
-        checkDate : null,
-        status : "",
-        result : "",
+        date : null,
+        sex : "",
         farm : getCurrentUser().farm._id,
       },
       loading : false,
@@ -120,18 +90,13 @@ export default {
       dataEdit : null,
       checked : {
         code : {
-          value : 'seq',
+          value : 'date',
         },
         label : {
           value : 'cow.name'
         }
       },
       datas : [
-        {
-          label : "ครั้งที่",
-          class : 'text-center',
-          value : 'seq',
-        },
         {
           label : "รหัสโค",
           value : 'cow.code',
@@ -141,49 +106,50 @@ export default {
           value : 'cow.name',
         },
         {
-          label : "วันที่เข้าระบบสืบพันธุ์",
+          label : "วันที่ตั้งครรภ์",
           class : 'text-center',
-          value : 'loginDate',
+          value : 'reproduction.checkDate',
           type : 'date',
         },
         {
-          label : 'ผล',
+          label : 'อายุครรภ์',
           func : (obj) => {
-            return reproductResult()[obj.result].label
+            return this.calAge(obj?.reproduction?.checkDate)
           },
         },
         {
-          label : "วันที่เป็นสัด",
+          label : "วันที่คลอด",
           class : 'text-center',
-          value : 'estrusDate',
+          value : 'date',
           type : 'date',
         },
         {
-          label : "วันที่ผสมพันธุ์",
+          label : "เพศ",
           class : 'text-center',
-          value : 'matingDate',
-          type : 'date',
-        },
-        {
-          label : "วันที่ตรวจท้อง",
-          class : 'text-center',
-          value : 'checkDate',
-          type : 'date',
-        },
-        {
-          label : "พ่อพันธุ์",
-          value : 'dad',
-        },
-        {
-          label : 'สถานะ',
           func : (obj) => {
-            return reproductStatus()[obj.status].label
+            return sex()[obj.sex]
           },
         },
         {
-          label : "วิธีรักษา",
-          value : 'howTo',
+          label : "รกค้าง",
+          class : 'text-center',
+          func : (obj) => {
+            return overgrown()[obj.overgrown]
+          },
         },
+        {
+          label : "วันที่ใช้ยาขับ",
+          class : 'text-center',
+          value : 'drugDate',
+          type : 'date',
+        },
+        {
+          label : "วันที่ล้างมดลูก",
+          class : 'text-center',
+          value : 'washDate',
+          type : 'date',
+        },
+
       ],
       buttons : [
         {
@@ -191,7 +157,7 @@ export default {
           type : 'delete',
           color : 'danger',
           condition : (obj) => {
-            return obj.status != '2' && obj.status != '3'
+            return !obj.date
           }
         },
         {
@@ -199,7 +165,16 @@ export default {
           type : 'edit',
           color : 'warning',
           condition : (obj) => {
-            return obj.status != '2' && obj.status != '3'
+            return obj.date
+          }
+        },
+        {
+          label : 'บันทึกการคลอดลูก',
+          color : 'info',
+          type : 'oth',
+          func : (obj) => {
+            this.openModal = true;
+            this.birthData = obj
           }
         },
       ]
@@ -214,23 +189,23 @@ export default {
     Criteria
 },
   created() {
-    this.getReproductions();
+    this.getDatas();
   },
   methods : {
-    async getReproductions(search){
+    async getDatas(search){
       this.loading = true
-      const resp = await ReproductionService.all(search);
+      const resp = await BirthService.all(search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.reproducts
+        this.items = resp.data.births
       }
       this.loading = false
     },
     async remove(id){
       this.loading = true
-      const resp = await ReproductionService.delete(id);
+      const resp = await BirthService.delete(id);
       if(resp.data){
-        this.getReproductions()
+        this.getDatas()
       }
       this.loading = false
     },
@@ -243,7 +218,11 @@ export default {
     reset(){
       this.search.cow = null
       this.search.date = null
+      this.search.sex = null
     },
+    calAge(date){
+      return getAge(date);
+    }
   }
 }
 </script>

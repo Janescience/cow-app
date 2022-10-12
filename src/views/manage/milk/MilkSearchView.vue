@@ -32,7 +32,7 @@
         :checked-data="checked" 
         :items="items" 
         :datas="datas" 
-        :button="button" 
+        :buttons="buttons" 
         @edit="edit" 
         @delete="removeMilk" 
         @deleteSelected="removeSelected"
@@ -98,7 +98,12 @@ export default {
           value : 'date',
         },
         {
-          label : "โค",
+          label : "รหัสโค",
+          class : 'text-center',
+          value : 'cow.code',
+        },
+        {
+          label : "ชื่อโค",
           class : 'text-center',
           value : 'cow.name',
         },
@@ -126,10 +131,18 @@ export default {
           value : 'amount',
         },
       ],
-      button : {
-        edit:true,
-        delete:true
-      }
+      buttons : [
+        {
+          label : 'ลบ',
+          type : 'delete',
+          color : 'danger',
+        },
+        {
+          label : 'แก้ไข',
+          type : 'edit',
+          color : 'warning',
+        },
+      ]
     }
   },
   components : {
