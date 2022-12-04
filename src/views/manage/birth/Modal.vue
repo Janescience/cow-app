@@ -38,6 +38,12 @@
               :options="{ M: 'เพศผู้', F: 'เพศเมีย' }"
             />
           </FormField>
+          <FormField label="ชื่อลูกวัว" v-if="create.sex == 'F'">
+            <FormControl
+              v-model="create.calf"
+              icon="babyFaceOutline"
+            />
+          </FormField>
           <FormField label="รก" help="* ห้ามว่าง" >
             <FormCheckRadioPicker
               v-model="create.overgrown"
@@ -119,6 +125,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       return {
         create : {
           sex : "F",
+          calf : "",
           overgrown : "N",
           date : new Date(),
           placentaDrugDate : addDays(new Date(),15),
