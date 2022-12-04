@@ -46,7 +46,7 @@
             />
           </FormField>
           
-          <FormField label="วันที่ใช้ยาขับ" v-if="create.overgrown === 'Y'" >
+          <FormField label="วันที่ใช้ยาขับ" v-if="create.overgrown === 'Y'" help="* ห้ามว่าง (วันที่คลอด + 15 วัน)">
             <FormControl
               v-model="create.placentaDrugDate"
               icon="calendar"
@@ -54,7 +54,7 @@
               :lower-limit="create.date"
             />
           </FormField>
-          <FormField label="วันที่ล้างมดลูก" v-if="create.overgrown === 'Y'">
+          <FormField label="วันที่ล้างมดลูก" v-if="create.overgrown === 'Y'" help="* ห้ามว่าง (วันที่ใช้ยาขับ + 14 วัน)">
             <FormControl
               v-model="create.uterusWashDate"
               icon="calendar"
@@ -121,8 +121,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           sex : "F",
           overgrown : "N",
           date : new Date(),
-          placentaDrugDate : new Date(),
-          uterusWashDate : addDays(new Date(),14),
+          placentaDrugDate : addDays(new Date(),15),
+          uterusWashDate : addDays(new Date(),29),
         },
         show : {
           cow : null,
@@ -150,7 +150,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         }
       },
       'create.date'(n){
-        this.create.placentaDrugDate = n;
+        this.create.placentaDrugDate = addDays(n,15);
       },
       'create.placentaDrugDate'(n){
         this.create.uterusWashDate = addDays(n,14);
