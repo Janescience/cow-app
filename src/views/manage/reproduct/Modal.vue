@@ -23,12 +23,7 @@
               icon="genderMale"
             />
           </FormField>
-          <FormField label="สถานะ" >
-            <FormControl
-              v-model="reproduct.status"
-              :options="status"
-            />
-          </FormField>
+          
           <FormField label="วันที่เข้าระบบสืบพันธุ์" help="* ห้ามว่าง">
             <FormControl
               v-model="reproduct.loginDate"
@@ -43,13 +38,13 @@
               :options="result"
             />
           </FormField>
-          <FormField label="วิธีการรักษา" help="" >
+          <FormField label="วิธีการรักษา" help="" v-if="reproduct.result == 1">
             <FormControl
               v-model="reproduct.howTo"
               icon="doctor"
             />
           </FormField>
-          <FormField label="วันที่เป็นสัด" help="* ห้ามว่าง (วันที่เข้าระบบสืบพันธุ์ + 21 วัน)">
+          <FormField label="วันที่เป็นสัด" help="* ห้ามว่าง (วันที่เข้าระบบสืบพันธุ์ + 21 วัน)" v-if="reproduct.result == 2">
             <FormControl
               v-model="reproduct.estrusDate"
               icon="calendar"
@@ -58,7 +53,7 @@
               required
             />
           </FormField>
-          <FormField label="วันที่ผสมพันธุ์" help="* ห้ามว่าง (วันเดียวกันกับ วันที่เป็นสัด)">
+          <FormField label="วันที่ผสมพันธุ์" help="* ห้ามว่าง (วันที่เป็นสัด + 24 ชม)"  v-if="reproduct.result == 2">
             <FormControl
               v-model="reproduct.matingDate"
               icon="calendar"
@@ -67,7 +62,7 @@
               required
             />
           </FormField>
-          <FormField label="วันที่ตรวจท้อง" help="* ห้ามว่าง (วันที่ผสมพันธุ์ + 21 วัน)">
+          <FormField label="วันที่ตรวจท้อง" help="* ห้ามว่าง (วันที่ผสมพันธุ์ + 2 เดือน)"  v-if="reproduct.result == 2">
             <FormControl
               v-model="reproduct.checkDate"
               icon="calendar"
@@ -76,7 +71,12 @@
               required
             />
           </FormField>
-          
+          <FormField label="สถานะ" >
+            <FormControl
+              v-model="reproduct.status"
+              :options="status"
+            />
+          </FormField>
         </div>
 
         <NotificationBar 
@@ -120,7 +120,7 @@
   import BaseLevel from '@/components/BaseLevel.vue'
   import DDLCow from '@/components/DDL/Cow.vue'
 
-  import { addDays } from 'date-fns'
+  import { addDays,addMonths } from 'date-fns'
   import { getCurrentUser } from '@/utils'
 
   import { reproductStatus , reproductResult  } from '@/constants/reproduct'
@@ -133,12 +133,12 @@
           cow : null,  
           loginDate : new Date(),
           estrusDate : addDays(new Date(),21),
-          matingDate : addDays(new Date(),21),
-          checkDate : addDays(new Date(),42),
+          matingDate : addDays(new Date(),22),
+          checkDate : addMonths(addDays(new Date(),22),2),
           dad : "",
           howTo : "",
           status : 1,
-          result : 3,
+          result : 2,
           farm : getCurrentUser().farm._id
         },
         status : reproductStatus('create'),
@@ -160,13 +160,20 @@
     },
     watch:{
       'reproduct.loginDate'(n){
-        this.reproduct.estrusDate = addDays(n,21);
+        this.reproduct.estrusDate = addDays(n,21); // เป็นสัด
       },
       'reproduct.estrusDate'(n){
-        this.reproduct.matingDate = n;
+        this.reproduct.matingDate = addDays(n,1); // ผสม
       },
-      'reproduct.matingDate'(n){
-        this.reproduct.checkDate = addDays(n,21);
+      'reproduct.matingDate'(n){  
+        this.reproduct.checkDate = addMonths(n,2); // ตรวจท้อง
+      },
+      'reproduct.result'(n){
+        if(n == 1){
+          this.reproduct.status = 4
+        }else{
+          this.reproduct.status = 1
+        }
       },
       dataEdit : {
         handler (n,o) {
@@ -175,10 +182,9 @@
             this.reproduct.loginDate = new Date(n.loginDate)
             this.reproduct.estrusDate = new Date(n.estrusDate)
             this.reproduct.matingDate = new Date(n.matingDate)
-            this.reproduct.checkDate = new Date(n.loginDate)
+            this.reproduct.checkDate = new Date(n.checkDate)
           }
-        },
-        deep : true
+        }
       }
     },
     methods: {
@@ -188,12 +194,12 @@
           this.reproduct.cow = null
           this.reproduct.loginDate = new Date()
           this.reproduct.estrusDate = addDays(new Date(),21)
-          this.reproduct.matingDate = addDays(new Date(),21)
-          this.reproduct.checkDate = addDays(new Date(),42)
+          this.reproduct.matingDate = addDays(new Date(),22)
+          this.reproduct.checkDate = addMonths(addDays(new Date(),43),2)
           this.reproduct.dad = ""
           this.reproduct.howTo = ""
           this.reproduct.status = 1
-          this.reproduct.result = ""
+          this.reproduct.result = 2
           delete this.reproduct?._id
         },
         confirmCancel(mode){

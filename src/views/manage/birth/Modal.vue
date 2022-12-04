@@ -21,7 +21,7 @@
             การสืบพันธุ์ครั้งที่ : {{ show?.reproduction?.seq }}
           </BaseLevel>
           <BaseLevel type="justify-start" >
-            อายุครรภ์ : {{ calAge(show?.reproduction?.checkDate) }}
+            อายุครรภ์ : {{ calAge(show?.pregnantDate) }}
           </BaseLevel>
           <FormField label="วันที่คลอด" help="* ห้ามว่าง" >
             <FormControl

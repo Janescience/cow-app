@@ -19,18 +19,12 @@ export const reproductResult = (action) => {
     return action === 'create' ?
     [
         { id: 1, label: 'ผิดปกติ' },
-        { id: 2, label: 'ไข่เล็ก' },
-        { id: 3, label: 'ตั้งรอบ' },
-        { id: 4, label: 'F - ซ้าย' },
-        { id: 5, label: 'F - ขวา' }
+        { id: 2, label: 'ปกติ (พร้อมผสม)' },
     ]
     :[
         { id: "", label: 'ทั้งหมด' },
         { id: 1, label: 'ผิดปกติ' },
-        { id: 2, label: 'ไข่เล็ก' },
-        { id: 3, label: 'ตั้งรอบ' },
-        { id: 4, label: 'F - ซ้าย' },
-        { id: 5, label: 'F - ขวา' }
+        { id: 2, label: 'ปกติ (พร้อมผสม)' },
     ]
 }
 

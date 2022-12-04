@@ -69,8 +69,7 @@ export default {
         {
           label : 'เพศ',
           value : 'sex',
-          type : 'radio',
-          options : { "":"ทั้งหมด",M:"ตัวผู้",F:"ตัวเมีย"}
+          options : [{id : '', label :"ทั้งหมด"},{id : 'M', label :"ตัวผู้"},{id : 'F', label :"ตัวเมีย"}]
         },
         {
           label : 'วันที่คลอด',
@@ -90,13 +89,18 @@ export default {
       dataEdit : null,
       checked : {
         code : {
-          value : 'date',
+          value : 'seq',
         },
         label : {
           value : 'cow.name'
         }
       },
       datas : [
+        {
+          label : "ครั้งที่",
+          value : 'seq',
+          class : 'text-center',
+        },
         {
           label : "รหัสโค",
           value : 'cow.code',
@@ -108,13 +112,13 @@ export default {
         {
           label : "วันที่ตั้งครรภ์",
           class : 'text-center',
-          value : 'reproduction.checkDate',
+          value : 'pregnantDate',
           type : 'date',
         },
         {
           label : 'อายุครรภ์',
           func : (obj) => {
-            return this.calAge(obj?.reproduction?.checkDate)
+            return this.calAge(obj?.pregnantDate)
           },
         },
         {

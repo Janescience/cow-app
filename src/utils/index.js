@@ -7,7 +7,13 @@
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
-}
+  }
+
+  export const addMonths = (months) => {
+    var date = new Date(this.valueOf());
+    date.setMonth(date.getMonth() + months);
+    return date;
+  }
   
   export const getCurrentUser = () => {
     let user = null;

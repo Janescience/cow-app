@@ -50,7 +50,8 @@ export default {
         async initialData () {
 
             const opts = {
-                farm : getCurrentUser().farm._id
+                farm : getCurrentUser().farm._id,
+                flag : 'Y'
             }
 
             try {
@@ -81,7 +82,7 @@ export default {
         },
         handleInput (text) {
             this.$emit("update:value", text);
-            this.dataSelected = this.datas.find((x) => x.cde === text || x.name === text);
+            this.dataSelected = this.datas.find((x) => x.code === text || x.name === text);
             this.$emit("update:dataSelected", this.dataSelected);
             
         }
