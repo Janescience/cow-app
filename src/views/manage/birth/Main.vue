@@ -10,6 +10,7 @@
       <Modal
         v-model="openModal"
         :data="birthData"
+        :mode="mode"
         @confirm="getDatas" 
       />
 
@@ -124,7 +125,7 @@ export default {
         {
           label : "วันที่คลอด",
           class : 'text-center',
-          value : 'date',
+          value : 'birthDate',
           type : 'date',
         },
         {
@@ -132,6 +133,13 @@ export default {
           class : 'text-center',
           func : (obj) => {
             return sex()[obj.sex]
+          },
+        },
+        {
+          label : "ลูกวัว",
+          class : 'text-center',
+          func : (obj) => {
+            return obj.calf ? obj.calf?.code + " : " + obj.calf?.name : ""
           },
         },
         {
@@ -161,7 +169,7 @@ export default {
           type : 'delete',
           color : 'danger',
           condition : (obj) => {
-            return !obj.date
+            return !obj.birthDate
           }
         },
         {
@@ -169,7 +177,7 @@ export default {
           type : 'edit',
           color : 'warning',
           condition : (obj) => {
-            return obj.date
+            return obj.birthDate
           }
         },
         {
@@ -177,8 +185,12 @@ export default {
           color : 'info',
           type : 'oth',
           func : (obj) => {
+            this.mode = 'create';
             this.openModal = true;
             this.birthData = obj
+          },
+          condition : (obj) => {
+            return !obj.birthDate
           }
         },
       ]
@@ -214,8 +226,7 @@ export default {
       this.loading = false
     },
     edit(obj){
-      this.dataEdit = obj;
-      this.dataEdit.cow = obj.cow._id;
+      this.birthData = obj;
       this.mode = 'edit';
       this.openModal = true;
     },

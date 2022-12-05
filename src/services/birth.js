@@ -31,23 +31,11 @@ class BirthService{
     get(id){
         return http.get(`/birth/${id}`,{ headers : authHeader()});
     }
-    create(payload){
+    create(id,payload){
         if (payload.birthDate) {
             payload.birthDate = moment(new Date(payload.birthDate)).format('YYYY-MM-DD') 
         }
-        if (payload.loginDate) {
-            payload.loginDate = moment(new Date(payload.loginDate)).format('YYYY-MM-DD') 
-        }
-        if (payload.estrusDate) {
-            payload.estrusDate = moment(new Date(payload.estrusDate)).format('YYYY-MM-DD') 
-        }
-        if (payload.matingDate) {
-            payload.matingDate = moment(new Date(payload.matingDate)).format('YYYY-MM-DD') 
-        }
-        if (payload.checkDate) {
-            payload.checkDate = moment(new Date(payload.checkDate)).format('YYYY-MM-DD') 
-        } 
-        return http.post(`/birth`,payload,{ headers : authHeader()});
+        return http.post(`/birth/${id}`,payload,{ headers : authHeader()});
     }
     delete(id){
         return http.delete(`/birth/${id}`,{ headers : authHeader()});

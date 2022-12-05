@@ -1,5 +1,5 @@
 export const sex = () => {
-    return { M: 'ตัวผู้', F: 'ตัวเมีย' }
+    return { M: 'เพศผู้', F: 'เพศเมีย' }
 }
 
 export const overgrown = () => {

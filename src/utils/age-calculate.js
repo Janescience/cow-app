@@ -1,4 +1,4 @@
-export default (dob) => {
+export default (dob,n) => {
     var dob = new Date(dob);  
       
     //extract the year, month, and date from user date input  
@@ -7,7 +7,7 @@ export default (dob) => {
     var dobDate = dob.getDate();  
       
     //get the current date from the system  
-    var now = new Date();  
+    var now = n ? new Date(n) : new Date();  
     //extract the year, month, and date from current date  
     var currentYear = now.getYear();  
     var currentMonth = now.getMonth();  
