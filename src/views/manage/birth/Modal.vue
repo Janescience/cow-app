@@ -58,7 +58,7 @@
           
           <FormField label="วันที่ใช้ยาขับ" v-if="birth.overgrown === 'Y'" help="* ห้ามว่าง (วันที่คลอด + 15 วัน)">
             <FormControl
-              v-model="birth.placentaDrugDate"
+              v-model="birth.drugDate"
               icon="calendar"
               type="date"
               :lower-limit="birth.date"
@@ -66,10 +66,10 @@
           </FormField>
           <FormField label="วันที่ล้างมดลูก" v-if="birth.overgrown === 'Y'" help="* ห้ามว่าง (วันที่ใช้ยาขับ + 14 วัน)">
             <FormControl
-              v-model="birth.uterusWashDate"
+              v-model="birth.washDate"
               icon="calendar"
               type="date"
-              :lower-limit="birth.placentaDrugDate"
+              :lower-limit="birth.drugDate"
             />
           </FormField>
           
@@ -131,8 +131,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           sex : "F",
           overgrown : "N",
           birthDate : new Date(),
-          placentaDrugDate : addDays(new Date(),15),
-          uterusWashDate : addDays(new Date(),29),
+          drugDate : addDays(new Date(),15),
+          washDate : addDays(new Date(),29),
           newCow : {
             name : "",
             mom : "",
@@ -164,15 +164,20 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           this.show = n
           this.birth.newCow.mom = n.cow.code
           this.birth.newCow.name = n.calf?.name
-          if(this.mode === 'edit')
+          if(this.mode === 'edit'){
             this.birth.birthDate = new Date(n.birthDate)
+            this.birth.drugDate = new Date(n.drugDate)
+            this.birth.washDate = new Date(n.washDate)
+            this.birth.overgrown = n.overgrown
+          }
+            
         }
       },
-      'birth.date'(n){
-        this.birth.placentaDrugDate = addDays(n,15);
+      'birth.birthDate'(n){
+        this.birth.drugDate = addDays(n,15);
       },
-      'birth.placentaDrugDate'(n){
-        this.birth.uterusWashDate = addDays(n,14);
+      'birth.drugDate'(n){
+        this.birth.washDate = addDays(n,14);
       },
     },
     methods: {
@@ -181,8 +186,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           this.birth.overgrown = "N"
           this.birth.newCow.name = "" 
           this.birth.birthDate = new Date()
-          this.birth.placentaDrugDate = addDays(new Date(),15)
-          this.birth.uterusWashDate = addDays(new Date(),14)
+          this.birth.drugDate = addDays(new Date(),15)
+          this.birth.washDate = addDays(new Date(),14)
         },
         confirmCancel(mode){
             this.value = false
@@ -200,6 +205,10 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.loading = true
             this.alert = ""
             try {
+              if(this.birth.overgrown === "N"){
+                this.birth.drugDate = null
+                this.birth.washDate = null
+              }
               if(this.mode === 'create'){
                 const resp = await BirthService.create(this.show._id,this.birth);
                 if(resp){
