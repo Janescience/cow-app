@@ -10,9 +10,9 @@ async function getSearchQuery (opts = {}) {
     if (opts.cow) {
         query = query + `cow=${opts.cow}&`;
     } 
-    if (opts.date) {
-        const dateNoTime = moment(new Date(opts.date)).format('YYYY-MM-DD') 
-        query = query + `date=${dateNoTime}&`;
+    if (opts.birthDate) {
+        const dateNoTime = moment(new Date(opts.birthDate)).format('YYYY-MM-DD') 
+        query = query + `birthDate=${dateNoTime}&`;
     }
     if (opts.sex) {
         query = query + `sex=${opts.sex}&`;
@@ -41,6 +41,9 @@ class BirthService{
         return http.delete(`/birth/${id}`,{ headers : authHeader()});
     }
     update(id,payload){
+        if (payload.birthDate) {
+            payload.birthDate = moment(new Date(payload.birthDate)).format('YYYY-MM-DD') 
+        }
         return http.put(`/birth/${id}`,payload,{ headers : authHeader()});
     }
 }

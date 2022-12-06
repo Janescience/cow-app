@@ -3,15 +3,20 @@
     <SectionMain>
 
       <SectionTitleBarSub 
-        icon="babyFaceOutline" 
-        title="การคลอดลูก"
+        icon="doctor" 
+        title="การรักษา"
+        has-btn-add
+        @openModal="mode='create';openModal = true;"
+        btnText="เพิ่มการรักษา"
       />
 
       <Modal
         v-model="openModal"
-        :data="birthData"
+        :data="modalData"
         :mode="mode"
-        @confirm="getDatas" 
+        @confirm="getDatas"
+        @cancel="getDatas"
+         
       />
 
       <Criteria
@@ -23,7 +28,7 @@
       />
 
       <Table
-        title="รายการคลอดลูก" 
+        title="รายการรักษา" 
         has-checkbox
         :checked-data="checked" 
         :items="items" 
@@ -48,17 +53,16 @@ import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
 
 import Modal from './Modal.vue'
-import BirthService from '@/services/birth'
+import HealService from '@/services/heal'
 
 import { getCurrentUser } from "@/utils";
-import getAge from "@/utils/age-calculate";
-import { sex,overgrown } from '@/constants/birth'
+
 
 export default {
   data (){
     return {
       openModal : false,
-      birthData : null,
+      modalData : null,
       items : [],
       forms : [
         {
@@ -68,21 +72,15 @@ export default {
           module : 'cow'
         },
         {
-          label : 'เพศ',
-          value : 'sex',
-          options : [{id : '', label :"ทั้งหมด"},{id : 'M', label :"ตัวผู้"},{id : 'F', label :"ตัวเมีย"}]
-        },
-        {
-          label : 'วันที่คลอด',
-          value : 'birthDate',
+          label : 'วันที่รักษา',
+          value : 'date',
           icon : 'calendar',
           type : 'date'
         },  
       ],
       search : {
         cow : null,
-        birthDate : null,
-        sex : "",
+        date : null,
         farm : getCurrentUser().farm._id,
       },
       loading : false,
@@ -111,87 +109,37 @@ export default {
           value : 'cow.name',
         },
         {
-          label : "วันที่ตั้งครรภ์",
+          label : "วันที่รักษา",
           class : 'text-center',
-          value : 'pregnantDate',
+          value : 'date',
           type : 'date',
         },
         {
-          label : 'อายุครรภ์',
-          func : (obj) => {
-            return this.calAge(obj?.pregnantDate)
-          },
+          label : "อาการ/โรค",
+          class : 'text-center',
+          value : 'disease',
         },
         {
-          label : "วันที่คลอด",
+          label : "วิธีการรักษา",
           class : 'text-center',
-          value : 'birthDate',
-          type : 'date',
+          value : 'method',
         },
         {
-          label : "เพศ",
+          label : "คนรักษา",
           class : 'text-center',
-          func : (obj) => {
-            return sex()[obj.sex]
-          },
+          value : 'healer',
         },
-        {
-          label : "ลูกวัว",
-          class : 'text-center',
-          func : (obj) => {
-            return obj.calf ? obj.calf?.code + " : " + obj.calf?.name : ""
-          },
-        },
-        {
-          label : "รกค้าง",
-          class : 'text-center',
-          func : (obj) => {
-            return overgrown()[obj.overgrown]
-          },
-        },
-        {
-          label : "วันที่ใช้ยาขับ",
-          class : 'text-center',
-          value : 'drugDate',
-          type : 'date',
-        },
-        {
-          label : "วันที่ล้างมดลูก",
-          class : 'text-center',
-          value : 'washDate',
-          type : 'date',
-        },
-
       ],
       buttons : [
         {
           label : 'ลบ',
           type : 'delete',
           color : 'danger',
-          condition : (obj) => {
-            return !obj.birthDate
-          }
         },
         {
           label : 'แก้ไข',
           type : 'edit',
           color : 'warning',
-          condition : (obj) => {
-            return obj.birthDate
-          }
-        },
-        {
-          label : 'บันทึกการคลอดลูก',
-          color : 'info',
-          type : 'oth',
-          func : (obj) => {
-            this.mode = 'create';
-            this.openModal = true;
-            this.birthData = obj
-          },
-          condition : (obj) => {
-            return !obj.birthDate
-          }
         },
       ]
     }
@@ -210,34 +158,32 @@ export default {
   methods : {
     async getDatas(search){
       this.loading = true
-      const resp = await BirthService.all(search);
+      const resp = await HealService.all(search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.births
+        this.items = resp.data.heals
       }
       this.loading = false
     },
     async remove(id){
       this.loading = true
-      const resp = await BirthService.delete(id);
+      const resp = await HealService.delete(id);
       if(resp.data){
         this.getDatas()
       }
       this.loading = false
     },
     edit(obj){
-      this.birthData = obj;
+      this.modalData = obj;
+      this.modalData.cow = obj.cow._id;
+
       this.mode = 'edit';
       this.openModal = true;
     },
     reset(){
       this.search.cow = null
-      this.search.birthDate = null
-      this.search.sex = null
+      this.search.date = null
     },
-    calAge(date){
-      return getAge(date);
-    }
   }
 }
 </script>

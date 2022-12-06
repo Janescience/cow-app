@@ -71,6 +71,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'การรักษา',
+      loginRequired : true
+    },
+    path: '/manage/heal',
+    name: 'heal',
+    component: () => import('@/views/manage/heal/Main.vue')
+  },
+  {
+    meta: {
       title: 'Tables',
       loginRequired : true
     },
