@@ -80,6 +80,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'การป้องกัน/บำรุง',
+      loginRequired : true
+    },
+    path: '/manage/protection',
+    name: 'protection',
+    component: () => import('@/views/manage/protection/Main.vue')
+  },
+  {
+    meta: {
       title: 'Tables',
       loginRequired : true
     },

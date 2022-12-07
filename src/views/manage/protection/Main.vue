@@ -4,10 +4,10 @@
 
       <SectionTitleBarSub 
         icon="doctor" 
-        title="การรักษา"
+        title="การป้องกัน/บำรุง"
         has-btn-add
         @openModal="mode='create';openModal = true;"
-        btnText="เพิ่มการรักษา"
+        btnText="เพิ่มการป้องกัน/บำรุง"
       />
 
       <Modal
@@ -28,7 +28,7 @@
       />
 
       <Table
-        title="รายการรักษา" 
+        title="รายการป้องกัน/บำรุง" 
         has-checkbox
         :checked-data="checked" 
         :items="items" 
@@ -68,19 +68,34 @@ export default {
         {
           label : 'โค',
           value : 'cow',
-          type : 'ddl',
-          module : 'cow'
+          type : 'ddl-multiple',
+          module : 'cow',
+          class : 'col-span-4'
         },
         {
-          label : 'วันที่รักษา',
-          value : 'date',
+          label : 'วัคซีน',
+          value : 'vaccine',
+          type : 'ddl',
+          module : 'vaccine'
+        }, 
+        {
+          label : 'ฉีดวัคซีนล่าสุด',
+          value : 'dateCurrent',
           icon : 'calendar',
           type : 'date'
-        },  
+        },
+        {
+          label : 'ฉีดวัคซีนครั้งต่อไป',
+          value : 'dateNext',
+          icon : 'calendar',
+          type : 'date'
+        },
       ],
       search : {
-        cow : null,
-        date : null,
+        cow : [],
+        dateCurrent : null,
+        dateNext : null,
+        vaccine : null,
         farm : getCurrentUser().farm._id,
       },
       loading : false,
@@ -88,46 +103,35 @@ export default {
       dataEdit : null,
       checked : {
         code : {
-          value : 'seq',
+          value : 'cow.name',
         },
         label : {
-          value : 'cow.name'
+          value : 'vaccine.name'
         }
       },
       datas : [
         {
-          label : "ครั้งที่",
-          value : 'seq',
+          label : "โค",
+          func : (obj) => {
+            return obj.cow.code + ' : ' + obj.cow.name
+          },
+        },
+        {
+          label : "วัคซีน",
           class : 'text-center',
+          value : 'vaccine.name'
         },
         {
-          label : "รหัสโค",
-          value : 'cow.code',
-        },
-        {
-          label : "ชื่อโค",
-          value : 'cow.name',
-        },
-        {
-          label : "วันที่รักษา",
+          label : "ฉีดวัคซีนล่าสุด",
           class : 'text-center',
-          value : 'date',
+          value : 'dateCurrent',
           type : 'date',
         },
         {
-          label : "อาการ/โรค",
+          label : "ฉีดวัคซีนครั้งต่อไป",
           class : 'text-center',
-          value : 'disease',
-        },
-        {
-          label : "วิธีการรักษา",
-          class : 'text-center',
-          value : 'method',
-        },
-        {
-          label : "คนรักษา",
-          class : 'text-center',
-          value : 'healer',
+          value : 'dateNext',
+          type : 'date',
         },
       ],
       buttons : [
@@ -180,13 +184,16 @@ export default {
     edit(obj){
       this.modalData = obj;
       this.modalData.cow = obj.cow._id;
+      this.modalData.vaccine = obj.vaccine._id;
 
       this.mode = 'edit';
       this.openModal = true;
     },
     reset(){
-      this.search.cow = null
-      this.search.date = null
+      this.search.cow = []
+      this.search.dateCurrent = null
+      this.search.dateNext = null
+      this.search.vaccine = null
     },
   }
 }

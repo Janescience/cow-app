@@ -8,8 +8,8 @@
             :disabled="disabled"
             :options="datas"
             :reduce="reduceAction"
-            label="cow_data"
-            placeholder="เลือกโค"
+            label="vaccine_data"
+            placeholder="เลือกวัคซีน"
             @input="handleInput"
             v-model="value"
             :dataSelected="dataSelected"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import  CowService  from '@/services/cow';
+import  VaccineService  from '@/services/vaccine';
 import { getCurrentUser } from '@/utils';
 
 export default {
@@ -52,15 +52,14 @@ export default {
 
             const opts = {
                 farm : getCurrentUser().farm._id,
-                flag : 'Y'
             }
 
             try {
-                const resp = await CowService.all(opts);
+                const resp = await VaccineService.all(opts);
                 this.datas = [];
                 if (resp) {
-                    this.datas = resp.data.cows;
-                    this.datas.map((x)=> x.cow_data = x.code + " : " + x.name);
+                    this.datas = resp.data.vaccines;
+                    this.datas.map((x)=> x.vaccine_data = x.name);
                 }
 
                 if(this.defaultValue) {
@@ -83,7 +82,7 @@ export default {
         },
         handleInput (text) {
             this.$emit("update:value", text);
-            this.dataSelected = this.datas.find((x) => x.code === text || x.name === text);
+            this.dataSelected = this.datas.find((x) => x.name === text);
             this.$emit("update:dataSelected", this.dataSelected);
             
         }

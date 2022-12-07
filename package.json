@@ -19,6 +19,7 @@
     "moment": "^2.29.4",
     "numeral": "^2.0.6",
     "pinia": "^2.0.13",
+    "sweetalert2": "^11.6.15",
     "vue": "^3.0.0",
     "vue-loading-overlay": "^5.0.3",
     "vue-router": "^4.0.0",

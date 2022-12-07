@@ -20,6 +20,12 @@
                     v-model="search[form.value]"
                     :valueType="form.valueType"
                 />
+                <DDLCow 
+                    v-else-if="form.type === 'ddl-multiple' && form.module === 'cow' " 
+                    v-model="search[form.value]"
+                    :valueType="form.valueType"
+                    mutiple
+                />
                 <FormCheckRadioPicker
                     v-else-if="form.type === 'radio' "
                     v-model="search[form.value]"

@@ -4,7 +4,7 @@
     >
       <CardBox
         v-show="value"
-        :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การรักษา'"
+        :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การป้องกัน/บำรุง'"
         class="shadow-lg w-full  overflow-y-auto lg:w-1/2 z-50"
         header-icon="close"
         modal
@@ -14,37 +14,28 @@
       >
       
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <FormField label="โค" help="* ห้ามว่าง">
-              <DDLCow v-model="heal.cow"/>
+          <FormField label="โค" help="* ห้ามว่าง" class="col-span-3">
+              <DDLCow v-model="protection.cows" multiple/>
           </FormField>
-          <FormField label="วันที่รักษา" help="* ห้ามว่าง" >
+          <FormField label="วัคซีน" help="* ห้ามว่าง" >
+              <DDLVaccine v-model="protection.vaccine" />
+          </FormField>
+          <FormField label="ฉีดวัคซีนล่าสุด" help="* ห้ามว่าง" >
             <FormControl
-              v-model="heal.date"
+              v-model="protection.dateCurrent"
               icon="calendar"
               type="date"
               required
             />
           </FormField>
-          <FormField label="คนรักษา"  >
+          <FormField label="ฉีดวัคซีนครั้งต่อไป" help="* ห้ามว่าง" >
             <FormControl
-              v-model="heal.healer"
-              icon="doctor"
-            />
-          </FormField>
-          <FormField label="อาการ/โรค"  help="* ห้ามว่าง">
-            <FormControl
-              v-model="heal.disease"
-              type="textarea"
+              v-model="protection.dateNext"
+              icon="calendar"
+              type="date"
               required
             />
           </FormField>
-          <FormField label="วิธีการรักษา" >
-            <FormControl
-              v-model="heal.method"
-              type="textarea"
-            />
-          </FormField>
-          
         </div>
 
         <NotificationBar 
@@ -87,22 +78,22 @@ import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
-import DDLCow from '@/components/DDL/Cow.vue'
+import DDLVaccine from '@/components/DDL/Vaccine.vue'
 
 import { getCurrentUser,Toast } from '@/utils'
+import { addMonths } from 'date-fns'
 
-import HealService from '@/services/heal'
+import ProtectionService from '@/services/protection'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
   
   export default {
     data () {
       return {
-        heal : {
-          cow : null,
-          date : new Date(),
-          disease : "",
-          method : "",
-          healer : "",
+        protection : {
+          cows : [],
+          dateCurrent : new Date(),
+          dateNext : null,
+          vaccine : null,
           farm :getCurrentUser().farm._id
         },
         loading : false,
@@ -123,18 +114,18 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     watch:{
       data(n){
         if(n && this.mode === 'edit'){
-          this.heal = n;
-          this.heal.date = new Date(n.date);
+          this.protection = n;
+          this.protection.dateCurrent = new Date(n.dateCurrent);
+          this.protection.dateNext = new Date(n.dateNext);
         }
       },
     },
     methods: {
         clear(){
-          this.heal.cow = null
-          this.heal.date = new Date()
-          this.heal.disease = "" 
-          this.heal.method = ""
-          this.heal.healer = ""
+          this.protection.cows = []
+          this.protection.dateCurrent = new Date()
+          this.protection.dateNext = null 
+          this.protection.vaccine = null
         },
         confirmCancel(mode){
             this.value = false
@@ -153,14 +144,14 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.alert = ""
             try {
               if(this.mode === 'create'){
-                const resp = await HealService.create(this.heal);
+                const resp = await ProtectionService.create(this.protection);
                 if(resp){
                     this.loading = false
                     this.value = false 
                     this.confirmCancel('confirm') 
                 }
               }else{
-                const resp = await HealService.update(this.heal);
+                const resp = await HealService.update(this.protection);
                 if(resp){
                     this.loading = false
                     this.value = false
@@ -193,7 +184,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     FormControl,
     NotificationBar,
     BaseLevel,
-    DDLCow,
+    DDLVaccine,
     FormCheckRadioPicker,
     BaseIcon
 },
