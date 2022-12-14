@@ -65,7 +65,7 @@ const submit = () => {
       
 
         <BaseLevel type="justify-center">
-          <UserAvatar avatar="src/assets/image/cow-logo.jpg" class="w-28" />
+          <UserAvatar avatar="public/image/cow-logo.jpg" class="w-28" />
         </BaseLevel>
 
         <SectionTitle>
