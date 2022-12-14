@@ -55,8 +55,8 @@ import Criteria from "@/components/Criteria.vue";
 import Modal from './Modal.vue'
 import HealService from '@/services/heal'
 
-import { getCurrentUser,Toast } from "@/utils";
-
+import { getCurrentUser } from "@/utils";
+import { Toast } from "@/utils/alert";
 
 export default {
   data (){

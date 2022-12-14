@@ -80,7 +80,8 @@ import NotificationBar from '@/components/NotificationBar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import DDLVaccine from '@/components/DDL/Vaccine.vue'
 
-import { getCurrentUser,Toast } from '@/utils'
+import { getCurrentUser } from '@/utils'
+import { Toast } from "@/utils/alert";
 import { addMonths } from 'date-fns'
 
 import ProtectionService from '@/services/protection'

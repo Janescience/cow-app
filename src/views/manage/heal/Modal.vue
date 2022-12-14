@@ -89,7 +89,9 @@ import NotificationBar from '@/components/NotificationBar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import DDLCow from '@/components/DDL/Cow.vue'
 
-import { getCurrentUser,Toast } from '@/utils'
+import { getCurrentUser } from '@/utils'
+import { Toast } from "@/utils/alert";
+
 
 import HealService from '@/services/heal'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'

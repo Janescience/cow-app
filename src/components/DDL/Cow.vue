@@ -13,7 +13,7 @@
             @input="handleInput"
             v-model="value"
             :dataSelected="dataSelected"
-            multiple
+            :multiple="multiple"
         >
             <template v-slot:no-options>
                 <mdicon name="alertCircleOutline" width="16" height="16" class="inline-block"/> 
