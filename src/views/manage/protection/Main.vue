@@ -53,7 +53,7 @@ import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
 
 import Modal from './Modal.vue'
-import HealService from '@/services/heal'
+import ProtectionService from '@/services/protection'
 
 import { getCurrentUser } from "@/utils";
 import { Toast } from "@/utils/alert";
@@ -67,17 +67,9 @@ export default {
       items : [],
       forms : [
         {
-          label : 'โค',
-          value : 'cow',
-          type : 'ddl-multiple',
-          module : 'cow',
-          class : 'col-span-4'
-        },
-        {
           label : 'วัคซีน',
           value : 'vaccine',
-          type : 'ddl',
-          module : 'vaccine'
+          icon : 'vaccine',
         }, 
         {
           label : 'ฉีดวัคซีนล่าสุด',
@@ -93,10 +85,9 @@ export default {
         },
       ],
       search : {
-        cow : [],
         dateCurrent : null,
         dateNext : null,
-        vaccine : null,
+        vaccine : '',
         farm : getCurrentUser().farm._id,
       },
       loading : false,
@@ -104,23 +95,22 @@ export default {
       dataEdit : null,
       checked : {
         code : {
-          value : 'cow.name',
+          value : '',
         },
         label : {
-          value : 'vaccine.name'
+          value : 'vaccine'
         }
       },
       datas : [
         {
-          label : "โค",
-          func : (obj) => {
-            return obj.cow.code + ' : ' + obj.cow.name
-          },
-        },
-        {
           label : "วัคซีน",
           class : 'text-center',
-          value : 'vaccine.name'
+          value : 'vaccine'
+        },
+        {
+          label : "ความถี่/วัคซีน (เดือน)",
+          class : 'text-center',
+          value : 'frequency'
         },
         {
           label : "ฉีดวัคซีนล่าสุด",
@@ -133,6 +123,11 @@ export default {
           class : 'text-center',
           value : 'dateNext',
           type : 'date',
+        },
+        {
+          label : "หมายเหตุ",
+          class : 'text-center',
+          value : 'remark',
         },
       ],
       buttons : [
@@ -163,16 +158,16 @@ export default {
   methods : {
     async getDatas(search){
       this.loading = true
-      const resp = await HealService.all(search);
+      const resp = await ProtectionService.all(search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.heals
+        this.items = resp.data.protections
       }
       this.loading = false
     },
     async remove(id){
       this.loading = true
-      const resp = await HealService.delete(id);
+      const resp = await ProtectionService.delete(id);
       if(resp.data){
         this.getDatas()
       }
@@ -184,17 +179,13 @@ export default {
     },
     edit(obj){
       this.modalData = obj;
-      this.modalData.cow = obj.cow._id;
-      this.modalData.vaccine = obj.vaccine._id;
-
       this.mode = 'edit';
       this.openModal = true;
     },
     reset(){
-      this.search.cow = []
       this.search.dateCurrent = null
       this.search.dateNext = null
-      this.search.vaccine = null
+      this.search.vaccine = ''
     },
   }
 }

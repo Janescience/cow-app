@@ -118,7 +118,7 @@
     data () {
       return {
         cow : {
-          image : '../../src/assets/image/img-mockup.png',
+          image : 'image/img-mockup.png',
           code : "",  
           name : "",
           status : "1",
@@ -163,7 +163,7 @@
     methods: {
         clear(){
           this.$emit('update:dataEdit',null);
-          this.cow.image = '../../src/assets/image/img-mockup.png'
+          this.cow.image = 'image/img-mockup.png'
           this.cow.code = ""
           this.cow.name = ""
           this.cow.birthDate = null

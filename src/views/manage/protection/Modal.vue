@@ -14,11 +14,20 @@
       >
       
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <FormField label="โค" help="* ห้ามว่าง" class="col-span-3">
-              <DDLCow v-model="protection.cows" multiple/>
-          </FormField>
           <FormField label="วัคซีน" help="* ห้ามว่าง" >
-              <DDLVaccine v-model="protection.vaccine" />
+            <FormControl
+              v-model="protection.vaccine"
+              icon="vaccine"
+              required
+            />
+          </FormField>
+          <FormField label="ความถี่/วัคซีน (เดือน)" help="* ห้ามว่าง" >
+            <FormControl
+              v-model="protection.frequency"
+              icon="time"
+              type="number"
+              required
+            />
           </FormField>
           <FormField label="ฉีดวัคซีนล่าสุด" help="* ห้ามว่าง" >
             <FormControl
@@ -34,6 +43,12 @@
               icon="calendar"
               type="date"
               required
+            />
+          </FormField>
+          <FormField label="หมายเหตุ"  >
+            <FormControl
+              v-model="protection.remark"
+              type="textarea"
             />
           </FormField>
         </div>
@@ -91,10 +106,11 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     data () {
       return {
         protection : {
-          cows : [],
           dateCurrent : new Date(),
           dateNext : null,
-          vaccine : null,
+          vaccine : '',
+          frequency : null,
+          remark : '',
           farm :getCurrentUser().farm._id
         },
         loading : false,
@@ -120,13 +136,20 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           this.protection.dateNext = new Date(n.dateNext);
         }
       },
+      'protection.frequency'(n){
+        if(n){
+          this.protection.dateNext = addMonths(new Date(this.protection.dateCurrent),n);
+        }
+      },
+
     },
     methods: {
         clear(){
-          this.protection.cows = []
           this.protection.dateCurrent = new Date()
           this.protection.dateNext = null 
-          this.protection.vaccine = null
+          this.protection.vaccine = ''
+          this.protection.frequency = ''
+          this.protection.remark = ''
         },
         confirmCancel(mode){
             this.value = false
@@ -152,7 +175,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
                     this.confirmCancel('confirm') 
                 }
               }else{
-                const resp = await HealService.update(this.protection);
+                const resp = await ProtectionService.update(this.protection._id,this.protection);
                 if(resp){
                     this.loading = false
                     this.value = false
@@ -165,8 +188,9 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
               })
             } catch (error) {
               console.error('Error : ',error)
+                this.clear()
                 this.loading = false  
-                this.alert = error.response.data.message
+                this.alert = await error.response.data.message
                 Toast.fire({
                   icon: 'error',
                   title: 'บันทึกข้อมูลไม่สำเร็จ'
