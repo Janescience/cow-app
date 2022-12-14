@@ -137,7 +137,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             name : "",
             mom : "",
             farm : getCurrentUser().farm._id
-          }
+          },
+          reproduction : ""
         },
         show : {
           cow : null,
@@ -164,6 +165,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           this.show = n
           this.birth.newCow.mom = n.cow.code
           this.birth.newCow.name = n.calf?.name
+          this.birth.reproduction = n.reproduction?._id
           if(this.mode === 'edit'){
             this.birth.birthDate = new Date(n.birthDate)
             this.birth.drugDate = new Date(n.drugDate)
