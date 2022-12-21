@@ -3,11 +3,11 @@
       <SectionMain>
         <div >
             <SectionTitle class="text-2xl">
-                กรุณาเชื่อมต่อ LINE เพื่อรับการแจ้งเตือน
+                เชื่อมต่อ LINE Notify เพื่อรับการแจ้งเตือน
             </SectionTitle>
             <div class="text-lg"> 
                 <div class="py-2 px-5">
-                    1. เพิ่มเพื่อน <span class="text-green-500 font-bold">LINE Notify</span> ใน <span class="text-green-300 font-bold">LINE</span>
+                    1. เพิ่มเพื่อน <span class="text-green-500 font-bold">LINE Notify</span>
                 </div>
                 <div class="py-2 px-5">
                     2. กดปุ่ม <u class="text-blue-400">เชื่อมต่อ LINE</u> ด้านล่าง เพื่อเข้าสู่ระบบ <span class="text-green-300 font-bold">LINE</span> 
