@@ -17,14 +17,14 @@
           <FormField label="วัคซีน" help="* ห้ามว่าง" >
             <FormControl
               v-model="protection.vaccine"
-              icon="vaccine"
+              icon="needle"
               required
             />
           </FormField>
           <FormField label="ความถี่/วัคซีน (เดือน)" help="* ห้ามว่าง" >
             <FormControl
               v-model="protection.frequency"
-              icon="time"
+              icon="calendarClock"
               type="number"
               required
             />

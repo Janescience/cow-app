@@ -69,7 +69,7 @@ export default {
         {
           label : 'วัคซีน',
           value : 'vaccine',
-          icon : 'vaccine',
+          icon : 'needle',
         }, 
         {
           label : 'ฉีดวัคซีนล่าสุด',
@@ -94,9 +94,6 @@ export default {
       mode : "create",
       dataEdit : null,
       checked : {
-        code : {
-          value : '',
-        },
         label : {
           value : 'vaccine'
         }
