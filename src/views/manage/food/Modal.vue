@@ -4,7 +4,7 @@
     >
       <CardBox
         v-show="value"
-        :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การป้องกัน/บำรุง'"
+        :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การให้อาหาร'"
         class="shadow-lg w-full  overflow-y-auto lg:w-1/2 z-50"
         header-icon="close"
         modal
@@ -14,42 +14,32 @@
       >
       
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <FormField label="วัคซีน" help="* ห้ามว่าง" >
+          <FormField label="คอก" help="* ห้ามว่าง" >
             <FormControl
-              v-model="protection.vaccine"
-              icon="needle"
+              v-model="food.corral"
+              icon="barn"
               required
             />
           </FormField>
-          <FormField label="ความถี่/วัคซีน (เดือน)" help="* ห้ามว่าง" >
+          <FormField label="สูตรอาหาร" help="* ห้ามว่าง" >
+            <DDLRecipe
+              v-model="food.recipe"
+              required
+            />
+          </FormField>
+          <FormField v-if="food.recipe">
+            ราคา/กก. {{ food.recipe?.amout }} บาท
+          </FormField>
+          <FormField v-if="food.recipe" label="จำนวนที่ให้/วัน (กก.)" help="* ห้ามว่าง" >
             <FormControl
-              v-model="protection.frequency"
-              icon="calendarClock"
+              v-model="food.qty"
+              icon="barn"
               type="number"
               required
             />
           </FormField>
-          <FormField label="ฉีดวัคซีนล่าสุด" help="* ห้ามว่าง" >
-            <FormControl
-              v-model="protection.dateCurrent"
-              icon="calendar"
-              type="date"
-              required
-            />
-          </FormField>
-          <FormField label="ฉีดวัคซีนครั้งต่อไป" help="* ห้ามว่าง" >
-            <FormControl
-              v-model="protection.dateNext"
-              icon="calendar"
-              type="date"
-              required
-            />
-          </FormField>
-          <FormField label="หมายเหตุ"  >
-            <FormControl
-              v-model="protection.remark"
-              type="textarea"
-            />
+          <FormField v-if="food.qty && food.qty > 0">
+            รวมเป็นเงิน/วัน {{ food.qty * food.recipe?.amout }} บาท
           </FormField>
         </div>
 
@@ -93,24 +83,22 @@ import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
-import DDLVaccine from '@/components/DDL/Vaccine.vue'
+import DDLRecipe from '@/components/DDL/Recipe.vue'
 
 import { getCurrentUser } from '@/utils'
 import { Toast } from "@/utils/alert";
 import { addMonths } from 'date-fns'
 
-import ProtectionService from '@/services/protection'
+import FoodService from '@/services/food'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
   
   export default {
     data () {
       return {
-        protection : {
-          dateCurrent : new Date(),
-          dateNext : null,
-          vaccine : '',
-          frequency : null,
-          remark : '',
+        food : {
+          corral : '',
+          recipe : {},
+          qty : 0,
           farm :getCurrentUser().farm._id
         },
         loading : false,
@@ -131,25 +119,15 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     watch:{
       data(n){
         if(n && this.mode === 'edit'){
-          this.protection = n;
-          this.protection.dateCurrent = new Date(n.dateCurrent);
-          this.protection.dateNext = new Date(n.dateNext);
+          this.food = n;
         }
       },
-      'protection.frequency'(n){
-        if(n){
-          this.protection.dateNext = addMonths(new Date(this.protection.dateCurrent),n);
-        }
-      },
-
     },
     methods: {
         clear(){
-          this.protection.dateCurrent = new Date()
-          this.protection.dateNext = null 
-          this.protection.vaccine = ''
-          this.protection.frequency = ''
-          this.protection.remark = ''
+          this.food.corral = ''
+          this.food.recipe = {} 
+          this.food.qty = 0
         },
         confirmCancel(mode){
             this.value = false
@@ -168,14 +146,14 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.alert = ""
             try {
               if(this.mode === 'create'){
-                const resp = await ProtectionService.create(this.protection);
+                const resp = await FoodService.create(this.food);
                 if(resp){
                     this.loading = false
                     this.value = false 
                     this.confirmCancel('confirm') 
                 }
               }else{
-                const resp = await ProtectionService.update(this.protection._id,this.protection);
+                const resp = await FoodService.update(this.food._id,this.food);
                 if(resp){
                     this.loading = false
                     this.value = false
@@ -209,7 +187,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     FormControl,
     NotificationBar,
     BaseLevel,
-    DDLVaccine,
+    DDLRecipe,
     FormCheckRadioPicker,
     BaseIcon
 },

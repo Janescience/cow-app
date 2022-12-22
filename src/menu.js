@@ -40,11 +40,11 @@ export default [
       icon: 'pillMultiple',
       label: 'การป้องกัน/บำรุง'
     },
-    {
-      to: '/manage/vaccine',
-      icon: 'needle',
-      label: 'วัคซีน/ยา'
-    },
+    // {
+    //   to: '/manage/vaccine',
+    //   icon: 'needle',
+    //   label: 'วัคซีน/ยา'
+    // },
     {
       to: '/manage/food',
       icon: 'foodDrumstickOutline',

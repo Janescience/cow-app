@@ -6,35 +6,34 @@ async function getSearchQuery (opts = {}) {
     if (opts.farm) {
         query = query + `farm=${opts.farm}&`;
     }
-    if (opts.type) {
-        query = query + `type=${opts.type}&`;
+    if (opts.corral) {
+        query = query + `corral=${opts.corral}&`;
     } 
     if (opts.recipe) {
         query = query + `recipe=${opts.recipe}&`;
     } 
     return opts ? query.replace(/&*$/, "") : "";
 }
-class RecipeService{
+class FoodService{
     async all(search){
         const query = await getSearchQuery(search);
-        return http.get(`/recipe`+query,{ headers : authHeader()})
+        return http.get(`/food`+query,{ headers : authHeader()})
             .then(response => {
                 return response;
             });
     }
     get(id){
-        return http.get(`/recipe/${id}`,{ headers : authHeader()});
+        return http.get(`/food/${id}`,{ headers : authHeader()});
     }
     create(payload){
-        return http.post(`/recipe`,payload,{ headers : authHeader()});
+        return http.post(`/food`,payload,{ headers : authHeader()});
     }
     delete(id){
-        return http.delete(`/recipe/${id}`,{ headers : authHeader()});
+        return http.delete(`/food/${id}`,{ headers : authHeader()});
     }
     update(id,payload){
-        return http.put(`/recipe/${id}`,payload,{ headers : authHeader()});
+        return http.put(`/food/${id}`,payload,{ headers : authHeader()});
     }
 }
 
-export default new RecipeService();
-
+export default new FoodService();

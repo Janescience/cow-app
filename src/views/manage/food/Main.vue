@@ -3,11 +3,11 @@
     <SectionMain>
 
       <SectionTitleBarSub 
-        icon="doctor" 
-        title="การป้องกัน/บำรุง"
+        icon="foodDrumstickOutline" 
+        title="การให้อาหาร"
         has-btn-add
         @openModal="mode='create';openModal = true;"
-        btnText="เพิ่มการป้องกัน/บำรุง"
+        btnText="เพิ่มการให้อาหาร"
       />
 
       <Modal
@@ -28,7 +28,7 @@
       />
 
       <Table
-        title="รายการป้องกัน/บำรุง" 
+        title="รายการให้อาหาร" 
         has-checkbox
         :checked-data="checked" 
         :items="items" 
@@ -53,7 +53,7 @@ import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
 
 import Modal from './Modal.vue'
-import ProtectionService from '@/services/protection'
+import FoodService from '@/services/food'
 
 import { getCurrentUser } from "@/utils";
 import { Toast } from "@/utils/alert";
@@ -67,64 +67,64 @@ export default {
       items : [],
       forms : [
         {
-          label : 'วัคซีน',
-          value : 'vaccine',
-          icon : 'needle',
+          label : 'สูตรอาหาร',
+          value : 'recipe',
+          type : 'ddl',
+          module : 'recipe'
+        },
+        {
+          label : 'คอก',
+          value : 'corral',
+          icon : 'barn',
+          type : 'number'
         }, 
-        {
-          label : 'ฉีดวัคซีนล่าสุด',
-          value : 'dateCurrent',
-          icon : 'calendar',
-          type : 'date'
-        },
-        {
-          label : 'ฉีดวัคซีนครั้งต่อไป',
-          value : 'dateNext',
-          icon : 'calendar',
-          type : 'date'
-        },
       ],
       search : {
-        dateCurrent : null,
-        dateNext : null,
-        vaccine : '',
+        recipe : null,
+        corral : '',
         farm : getCurrentUser().farm._id,
       },
       loading : false,
       mode : "create",
       dataEdit : null,
       checked : {
+        code : {
+          value : 'corral'
+        },
         label : {
-          value : 'vaccine'
+          value : 'recipe.name'
         }
       },
       datas : [
         {
-          label : "วัคซีน",
+          label : "คอก",
           class : 'text-center',
-          value : 'vaccine'
+          value : 'corral'
         },
         {
-          label : "ความถี่/วัคซีน (เดือน)",
+          label : "จำนวนวัว",
           class : 'text-center',
-          value : 'frequency'
+          value : 'numCow',
         },
         {
-          label : "ฉีดวัคซีนล่าสุด",
+          label : "สูตรอาหาร",
           class : 'text-center',
-          value : 'dateCurrent',
-          type : 'date',
+          value : 'recipe.name'
         },
         {
-          label : "ฉีดวัคซีนครั้งต่อไป",
+          label : "จำนวนที่ให้/วัน (กก.)",
           class : 'text-center',
-          value : 'dateNext',
-          type : 'date',
+          value : 'qty',
         },
         {
-          label : "หมายเหตุ",
+          label : "รวมเป็นเงิน/วัน",
           class : 'text-center',
-          value : 'remark',
+          value : 'amount',
+        },
+        {
+          label : "รวมเป็นเงิน/ตัว",
+          class : 'text-center',
+          value : 'amountAvg',
         },
       ],
       buttons : [
@@ -155,16 +155,16 @@ export default {
   methods : {
     async getDatas(search){
       this.loading = true
-      const resp = await ProtectionService.all(search);
+      const resp = await FoodService.all(search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.protections
+        this.items = resp.data.foods
       }
       this.loading = false
     },
     async remove(id){
       this.loading = true
-      const resp = await ProtectionService.delete(id);
+      const resp = await FoodService.delete(id);
       if(resp.data){
         this.getDatas()
       }
@@ -180,9 +180,9 @@ export default {
       this.openModal = true;
     },
     reset(){
-      this.search.dateCurrent = null
-      this.search.dateNext = null
-      this.search.vaccine = ''
+      this.search.recipe = null
+      this.search.corral = ''
+      this.getDatas()
     },
   }
 }
