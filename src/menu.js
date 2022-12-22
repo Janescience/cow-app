@@ -51,7 +51,7 @@ export default [
       label: 'การให้อาหาร'
     },
     {
-      to: '/manage/formula',
+      to: '/manage/recipe',
       icon: 'calculatorVariantOutline',
       label: 'สูตรอาหาร'
     },

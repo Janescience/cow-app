@@ -89,6 +89,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'สูตรอาหาร',
+      loginRequired : true
+    },
+    path: '/manage/recipe',
+    name: 'recipe',
+    component: () => import('@/views/manage/recipe/Main.vue')
+  },
+  {
+    meta: {
       title: 'Tables',
       loginRequired : true
     },
