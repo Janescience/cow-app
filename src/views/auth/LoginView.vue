@@ -21,7 +21,7 @@ import NotificationBarInCard from '@/components/NotificationBarInCard.vue'
 import { ref } from '@vue/reactivity'
 
 const form = reactive({
-  login: 'admin',
+  login: 'halem',
   pass: 'P@ssw0rd',
   remember: ['remember']
 })
