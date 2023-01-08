@@ -28,12 +28,11 @@
               required
             />
           </FormField>
-          <FormField label="จำนวนเงินรวม/สูตร"  >
+          <FormField label="จำนวนเงินรวม ต่อ 1 กก."  >
             <FormControl
               v-model="recipe.amount"
               icon="cashMultiple"
               type="number"
-              disabled
               required
             />
           </FormField>
@@ -49,7 +48,6 @@
               <FormControl
                 v-model="recipeDetail.food"
                 icon="foodVariant"
-                required
               />
             </FormField>
             <FormField label="ราคา/กก." help="* ห้ามว่าง" >
@@ -57,14 +55,13 @@
                 v-model="recipeDetail.cost"
                 icon="cash"
                 type="number"
-                required
               />
             </FormField>
-            <FormField label="จำนวนที่ใช้ (กก.)" help="* ห้ามว่าง" >
+            <FormField label="จำนวนที่ใช้ (กก.)" help="* ห้ามว่าง (ห้ามเกิน 1 กก.)" >
               <FormControl
                 icon="scale"
+                type="number"
                 v-model="recipeDetail.qty"
-                required
               />
             </FormField>
             <FormField label="จำนวนเงิน"  >
@@ -72,8 +69,6 @@
                 v-model="recipeDetail.amount"
                 icon="cashMultiple"
                 type="number"
-                disabled
-                required
               />
             </FormField>
             
@@ -169,11 +164,19 @@
         </CardBox>
 
         <NotificationBar 
-          v-if="alert" 
+          v-if="alertError" 
           color="danger" 
           outline
           icon="alertCircleOutline">
-            {{ alert }}
+            {{ alertError }}
+        </NotificationBar>
+
+        <NotificationBar 
+          v-if="alertWarning" 
+          color="warning" 
+          outline
+          icon="alertCircleOutline">
+            {{ alertWarning }}
         </NotificationBar>
   
         <BaseDivider />
@@ -224,14 +227,15 @@ import { type } from "@/constants/recipe";
           code : '',
           name : '',
           type : 1,
-          amount : '',
+          amount : 0,
           farm :getCurrentUser().farm._id
         },
         recipeDetail : {},
         recipeDetails : [],
         type : type('create'),
         loading : false,
-        alert : "",
+        alertError : "",
+        alertWarning : "",
         alertDetail : ""
       }
     },
@@ -299,8 +303,18 @@ import { type } from "@/constants/recipe";
           if(this.recipeDetail?.food && this.recipeDetail?.qty && this.recipeDetail?.cost){
             let dup = this.recipeDetails.filter(x => x.food === this.recipeDetail?.food).length
             if(dup <= 0){
-              this.recipeDetails.push(this.recipeDetail)
-              this.recipeDetail = {}
+              if(this.recipeDetail?.qty <= 1){
+                let sumQty = this.recipeDetails.reduce((a, b) => a + b, 0);
+                if(sumQty <= 1){
+                  this.recipeDetails.push(this.recipeDetail)
+                  this.recipe.amount += this.recipeDetail?.amount
+                  this.recipeDetail = {}
+                }else{
+                  this.alertDetail = 'จำนวนที่ใช้รวมห้ามเกิน 1 กก.'
+                }
+              }else{
+                this.alertDetail = 'จำนวนที่ใช้ห้ามเกิน 1 กก.'
+              }
             }else{
               this.alertDetail = 'อาหาร/วัตถุดิบ ซ้ำ'
             }
@@ -312,19 +326,30 @@ import { type } from "@/constants/recipe";
         removeDetail(recipe){
           let index = this.recipeDetails.indexOf(recipe);
           if (index !== -1) {
+            this.recipe.amount -= this.recipeDetails[index]?.amount
             this.recipeDetails.splice(index, 1);
           }
         },
         async submit(){
             this.loading = true
             this.alert = ""
+            this.alertWarning = ""
             try {
               if(this.mode === 'create'){
-                const resp = await RecipeService.create(this.recipe);
-                if(resp){
-                    this.loading = false
-                    this.value = false 
-                    this.confirmCancel('confirm') 
+                let sumQty = this.recipeDetails.reduce((a, b) => a + b, 0);
+                if(sumQty === 1){
+                  const resp = await RecipeService.create({recipe : this.recipe, recipeDetail : this.recipeDetails});
+                  if(resp){
+                      this.loading = false
+                      this.value = false 
+                      this.confirmCancel('confirm')
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'บันทึกข้อมูลสำเร็จ'
+                      }) 
+                  }
+                }else{
+                  this.alertWarning = 'กรุณาเพิ่ม รายการอาหาร/วัตถุดิบ ให้ครบ 1 กก.'
                 }
               }else{
                 const resp = await RecipeService.update(this.recipe._id,this.recipe);
@@ -334,15 +359,12 @@ import { type } from "@/constants/recipe";
                     this.confirmCancel('confirm')  
                 }
               }
-              Toast.fire({
-                icon: 'success',
-                title: 'บันทึกข้อมูลสำเร็จ'
-              })
+              
             } catch (error) {
               console.error('Error : ',error)
                 this.clear()
                 this.loading = false  
-                this.alert = await error.response.data.message
+                this.alertError = await error.response.data.message
                 Toast.fire({
                   icon: 'error',
                   title: 'บันทึกข้อมูลไม่สำเร็จ'

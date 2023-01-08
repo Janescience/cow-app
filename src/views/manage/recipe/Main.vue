@@ -141,9 +141,9 @@ export default {
     this.getDatas();
   },
   methods : {
-    async getDatas(search){
+    async getDatas(){
       this.loading = true
-      const resp = await RecipeService.all(search);
+      const resp = await RecipeService.all(this.search);
       this.items = []
       if(resp.data){
         this.items = resp.data.recipes
