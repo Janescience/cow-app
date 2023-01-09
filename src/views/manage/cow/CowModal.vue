@@ -14,7 +14,7 @@
       >
         
         <ImageUpload v-model="cow.image" />
-        <BaseLevel type="justify-center mb-6">
+        <BaseLevel type="justify-center mb-6 text-sm">
           อัพโหลดรูปภาพ (คลิกที่รูป)
         </BaseLevel>
         <div class="grid lg:grid-cols-4 grid-cols-2 gap-5 mt-3">

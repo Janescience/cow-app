@@ -38,14 +38,10 @@ const props = defineProps({
     type: String,
     default: null
   },
-  trend: {
-    type: String,
-    default: null
-  },
-  trendType: {
-    type: Number,
-  },
   quality : {
+    type : Number
+  },
+  status : {
     type : Number
   }
 })
@@ -86,6 +82,37 @@ const qualityStyle = computed(() => {
 
 })
 
+const statusStyle = computed(() => {
+  if (props.status == 1) {
+    return {
+      icon: 'humanPregnant',
+      style: 'warning'
+    }
+  }
+
+  if (props.status == 2) {
+    return {
+      icon: 'waterRemoveOutline',
+      style: 'danger'
+    }
+  }
+
+  if (props.status == 3) {
+    return {
+      icon: 'water',
+      style: 'success'
+    }
+  }
+
+  if (props.status == 4) {
+    return {
+      icon: 'babyFaceOutline',
+      style: 'light'
+    }
+  }
+
+})
+
 
 
 </script>
@@ -95,19 +122,16 @@ const qualityStyle = computed(() => {
     hoverable
   >
       <BaseLevel
-        class="mb-3"
+        type="justify-center"
+        class="mb-1 "
         mobile
       >
-        <PillTagTrend
-          :trend-type="trendType"
-          small
-        />
         <BaseIcon
-          v-if="qualityStyle"
-          :class="qualityStyle.style"
-          :path="qualityStyle.icon"
-          size="24"
+          :class="statusStyle.style"
+          :path="statusStyle.icon"
+          size="20"
         />
+        
       </BaseLevel>
       <BaseLevel type="justify-center">
         <UserAvatar
@@ -123,8 +147,14 @@ const qualityStyle = computed(() => {
           :suffix="suffix"
         />
       </h1> -->
-    <div class="text-center ">
-      <h4 class="lg:text-xl text-md">
+    <div class="text-center mt-2">
+      <h4 class="lg:text-xl text-md ">
+        <BaseIcon
+          v-if="qualityStyle"
+          :class="qualityStyle.style"
+          :path="qualityStyle.icon"
+          size="20"
+        />
         {{ name }} 
       </h4>
       <p class="text-gray-500 dark:text-gray-400 text-sm">

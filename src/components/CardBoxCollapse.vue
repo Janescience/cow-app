@@ -1,6 +1,6 @@
 <script setup>
 import { mdiCog } from '@mdi/js'
-import { computed } from 'vue'
+import { computed , ref } from 'vue'
 import BaseIcon from '@/components/BaseIcon.vue'
 
 const props = defineProps({
@@ -27,7 +27,7 @@ const props = defineProps({
   hoverable: Boolean,
   modal: Boolean,
 })
-
+var collapse = ref(false);
 const emit = defineEmits(['header-icon-click', 'submit'])
 
 const is = computed(() => props.form ? 'form' : 'div')
@@ -45,7 +45,7 @@ const componentClass = computed(() => {
   return base
 })
 
-const computedHeaderIcon = computed(() => props.headerIcon ?? 'cog')
+const computedHeaderIcon = computed(() => collapse.value ? 'chevronDown' : 'chevronUp')
 
 const headerIconClick = () => {
   emit('header-icon-click')
@@ -54,6 +54,11 @@ const headerIconClick = () => {
 const submit = e => {
   emit('submit', e)
 }
+
+const collapseClick = () => {
+  collapse.value = !collapse.value
+}
+
 </script>
 
 <template>
@@ -65,6 +70,7 @@ const submit = e => {
   >
     <header
       v-if="title"
+      @click="collapseClick"
       class="flex items-stretch border-b border-gray-100 dark:border-gray-800"
     >
       <p
@@ -107,8 +113,8 @@ const submit = e => {
       <p> กำลังโหลดข้อมูล...</p>
     </div>
     <div
-      v-else
-      :class="{'p-4':!hasTable}"
+      v-else-if="collapse"
+      :class="{'p-6':!hasTable}"
     >
       <slot />
     </div>

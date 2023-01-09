@@ -16,7 +16,8 @@ defineProps({
     type: String,
     default: ''
   },
-  hasBtnAdd : Boolean
+  hasBtnAdd : Boolean,
+  hasBtnSearch : Boolean
 })
 
 const emit = defineEmits([ 'openModal'])
@@ -43,6 +44,7 @@ const openModal = () => confirmOpenModal('openModal')
       </h1>
     </div>
     <BaseButton
+      class="text-right"
       v-if="hasBtnAdd"
       :label="btnText"
       color="success"

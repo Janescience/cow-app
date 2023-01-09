@@ -8,7 +8,11 @@
             accept="image/*"
             hidden
             />
-            <img class="w-56 cursor-pointer rounded-lg" @click="chooseImg" :src="value"/>
+            <UserAvatar
+                class="lg:w-32 lg:h-32 w-32 h-32"
+                :avatar="value"
+                @click="chooseImg"
+            />
         </BaseLevel>
 
     
@@ -16,6 +20,7 @@
 
 <script>
     import BaseLevel from '@/components/BaseLevel.vue';
+    import UserAvatar from '@/components/UserAvatar.vue';
     export default {
         computed:{
             value:{
@@ -50,7 +55,8 @@
             },
         },
         components : {
-            BaseLevel
+            BaseLevel,
+            UserAvatar
         },
         props: {
             modelValue: {

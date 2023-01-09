@@ -1,10 +1,11 @@
 <template>
-    <CardBox
+    <CardBoxCollapse
         title="ค้นหา"
         icon=""
         form
         class="mb-3"
         header-icon=""
+        :collapse="collapse"
         @submit.prevent="submit"
         @reset.prevent="reset"
     >
@@ -59,14 +60,14 @@
                 label="ล้าง"
             />
         </BaseButtons>
-    </CardBox>
+    </CardBoxCollapse>
 </template>
 
 <script>
 import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
-import CardBox from "@/components/CardBox.vue";
+import CardBoxCollapse from "@/components/CardBoxCollapse.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import FormCheckRadioPicker from "@/components/FormCheckRadioPicker.vue";
@@ -85,13 +86,14 @@ export default {
         search : {
             type : Object,
             default : null
-        }
+        },
+        collapse : Boolean
     },
     components : {
         BaseButton,
         BaseButtons,
         BaseDivider,
-        CardBox,
+        CardBoxCollapse,
         FormField,
         FormControl,
         FormCheckRadioPicker,

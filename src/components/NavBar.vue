@@ -199,7 +199,7 @@ const logout = () => {
             </NavBarItem>
           </template>
         </NavBarMenu>
-        <NavBarItem
+        <!-- <NavBarItem
           has-divider
           is-desktop-icon-only
           @click.prevent="toggleLightDark"
@@ -209,7 +209,7 @@ const logout = () => {
             label="Light/Dark"
             is-desktop-icon-only
           />
-        </NavBarItem>
+        </NavBarItem> -->
         <!-- <NavBarItem
           href="https://github.com/justboil/admin-one-vue-tailwind"
           has-divider
@@ -221,7 +221,7 @@ const logout = () => {
             is-desktop-icon-only
           />
         </NavBarItem> -->
-        <NavBarItem
+        <!-- <NavBarItem
           is-desktop-icon-only
           @click="logout"
         >
@@ -230,7 +230,7 @@ const logout = () => {
             label="Log out"
             is-desktop-icon-only
           />
-        </NavBarItem>
+        </NavBarItem> -->
       </div>
     </div>
   </nav>

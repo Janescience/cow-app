@@ -7,6 +7,7 @@
         title="โค"
         btnText="เพิ่มโค"
         has-btn-add
+        has-btn-search
         @openModal="mode='create';modalCow = true;"
       />
       
@@ -40,7 +41,7 @@
 
 
         <div
-          class="grid gap-3 grid-cols-3 lg:grid-cols-6 md:grid-cols-4"
+          class="grid lg:gap-3 grid-cols-3 lg:grid-cols-6 md:grid-cols-4"
         >
         <CardBoxClient
           v-for="item in items"
@@ -49,8 +50,9 @@
           :name="item.name"
           :sub-text="'คอก '+item.corral"
           :date="item.birthDate"
-          :trend-type="item.status"
-          quality="3"
+          :status="item.status"
+          @click="edit(item)"
+          :quality="3"
         />
         </div>
         
