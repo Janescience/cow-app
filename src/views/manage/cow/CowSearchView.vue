@@ -26,7 +26,7 @@
         :search="search"
       />
 
-      <Table 
+      <!-- <Table 
         title="รายการโค" 
         has-checkbox
         :checked-data="checked"
@@ -36,7 +36,24 @@
         @edit="edit"
         @delete="removeCow"
         :loading="loading"
-      />
+      /> -->
+
+
+        <div
+          class="grid gap-3 grid-cols-3 lg:grid-cols-6 md:grid-cols-4"
+        >
+        <CardBoxClient
+          v-for="item in items"
+          :key="item.name"
+          :img="item.image"
+          :name="item.name"
+          :sub-text="'คอก '+item.corral"
+          :date="item.birthDate"
+          :trend-type="item.status"
+          quality="3"
+        />
+        </div>
+        
 
     </SectionMain>
   </LayoutAuthenticated>
@@ -50,6 +67,7 @@ import BaseButtons from "@/components/BaseButtons.vue";
 import BaseIcon from "@/components/BaseIcon.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import CardBox from "@/components/CardBox.vue";
+import CardBoxClient from "@/components/CardBoxClient.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import Table from "@/components/Table.vue";
@@ -194,7 +212,8 @@ export default {
     CreateCowModal,
     Table,
     SectionTitleBarSub,
-    Criteria
+    Criteria,
+    CardBoxClient,
 },
   created() {
     this.getCows();

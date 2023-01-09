@@ -25,7 +25,7 @@ const componentClass = computed(() => {
 
   return [
     'border',
-    props.small ? 'py-0.5 px-2 text-xs rounded-lg mr-1.5' : 'py-2 px-4 rounded-2xl mr-3',
+    props.small ? 'text-xs rounded-lg mr-1.5' : 'py-2 px-4 rounded-2xl mr-3',
     ...baseColor
   ]
 })
@@ -39,9 +39,7 @@ const componentClass = computed(() => {
     <BaseIcon
       v-if="icon"
       :path="icon"
-      h="h-4"
-      w="w-4"
-      class="mr-2"
+      
     />
     <span>{{ text }}</span>
   </div>

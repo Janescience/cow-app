@@ -31,7 +31,7 @@ const username = computed(
     <img
       :src="avatar"
       :alt="username"
-      class="rounded-lg  block h-auto shadow w-full max-w-full bg-gray-100 dark:bg-gray-800"
+      class="rounded-full  object-cover w-full shadow-lg h-full block bg-gray-100 dark:bg-gray-800"
     >
   </div>
 </template>

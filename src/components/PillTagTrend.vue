@@ -8,31 +8,37 @@ const props = defineProps({
     required: true
   },
   trendType: {
-    type: String,
-    default: null
+    type: Number,
   },
   small: Boolean
 })
 
 const trendStyle = computed(() => {
-  if (props.trendType === 'up') {
+  if (props.trendType == 1) {
     return {
-      icon: 'accountArrowDown',
-      style: 'success'
+      icon: 'humanPregnant',
+      style: 'warning'
     }
   }
 
-  if (props.trendType === 'down') {
+  if (props.trendType == 2) {
     return {
-      icon: 'accountArrowUp',
+      icon: 'waterRemoveOutline',
       style: 'danger'
     }
   }
 
-  if (props.trendType === 'alert') {
+  if (props.trendType == 3) {
     return {
-      icon: 'accountAlert',
-      style: 'warning'
+      icon: 'water',
+      style: 'success'
+    }
+  }
+
+  if (props.trendType == 4) {
+    return {
+      icon: 'babyFaceOutline',
+      style: 'light'
     }
   }
 

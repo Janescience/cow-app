@@ -3,12 +3,17 @@ import { computed } from 'vue'
 import { mdiTrendingDown, mdiTrendingUp, mdiTrendingNeutral } from '@mdi/js'
 import CardBox from '@/components/CardBox.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
+import BaseIcon from '@/components/BaseIcon.vue'
 import PillTag from '@/components/PillTag.vue'
+import PillTagTrend from '@/components/PillTagTrend.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import NumberDynamic from '@/components/NumberDynamic.vue'
 import numeral from 'numeral'
 
 const props = defineProps({
+  img : {
+    type: String,
+  },
   name: {
     type: String,
     required: true
@@ -32,6 +37,16 @@ const props = defineProps({
   type: {
     type: String,
     default: null
+  },
+  trend: {
+    type: String,
+    default: null
+  },
+  trendType: {
+    type: Number,
+  },
+  quality : {
+    type : Number
   }
 })
 
@@ -54,37 +69,67 @@ const pillType = computed(() => {
   return 'info'
 })
 
+const qualityStyle = computed(() => {
+  if (props.quality == 1) {
+    return {
+      icon: 'accountArrowDown',
+      style: 'success'
+    }
+  }
+
+  if (props.quality == 3) {
+    return {
+      icon: 'crownCircleOutline',
+      style: 'text-amber-400'
+    }
+  }
+
+})
+
 
 
 </script>
 
 <template>
   <CardBox
-    class="mb-6 last:mb-0"
     hoverable
   >
-    <BaseLevel>
-      <BaseLevel type="justify-start">
-        <UserAvatar
-          class="w-12 h-12 md:mr-6"
-          :username="name"
+      <BaseLevel
+        class="mb-3"
+        mobile
+      >
+        <PillTagTrend
+          :trend-type="trendType"
+          small
         />
-        <div class="text-center md:text-left">
-          <h4 class="text-xl">
-            {{ name }} 
-          </h4>
-          <p class="text-gray-500 dark:text-gray-400 text-sm">
-            {{ subText }}
-          </p>
-        </div>
+        <BaseIcon
+          v-if="qualityStyle"
+          :class="qualityStyle.style"
+          :path="qualityStyle.icon"
+          size="24"
+        />
       </BaseLevel>
-      <h1 class="text-3xl leading-tight font-semibold text-red-500">
+      <BaseLevel type="justify-center">
+        <UserAvatar
+          class="lg:w-32 lg:h-32 w-24 h-24"
+          :avatar="img"
+        />
+      </BaseLevel>
+      
+      <!-- <h1 class="text-3xl leading-tight font-semibold text-red-500">
         <NumberDynamic
           :value="amt"
           prefix="$"
           :suffix="suffix"
         />
-      </h1>
-    </BaseLevel>
+      </h1> -->
+    <div class="text-center ">
+      <h4 class="lg:text-xl text-md">
+        {{ name }} 
+      </h4>
+      <p class="text-gray-500 dark:text-gray-400 text-sm">
+        {{ subText }}
+      </p>
+    </div>
   </CardBox>
 </template>

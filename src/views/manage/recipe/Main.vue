@@ -98,9 +98,7 @@ export default {
         {
           label : "สูตรอาหาร",
           class : 'text-center',
-          func : (obj) => {
-            return obj.code + ' : ' + obj.name
-          },
+          value : 'name',
         },
         {
           label : "ประเภท",
@@ -110,7 +108,7 @@ export default {
           },
         },
         {
-          label : "ต้นทุน/กก.",
+          label : "ราคา/กก.",
           class : 'text-center',
           value : 'amount',
         }
