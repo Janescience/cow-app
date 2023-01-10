@@ -3,7 +3,7 @@
         title="ค้นหา"
         icon=""
         form
-        class="mb-3"
+        class="mb-2"
         header-icon=""
         :collapse="collapse"
         @submit.prevent="submit"

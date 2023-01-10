@@ -31,7 +31,7 @@ const openModal = () => confirmOpenModal('openModal')
 </script>
 
 <template>
-  <section class="px-6 sm:px-0 mb-6 flex items-center justify-between">
+  <section class="px-4 sm:px-0 mb-4 flex items-center justify-between">
     <div class="flex items-center justify-start">
       <BaseIcon
         v-if="icon"

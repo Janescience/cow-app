@@ -92,7 +92,7 @@ const statusStyle = computed(() => {
 
   if (props.status == 2) {
     return {
-      icon: 'waterRemoveOutline',
+      icon: 'waterOff',
       style: 'danger'
     }
   }

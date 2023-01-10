@@ -42,10 +42,10 @@
 
         <div
           v-if="!loading"
-          class="grid lg:gap-3 grid-cols-3 lg:grid-cols-6 md:grid-cols-4"
+          class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-3 lg:grid-cols-6 md:grid-cols-4"
         >
           <CardBoxClient
-            v-for="item in items"
+            v-for="item in itemsPaginated"
             :key="item.name"
             :img="item.image"
             :name="item.name"
@@ -67,6 +67,24 @@
             />
             <p> กำลังโหลดข้อมูล...</p>
         </div>
+
+        <div
+          class="p-2 mt-2 border-t border-gray-100 dark:border-gray-800"
+        >
+          <BaseLevel>
+              <BaseButtons>
+              <BaseButton
+                  v-for="page in pagesList"
+                  :key="page"
+                  :active="page === currentPage"
+                  :label="page + 1"
+                  small
+                  @click="currentPage = page"
+              />
+              </BaseButtons>
+              <small>หน้า {{ currentPageHuman }} จาก {{ numPages }}</small>
+          </BaseLevel>
+        </div>
         
 
     </SectionMain>
@@ -79,6 +97,7 @@ import SectionMain from '@/components/SectionMain.vue';
 import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseIcon from "@/components/BaseIcon.vue";
+import BaseLevel from "@/components/BaseLevel.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import CardBox from "@/components/CardBox.vue";
 import CardBoxClient from "@/components/CardBoxClient.vue";
@@ -99,6 +118,8 @@ import { cowStatus } from '@/constants/cow'
 export default {
   data (){
     return {
+      perPage :18,
+      currentPage : 0,
       modalCow : false,
       items : [],
       forms : [
@@ -212,6 +233,26 @@ export default {
       ]
     }
   },
+  computed : {
+      itemsPaginated() {
+          return this.items ? this.items.slice(this.perPage * this.currentPage, this.perPage * (this.currentPage + 1)) : []
+      },
+      numPages(){
+          return Math.ceil((this.items ? this.items.length : 0) / this.perPage);
+      },
+      currentPageHuman() {
+          return this.currentPage + 1
+      },
+      pagesList() {
+          const pagesList = []
+
+          for (let i = 0; i < this.numPages; i++) {
+              pagesList.push(i)
+          }
+
+          return pagesList
+      }
+  },
   components : {
     SectionMain,
     LayoutAuthenticated,
@@ -228,6 +269,7 @@ export default {
     SectionTitleBarSub,
     Criteria,
     CardBoxClient,
+    BaseLevel,
 },
   created() {
     this.getCows();
