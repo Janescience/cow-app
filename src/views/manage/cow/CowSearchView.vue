@@ -41,19 +41,31 @@
 
 
         <div
+          v-if="!loading"
           class="grid lg:gap-3 grid-cols-3 lg:grid-cols-6 md:grid-cols-4"
         >
-        <CardBoxClient
-          v-for="item in items"
-          :key="item.name"
-          :img="item.image"
-          :name="item.name"
-          :sub-text="'คอก '+item.corral"
-          :date="item.birthDate"
-          :status="item.status"
-          @click="edit(item)"
-          :quality="3"
-        />
+          <CardBoxClient
+            v-for="item in items"
+            :key="item.name"
+            :img="item.image"
+            :name="item.name"
+            :sub-text="'คอก '+item.corral"
+            :date="item.birthDate"
+            :status="item.status"
+            @click="edit(item)"
+            :quality="item.quality"
+          />
+        </div>
+        <div
+            v-else
+            class="text-center py-10 text-gray-500 dark:text-gray-400 "
+          >
+            <BaseIcon
+              path="dotsCircle"
+              size="22"
+              class="animate-spin"
+            />
+            <p> กำลังโหลดข้อมูล...</p>
         </div>
         
 
