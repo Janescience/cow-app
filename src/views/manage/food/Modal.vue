@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การให้อาหาร'"
-        class="shadow-lg w-full  overflow-y-auto lg:w-1/2 z-50"
+        class="shadow-lg w-full  overflow-y-auto lg:w-5/6 z-50"
         header-icon="close"
         modal
         form
@@ -13,33 +13,37 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
           <FormField label="คอก" help="* ห้ามว่าง" >
             <FormControl
               v-model="food.corral"
               icon="barn"
+              type="number"
               required
             />
           </FormField>
           <FormField label="สูตรอาหาร" help="* ห้ามว่าง" >
             <DDLRecipe
               v-model="food.recipe"
-              required
+              valueType="object"
             />
           </FormField>
-          <FormField v-if="food.recipe">
-            ราคา/กก. {{ food.recipe?.amout }} บาท
-          </FormField>
-          <FormField v-if="food.recipe" label="จำนวนที่ให้/วัน (กก.)" help="* ห้ามว่าง" >
+         
+          <FormField label="จำนวนที่ให้/วัน (กก.)" help="* ห้ามว่าง" >
             <FormControl
               v-model="food.qty"
-              icon="barn"
+              icon="shaker"
               type="number"
               required
             />
           </FormField>
-          <FormField v-if="food.qty && food.qty > 0">
-            รวมเป็นเงิน/วัน {{ food.qty * food.recipe?.amout }} บาท
+
+          <FormField class="col-span-3">
+            <BaseLevel type="justify-end">
+              ราคา/กก. <p class="text-red-700 font-bold p-2">{{ food.amount > 0 ? food.amount : '-' }}</p> บาท , 
+              รวมเป็นเงิน/วัน <p class="text-red-700 font-bold p-2">{{ food.qty && food.amount > 0 ? food.qty * food.amount : '-' }}</p> บาท
+            </BaseLevel>
+            
           </FormField>
         </div>
 
@@ -99,6 +103,9 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           corral : '',
           recipe : {},
           qty : 0,
+          amount : 0,
+          amountAvg : 0,
+          numCow : 0,
           farm :getCurrentUser().farm._id
         },
         loading : false,
@@ -120,6 +127,13 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       data(n){
         if(n && this.mode === 'edit'){
           this.food = n;
+        }
+      },
+      'food.recipe'(n){
+        if(n){
+          this.food.amount = n.amount;
+        }else{
+          this.food.amount = null;
         }
       },
     },

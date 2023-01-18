@@ -70,7 +70,8 @@ export default {
         {
           label : 'สูตรอาหาร',
           value : 'recipe',
-          icon : 'recipe',
+          type : 'ddl',
+          module : 'recipe'
         }, 
         {
           label : 'ประเภท',
@@ -111,7 +112,14 @@ export default {
           label : "ราคา/กก.",
           class : 'text-center',
           value : 'amount',
-        }
+        },
+        {
+          label : "จำนวนอาหาร/วัตถุดิบ",
+          class : 'text-center',
+          func : (obj) => {
+            return obj.recipeDetails.length
+          },
+        },
       ],
       buttons : [
         {

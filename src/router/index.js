@@ -89,6 +89,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'การให้อาหาร',
+      loginRequired : true
+    },
+    path: '/manage/food',
+    name: 'food',
+    component: () => import('@/views/manage/food/Main.vue')
+  },
+  {
+    meta: {
       title: 'สูตรอาหาร',
       loginRequired : true
     },

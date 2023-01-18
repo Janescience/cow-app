@@ -13,7 +13,7 @@
             @input="handleInput"
             v-model="value"
             :dataSelected="dataSelected"
-            multiple
+            :multiple="multiple"
         >
             <template v-slot:no-options>
                 <mdicon name="alertCircleOutline" width="16" height="16" class="inline-block"/> 
@@ -40,6 +40,9 @@ export default {
     computed:{
         value:{
             get(){
+                if(this.valueType === 'object'){
+                    this.modelValue.recipe_data = this.modelValue.name
+                }
                 return this.modelValue
             },
             set(newValue){
@@ -59,7 +62,7 @@ export default {
                 this.datas = [];
                 if (resp) {
                     this.datas = resp.data.recipes;
-                    this.datas.map((x)=> x.recipe_data = x.code + ' : ' + x.name);
+                    this.datas.map((x)=> x.recipe_data =  x.name);
                 }
 
                 if(this.defaultValue) {
@@ -82,7 +85,7 @@ export default {
         },
         handleInput (text) {
             this.$emit("update:value", text);
-            this.dataSelected = this.datas.find((x) => x.name === text || x.code === text);
+            this.dataSelected = this.datas.find((x) => x.name === text );
             this.$emit("update:dataSelected", this.dataSelected);
             
         }

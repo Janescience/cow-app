@@ -13,7 +13,7 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-5">
           <FormField label="ชื่อสูตรอาหาร" help="* ห้ามว่าง" >
             <FormControl
               v-model="recipe.name"
@@ -28,7 +28,7 @@
               required
             />
           </FormField>
-          <FormField label="จำนวนเงินรวม ต่อ 1 กก."  >
+          <FormField label="จำนวนเงินรวม"  >
             <FormControl
               v-model="recipe.amount"
               icon="cashMultiple"
@@ -44,7 +44,7 @@
             header-icon=""
         >
           <div class="grid grid-cols-2 lg:grid-cols-6 gap-5">
-            <FormField label="อาหาร/วัตถุดิบ" help="* ห้ามว่าง" class="col-span-2">
+            <FormField label="อาหาร/วัตถุดิบ" help="* ห้ามว่าง" >
               <FormControl
                 v-model="recipeDetail.food"
                 icon="foodVariant"
@@ -73,6 +73,7 @@
             </FormField>
             
             <BaseButtons
+              class="col-span-2"
               type="justify-center"
             >
               <BaseButton
@@ -252,10 +253,17 @@ import { type } from "@/constants/recipe";
     },
     watch:{
       data(n){
-        if(n && this.mode === 'edit'){
-          this.recipe = n;
-          this.recipe.dateCurrent = new Date(n.dateCurrent);
-          this.recipe.dateNext = new Date(n.dateNext);
+        if(n){
+          if(this.mode === 'edit'){
+            this.recipe = n;
+            this.recipeDetails = n.recipeDetails;
+          }else{
+            this.recipe.name = ''
+            this.recipe.amount = 0
+            this.recipe.type = 1
+            this.recipeDetails = []
+          }
+          
         }
       },
       'recipe.frequency'(n){
@@ -304,17 +312,23 @@ import { type } from "@/constants/recipe";
             let dup = this.recipeDetails.filter(x => x.food === this.recipeDetail?.food).length
             if(dup <= 0){
               if(this.recipeDetail?.qty <= 1){
-                let sumQty = this.recipeDetails.reduce((a, b) => a + b, 0);
+                let sumQty = 0;
+                this.recipeDetails.forEach((rd) => {
+                  sumQty += rd.qty;
+                })
                 if(sumQty <= 1){
                   this.recipeDetails.push(this.recipeDetail)
-                  this.recipe.amount += this.recipeDetail?.amount
+                  this.recipe.amount = 0;
+                  this.recipeDetails.forEach((rd) => {
+                    this.recipe.amount += rd.amount
+                  })
                   this.recipeDetail = {}
                 }else{
                   this.alertDetail = 'จำนวนที่ใช้รวมห้ามเกิน 1 กก.'
                 }
               }else{
                 this.alertDetail = 'จำนวนที่ใช้ห้ามเกิน 1 กก.'
-              }
+              } 
             }else{
               this.alertDetail = 'อาหาร/วัตถุดิบ ซ้ำ'
             }
@@ -336,7 +350,10 @@ import { type } from "@/constants/recipe";
             this.alertWarning = ""
             try {
               if(this.mode === 'create'){
-                let sumQty = this.recipeDetails.reduce((a, b) => a + b, 0);
+                let sumQty = 0;
+                this.recipeDetails.forEach((rd) => {
+                  sumQty += rd.qty;
+                })
                 if(sumQty === 1){
                   const resp = await RecipeService.create({recipe : this.recipe, recipeDetail : this.recipeDetails});
                   if(resp){
@@ -352,11 +369,15 @@ import { type } from "@/constants/recipe";
                   this.alertWarning = 'กรุณาเพิ่ม รายการอาหาร/วัตถุดิบ ให้ครบ 1 กก.'
                 }
               }else{
-                const resp = await RecipeService.update(this.recipe._id,this.recipe);
+                const resp = await RecipeService.update(this.recipe._id,{recipe:this.recipe, recipeDetail : this.recipeDetails});
                 if(resp){
                     this.loading = false
-                    this.value = false
-                    this.confirmCancel('confirm')  
+                      this.value = false 
+                      this.confirmCancel('confirm')
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'บันทึกข้อมูลสำเร็จ'
+                      }) 
                 }
               }
               
