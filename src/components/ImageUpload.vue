@@ -1,6 +1,6 @@
 <template>
 
-        <BaseLevel type="justify-center mb-1">
+        <BaseLevel type="justify-center items-center align-middle mb-2 " role="button">
             <input
             id="imageUpload"
             @change="handleFile"
@@ -9,7 +9,7 @@
             hidden
             />
             <UserAvatar
-                class="lg:w-32 lg:h-32 w-32 h-32"
+                class="lg:w-40 lg:h-40 w-32 h-32"
                 :avatar="value"
                 @click="chooseImg"
             />

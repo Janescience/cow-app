@@ -49,6 +49,13 @@
               required
             />
           </FormField>
+          <FormField label="คุณภาพน้ำนม" help="* ห้ามว่าง">
+            <FormControl
+              v-model="cow.quality"
+              :options="quality"
+              icon=""
+            />
+          </FormField>
           <FormField label="คอก">
             <FormControl
               v-model="cow.corral"
@@ -113,7 +120,8 @@
   
   import { getCurrentUser } from '@/utils'
   import CowService from '@/services/cow'
-  
+  import { status , quality } from "@/constants/cow";
+
   export default {
     data () {
       return {
@@ -121,19 +129,16 @@
           image : 'image/img-mockup.png',
           code : "",  
           name : "",
-          status : "1",
+          status : 1,
           birthDate : null,
           corral : "",
           dad : "",
           mom : "",
+          quality : 1,
           farm : getCurrentUser().farm._id
         },
-        status : [
-          { id: 1, label: 'ท้อง' },
-          { id: 2, label: 'นมแห้ง' },
-          { id: 3, label: 'ให้ผลผลิต' },
-          { id: 4, label: 'วัวเด็ก' }
-        ],
+        status : status('create'),
+        quality : quality('create'),
         loading : false,
         alert : ""
       }

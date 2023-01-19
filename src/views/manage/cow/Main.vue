@@ -7,7 +7,6 @@
         title="โค"
         btnText="เพิ่มโค"
         has-btn-add
-        has-btn-search
         @openModal="mode='create';modalCow = true;"
       />
       
@@ -20,25 +19,12 @@
       />
 
       <Criteria
-        grid="grid-cols-2 lg:grid-cols-4"
+        grid="grid-cols-2 lg:grid-cols-5"
         @search="getCows" 
         @reset="reset" 
         :forms="forms" 
         :search="search"
       />
-
-      <!-- <Table 
-        title="รายการโค" 
-        has-checkbox
-        :checked-data="checked"
-        :datas="datas" 
-        :items="items" 
-        :buttons="buttons"
-        @edit="edit"
-        @delete="removeCow"
-        :loading="loading"
-      /> -->
-
 
         <div
           v-if="!loading"
@@ -112,7 +98,7 @@ import DDLCow from '@/components/DDL/Cow.vue'
 import CowService from '@/services/cow'
 import { getCurrentUser } from "@/utils";
 import getAge from "@/utils/age-calculate";
-import { cowStatus } from '@/constants/cow'
+import { status,quality } from '@/constants/cow'
 
 
 export default {
@@ -139,7 +125,12 @@ export default {
         {
           label : 'สถานะ',
           value : 'status',
-          options : cowStatus()
+          options : status()
+        },
+        {
+          label : 'คุณภาพน้ำนม',
+          value : 'quality',
+          options : quality()
         },
         {
           label : 'คอก',
@@ -155,82 +146,8 @@ export default {
         flag : "Y",
         farm : getCurrentUser().farm._id
       },
+      mode : 'create',
       loading : false,
-      mode : "create",
-      dataEdit : null,
-      checked : {
-        code : {
-          value : 'code'
-        },
-        label : {
-          value : 'name'
-        }
-      },
-      datas : [
-        {
-          label : 'รูปภาพ',
-          class : 'text-center',
-          value : 'image',
-          type : 'image'
-        },
-        {
-          label : 'รหัสโค',
-          value : 'code',
-        },
-        {
-          label : 'ชื่อโค',
-          value : 'name',
-        },
-        {
-          label : 'วันเกิด',
-          class : 'text-center',
-          value : 'birthDate',
-          type : 'date'
-        },
-        {
-          label : 'อายุ',
-          class : 'text-center',
-          func : (obj) => {
-            return this.calAge(obj.birthDate)
-          },
-        },
-        {
-          label : 'สถานะ',
-          func : (obj) => {
-            return cowStatus()[obj.status].label
-          },
-        },
-        {
-          label : 'คอก',
-          value : 'corral',
-        },
-        {
-          label : 'พ่อพันธุ์',
-          value : 'dad',
-        },
-        {
-          label : 'แม่พันธุ์',
-          value : 'mom',
-        },
-      ],
-      buttons : [
-        {
-          label : 'ลบ',
-          type : 'delete',
-          color : 'danger',
-        },
-        {
-          label : 'แก้ไข',
-          type : 'edit',
-          color : 'warning',
-        },
-        {
-          label : 'รายละเอียด',
-          type : 'detail',
-          color : 'info',
-          path : '/manage/cow/detail'
-        }
-      ]
     }
   },
   computed : {

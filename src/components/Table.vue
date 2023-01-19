@@ -12,7 +12,7 @@
         <CardBox
             v-if="itemsPaginated.length > 0"
             :title="title + ' ' + countChecked()"
-            class="shadow-lg"
+            class="shadow-lg mb-5"
             has-table
             header-icon=""
         >

@@ -66,14 +66,9 @@ const pillType = computed(() => {
 })
 
 const qualityStyle = computed(() => {
-  if (props.quality == 1) {
-    return {
-      icon: 'accountArrowDown',
-      style: 'success'
-    }
-  }
 
-  if (props.quality == 3) {
+
+  if (props.quality == 2) {
     return {
       icon: 'crownCircleOutline',
       style: 'text-amber-400'
