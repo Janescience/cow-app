@@ -9,7 +9,7 @@
             hidden
             />
             <UserAvatar
-                class="lg:w-40 lg:h-40 w-32 h-32"
+                class="lg:w-38 lg:h-38 w-32 h-32"
                 :avatar="value"
                 @click="chooseImg"
             />
@@ -25,7 +25,7 @@
         computed:{
             value:{
                 get(){
-                    return this.modelValue
+                    return !this.modelValue ? '/image/img-mockup.png' : this.modelValue
                 },
                 set(newValue){
                     this.$emit('update:modelValue', newValue)

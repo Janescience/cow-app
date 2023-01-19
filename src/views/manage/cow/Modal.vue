@@ -126,7 +126,7 @@
     data () {
       return {
         cow : {
-          image : 'image/img-mockup.png',
+          image : '/image/img-mockup.png',
           code : "",  
           name : "",
           status : 1,

@@ -29,12 +29,12 @@
 
       <CardBox 
         class="mb-5"
-        :loading="loading"
+        :loading="cowLoading"
         title="ข้อมูลโค"
         header-icon=""
       >
-        <div class="grid lg:gap-3 md:gap-2 gap-5 grid-cols-2 lg:grid-cols-6 md:grid-cols-4">
-          <div class="row-span-2 ">
+        <div class="grid lg:gap-3 md:gap-2 gap-5 grid-cols-2 lg:grid-cols-7 md:grid-cols-4">
+          <div class="row-span-2">
             <ImageUpload v-model="cow.image"/>
             <BaseLevel type="justify-center text-xs ">
               อัพโหลดรูปภาพ (คลิกที่รูป)
@@ -98,16 +98,171 @@
         </div>
       </CardBox>
 
+      <div class="grid gap-5 grid-cols-1 lg:grid-cols-2 md:grid-cols-2 mb-5">
+        <CardBox 
+          icon="cupWater"
+          :loading="milkLoading"
+          title="สรุปข้อมูลน้ำนม"
+          header-icon=""
+        >
+          <div class="grid gap-5 grid-cols-4 ">
+            <p class="col-span-2">
+              <BaseIcon path="waterPercent" size="20"/> ผลผลิตน้ำนมเฉลี่ย/วัน 
+            </p>
+            <p>
+              {{ milk().avg }}
+            </p>
+            <p>
+              กิโลกรัม
+            </p>
+            <p class="col-span-2">
+              <BaseIcon path="water" size="20"/> ผลผลิตน้ำนมทั้งหมด
+            </p>
+            <p>
+              {{ milk().all }}
+            </p>
+            <p>
+              กิโลกรัม
+            </p>
+          </div>
+  
+        </CardBox>
+        <CardBox 
+          icon="reproduction"
+          class="row-span-2"
+          :loading="reproductLoading"
+          title="สรุปข้อมูลการสืบพันธุ์/ผสมพันธุ์"
+          header-icon=""
+        >
+          <div class="grid gap-5 grid-cols-3 ">
+            <p class="row-span-3">
+               การเข้าระบบสืบพันธุ์
+            </p>
+            <p>
+              จำนวนครั้ง
+            </p>
+            <p>
+              {{ reproduct().login.count }}
+            </p>
+            <p >
+              วันที่เข้าครั้งล่าสุด
+            </p>
+            <p>
+              {{ reproduct().login.lastDate }}
+            </p>
+            <p>
+              ผลครั้งล่าสุด
+            </p>
+            <p>
+              {{ reproduct().login.result }}
+            </p>
+            <!-- ================================ -->
+            <p class="row-span-2">
+               การเป็นสัด
+            </p>
+            <p>
+              จำนวนครั้ง
+            </p>
+            <p>
+              {{ reproduct().estrus.count }}
+            </p>
+            <p >
+              วันที่เป็นสัดครั้งล่าสุด
+            </p>
+            <p>
+              {{ reproduct().estrus.lastDate }}
+            </p>
+            <!-- //================================ -->
+            <p class="row-span-2">
+               การผสม
+            </p>
+            <p>
+              จำนวนครั้ง
+            </p>
+            <p>
+              {{ reproduct().mating.count }}
+            </p>
+            <p >
+              วันที่ผสมครั้งล่าสุด
+            </p>
+            <p>
+              {{ reproduct().mating.lastDate }}
+            </p>
+            <!-- //================================ -->
+            <p class="row-span-2">
+               การตรวจท้อง
+            </p>
+            <p>
+              จำนวนครั้ง
+            </p>
+            <p>
+              {{ reproduct().check.count }}
+            </p>
+            <p >
+              วันที่ตรวจท้องครั้งล่าสุด
+            </p>
+            <p>
+              {{ reproduct().check.lastDate }}
+            </p>
+            <!-- //================================ -->
+          </div>
+  
+        </CardBox>
+        <CardBox 
+          icon="babyFace"
+          :loading="reproductLoading"
+          title="สรุปข้อมูลการคลอดลูก"
+          header-icon=""
+        >
+          <div class="grid gap-5 grid-cols-3 ">
+            <p class="row-span-4">
+               การคลอดลูก
+            </p>
+            <p>
+              จำนวนครั้ง
+            </p>
+            <p>
+              {{ reproduct().login.count }}
+            </p>
+            <p >
+              วันที่คลอดลูกครั้งล่าสุด
+            </p>
+            <p>
+              {{ reproduct().login.lastDate }}
+            </p>
+            <p>
+              จำนวนเพศผู้
+            </p>
+            <p>
+              {{ reproduct().login.count }}
+            </p>
+            <p>
+              จำนวนเพศเมีย
+            </p>
+            <p>
+              {{ reproduct().login.count }}
+            </p>
+          </div>
+  
+        </CardBox>
+      </div>
+
       <Table
+        v-if="milks.length > 0"
         title="ข้อมูลการรีดนม" 
         :items="milks" 
         :datas="milkDatas"
+        :loading="milkLoading"
+
       />
 
       <Table
+        v-if="reproducts.length > 0"
         title="ข้อมูลการสืบพันธ์ุ/ผสมพันธ์ุ" 
         :items="reproducts" 
         :datas="reproductDatas" 
+        :loading="reproductLoading"
+
       />
           
     </SectionMain>
@@ -132,6 +287,7 @@ import CowService from '@/services/cow'
 import MilkService from '@/services/milking'
 import ReproductService from '@/services/reproduction'
 import getAge from "@/utils/age-calculate";
+import moment from "moment";
 import { getCurrentUser } from "@/utils";
 import { Toast } from "@/utils/alert";
 import { status,quality } from '@/constants/cow'
@@ -141,10 +297,12 @@ import { reproductResult,reproductStatus } from '@/constants/reproduct'
 export default {
   data (){
     return {
-      cow : null,
+      cow : {},
       milks : [],
       reproducts : [],
-      loading : false,
+      cowLoading : false,
+      milkLoading : false,
+      reproductLoading : false,
       alert : "",
       status : status('create'),
       quality : quality('create'),
@@ -254,32 +412,32 @@ export default {
   },
   methods : {
     async getCow(id){
-      this.loading = true
+      this.cowLoading = true
       const resp = await CowService.get(id);
       this.cow = null
       if(resp.data){
         this.cow = resp.data.cow
         this.cow.birthDate = new Date(this.cow.birthDate)
       }
-      this.loading = false
+      this.cowLoading = false
     },
     async getMilks(id){
-      this.loading = true
+      this.milkLoading = true
       const resp = await MilkService.all({cow:id,farm:getCurrentUser().farm._id});
       this.milks = []
       if(resp.data){
         this.milks = resp.data.milkings
       }
-      this.loading = false
+      this.milkLoading = false
     },
     async getReproducts(id){
-      this.loading = true
+      this.reproductLoading = true
       const resp = await ReproductService.all({cow:id,farm:getCurrentUser().farm._id});
       this.reproducts = []
       if(resp.data){
         this.reproducts = resp.data.reproducts
       }
-      this.loading = false
+      this.reproductLoading = false
     },
     async update(){
         this.loading = true
@@ -304,7 +462,75 @@ export default {
             })
         }
     },
+    milk(){
+      let count = this.milks.length
+      let total = 0;
+      for(let milk of this.milks){
+        total += milk.morningQty + milk.afternoonQty
+      }
+      let avg = total/count;
+      return { 
+        avg : (count > 0 ? avg.toFixed(2) : 0) , 
+        all : total
+      };
+    },
+    reproduct(){
+      let now = moment();
 
+      let countLogin = this.reproducts.length > 0 ? this.reproducts.length : '-'
+      let lastDateLogin = this.reproducts.length > 0 ? this.formatDate(this.reproducts[0].loginDate) : '-'
+      let result = this.reproducts.length > 0 ? reproductResult()[this.reproducts[0].result].label : '-'
+
+      let countEstrus = 0,countMating = 0,countCheck = 0;
+      let lastEstrus = "-",lastMating = "-",lastCheck = '-';
+
+      for(let rpd of this.reproducts){
+        if(rpd.estrusDate != null){
+          if(moment(rpd.estrusDate) <= now){
+            countEstrus++
+            lastEstrus = this.formatDate(rpd.estrusDate)
+          }
+        }
+        if(rpd.matingDate != null){
+          if(moment(rpd.matingDate) <= now){
+            countMating++
+            lastMating = this.formatDate(rpd.matingDate)
+          }
+        }
+        if(rpd.checkDate != null){
+          if(moment(rpd.checkDate) <= now){
+            countCheck++
+            lastCheck = this.formatDate(rpd.checkDate)
+          }
+        }
+      }
+   
+      return {
+        login : {
+          count : countLogin,
+          lastDate : lastDateLogin,
+          result : result
+        },
+        estrus : {
+          count : countEstrus > 0 ? countEstrus : '-',
+          lastDate : lastEstrus
+        },
+        mating : {
+          count : countMating > 0 ? countMating : '-',
+          lastDate : lastMating
+        },
+        check : {
+          count : countCheck > 0 ? countCheck : '-',
+          lastDate : lastCheck
+        }
+      }
+    },
+    formatDate(date){
+        if(!date){
+            return ""
+        }
+        return moment(new Date(date)).format('DD/MM/YYYY');
+    },
     calAge(bdDate){
       return getAge(bdDate);
     },
