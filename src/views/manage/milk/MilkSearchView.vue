@@ -36,6 +36,7 @@
         @edit="edit" 
         @delete="removeMilk" 
         @deleteSelected="removeSelected"
+        :loading="loading"
       />
 
     </SectionMain>
@@ -158,9 +159,9 @@ export default {
     this.getMilks();
   },
   methods : {
-    async getMilks(search){
+    async getMilks(){
       this.loading = true
-      const resp = await MilkingService.all(search);
+      const resp = await MilkingService.all(this.search);
       this.items = []
       if(resp.data){
         this.items = resp.data.milkings
@@ -183,7 +184,7 @@ export default {
     },
     reset(){
       this.search.cow = null
-      this.search.date = null
+      this.search.date = new Date()
     },
   }
 }
