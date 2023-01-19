@@ -13,7 +13,7 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-8">
           <FormField label="วัคซีน" help="* ห้ามว่าง" >
             <FormControl
               v-model="protection.vaccine"
@@ -45,7 +45,7 @@
               required
             />
           </FormField>
-          <FormField label="หมายเหตุ"  >
+          <FormField label="หมายเหตุ"  class="col-span-2">
             <FormControl
               v-model="protection.remark"
               type="textarea"

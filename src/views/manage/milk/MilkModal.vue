@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="mode === 'create' ? 'เพิ่มการรีดนม' : 'แก้ไขการรีดนม'"
-        class="shadow-lg w-full  overflow-y-auto lg:w-1/3 z-50"
+        class="shadow-lg w-full  overflow-y-auto lg:w-3/5 z-50"
         header-icon="close"
         modal
         form
@@ -13,7 +13,7 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-1">
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-1">
           
           <FormField label="วันที่รีดนม" help="* ห้ามว่าง">
             <FormControl

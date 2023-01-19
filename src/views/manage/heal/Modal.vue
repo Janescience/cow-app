@@ -13,7 +13,7 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-5">
           <FormField label="โค" help="* ห้ามว่าง">
               <DDLCow v-model="heal.cow"/>
           </FormField>
@@ -31,14 +31,14 @@
               icon="doctor"
             />
           </FormField>
-          <FormField label="อาการ/โรค"  help="* ห้ามว่าง">
+          <FormField label="อาการ/โรค"  help="* ห้ามว่าง" class="col-span-2">
             <FormControl
               v-model="heal.disease"
               type="textarea"
               required
             />
           </FormField>
-          <FormField label="วิธีการรักษา" >
+          <FormField label="วิธีการรักษา" class="col-span-2">
             <FormControl
               v-model="heal.method"
               type="textarea"

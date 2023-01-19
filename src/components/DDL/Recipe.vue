@@ -41,7 +41,7 @@ export default {
         value:{
             get(){
                 if(this.valueType === 'object'){
-                    this.modelValue.recipe_data = this.modelValue.name
+                    this.modelValue.recipe_data = this.modelValue?.name
                 }
                 return this.modelValue
             },
