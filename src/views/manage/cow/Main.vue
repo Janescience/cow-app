@@ -52,7 +52,7 @@
             :sub-text="'คอก '+item.corral"
             :date="item.birthDate"
             :status="item.status"
-            @click="edit(item)"
+            @click="detail(item)"
             :quality="item.quality"
           />
         </div>
@@ -106,7 +106,7 @@ import FormControl from "@/components/FormControl.vue";
 import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
 import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
-import CreateCowModal from './CowModal.vue'
+import CreateCowModal from './Modal.vue'
 
 import DDLCow from '@/components/DDL/Cow.vue'
 import CowService from '@/services/cow'
@@ -292,11 +292,13 @@ export default {
       }
       this.loading = false
     },
-    edit(cow){
-      this.dataEdit = cow;
-      this.mode='edit';
-      this.dataEdit.birthDate = new Date(this.dataEdit.birthDate)
-      this.modalCow = true;
+    detail(cow){
+      this.$router.push({
+          name: "cowDetail",
+          params: {
+              id: cow._id ,
+          }
+      });
     },
     reset(){
       this.search.code = null

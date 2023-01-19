@@ -40,7 +40,16 @@ const routes = [
     },
     path: '/manage/cow',
     name: 'cow',
-    component: () => import('@/views/manage/cow/CowSearchView.vue')
+    component: () => import('@/views/manage/cow/Main.vue')
+  },
+  {
+    meta: {
+      title: 'รายละเอียดโค',
+      loginRequired : true
+    },
+    path: '/manage/cow/detail/:id',
+    name: 'cowDetail',
+    component: () => import('@/views/manage/cow/Detail.vue')
   },
   {
     meta: {
