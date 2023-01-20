@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การคลอดลูก'"
-        class="shadow-lg w-full  overflow-y-auto lg:w-1/2 z-50"
+        class="shadow-lg w-full lg:w-2/5 z-50"
         header-icon="close"
         modal
         form
@@ -13,15 +13,15 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-8">
           <BaseLevel type="justify-start" >
-            <BaseIcon path="cow" size="24" class="mr-3"/> แม่พันธ์ {{ show.cow?.code }} : {{ show.cow?.name }}
+            <BaseIcon path="cow" size="24" class="mr-3"/> {{ show.cow?.name }}
           </BaseLevel>
           <BaseLevel type="justify-start" >
-            การสืบพันธุ์ครั้งที่ : {{ show?.reproduction?.seq }}
+            สืบพันธุ์ครั้งที่  {{ show?.reproduction?.seq }}
           </BaseLevel>
           <BaseLevel type="justify-start" >
-            อายุครรภ์ : {{ calAge(show?.pregnantDate,show.birthDate) }}
+            อายุครรภ์ {{ calAge(show?.pregnantDate,show.birthDate) }}
           </BaseLevel>
           <FormField label="วันที่คลอด" help="* ห้ามว่าง" >
             <FormControl
@@ -39,9 +39,9 @@
             />
           </FormField>
           <BaseLevel type="justify-start" v-if="mode === 'edit'">
-             <BaseIcon path="babyFaceOutline" size="24" class="mr-3"/> ลูกวัว {{ show.calf?.code }} : {{  show.calf?.name }}
+             <BaseIcon path="babyFaceOutline" size="24" class="mr-3"/> ชื่อลูก {{  show.calf?.name }}
           </BaseLevel>
-          <FormField label="ชื่อลูกวัว" v-if="(birth.sex == 'F' && mode === 'create')" help="* ห้ามว่าง">
+          <FormField label="ชื่อลูก" v-if="(birth.sex == 'F' && mode === 'create')" help="* ห้ามว่าง">
             <FormControl
               v-model="birth.newCow.name"
               icon="babyFaceOutline"

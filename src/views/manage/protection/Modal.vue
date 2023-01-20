@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การป้องกัน/บำรุง'"
-        class="shadow-lg w-full  overflow-y-auto lg:w-1/2 z-50"
+        class="shadow-lg w-full lg:w-1/2 z-50"
         header-icon="close"
         modal
         form

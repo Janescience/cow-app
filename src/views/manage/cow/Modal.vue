@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="mode === 'create' ? 'เพิ่มโค' : 'แก้ไขโค'"
-        class="shadow-lg w-full  overflow-y-auto md:w-3/5 lg:w-1/1 z-50"
+        class="shadow-lg w-full  md:w-3/5 lg:w-1/1 z-50"
         header-icon="close"
         modal
         form

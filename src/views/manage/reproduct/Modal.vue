@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="mode === 'create' ? 'เพิ่มการสืบพันธุ์' : 'แก้ไขการสืบพันธุ์'"
-        class="shadow-lg w-full  overflow-y-auto lg:w-1/2 z-50"
+        class="shadow-lg w-full lg:w-1/2 z-50"
         header-icon="close"
         modal
         form

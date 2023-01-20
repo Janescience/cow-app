@@ -55,7 +55,7 @@
                             :class="[header.class]">
                             {{ header.label }}
                         </th>
-                        <th />
+                        <th v-if="buttons.length > 0"/>
                     </tr>
                 </thead>
               <tbody>

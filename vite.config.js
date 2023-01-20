@@ -21,7 +21,7 @@ export default defineConfig((command,mode) =>{
         },
         manifest : {
           name : 'Dairy Farm',
-          short_name : 'daifar',
+          short_name : 'Dairy Farm',
           description : 'Dairy farm management application',
           theme_color : '#1F2937',
           background_color : '#1F2937',

@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="mode === 'create' ? 'เพิ่มการรีดนม' : 'แก้ไขการรีดนม'"
-        class="shadow-lg w-full  overflow-y-auto lg:w-3/5 z-50"
+        class="shadow-lg w-full  lg:w-3/5 z-50"
         header-icon="close"
         modal
         form

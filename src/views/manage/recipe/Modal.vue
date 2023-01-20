@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'สูตรอาหาร'"
-        class="shadow-lg w-full  overflow-y-auto lg:w-2/3 z-50"
+        class="shadow-lg w-full lg:w-2/3 z-50"
         header-icon="close"
         modal
         form

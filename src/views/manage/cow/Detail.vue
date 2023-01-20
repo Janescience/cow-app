@@ -102,7 +102,7 @@
         <CardBox 
           icon="cupWater"
           :loading="milkLoading"
-          title="สรุปข้อมูลน้ำนม"
+          title="ข้อมูลน้ำนม"
           header-icon=""
         >
           <div class="grid gap-5 grid-cols-4 ">
@@ -131,7 +131,7 @@
           icon="reproduction"
           class="row-span-2"
           :loading="reproductLoading"
-          title="สรุปข้อมูลการสืบพันธุ์/ผสมพันธุ์"
+          title="ข้อมูลการสืบพันธุ์/ผสมพันธุ์"
           header-icon=""
         >
           <div class="grid gap-5 grid-cols-3 ">
@@ -211,7 +211,7 @@
         <CardBox 
           icon="babyFace"
           :loading="reproductLoading"
-          title="สรุปข้อมูลการคลอดลูก"
+          title="ข้อมูลการคลอดลูก"
           header-icon=""
         >
           <div class="grid gap-5 grid-cols-3 ">
@@ -222,25 +222,25 @@
               จำนวนครั้ง
             </p>
             <p>
-              {{ reproduct().login.count }}
+              {{ birth().count }}
             </p>
             <p >
               วันที่คลอดลูกครั้งล่าสุด
             </p>
             <p>
-              {{ reproduct().login.lastDate }}
+              {{ birth().lastDate }}
             </p>
             <p>
               จำนวนเพศผู้
             </p>
             <p>
-              {{ reproduct().login.count }}
+              {{ birth().countMale }}
             </p>
             <p>
               จำนวนเพศเมีย
             </p>
             <p>
-              {{ reproduct().login.count }}
+              {{ birth().countFemale }}
             </p>
           </div>
   
@@ -249,7 +249,7 @@
 
       <Table
         v-if="milks.length > 0"
-        title="ข้อมูลการรีดนม" 
+        title="ประวัติการรีดนม" 
         :items="milks" 
         :datas="milkDatas"
         :loading="milkLoading"
@@ -258,11 +258,18 @@
 
       <Table
         v-if="reproducts.length > 0"
-        title="ข้อมูลการสืบพันธ์ุ/ผสมพันธ์ุ" 
+        title="ประวัติการสืบพันธ์ุ/ผสมพันธ์ุ" 
         :items="reproducts" 
         :datas="reproductDatas" 
         :loading="reproductLoading"
+      />
 
+      <Table
+        v-if="births.length > 0"
+        title="ประวัติการคลอดลูก" 
+        :items="births" 
+        :datas="birthDatas" 
+        :loading="birthLoading"
       />
           
     </SectionMain>
@@ -286,12 +293,15 @@ import Table from "@/components/Table.vue";
 import CowService from '@/services/cow'
 import MilkService from '@/services/milking'
 import ReproductService from '@/services/reproduction'
+import BirthService from '@/services/birth'
+
 import getAge from "@/utils/age-calculate";
 import moment from "moment";
 import { getCurrentUser } from "@/utils";
 import { Toast } from "@/utils/alert";
 import { status,quality } from '@/constants/cow'
 import { reproductResult,reproductStatus } from '@/constants/reproduct'
+import { sex,overgrown } from '@/constants/birth'
 
 
 export default {
@@ -300,9 +310,11 @@ export default {
       cow : {},
       milks : [],
       reproducts : [],
+      births : [],
       cowLoading : false,
       milkLoading : false,
       reproductLoading : false,
+      birthLoading : false,
       alert : "",
       status : status('create'),
       quality : quality('create'),
@@ -388,6 +400,65 @@ export default {
           value : 'howTo',
         },
       ],
+      birthDatas : [
+        {
+          label : "ครั้งที่",
+          value : 'seq',
+          class : 'text-center',
+        },
+        {
+          label : "วันที่ตั้งครรภ์",
+          class : 'text-center',
+          value : 'pregnantDate',
+          type : 'date',
+        },
+        {
+          label : 'อายุครรภ์',
+          func : (obj) => {
+            return this.calAge(obj?.pregnantDate)
+          },
+        },
+        {
+          label : "วันที่คลอด",
+          class : 'text-center',
+          value : 'birthDate',
+          type : 'date',
+        },
+        {
+          label : "เพศ",
+          class : 'text-center',
+          func : (obj) => {
+            return sex()[obj.sex]
+          },
+        },
+        {
+          label : "ลูกวัว",
+          class : 'text-center',
+          func : (obj) => {
+            return obj.calf ? obj.calf?.code + " : " + obj.calf?.name : ""
+          },
+        },
+        {
+          label : "รกค้าง",
+          class : 'text-center',
+          func : (obj) => {
+            return overgrown()[obj.overgrown]
+          },
+        },
+        {
+          label : "วันที่ใช้ยาขับ",
+          class : 'text-center',
+          value : 'drugDate',
+          type : 'date',
+        },
+        {
+          label : "วันที่ล้างมดลูก",
+          class : 'text-center',
+          value : 'washDate',
+          type : 'date',
+        },
+
+      ],
     }
   },
  
@@ -409,6 +480,7 @@ export default {
     this.getCow(this.$route.params.id);
     this.getMilks(this.$route.params.id);
     this.getReproducts(this.$route.params.id);
+    this.getBirths(this.$route.params.id);
   },
   methods : {
     async getCow(id){
@@ -438,6 +510,15 @@ export default {
         this.reproducts = resp.data.reproducts
       }
       this.reproductLoading = false
+    },
+    async getBirths(id){
+      this.birthLoading = true
+      const resp = await BirthService.all({cow:id,farm:getCurrentUser().farm._id});
+      this.births = []
+      if(resp.data){
+        this.births = resp.data.births
+      }
+      this.birthLoading = false
     },
     async update(){
         this.loading = true
@@ -471,7 +552,7 @@ export default {
       let avg = total/count;
       return { 
         avg : (count > 0 ? avg.toFixed(2) : 0) , 
-        all : total
+        all : total.toFixed(2)
       };
     },
     reproduct(){
@@ -523,6 +604,14 @@ export default {
           count : countCheck > 0 ? countCheck : '-',
           lastDate : lastCheck
         }
+      }
+    },
+    birth(){
+      return {
+        count : this.births.length > 0 ? this.births.length : '-',
+        lastDate : this.births.length > 0 ? this.formatDate(this.births[0].birthDate) : '-',
+        countMale : this.births.length > 0 ? this.births.filter(b => b.sex === 'M').length : '-',
+        countFemale : this.births.length > 0 ? this.births.filter(b => b.sex === 'F').length : '-',
       }
     },
     formatDate(date){
