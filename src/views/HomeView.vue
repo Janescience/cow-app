@@ -5,7 +5,77 @@
         icon="chartLine"
         title="ภาพรวมฟาร์ม"
       />
+      <CardBox
+        title="โค"
+        class="text-center"
+        header-icon=""
+      >
+        <div
+          class="grid gap-5 grid-cols-5"
+        >
+          <CardBox
+          >
+            <BaseIcon path="cow" size="100" class="mt-5"/>
+            <div class="text-center mt-2">
+              <h1 class="text-2xl">48</h1>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">
+                 โคทั้งหมด 
+              </p>
+            </div>
+          </CardBox>
+          <CardBox>
+            <BaseIcon path="water" size="100" class="mt-5"/>
+            <div class="text-center mt-2">
+              <h1 class="text-2xl">20</h1>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">
+                 โคให้ผลผลิต 
+              </p>
+            </div>
+          </CardBox>
+          <CardBox>
+            <BaseIcon path="humanPregnant" size="100" class="mt-5"/>
+            <div class="text-center mt-2">
+              <h1 class="text-2xl">10</h1>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">
+                 โคท้อง 
+              </p>
+            </div>
+          </CardBox>
+          <CardBox>
+            <BaseIcon path="babyFaceOutline" size="100" class="mt-5"/>
+            <div class="text-center mt-2">
+              <h1 class="text-2xl">10</h1>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">
+                 โคเด็ก 
+              </p>
+            </div>
+          </CardBox>
+          <CardBox>
+            <BaseIcon path="waterOff" size="100" class="mt-5"/>
+            <div class="text-center mt-2">
+              <h1 class="text-2xl">8</h1>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">
+                 โคนมแห้ง
+              </p>
+            </div>
+          </CardBox>
+        </div>
+      </CardBox>
+      <CardBox
+        title="ปริมาณน้ำนม"
+        icon=""
+        class="mt-5"
+        header-icon=""
+      >
+        <div v-if="chartData">
+          <line-chart
+            :data="chartData"
+            class="h-96"
+          />
+        </div>
+      </CardBox>
     </SectionMain>
+    
   </LayoutAuthenticated>
 </template>
 
@@ -19,19 +89,24 @@ import CardBoxWidget from '@/components/CardBoxWidget.vue'
 import CardBox from '@/components/CardBox.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseButton from '@/components/BaseButton.vue'
+import BaseIcon from '@/components/BaseIcon.vue'
 import CardBoxTransaction from '@/components/CardBoxTransaction.vue'
 import CardBoxClient from '@/components/CardBoxClient.vue'
 import SectionTitleBarSub from '@/components/SectionTitleBarSub.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
-import DashboardService from '@/services/dashboard'
 import FormControl from '@/components/FormControl.vue'
+
+import MilkService from '@/services/milking'
+import { getCurrentUser } from "@/utils";
+import moment from "moment";
+import _ from "lodash";
 
 export default {
   data(){
     return {
       chartData : null,
       chartColors : {primary: '#00D1B2',danger: '#FF3860'},
-      dashboard : null,
+      milks : [],
     }
   },
   components : {
@@ -47,24 +122,29 @@ export default {
     CardBoxClient,
     SectionTitleBarSub,
     LayoutAuthenticated,
-    FormControl
+    FormControl,
+    BaseIcon
   },
   created(){
     this.getDashboard()
   },
   methods : {
     async getDashboard(){
-      
+      const resp = await MilkService.all({farm:getCurrentUser().farm._id})
+      if(resp){
+        this.milks = _.groupBy(resp.data.milkings,'date')
+        this.chartData = this.createChart()
+      }
     },
     getChartData(type){
       const datas = []
-      this.dashboard?.summaries.map((summary) => {
-        if(type === 'inc'){
-          datas.push(summary.amount)
-        }
-        if(type === 'exp'){
-          datas.push(summary.paid)
-        }
+      Object.keys(this.milks).forEach(key => {
+        let milks = this.milks[key];
+        let sum = 0 ;
+        milks.map((m) => {
+          sum += m.morningQty + m.afternoonQty
+        })
+        datas.push(sum)
       })
       return datas;
     },
@@ -90,18 +170,23 @@ export default {
     createChart(){
       const labels = []
 
-      this.dashboard.summaries.map((summary) => {
-        labels.push(`${summary.month}`)
+      Object.keys(this.milks).forEach(m => {
+        labels.push(`${this.formatDate(m)}`)
       })
 
       return {
         labels,
         datasets: [
-          this.getDatasetObject('primary', 'exp'),
-          this.getDatasetObject('danger', 'inc')
+          this.getDatasetObject('primary', 'qty'),
         ]
       }
-    }
+    },
+    formatDate(date){
+        if(!date){
+            return ""
+        }
+        return moment(new Date(date)).format('DD/MM/YYYY');
+    },
   }
 }
 </script>
