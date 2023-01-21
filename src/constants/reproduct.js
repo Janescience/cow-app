@@ -19,12 +19,12 @@ export const reproductResult = (action) => {
     return action === 'create' ?
     [
         { id: 1, label: 'ผิดปกติ' },
-        { id: 2, label: 'ปกติ (พร้อมผสม)' },
+        { id: 2, label: 'ปกติ' },
     ]
     :[
         { id: "", label: 'ทั้งหมด' },
         { id: 1, label: 'ผิดปกติ' },
-        { id: 2, label: 'ปกติ (พร้อมผสม)' },
+        { id: 2, label: 'ปกติ' },
     ]
 }
 

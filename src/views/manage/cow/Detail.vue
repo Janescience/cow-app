@@ -20,6 +20,12 @@
             @click="this.$router.push('/manage/cow')"
           />
           <BaseButton
+            v-if="canRemove"
+            label="ลบ"
+            color="danger"
+            @click="remove()"
+          />
+          <BaseButton
             label="บันทึก"
             color="success"
             @click="update()"
@@ -29,7 +35,7 @@
 
       <CardBox 
         class="mb-5"
-        :loading="cowLoading"
+        :loading="loading"
         title="ข้อมูลโค"
         header-icon=""
       >
@@ -101,7 +107,7 @@
       <div class="grid gap-5 grid-cols-1 lg:grid-cols-2 md:grid-cols-2 mb-5">
         <CardBox 
           icon="cupWater"
-          :loading="milkLoading"
+          :loading="loading"
           title="ข้อมูลน้ำนม"
           header-icon=""
         >
@@ -130,7 +136,7 @@
         <CardBox 
           icon="reproduction"
           class="row-span-2"
-          :loading="reproductLoading"
+          :loading="loading"
           title="ข้อมูลการสืบพันธุ์/ผสมพันธุ์"
           header-icon=""
         >
@@ -208,16 +214,15 @@
           </div>
   
         </CardBox>
-        <CardBox 
+        <div class="grid gap-5 grid-cols-2 ">
+          <CardBox 
           icon="babyFace"
-          :loading="reproductLoading"
-          title="ข้อมูลการคลอดลูก"
+          :loading="loading"
+          title="การคลอดลูก"
           header-icon=""
         >
-          <div class="grid gap-5 grid-cols-3 ">
-            <p class="row-span-4">
-               การคลอดลูก
-            </p>
+          <div class="grid gap-5 grid-cols-2 ">
+
             <p>
               จำนวนครั้ง
             </p>
@@ -225,7 +230,7 @@
               {{ birth().count }}
             </p>
             <p >
-              วันที่คลอดลูกครั้งล่าสุด
+              วันที่คลอดลูกล่าสุด
             </p>
             <p>
               {{ birth().lastDate }}
@@ -245,6 +250,88 @@
           </div>
   
         </CardBox>
+        <CardBox 
+          icon="doctor"
+          :loading="loading"
+          title="การรักษา"
+          header-icon=""
+        >
+          <div class="grid gap-5 grid-cols-2 ">
+            <p>
+              จำนวนครั้ง
+            </p>
+            <p>
+              {{ heal().count }}
+            </p>
+            <p >
+              วันที่รักษาล่าสุด
+            </p>
+            <p>
+              {{ heal().lastDate }}
+            </p>
+            <p>
+              อาการ/โรคล่าสุด
+            </p>
+            <p>
+              {{ heal().lastDisease }}
+            </p>
+            <p>
+              วิธีการรักษาล่าสุด
+            </p>
+            <p>
+              {{ heal().lastMethod }}
+            </p>
+          </div>
+  
+        </CardBox>
+        </div>
+
+        <CardBox 
+          icon="pillMultiple"
+          :loading="loading"
+          title="การป้องกัน/บำรุง"
+          header-icon=""
+        >
+          <div class="grid gap-5 grid-cols-3 "
+            v-for="protection in protections"
+            :key="protection.vaccine"
+          >
+              <p class="row-span-2">
+                {{  protection.vaccine }}
+              </p>
+              <p>
+                วันที่ให้ยาล่าสุด
+              </p>
+              <p >
+                {{ formatDate(protection.dateCurrent)  }}
+              </p>
+              <p>
+                วันที่ให้ยาครั้งต่อไป
+              </p>
+              <p >
+                {{ formatDate(protection.dateNext)  }}
+              </p>
+          </div>
+  
+        </CardBox>
+
+        <CardBox 
+          icon="foodDrumstickOutline"
+          :loading="loading"
+          :title="'การให้อาหาร' + ' (คอก '+cow.corral+')'"
+          header-icon=""
+        >
+          <div class="grid gap-5 grid-cols-1 "
+            v-for="(food,index) in foods"
+            :key="food.recipe._id"
+          >
+              <p >
+                {{ (index+1) +'. สูตร'+ food.recipe.name + ' จำนวน ' + food.qty + ' กก./วัน คิดเป็นเงินต้นทุน '+ food.amount + ' บาท/วัน และ ' + food.amountAvg + ' บาท/ตัว โดยมีวัวทั้งหมด ' +food.numCow+ ' ตัว'}}
+              </p>
+          </div>
+  
+        </CardBox>
+        
       </div>
 
       <Table
@@ -252,7 +339,7 @@
         title="ประวัติการรีดนม" 
         :items="milks" 
         :datas="milkDatas"
-        :loading="milkLoading"
+        :loading="loading"
 
       />
 
@@ -261,7 +348,7 @@
         title="ประวัติการสืบพันธ์ุ/ผสมพันธ์ุ" 
         :items="reproducts" 
         :datas="reproductDatas" 
-        :loading="reproductLoading"
+        :loading="loading"
       />
 
       <Table
@@ -269,7 +356,15 @@
         title="ประวัติการคลอดลูก" 
         :items="births" 
         :datas="birthDatas" 
-        :loading="birthLoading"
+        :loading="loading"
+      />
+
+      <Table
+        v-if="heals.length > 0"
+        title="ประวัติการรักษา" 
+        :items="heals" 
+        :datas="healDatas" 
+        :loading="loading"
       />
           
     </SectionMain>
@@ -294,6 +389,9 @@ import CowService from '@/services/cow'
 import MilkService from '@/services/milking'
 import ReproductService from '@/services/reproduction'
 import BirthService from '@/services/birth'
+import HealService from '@/services/heal'
+import ProtectionService from '@/services/protection'
+import FoodService from '@/services/food'
 
 import getAge from "@/utils/age-calculate";
 import moment from "moment";
@@ -311,11 +409,12 @@ export default {
       milks : [],
       reproducts : [],
       births : [],
-      cowLoading : false,
-      milkLoading : false,
-      reproductLoading : false,
-      birthLoading : false,
+      heals : [],
+      protections : [],
+      foods : [],
+      loading : false,
       alert : "",
+      newCow : false,
       status : status('create'),
       quality : quality('create'),
       milkDatas : [
@@ -459,6 +558,34 @@ export default {
         },
 
       ],
+      healDatas : [
+        {
+          label : "ครั้งที่",
+          value : 'seq',
+          class : 'text-center',
+        },
+        {
+          label : "วันที่รักษา",
+          class : 'text-center',
+          value : 'date',
+          type : 'date',
+        },
+        {
+          label : "อาการ/โรค",
+          class : 'text-center',
+          value : 'disease',
+        },
+        {
+          label : "วิธีการรักษา",
+          class : 'text-center',
+          value : 'method',
+        },
+        {
+          label : "คนรักษา",
+          class : 'text-center',
+          value : 'healer',
+        },
+      ],
     }
   },
  
@@ -475,51 +602,69 @@ export default {
     BaseLevel,
     ImageUpload,
     Table
-},
+  },
+  computed : {
+    canRemove(){
+      if(this.milks.length == 0 &&
+        this.reproducts.length == 0 &&
+        this.births.length == 0){
+          return true;
+        }else{
+          return false;
+        }
+    }
+  },
   created() {
-    this.getCow(this.$route.params.id);
-    this.getMilks(this.$route.params.id);
-    this.getReproducts(this.$route.params.id);
-    this.getBirths(this.$route.params.id);
+    const cowId = this.$route.params.id;
+    this.getCowData(cowId);
   },
   methods : {
-    async getCow(id){
-      this.cowLoading = true
+    async getCowData(id){
+      this.loading = true;
       const resp = await CowService.get(id);
-      this.cow = null
-      if(resp.data){
-        this.cow = resp.data.cow
-        this.cow.birthDate = new Date(this.cow.birthDate)
-      }
-      this.cowLoading = false
-    },
-    async getMilks(id){
-      this.milkLoading = true
-      const resp = await MilkService.all({cow:id,farm:getCurrentUser().farm._id});
-      this.milks = []
-      if(resp.data){
-        this.milks = resp.data.milkings
-      }
-      this.milkLoading = false
-    },
-    async getReproducts(id){
-      this.reproductLoading = true
-      const resp = await ReproductService.all({cow:id,farm:getCurrentUser().farm._id});
-      this.reproducts = []
-      if(resp.data){
-        this.reproducts = resp.data.reproducts
-      }
-      this.reproductLoading = false
-    },
-    async getBirths(id){
-      this.birthLoading = true
-      const resp = await BirthService.all({cow:id,farm:getCurrentUser().farm._id});
-      this.births = []
-      if(resp.data){
-        this.births = resp.data.births
-      }
-      this.birthLoading = false
-    },
+
+      if (resp.data) {
+        this.cow = resp.data.cow;
+        this.cow.birthDate = new Date(this.cow.birthDate);
+
+        const farmId = getCurrentUser().farm._id;
+
+        const milkResp = await MilkService.all({ cow: id, farm: farmId });
+        if (milkResp.data) {
+          this.milks = milkResp.data.milkings;
+        }
+
+        const reproductResp = await ReproductService.all({ cow: id, farm: farmId });
+        if (reproductResp.data) {
+          this.reproducts = reproductResp.data.reproducts;
+        }
+
+        const birthResp = await BirthService.all({ cow: id, farm: farmId });
+        if (birthResp) {
+          this.births = birthResp.data.births; 
+        }
+
+        const healResp = await HealService.all({ cow: id, farm: farmId }); 
+        if (healResp) { 
+          this.heals = healResp.data.heals; 
+        }
+
+        const protectionResp = await ProtectionService.all(); 
+        if (protectionResp) { 
+          this.protections = protectionResp.data.protections; 
+        }
+
+        const foodResp = await FoodService.all({ corral: this.cow.corral , farm: farmId }); 
+        if (foodResp) { 
+          this.foods = foodResp.data.foods; 
+        }
+
+      } else { 
+         this.cow = null;   // If no data is returned, set the cow to null  
+      }  
+
+      this.loading = false;   // Set the loading state to false after all data has been fetched and processed   
+    },  
     async update(){
         this.loading = true
         this.alert = ""
@@ -566,24 +711,21 @@ export default {
       let lastEstrus = "-",lastMating = "-",lastCheck = '-';
 
       for(let rpd of this.reproducts){
-        if(rpd.estrusDate != null){
-          if(moment(rpd.estrusDate) <= now){
-            countEstrus++
-            lastEstrus = this.formatDate(rpd.estrusDate)
-          }
-        }
-        if(rpd.matingDate != null){
-          if(moment(rpd.matingDate) <= now){
-            countMating++
-            lastMating = this.formatDate(rpd.matingDate)
-          }
-        }
-        if(rpd.checkDate != null){
-          if(moment(rpd.checkDate) <= now){
-            countCheck++
-            lastCheck = this.formatDate(rpd.checkDate)
-          }
-        }
+        if(rpd.estrusDate != null && moment(rpd.estrusDate) <= now){
+            countEstrus++;
+            lastEstrus = this.formatDate(rpd.estrusDate);
+        } 
+
+        if(rpd.matingDate != null && moment(rpd.matingDate) <= now){
+            countMating++;
+            lastMating = this.formatDate(rpd.matingDate);
+        } 
+
+        if(rpd.checkDate != null && moment(rpd.checkDate) <= now){
+            countCheck++;
+            lastCheck = this.formatDate(rpd.checkDate);  
+        } 
+
       }
    
       return {
@@ -613,6 +755,14 @@ export default {
         countMale : this.births.length > 0 ? this.births.filter(b => b.sex === 'M').length : '-',
         countFemale : this.births.length > 0 ? this.births.filter(b => b.sex === 'F').length : '-',
       }
+    },
+    heal(){
+      let count = this.heals.length > 0 ? this.heals.length : '-';
+      let lastDate = this.heals.length > 0 ? this.formatDate(this.heals[0].date) : '-';
+      let lastDisease = this.heals.length > 0 ? this.heals[0].disease : '-';
+      let lastMethod = this.heals.length > 0 && this.heals[0].method ? this.heals[0].method : '-';
+
+      return { count, lastDate, lastDisease, lastMethod };
     },
     formatDate(date){
         if(!date){

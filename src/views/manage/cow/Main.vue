@@ -35,7 +35,7 @@
             :key="item.name"
             :img="item.image"
             :name="item.name"
-            :sub-text="'คอก '+item.corral"
+            :sub-text="'คอก '+(item.corral ? item.corral:'-')"
             :date="item.birthDate"
             :status="item.status"
             @click="detail(item)"

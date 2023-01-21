@@ -134,14 +134,6 @@ const statusStyle = computed(() => {
           :avatar="img"
         />
       </BaseLevel>
-      
-      <!-- <h1 class="text-3xl leading-tight font-semibold text-red-500">
-        <NumberDynamic
-          :value="amt"
-          prefix="$"
-          :suffix="suffix"
-        />
-      </h1> -->
     <div class="text-center mt-2">
       <h4 class="lg:text-xl text-md ">
         <BaseIcon

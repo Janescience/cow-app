@@ -1,5 +1,5 @@
 {
-  "name": "admin-one-vue-tailwind",
+  "name": "dairy-farm-app",
   "version": "3.0.0",
   "scripts": {
     "dev": "vite --host --mode dev",
