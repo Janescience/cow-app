@@ -11,7 +11,7 @@
         header-icon=""
       >
         <div
-          class="grid gap-5 grid-cols-5"
+          class="grid gap-5 grid-cols-2 lg:grid-cols-5"
         >
           <CardBox
           >
