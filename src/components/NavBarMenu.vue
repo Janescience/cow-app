@@ -1,5 +1,5 @@
 <script setup>
-import { useStyleStore } from '@/stores/style.js'
+import { useStyleStore } from '@/store/theme/style.js'
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 import NavBarItem from '@/components/NavBarItem.vue'

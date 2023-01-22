@@ -1,8 +1,8 @@
 import '../css/main.css';
 
 import { createPinia } from 'pinia'
-import { useStyleStore } from '@/stores/style.js'
-import { useLayoutStore } from '@/stores/layout.js'
+import { useStyleStore } from '@/store/theme/style.js'
+import { useLayoutStore } from '@/store/theme/layout.js'
 
 import { darkModeKey, styleKey } from '@/config.js'
 

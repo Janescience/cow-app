@@ -212,9 +212,7 @@ import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
-import DDLVaccine from '@/components/DDL/Vaccine.vue'
 
-import { getCurrentUser } from '@/utils'
 import { Toast } from "@/utils/alert";
 import { addMonths } from 'date-fns'
 
@@ -229,7 +227,6 @@ import { type } from "@/constants/recipe";
           name : '',
           type : 1,
           amount : 0,
-          farm :getCurrentUser().farm._id
         },
         recipeDetail : {},
         recipeDetails : [],
@@ -249,7 +246,10 @@ import { type } from "@/constants/recipe";
           set(newValue){
               this.$emit('update:modelValue', newValue)
           }
-        }
+        },
+        user() {
+          return this.$store.state.auth.user;
+        } 
     },
     watch:{
       data(n){
@@ -348,6 +348,7 @@ import { type } from "@/constants/recipe";
             this.loading = true
             this.alert = ""
             this.alertWarning = ""
+            this.recipe.farm = this.user.farm._id
             try {
               if(this.mode === 'create'){
                 let sumQty = 0;
@@ -404,7 +405,6 @@ import { type } from "@/constants/recipe";
     FormControl,
     NotificationBar,
     BaseLevel,
-    DDLVaccine,
     BaseIcon
 },
     props : {

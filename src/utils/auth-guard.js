@@ -1,11 +1,11 @@
 import { setCurrentUser } from '@/utils'
-import { useMainStore } from '@/stores/main'; 
+import TokenService from '@/services/token'
 
 export default (to, from, next) => {
     if (to.matched.some(record => record.meta.loginRequired)) {
-        const user = useMainStore().currentUser
+        const user = TokenService.getUser()
         if (user && user.accessToken) {
-            next();
+            next()
         } else {
             setCurrentUser(null)
             next('/login')

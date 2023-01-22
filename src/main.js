@@ -6,9 +6,9 @@ import * as mdijs from '@mdi/js'
 
 import App from './App.vue'
 import router from './router'
-import { useMainStore } from '@/stores/main.js'
-import { useStyleStore } from '@/stores/style.js'
-import { useLayoutStore } from '@/stores/layout.js'
+import store from './store'
+import { useStyleStore } from '@/store/theme/style.js'
+import { useLayoutStore } from '@/store/theme/layout.js'
 import { darkModeKey, styleKey } from '@/config.js'
 import vSelect from "vue-select";
 import Datepicker from '@vuepic/vue-datepicker';
@@ -19,12 +19,16 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import './css/main.css'
 import "vue-select/dist/vue-select.css";
 
+import setupInterceptors from '@/services/setupInterceptors';
+setupInterceptors(store);
+
 /* Init Pinia */
 const pinia = createPinia()
 
 /* Create Vue app */
 createApp(App)
 .use(router)
+.use(store)
 .use(pinia)
 .use(mdiVue,{icons:mdijs})
 .use(Loading,{
@@ -39,7 +43,6 @@ createApp(App)
 .mount('#app')
 
 /* Init Pinia stores */
-const mainStore = useMainStore(pinia)
 const styleStore = useStyleStore(pinia)
 const layoutStore = useLayoutStore(pinia)
 

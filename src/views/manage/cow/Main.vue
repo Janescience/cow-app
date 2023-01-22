@@ -96,7 +96,6 @@ import CreateCowModal from './Modal.vue'
 
 import DDLCow from '@/components/DDL/Cow.vue'
 import CowService from '@/services/cow'
-import { getCurrentUser } from "@/utils";
 import getAge from "@/utils/age-calculate";
 import { status,quality } from '@/constants/cow'
 
@@ -144,7 +143,6 @@ export default {
         birthDate : null,
         corral : "",
         flag : "Y",
-        farm : getCurrentUser().farm._id
       },
       mode : 'create',
       loading : false,
@@ -168,6 +166,9 @@ export default {
           }
 
           return pagesList
+      },
+      user() {
+        return this.$store.state.auth.user;
       }
   },
   components : {
@@ -194,6 +195,7 @@ export default {
   methods : {
     async getCows(){
       this.loading = true
+      this.search.farm = this.user.farm._id
       const resp = await CowService.all(this.search);
       this.items = []
       if(resp.data){

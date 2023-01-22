@@ -395,7 +395,6 @@ import FoodService from '@/services/food'
 
 import getAge from "@/utils/age-calculate";
 import moment from "moment";
-import { getCurrentUser } from "@/utils";
 import { Toast } from "@/utils/alert";
 import { status,quality } from '@/constants/cow'
 import { reproductResult,reproductStatus } from '@/constants/reproduct'
@@ -612,6 +611,9 @@ export default {
         }else{
           return false;
         }
+    },
+    user() {
+      return this.$store.state.auth.user;
     }
   },
   created() {
@@ -627,7 +629,7 @@ export default {
         this.cow = resp.data.cow;
         this.cow.birthDate = new Date(this.cow.birthDate);
 
-        const farmId = getCurrentUser().farm._id;
+        const farmId = this.user.farm._id;
 
         const milkResp = await MilkService.all({ cow: id, farm: farmId });
         if (milkResp.data) {

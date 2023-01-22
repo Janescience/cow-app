@@ -118,7 +118,6 @@
   import BaseLevel from '@/components/BaseLevel.vue'
   import ImageUpload from '@/components/ImageUpload.vue'
   
-  import { getCurrentUser } from '@/utils'
   import CowService from '@/services/cow'
   import { status , quality } from "@/constants/cow";
 
@@ -135,7 +134,6 @@
           dad : "",
           mom : "",
           quality : 1,
-          farm : getCurrentUser().farm._id
         },
         status : status('create'),
         quality : quality('create'),
@@ -152,6 +150,9 @@
           set(newValue){
               this.$emit('update:modelValue', newValue)
           }
+        },
+        user() {
+          return this.$store.state.auth.user;
         }
     },
     watch:{
@@ -193,6 +194,7 @@
         async submit(){
             this.loading = true
             this.alert = ""
+            this.cow.farm = this.user.farm._id
             try {
                 if(this.mode === 'create'){
                   const resp = await CowService.create(this.cow);

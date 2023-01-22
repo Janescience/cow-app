@@ -1,5 +1,4 @@
 import http from '@/constants/api';
-import authHeader from './auth-header'
 import moment from 'moment'
 
 async function getSearchQuery (opts = {}) {
@@ -23,13 +22,13 @@ async function getSearchQuery (opts = {}) {
 class ProtectionService{
     async all(search){
         const query = await getSearchQuery(search);
-        return http.get(`/protection`+query,{ headers : authHeader()})
+        return http.get(`/protection`+query)
             .then(response => {
                 return response;
             });
     }
     get(id){
-        return http.get(`/protection/${id}`,{ headers : authHeader()});
+        return http.get(`/protection/${id}`);
     }
     create(payload){
         if (payload.dateCurrent) {
@@ -38,13 +37,13 @@ class ProtectionService{
         if (payload.dateNext) {
             payload.dateNext = moment(new Date(payload.dateNext)).format('YYYY-MM-DD') 
         }
-        return http.post(`/protection`,payload,{ headers : authHeader()});
+        return http.post(`/protection`,payload);
     }
     delete(id){
-        return http.delete(`/protection/${id}`,{ headers : authHeader()});
+        return http.delete(`/protection/${id}`);
     }
     update(id,payload){
-        return http.put(`/protection/${id}`,payload,{ headers : authHeader()});
+        return http.put(`/protection/${id}`,payload);
     }
 }
 

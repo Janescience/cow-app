@@ -50,7 +50,6 @@ import Criteria from "@/components/Criteria.vue";
 import Modal from './Modal.vue'
 import BirthService from '@/services/birth'
 
-import { getCurrentUser } from "@/utils";
 import getAge from "@/utils/age-calculate";
 import { sex,overgrown } from '@/constants/birth'
 
@@ -83,7 +82,6 @@ export default {
         cow : null,
         birthDate : null,
         sex : "",
-        farm : getCurrentUser().farm._id,
       },
       loading : false,
       mode : "create",
@@ -203,13 +201,19 @@ export default {
     Table,
     Modal,
     Criteria
-},
+  },
+  computed: {
+    user() {
+      return this.$store.state.auth.user;
+    }
+  },
   created() {
     this.getDatas();
   },
   methods : {
     async getDatas(search){
       this.loading = true
+      this.search.farm = this.user.farm._id
       const resp = await BirthService.all(search);
       this.items = []
       if(resp.data){

@@ -1,6 +1,7 @@
 <script setup>
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import AuthService from '@/services/auth'
 import { mdiAccount, mdiAsterisk } from '@mdi/js'
 import SectionFullScreen from '@/components/SectionFullScreen.vue'
@@ -18,7 +19,7 @@ import BaseLevel from '@/components/BaseLevel.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import NotificationBarInCard from '@/components/NotificationBarInCard.vue'
-import { ref } from '@vue/reactivity'
+import { ref,computed } from '@vue/reactivity'
 
 const form = reactive({
   login: 'halem',
@@ -28,16 +29,18 @@ const form = reactive({
 
 const loading = ref(false);
 
+
 const alert = reactive({
   message: '',
 })
 
 const router = useRouter()
+const store = useStore()
 
 const submit = () => {
   loading.value = true;
   alert.message = ''
-  AuthService.login({username:form.login,password:form.pass})
+  store.dispatch('auth/login',{username:form.login,password:form.pass})
     .then((res) => {
       router.push("/dashboard")
       loading.value = false;
@@ -134,8 +137,6 @@ const submit = () => {
         </BaseButtons>
 
       </CardBox>
-
-      <FooterBar/>
 
     </SectionFullScreen>
   </LayoutGuest>

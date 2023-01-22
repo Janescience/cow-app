@@ -25,7 +25,6 @@
 
 <script>
 import  RecipeService  from '@/services/recipe';
-import { getCurrentUser } from '@/utils';
 
 export default {
     data () {
@@ -48,13 +47,16 @@ export default {
             set(newValue){
                 this.$emit('update:modelValue', newValue)
             }
+        },
+        user() {
+            return this.$store.state.auth.user;
         }
     },
     methods: {
         async initialData () {
 
             const opts = {
-                farm : getCurrentUser().farm._id,
+                farm : this.user.farm._id,
             }
 
             try {

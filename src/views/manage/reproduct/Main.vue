@@ -55,7 +55,6 @@ import Modal from './Modal.vue'
 import ReproductionService from '@/services/reproduction'
 
 import { reproductStatus,reproductResult } from '@/constants/reproduct'
-import { getCurrentUser } from "@/utils";
 
 export default {
   data (){
@@ -113,7 +112,6 @@ export default {
         checkDate : null,
         status : "",
         result : "",
-        farm : getCurrentUser().farm._id,
       },
       loading : false,
       mode : "create",
@@ -212,14 +210,20 @@ export default {
     Table,
     Modal,
     Criteria
-},
+  },
+  computed : {
+    user() {
+      return this.$store.state.auth.user;
+    }
+  },
   created() {
     this.getReproductions();
   },
   methods : {
-    async getReproductions(search){
+    async getReproductions(){
       this.loading = true
-      const resp = await ReproductionService.all(search);
+      this.search.farm = this.user.farm._id
+      const resp = await ReproductionService.all(this.search);
       this.items = []
       if(resp.data){
         this.items = resp.data.reproducts

@@ -1,8 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import { useStyleStore } from '@/stores/style.js'
-import { useMainStore } from '@/stores/main'
+import { useStyleStore } from '@/store/theme/style.js'
 import { mdiMinus, mdiPlus } from '@mdi/js'
 import BaseIcon from '@/components/BaseIcon.vue'
 import AsideMenuList from '@/components/AsideMenuList.vue'
@@ -17,7 +16,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['menu-click'])
-const mainStore = useMainStore();
 
 const styleStore = useStyleStore()
 

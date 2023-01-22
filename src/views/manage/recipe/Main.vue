@@ -55,7 +55,6 @@ import Criteria from "@/components/Criteria.vue";
 import Modal from './Modal.vue'
 import RecipeService from '@/services/recipe'
 
-import { getCurrentUser } from "@/utils";
 import { Toast } from "@/utils/alert";
 import { type } from "@/constants/recipe";
 
@@ -82,7 +81,6 @@ export default {
       search : {
         recipe : '',
         type : '',
-        farm : getCurrentUser().farm._id,
       },
       loading : false,
       mode : "create",
@@ -142,13 +140,19 @@ export default {
     Table,
     Modal,
     Criteria
-},
+  },
+  computed : {
+    user() {
+      return this.$store.state.auth.user;
+    }
+  },
   created() {
     this.getDatas();
   },
   methods : {
     async getDatas(){
       this.loading = true
+      this.search.farm = this.user.farm._id
       const resp = await RecipeService.all(this.search);
       this.items = []
       if(resp.data){

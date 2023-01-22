@@ -1,6 +1,6 @@
 <script setup>
 import { mdiThemeLightDark } from '@mdi/js'
-import { useStyleStore } from '@/stores/style.js'
+import { useStyleStore } from '@/store/theme/style.js'
 import BaseLevel from '@/components/BaseLevel.vue'
 import BaseButton from '@/components/BaseButton.vue'
 

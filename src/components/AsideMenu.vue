@@ -1,6 +1,6 @@
 <script setup>
-import { useStyleStore } from '@/stores/style.js'
-import { useLayoutStore } from '@/stores/layout.js'
+import { useStyleStore } from '@/store/theme/style.js'
+import { useLayoutStore } from '@/store/theme/layout.js'
 import { mdiMenu } from '@mdi/js'
 import AsideMenuList from '@/components/AsideMenuList.vue'
 import NavBarItem from '@/components/NavBarItem.vue'

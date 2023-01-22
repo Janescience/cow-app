@@ -98,7 +98,6 @@
   import BaseLevel from '@/components/BaseLevel.vue'
   import DDLCow from '@/components/DDL/Cow.vue'
 
-  import { getCurrentUser } from '@/utils'
   import MilkingService from '@/services/milking'
   
   export default {
@@ -123,6 +122,9 @@
         calAmount(){
             this.milk.amount = (this.milk.morningQty + this.milk.afternoonQty) * 100
             return this.milk.amount
+        },
+        user() {
+          return this.$store.state.auth.user;
         },
         value:{
           get(){
@@ -170,6 +172,7 @@
         async submit(){
             this.loading = true
             this.alert = ""
+            this.milk.farm = this.user.farm._id
             try {
                 if(this.mode === 'create'){
                   const resp = await MilkingService.create(this.milk);

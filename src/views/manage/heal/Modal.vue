@@ -89,9 +89,7 @@ import NotificationBar from '@/components/NotificationBar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import DDLCow from '@/components/DDL/Cow.vue'
 
-import { getCurrentUser } from '@/utils'
 import { Toast } from "@/utils/alert";
-
 
 import HealService from '@/services/heal'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
@@ -105,7 +103,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           disease : "",
           method : "",
           healer : "",
-          farm :getCurrentUser().farm._id
         },
         loading : false,
         alert : ""
@@ -120,6 +117,9 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           set(newValue){
               this.$emit('update:modelValue', newValue)
           }
+        },
+        user() {
+          return this.$store.state.auth.user;
         }
     },
     watch:{
@@ -153,6 +153,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         async submit(){
             this.loading = true
             this.alert = ""
+            this.heal.farm = this.user.farm._id
             try {
               if(this.mode === 'create'){
                 const resp = await HealService.create(this.heal);

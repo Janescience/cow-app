@@ -1,6 +1,5 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { useMainStore } from '@/stores/main'
 import { mdiAccount, mdiAccountCircle, mdiLock, mdiMail, mdiAsterisk, mdiFormTextboxPassword } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
@@ -15,13 +14,12 @@ import BaseButtons from '@/components/BaseButtons.vue'
 import UserCard from '@/components/UserCard.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 
-const mainStore = useMainStore()
 
 const titleStack = ref(['Admin', 'Profile'])
 
 const profileForm = reactive({
-  name: mainStore.userName,
-  email: mainStore.userEmail
+  name: '',
+  email: ''
 })
 
 const passwordForm = reactive({

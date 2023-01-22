@@ -1,5 +1,4 @@
 import http from '@/constants/api';
-import authHeader from './auth-header'
 import moment from 'moment'
 
 async function getSearchQuery (opts = {}) {
@@ -19,28 +18,28 @@ async function getSearchQuery (opts = {}) {
 class HealService{
     async all(search){
         const query = await getSearchQuery(search);
-        return http.get(`/heal`+query,{ headers : authHeader()})
+        return http.get(`/heal`+query)
             .then(response => {
                 return response;
             });
     }
     get(id){
-        return http.get(`/heal/${id}`,{ headers : authHeader()});
+        return http.get(`/heal/${id}`);
     }
     create(payload){
         if (payload.date) {
             payload.date = moment(new Date(payload.date)).format('YYYY-MM-DD') 
         }
-        return http.post(`/heal`,payload,{ headers : authHeader()});
+        return http.post(`/heal`,payload);
     }
     delete(id){
-        return http.delete(`/heal/${id}`,{ headers : authHeader()});
+        return http.delete(`/heal/${id}`);
     }
     update(id,payload){
         if (payload.date) {
             payload.date = moment(new Date(payload.date)).format('YYYY-MM-DD') 
         }
-        return http.put(`/heal/${id}`,payload,{ headers : authHeader()});
+        return http.put(`/heal/${id}`,payload);
     }
 }
 

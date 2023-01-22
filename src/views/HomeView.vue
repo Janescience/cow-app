@@ -15,7 +15,7 @@
         >
           <CardBox
           >
-            <BaseIcon path="cow" size="100" class="mt-5"/>
+            <BaseIcon path="cow" size="100" class="mt-5 xs:hidden "/>
             <div class="text-center mt-2">
               <h1 class="text-2xl">48</h1>
               <p class="text-gray-500 dark:text-gray-400 text-sm">
@@ -97,7 +97,6 @@ import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import FormControl from '@/components/FormControl.vue'
 
 import MilkService from '@/services/milking'
-import { getCurrentUser } from "@/utils";
 import moment from "moment";
 import _ from "lodash";
 
@@ -125,12 +124,17 @@ export default {
     FormControl,
     BaseIcon
   },
+  computed : {
+    user() {
+      return this.$store.state.auth.user;
+    }
+  },
   created(){
     this.getDashboard()
   },
   methods : {
     async getDashboard(){
-      const resp = await MilkService.all({farm:getCurrentUser().farm._id})
+      const resp = await MilkService.all({farm:this.user.farm._id})
       if(resp){
         this.milks = _.groupBy(resp.data.milkings,'date')
         this.chartData = this.createChart()

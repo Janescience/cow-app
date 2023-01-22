@@ -121,7 +121,6 @@
   import DDLCow from '@/components/DDL/Cow.vue'
 
   import { addDays,addMonths } from 'date-fns'
-  import { getCurrentUser } from '@/utils'
 
   import { reproductStatus , reproductResult  } from '@/constants/reproduct'
   import ReproductService from '@/services/reproduction'
@@ -139,7 +138,6 @@
           howTo : "",
           status : 1,
           result : 2,
-          farm : getCurrentUser().farm._id
         },
         status : reproductStatus('create'),
         result : reproductResult('create'),
@@ -156,6 +154,9 @@
           set(newValue){
               this.$emit('update:modelValue', newValue)
           }
+        },
+        user() {
+          return this.$store.state.auth.user;
         }
     },
     watch:{
@@ -217,6 +218,7 @@
         async submit(){
             this.loading = true
             this.alert = ""
+            this.reproduct.farm = this.user.farm._id
             try {
                 if(this.mode === 'create'){
                   const resp = await ReproductService.create(this.reproduct);

@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import { useLayoutStore } from '@/stores/layout.js'
-import { useStyleStore } from '@/stores/style.js'
+import { useLayoutStore } from '@/store/theme/layout.js'
+import { useStyleStore } from '@/store/theme/style.js'
 import menu from '@/menu.js'
 import NavBar from '@/components/NavBar.vue'
 import AsideMenu from '@/components/AsideMenu.vue'

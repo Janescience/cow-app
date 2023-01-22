@@ -1,9 +1,9 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useMainStore } from '@/stores/main.js'
-import { useStyleStore } from '@/stores/style.js'
-import { useLayoutStore } from '@/stores/layout.js'
+import { useStore } from 'vuex'
+import { useStyleStore } from '@/store/theme/style.js'
+import { useLayoutStore } from '@/store/theme/layout.js'
 import {
   mdiForwardburger,
   mdiBackburger,
@@ -31,14 +31,14 @@ import BaseIcon from '@/components/BaseIcon.vue'
 import NavBarSearch from '@/components/NavBarSearch.vue'
 
 import AuthService from '@/services/auth'
+import TokenService from '@/services/token'
 import moment from 'moment'
 
-const mainStore = useMainStore()
-
 const router = useRouter()
+const store = useStore()
 
-const farmName = computed(() => mainStore.currentUser.farm.name)
-const farmCode = computed(() => mainStore.currentUser.farm.code)
+const farmName = computed(() => TokenService.getUser()?.farm?.name)
+const farmCode = computed(() => TokenService.getUser()?.farm?.code)
 
 const styleStore = useStyleStore()
 
@@ -67,7 +67,7 @@ const menuOpenLg = () => {
 }
 
 const logout = () => {
-  AuthService.logout();
+  store.dispatch('auth/logout');
   router.push("/login")
 }
 </script>
@@ -191,7 +191,9 @@ const logout = () => {
               />
             </NavBarItem>
             <BaseDivider nav-bar />
-            <NavBarItem>
+            <NavBarItem
+              @click="logout"
+            >  
               <NavBarItemLabel
                 icon="logout"
                 label="ออกจากระบบ"

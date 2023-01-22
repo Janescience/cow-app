@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useStyleStore } from '@/stores/style.js'
+import { useStyleStore } from '@/store/theme/style.js'
 import {
   mdiMonitorCellphone,
   mdiSelectColor,

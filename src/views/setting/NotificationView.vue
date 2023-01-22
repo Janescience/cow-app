@@ -45,35 +45,30 @@ import SectionMain from '@/components/SectionMain.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
-import { getCurrentUser } from '@/utils'
 import SectionTitle from '@/components/SectionTitle.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 
 import LineService from '@/services/line'
         
 export default {
-
-    data(){
-        return {
-            user : getCurrentUser(),
-        }
-    },
-
     components : {
-    SectionMain,
-    BaseButton,
-    LayoutAuthenticated,
-    BaseButtons,
-    BaseButton,
-    SectionTitle,
-    BaseLevel
-},
+        SectionMain,
+        BaseButton,
+        LayoutAuthenticated,
+        BaseButtons,
+        BaseButton,
+        SectionTitle,
+        BaseLevel
+    },
     computed:{
         urlAuth(){
             const clientId = import.meta.env.VITE_LINE_CLIENT_ID
             const engine = import.meta.env.VITE_API_ENGINE_URL
             const username = this.user.username
             return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}/line/redirect&scope=notify&state=${username}`
+        },
+        user() {
+            return this.$store.state.auth.user;
         }
     },
     methods : {

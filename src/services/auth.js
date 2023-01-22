@@ -1,6 +1,5 @@
 import http from '@/constants/api';
-import { useMainStore } from '@/stores/main.js'
-import { setCurrentUser } from '@/utils'
+import TokenSerrvice from '@/services/token'
 
 class AuthService {
 
@@ -13,16 +12,14 @@ class AuthService {
             .then(response => {
                 console.log('response : ',response)    
                 if (response.data) {
-                    setCurrentUser(response.data)
-                    useMainStore().setUser(response.data);
+                    TokenSerrvice.setUser(response.data);
                 }
                 return response.data;
             })
     }
 
     logout() {
-        setCurrentUser(null)
-        useMainStore().setUser(null);
+        TokenSerrvice.removeUser();
     }
 
     register(user) {

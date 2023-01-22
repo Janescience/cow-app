@@ -154,13 +154,19 @@ export default {
     DDLCow,
     MilkModal,
     Criteria
-},
+  },
+  computed : {
+    user() {
+      return this.$store.state.auth.user;
+    }
+  },
   created() {
     this.getMilks();
   },
   methods : {
     async getMilks(){
       this.loading = true
+      this.search.farm = this.user.farm._id
       const resp = await MilkingService.all(this.search);
       this.items = []
       if(resp.data){

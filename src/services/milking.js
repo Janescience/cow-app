@@ -1,5 +1,4 @@
 import http from '@/constants/api';
-import authHeader from './auth-header'
 import moment from 'moment'
 
 async function getSearchQuery (opts = {}) {
@@ -19,25 +18,25 @@ async function getSearchQuery (opts = {}) {
 class MilkingService{
     async all(search){
         const query = await getSearchQuery(search);
-        return http.get(`/milking`+query,{ headers : authHeader()})
+        return http.get(`/milking`+query)
             .then(response => {
                 return response;
             });
     }
     get(id){
-        return http.get(`/milking/${id}`,{ headers : authHeader()});
+        return http.get(`/milking/${id}`);
     }
     create(payload){
         if (payload.date) {
             payload.date = moment(new Date(payload.date)).format('YYYY-MM-DD') 
         } 
-        return http.post(`/milking`,payload,{ headers : authHeader()});
+        return http.post(`/milking`,payload);
     }
     delete(id){
-        return http.delete(`/milking/${id}`,{ headers : authHeader()});
+        return http.delete(`/milking/${id}`);
     }
     update(id,payload){
-        return http.put(`/milking/${id}`,payload,{ headers : authHeader()});
+        return http.put(`/milking/${id}`,payload);
     }
 }
 

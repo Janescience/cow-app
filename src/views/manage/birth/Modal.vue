@@ -118,7 +118,6 @@ import BaseLevel from '@/components/BaseLevel.vue'
 import DDLCow from '@/components/DDL/Cow.vue'
 
 import { addDays } from 'date-fns'
-import { getCurrentUser } from '@/utils'
 import getAge from "@/utils/age-calculate";
 
 import BirthService from '@/services/birth'
@@ -136,8 +135,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           newCow : {
             name : "",
             mom : "",
-            farm : getCurrentUser().farm._id
           },
+          farm : "",
           reproduction : ""
         },
         show : {
@@ -157,6 +156,9 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           set(newValue){
               this.$emit('update:modelValue', newValue)
           }
+        },
+        user() {
+          return this.$store.state.auth.user;
         }
     },
     watch:{
@@ -211,6 +213,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
                 this.birth.drugDate = null
                 this.birth.washDate = null
               }
+              this.birth.farm = this.user.farm._id
               if(this.mode === 'create'){
                 const resp = await BirthService.create(this.show._id,this.birth);
                 if(resp){

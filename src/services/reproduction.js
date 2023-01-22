@@ -1,5 +1,4 @@
 import http from '@/constants/api';
-import authHeader from './auth-header'
 import moment from 'moment'
 
 async function getSearchQuery (opts = {}) {
@@ -37,13 +36,13 @@ async function getSearchQuery (opts = {}) {
 class ReproductService{
     async all(search){
         const query = await getSearchQuery(search);
-        return http.get(`/reproduction`+query,{ headers : authHeader()})
+        return http.get(`/reproduction`+query)
             .then(response => {
                 return response;
             });
     }
     get(id){
-        return http.get(`/reproduction/${id}`,{ headers : authHeader()});
+        return http.get(`/reproduction/${id}`);
     }
     create(payload){
         if (payload.birthDate) {
@@ -61,13 +60,13 @@ class ReproductService{
         if (payload.checkDate) {
             payload.checkDate = moment(new Date(payload.checkDate)).format('YYYY-MM-DD') 
         } 
-        return http.post(`/reproduction`,payload,{ headers : authHeader()});
+        return http.post(`/reproduction`,payload);
     }
     delete(id){
-        return http.delete(`/reproduction/${id}`,{ headers : authHeader()});
+        return http.delete(`/reproduction/${id}`);
     }
     update(id,payload){
-        return http.put(`/reproduction/${id}`,payload,{ headers : authHeader()});
+        return http.put(`/reproduction/${id}`,payload);
     }
 }
 

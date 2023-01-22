@@ -55,7 +55,6 @@ import Criteria from "@/components/Criteria.vue";
 import Modal from './Modal.vue'
 import HealService from '@/services/heal'
 
-import { getCurrentUser } from "@/utils";
 import { Toast } from "@/utils/alert";
 
 export default {
@@ -81,7 +80,6 @@ export default {
       search : {
         cow : null,
         date : null,
-        farm : getCurrentUser().farm._id,
       },
       loading : false,
       mode : "create",
@@ -151,13 +149,19 @@ export default {
     Table,
     Modal,
     Criteria
-},
+  },
+  computed : {
+    user() {
+      return this.$store.state.auth.user;
+    }
+  },
   created() {
     this.getDatas();
   },
   methods : {
     async getDatas(search){
       this.loading = true
+      this.search.farm = this.user.farm._id
       const resp = await HealService.all(search);
       this.items = []
       if(resp.data){

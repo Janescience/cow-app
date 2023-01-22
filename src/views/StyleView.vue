@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { useStyleStore } from '@/stores/style.js'
+import { useStyleStore } from '@/store/theme/style.js'
 import { sectionBgLogin } from '@/colors.js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'

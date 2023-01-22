@@ -1,5 +1,4 @@
 import http from '@/constants/api';
-import authHeader from './auth-header'
 import moment from 'moment'
 
 async function getSearchQuery (opts = {}) {
@@ -23,28 +22,28 @@ async function getSearchQuery (opts = {}) {
 class BirthService{
     async all(search){
         const query = await getSearchQuery(search);
-        return http.get(`/birth`+query,{ headers : authHeader()})
+        return http.get(`/birth`+query)
             .then(response => {
                 return response;
             });
     }
     get(id){
-        return http.get(`/birth/${id}`,{ headers : authHeader()});
+        return http.get(`/birth/${id}`);
     }
     create(id,payload){
         if (payload.birthDate) {
             payload.birthDate = moment(new Date(payload.birthDate)).format('YYYY-MM-DD') 
         }
-        return http.post(`/birth/${id}`,payload,{ headers : authHeader()});
+        return http.post(`/birth/${id}`,payload);
     }
     delete(id){
-        return http.delete(`/birth/${id}`,{ headers : authHeader()});
+        return http.delete(`/birth/${id}`);
     }
     update(id,payload){
         if (payload.birthDate) {
             payload.birthDate = moment(new Date(payload.birthDate)).format('YYYY-MM-DD') 
         }
-        return http.put(`/birth/${id}`,payload,{ headers : authHeader()});
+        return http.put(`/birth/${id}`,payload);
     }
 }
 

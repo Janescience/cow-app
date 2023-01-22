@@ -1,5 +1,4 @@
 import http from '@/constants/api';
-import authHeader from './auth-header'
 
 async function getSearchQuery (opts = {}) {
     let query = "?";
@@ -17,22 +16,22 @@ async function getSearchQuery (opts = {}) {
 class RecipeService{
     async all(search){
         const query = await getSearchQuery(search);
-        return http.get(`/recipe`+query,{ headers : authHeader()})
+        return http.get(`/recipe`+query)
             .then(response => {
                 return response;
             });
     }
     get(id){
-        return http.get(`/recipe/${id}`,{ headers : authHeader()});
+        return http.get(`/recipe/${id}`);
     }
     create(payload){
-        return http.post(`/recipe`,payload,{ headers : authHeader()});
+        return http.post(`/recipe`,payload);
     }
     delete(id){
-        return http.delete(`/recipe/${id}`,{ headers : authHeader()});
+        return http.delete(`/recipe/${id}`);
     }
     update(id,payload){
-        return http.put(`/recipe/${id}`,payload,{ headers : authHeader()});
+        return http.put(`/recipe/${id}`,payload);
     }
 }
 
