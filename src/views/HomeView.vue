@@ -15,65 +15,102 @@
         >
           <CardBox
           >
-            <BaseIcon path="cow" size="100" class="mt-5 xs:hidden "/>
+            <BaseIcon path="cow" size="70" class="mt-5 text-gray-400"/>
             <div class="text-center mt-2">
-              <h1 class="text-2xl">48</h1>
-              <p class="text-gray-500 dark:text-gray-400 text-sm">
+              <h1 class="text-5xl text-orange-700">48</h1>
+              <p class="text-sm mt-2">
                  โคทั้งหมด 
               </p>
             </div>
           </CardBox>
           <CardBox>
-            <BaseIcon path="water" size="100" class="mt-5"/>
+            <BaseIcon path="water" size="70" class="mt-5 text-gray-400"/>
             <div class="text-center mt-2">
-              <h1 class="text-2xl">20</h1>
-              <p class="text-gray-500 dark:text-gray-400 text-sm">
+              <h1 class="text-5xl text-yellow-600">20</h1>
+              <p class="text-sm mt-2">
                  โคให้ผลผลิต 
               </p>
             </div>
           </CardBox>
           <CardBox>
-            <BaseIcon path="humanPregnant" size="100" class="mt-5"/>
+            <BaseIcon path="humanPregnant" size="70" class="mt-5 text-gray-400"/>
             <div class="text-center mt-2">
-              <h1 class="text-2xl">10</h1>
-              <p class="text-gray-500 dark:text-gray-400 text-sm">
+              <h1 class="text-5xl text-yellow-600">10</h1>
+              <p class="text-sm mt-2">
                  โคท้อง 
               </p>
             </div>
           </CardBox>
           <CardBox>
-            <BaseIcon path="babyFaceOutline" size="100" class="mt-5"/>
+            <BaseIcon path="babyFaceOutline" size="70" class="mt-5 text-gray-400"/>
             <div class="text-center mt-2">
-              <h1 class="text-2xl">10</h1>
-              <p class="text-gray-500 dark:text-gray-400 text-sm">
+              <h1 class="text-5xl text-yellow-600">10</h1>
+              <p class="text-sm mt-2">
                  โคเด็ก 
               </p>
             </div>
           </CardBox>
           <CardBox>
-            <BaseIcon path="waterOff" size="100" class="mt-5"/>
+            <BaseIcon path="waterOff" size="70" class="mt-5 text-gray-400"/>
             <div class="text-center mt-2">
-              <h1 class="text-2xl">8</h1>
-              <p class="text-gray-500 dark:text-gray-400 text-sm">
+              <h1 class="text-5xl text-yellow-600">8</h1>
+              <p class="text-sm mt-2">
                  โคนมแห้ง
               </p>
             </div>
           </CardBox>
         </div>
       </CardBox>
-      <CardBox
-        title="ปริมาณน้ำนม"
-        icon=""
-        class="mt-5"
-        header-icon=""
-      >
-        <div v-if="chartData">
-          <line-chart
-            :data="chartData"
-            class="h-96"
-          />
+      <div class="grid gap-5 grid-cols-3">
+        <CardBox
+          title="ปริมาณน้ำนม"
+          icon=""
+          class="mt-5 col-span-2 row-span-5"
+          header-icon=""
+        >
+          <div v-if="chartData">
+            <line-chart
+              :data="chartData"
+              class="h-96"
+            />
+          </div>
+        </CardBox>
+        <CardBox
+          icon=""
+          class="mt-5 "
+          header-icon=""
+        >
+        <div class="flex">
+          <BaseIcon path="cow" size="26" />
+          <p class="text-lg"> มหาชน โคที่ให้น้ำนมเฉลี่ย/วัน มากที่สุด</p>
         </div>
-      </CardBox>
+        </CardBox>
+        <CardBox
+          icon=""
+          header-icon=""
+        >
+         
+        </CardBox>
+        <CardBox
+          icon=""
+          header-icon=""
+        >
+         
+        </CardBox>
+        <CardBox
+          icon=""
+          header-icon=""
+        >
+         
+        </CardBox>
+        <CardBox
+          icon=""
+          header-icon=""
+        >
+         
+        </CardBox>
+      </div>
+      
     </SectionMain>
     
   </LayoutAuthenticated>

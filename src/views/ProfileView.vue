@@ -11,7 +11,6 @@ import FormFilePicker from '@/components/FormFilePicker.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import SectionBottomOtherPages from '@/components/SectionBottomOtherPages.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
-import UserCard from '@/components/UserCard.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 
 
@@ -41,7 +40,6 @@ const submitPass = () => {
   <LayoutAuthenticated>
     <SectionTitleBar :title-stack="titleStack" />
 
-    <UserCard />
 
     <SectionMain>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
