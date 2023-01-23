@@ -160,7 +160,7 @@
         handler (n,o) {
           if(n != null && this.mode == 'edit'){
             this.cow = n
-            this.cow.image = !this.cow.image ? '../../src/assets/image/img-mockup.png' : this.cow.image
+            this.cow.image = !this.cow.image ? '/image/img-mockup.png' : this.cow.image
           }
         },
         deep : true
@@ -169,7 +169,7 @@
     methods: {
         clear(){
           this.$emit('update:dataEdit',null);
-          this.cow.image = 'image/img-mockup.png'
+          this.cow.image = '/image/img-mockup.png'
           this.cow.code = ""
           this.cow.name = ""
           this.cow.birthDate = null

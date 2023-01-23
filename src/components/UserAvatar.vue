@@ -8,7 +8,7 @@ const props = defineProps({
   },
   avatar: {
     type: String,
-    default: '../src/assets/image/img-mockup.png'
+    default: '/image/img-mockup.png'
   },
   api: {
     type: String,
