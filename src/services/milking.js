@@ -12,6 +12,9 @@ async function getSearchQuery (opts = {}) {
     } 
     if (opts.quantity) {
         query = query + `quantity=${opts.quantity}&`;
+    }
+    if (opts.farm) {
+        query = query + `farm=${opts.farm}&`;
     } 
     return opts ? query.replace(/&*$/, "") : "";
 }
