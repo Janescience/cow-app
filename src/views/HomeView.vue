@@ -105,7 +105,7 @@
               <p >ค่าอาหาร 25,000 บาท</p>
               <p>ค่ารักษา 12,000 บาท</p>
             </div>
-            <p class="text-3xl text-right text-red-500">-27,000</p>
+            <p class="text-3xl text-right text-red-500">-37,000</p>
           </div>
         </CardBox>
         <CardBox
