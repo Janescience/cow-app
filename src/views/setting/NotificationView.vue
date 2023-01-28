@@ -34,7 +34,6 @@
         <div v-else>
             <BaseButtons type="justify-end" class="mb-2 p-2 lg:p-0">
                 <BaseButton 
-                    class="text-sm"
                     small
                     label="ทดสอบการแจ้งเตือน" 
                     @click="notify('ทดสอบการแจ้งเตือน')"
@@ -289,7 +288,7 @@ export default {
                     id: 6,
                     url: "https://github.com/dev-charles15531",
                     title: "Dummy Event Name 3",
-                    time: { start: "2023-01-12 12:00", end: "2023-01-15 14:00" },
+                    time: { start: "2023-01-31 12:00", end: "2023-01-31 14:00" },
                     description:
                     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
                     image: "test-img.png",

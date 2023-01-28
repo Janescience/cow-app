@@ -12,7 +12,33 @@
         form
         @header-icon-click="cancel"
       >
-        
+      <div class="overflow-x-auto">
+        <table>
+          <thead>
+            <tr >
+                <th class="whitespace-nowrap">เวลา</th>
+                <th class="whitespace-nowrap">หัวข้อ</th>
+                <th class="whitespace-nowrap">รายละเอียด</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="event in events"
+              :key="event._id"
+            >
+              <td data-label="เวลา" class="whitespace-nowrap">
+                {{ event.time.start }}
+              </td>
+              <td data-label="หัวข้อ" class="whitespace-nowrap">
+                {{ event.title }}
+              </td>
+              <td data-label="รายละเอียด" class="whitespace-nowrap">
+                {{ event.description }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
         
   
         <BaseButtons
