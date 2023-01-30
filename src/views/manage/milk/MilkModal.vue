@@ -138,9 +138,11 @@
     watch:{
       dataEdit : {
         handler (n,o) {
-          if(n != null && this.mode == 'edit'){
-            this.milk = n
-            this.milk.date = new Date(n.date)
+          if(n != null){
+            if(this.mode == 'edit'){
+              this.milk = n
+            }
+            this.milk.date = new Date(n.date ? n.date : new Date())
           }
         },
         deep : true

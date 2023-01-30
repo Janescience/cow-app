@@ -78,7 +78,7 @@
                             </svg>
                             <span
                                 ><span class="font-medium">Your Time: </span
-                                >{{ props.eventDialogData.time.start }}
+                                >{{ props.eventDialogData.date }}
                             </span>
                             </h6>
 
@@ -100,7 +100,7 @@
                             </svg>
                             <span
                                 ><span class="font-medium">Their Time: </span
-                                >{{ props.eventDialogData.time.start }}
+                                >{{ props.eventDialogData.date }}
                             </span>
                             </h6>
 
@@ -206,6 +206,8 @@
                 </template>
             </Calendar>
         </CardBox>
+
+        
       </SectionMain>
     </LayoutAuthenticated>
 </template>
@@ -307,7 +309,7 @@ export default {
         SectionTitle,
         BaseLevel,
         CardBox,
-        Calendar
+        Calendar,
     },
     computed:{
         urlAuth(){

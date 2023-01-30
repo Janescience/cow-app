@@ -26,7 +26,7 @@
         :search="search"
       />
 
-      <Table
+      <!-- <Table
         title="รายการรีดนม" 
         has-checkbox
         :checked-data="checked" 
@@ -37,8 +37,8 @@
         @delete="removeMilk" 
         @deleteSelected="removeSelected"
         :loading="loading"
-      />
-
+      /> -->
+      <Calendar :events="events"/>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
@@ -54,12 +54,16 @@ import MilkModal from './MilkModal.vue'
 import MilkingService from '@/services/milking'
 import Criteria from "@/components/Criteria.vue";
 
+import Calendar from './Calendar.vue'
+import moment from "moment";
+import _ from 'lodash';
 
 export default {
   data (){
     return {
       modalMilk : false,
       items : [],
+      events : [],
       forms : [
         {
           label : 'โค',
@@ -99,14 +103,9 @@ export default {
           value : 'date',
         },
         {
-          label : "รหัสโค",
+          label : "โค",
           class : 'text-center',
-          value : 'cow.code',
-        },
-        {
-          label : "ชื่อโค",
-          class : 'text-center',
-          value : 'cow.name',
+          value : 'relate.cow.name',
         },
         {
           label : "ปริมาณน้ำนมดิบ/เช้า (กก.)",
@@ -153,7 +152,8 @@ export default {
     SectionTitleBarSub,
     DDLCow,
     MilkModal,
-    Criteria
+    Criteria,
+    Calendar
   },
   computed : {
     user() {
@@ -170,7 +170,27 @@ export default {
       const resp = await MilkingService.all(this.search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.milkings
+        for(let milk of resp.data.milkings){
+          milk.date = moment(milk.date,'YYYY-MM-DD').format('DDMMYYYY');
+        }
+        this.items = _.groupBy(resp.data.milkings,'date');
+        Object.keys(this.items).forEach(key => {
+          let milks = this.items[key];
+
+          let event = {};
+          event.date = key
+          event.count = milks.length;
+          event.sumQty = 0;
+          event.sumAmt = 0;
+
+          milks.map((m) => {
+            event.sumQty += m.morningQty + m.afternoonQty
+            event.sumAmt += m.amount
+          })
+
+          event.milks = milks
+          this.events.push(event)
+      })
       }
       this.loading = false
     },
@@ -184,7 +204,6 @@ export default {
     },
     edit(milk){
       this.dataEdit = milk;
-      this.dataEdit.cow = milk.cow._id;
       this.mode = 'edit';
       this.modalMilk = true;
     },
