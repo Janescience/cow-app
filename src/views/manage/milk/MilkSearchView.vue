@@ -25,20 +25,10 @@
         :forms="forms" 
         :search="search"
       />
+      <CardBox>
+        <Calendar :events="events"/>
 
-      <!-- <Table
-        title="รายการรีดนม" 
-        has-checkbox
-        :checked-data="checked" 
-        :items="items" 
-        :datas="datas" 
-        :buttons="buttons" 
-        @edit="edit" 
-        @delete="removeMilk" 
-        @deleteSelected="removeSelected"
-        :loading="loading"
-      /> -->
-      <Calendar :events="events"/>
+      </CardBox>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
@@ -53,6 +43,7 @@ import DDLCow from '@/components/DDL/Cow.vue'
 import MilkModal from './MilkModal.vue'
 import MilkingService from '@/services/milking'
 import Criteria from "@/components/Criteria.vue";
+import CardBox from "@/components/CardBox.vue";
 
 import Calendar from './Calendar.vue'
 import moment from "moment";
@@ -153,7 +144,8 @@ export default {
     DDLCow,
     MilkModal,
     Criteria,
-    Calendar
+    Calendar,
+    CardBox
   },
   computed : {
     user() {
