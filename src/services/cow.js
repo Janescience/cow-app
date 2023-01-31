@@ -35,6 +35,13 @@ class CowService{
                 return response;
             });
     }
+    async ddl(search){
+        const query = await getSearchQuery(search);
+        return http.get(`/cow/ddl`+query)
+            .then(response => {
+                return response;
+            });
+    }
     get(id){
         return http.get(`/cow/${id}`);
     }

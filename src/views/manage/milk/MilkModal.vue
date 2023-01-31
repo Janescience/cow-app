@@ -13,7 +13,7 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-1">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-1">
           
           <FormField label="วันที่รีดนม" help="* ห้ามว่าง">
             <FormControl

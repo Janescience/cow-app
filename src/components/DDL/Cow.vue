@@ -58,7 +58,7 @@ export default {
             }
 
             try {
-                const resp = await CowService.all(opts);
+                const resp = await CowService.ddl(opts);
                 this.datas = [];
                 if (resp) {
                     this.datas = resp.data.cows;
