@@ -348,7 +348,6 @@ import { type } from "@/constants/recipe";
             this.loading = true
             this.alert = ""
             this.alertWarning = ""
-            this.recipe.farm = this.user.farm._id
             try {
               if(this.mode === 'create'){
                 let sumQty = 0;

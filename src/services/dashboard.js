@@ -1,8 +1,8 @@
 import http from '@/constants/api';
 
 class DashboardService{
-    get(farmId){
-        return http.get('/dashboard?farm='+farmId);
+    get(){
+        return http.get('/dashboard');
     }
 }
 

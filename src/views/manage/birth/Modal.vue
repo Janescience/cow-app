@@ -136,7 +136,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             name : "",
             mom : "",
           },
-          farm : "",
           reproduction : ""
         },
         show : {
@@ -213,7 +212,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
                 this.birth.drugDate = null
                 this.birth.washDate = null
               }
-              this.birth.farm = this.user.farm._id
               if(this.mode === 'create'){
                 const resp = await BirthService.create(this.show._id,this.birth);
                 if(resp){

@@ -3,9 +3,6 @@ import moment from 'moment'
 
 async function getSearchQuery (opts = {}) {
     let query = "?";
-    if (opts.farm) {
-        query = query + `farm=${opts.farm}&`;
-    }
     if (opts.dateCurrent) {
         const dateNoTime = moment(new Date(opts.dateCurrent)).format('YYYY-MM-DD') 
         query = query + `dateCurrent=${dateNoTime}&`;

@@ -166,7 +166,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         async submit(){
             this.loading = true
             this.alert = ""
-            this.protection.farm = this.user.farm._id
             try {
               if(this.mode === 'create'){
                 const resp = await ProtectionService.create(this.protection);

@@ -3,9 +3,6 @@ import moment from 'moment'
 
 async function getSearchQuery (opts = {}) {
     let query = "?";
-    if (opts.farm) {
-        query = query + `farm=${opts.farm}&`;
-    }
     if (opts.flag) {
         query = query + `flag=${opts.flag}&`;
     } 

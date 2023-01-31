@@ -158,7 +158,6 @@ export default {
   methods : {
     async getDatas(search){
       this.loading = true
-      this.search.farm = this.user.farm._id
       const resp = await ProtectionService.all(search);
       this.items = []
       if(resp.data){

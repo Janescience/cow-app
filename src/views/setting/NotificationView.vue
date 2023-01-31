@@ -326,7 +326,7 @@ export default {
         async notify(message){
             this.loading = true
             try {
-                const resp = await LineService.notify({message : message, lineToken : this.user.farm.lineToken , farm : this.user.farm._id });
+                const resp = await LineService.notify({message : message, lineToken : this.user.farm.lineToken });
                 if(resp.data){
                     this.loading = false
                     Toast.fire({

@@ -194,7 +194,6 @@
         async submit(){
             this.loading = true
             this.alert = ""
-            this.cow.farm = this.user.farm._id
             try {
                 if(this.mode === 'create'){
                   const resp = await CowService.create(this.cow);

@@ -153,7 +153,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         async submit(){
             this.loading = true
             this.alert = ""
-            this.heal.farm = this.user.farm._id
             try {
               if(this.mode === 'create'){
                 const resp = await HealService.create(this.heal);

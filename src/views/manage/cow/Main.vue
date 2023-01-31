@@ -19,7 +19,7 @@
       />
 
       <Criteria
-        grid="grid-cols-2 lg:grid-cols-5"
+        grid="grid-cols-2 md:grid-cols-3 lg:grid-cols-5"
         @search="getCows" 
         @reset="reset" 
         :forms="forms" 
@@ -195,7 +195,6 @@ export default {
   methods : {
     async getCows(){
       this.loading = true
-      this.search.farm = this.user.farm._id
       const resp = await CowService.all(this.search);
       this.items = []
       if(resp.data){

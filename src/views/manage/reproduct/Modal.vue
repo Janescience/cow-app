@@ -218,7 +218,6 @@
         async submit(){
             this.loading = true
             this.alert = ""
-            this.reproduct.farm = this.user.farm._id
             try {
                 if(this.mode === 'create'){
                   const resp = await ReproductService.create(this.reproduct);

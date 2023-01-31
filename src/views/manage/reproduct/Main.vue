@@ -222,7 +222,6 @@ export default {
   methods : {
     async getReproductions(){
       this.loading = true
-      this.search.farm = this.user.farm._id
       const resp = await ReproductionService.all(this.search);
       this.items = []
       if(resp.data){

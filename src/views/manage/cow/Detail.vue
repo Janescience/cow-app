@@ -629,24 +629,22 @@ export default {
         this.cow = resp.data.cow;
         this.cow.birthDate = new Date(this.cow.birthDate);
 
-        const farmId = this.user.farm._id;
-
-        const milkResp = await MilkService.all({ cow: id, farm: farmId });
+        const milkResp = await MilkService.all({ cow: id });
         if (milkResp.data) {
           this.milks = milkResp.data.milkings;
         }
 
-        const reproductResp = await ReproductService.all({ cow: id, farm: farmId });
+        const reproductResp = await ReproductService.all({ cow: id });
         if (reproductResp.data) {
           this.reproducts = reproductResp.data.reproducts;
         }
 
-        const birthResp = await BirthService.all({ cow: id, farm: farmId });
+        const birthResp = await BirthService.all({ cow: id});
         if (birthResp) {
           this.births = birthResp.data.births; 
         }
 
-        const healResp = await HealService.all({ cow: id, farm: farmId }); 
+        const healResp = await HealService.all({ cow: id }); 
         if (healResp) { 
           this.heals = healResp.data.heals; 
         }
@@ -656,7 +654,7 @@ export default {
           this.protections = protectionResp.data.protections; 
         }
 
-        const foodResp = await FoodService.all({ corral: this.cow.corral , farm: farmId }); 
+        const foodResp = await FoodService.all({ corral: this.cow.corral }); 
         if (foodResp) { 
           this.foods = foodResp.data.foods; 
         }

@@ -174,7 +174,6 @@
         async submit(){
             this.loading = true
             this.alert = ""
-            this.milk.farm = this.user.farm._id
             try {
                 if(this.mode === 'create'){
                   const resp = await MilkingService.create(this.milk);

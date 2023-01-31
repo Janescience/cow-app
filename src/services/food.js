@@ -2,9 +2,6 @@ import http from '@/constants/api';
 
 async function getSearchQuery (opts = {}) {
     let query = "?";
-    if (opts.farm) {
-        query = query + `farm=${opts.farm}&`;
-    }
     if (opts.corral) {
         query = query + `corral=${opts.corral}&`;
     } 

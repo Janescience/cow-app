@@ -152,7 +152,6 @@ export default {
   methods : {
     async getDatas(){
       this.loading = true
-      this.search.farm = this.user.farm._id
       const resp = await RecipeService.all(this.search);
       this.items = []
       if(resp.data){
