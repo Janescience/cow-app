@@ -58,7 +58,7 @@ const routes = [
     },
     path: '/manage/milk',
     name: 'milk',
-    component: () => import('@/views/manage/milk/MilkSearchView.vue')
+    component: () => import('@/views/manage/milk/Main.vue')
   },
   {
     meta: {
@@ -113,6 +113,15 @@ const routes = [
     path: '/manage/recipe',
     name: 'recipe',
     component: () => import('@/views/manage/recipe/Main.vue')
+  },
+  {
+    meta: {
+      title: 'รายงานประวัติต่างๆ',
+      loginRequired : true
+    },
+    path: '/report/history',
+    name: 'report-history',
+    component: () => import('@/views/report/history/Main.vue')
   },
   {
     meta: {

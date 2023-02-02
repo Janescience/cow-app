@@ -180,8 +180,8 @@
   
     <Modal
       v-model="modalShow"
-      mode="create" 
-      :dataEdit="create" 
+      :mode="mode" 
+      :data="data" 
       @confirm="getMilks" 
       @cancel="getMilks" 
     />
@@ -193,7 +193,7 @@
   import Top from "@/components/calendar/Top.vue";
   import BaseIcon from "@/components/BaseIcon.vue";
   import BaseLevel from "@/components/BaseLevel.vue";
-  import Modal from './MilkModal.vue';
+  import Modal from './Modal.vue';
 
   import { useCalendarStore } from "@/store/calendar";
   /**************************************
@@ -227,7 +227,8 @@
   const firstDayOfCurrentMonth = ref(0);
   const lastEmptyCells = ref(0);
   const modalShow = ref(false);
-  const create = ref({});
+  const mode = ref("create");
+  const data = ref({});
   /**
    * Gets the number of days present in a month
    * The month is gotten from the calendar store
@@ -311,7 +312,6 @@
     if (!events.length) return [];
     let threeTodaysEventArr = [];
     events.forEach((event) => {
-      if (threeTodaysEventArr.length == 3) return threeTodaysEventArr;
       if (isEventToday(day, event.date,isPrevMonth)) {
         threeTodaysEventArr.push(event);
       }
@@ -345,7 +345,9 @@
    * @return null
    */
   const openModal = (day, events) => {
-    create.value = { date : calendarStore.getYear + "-" + (calendarStore.getMonth+1) + "-" + day }
+    mode.value = 'edit';
+    let date = calendarStore.getYear + "-" + (calendarStore.getMonth+1) + "-" + day
+    data.value = { date : date , milkDetails : events};
     modalShow.value = true;
   };
 
@@ -354,6 +356,7 @@
    */
   const closeModal = () => {
     modalShow.value = false;
+    datas.value = [];
   };
   /************************************************************************
    *  LIFECYCLE HOOKS

@@ -57,7 +57,7 @@
             <BaseButton
                 type="submit"
                 color="info"
-                label="ค้นหา"
+                :label="btnSubmitLabel"
             />
             <BaseButton
                 type="reset"
@@ -93,7 +93,11 @@ export default {
             type : Object,
             default : null
         },
-        collapse : Boolean
+        collapse : Boolean,
+        btnSubmitLabel : {
+            type : String ,
+            default : 'ค้นหา'
+        }
     },
     components : {
         BaseButton,

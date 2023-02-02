@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="mode === 'create' ? 'เพิ่มการรีดนม' : 'แก้ไขการรีดนม'"
-        class="shadow-lg w-full  lg:w-3/5 z-50"
+        class="shadow-lg w-full lg:w-4/5 z-50"
         header-icon="close"
         modal
         form
@@ -13,7 +13,7 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-1">
+        <div class="grid grid-cols-2 lg:grid-cols-6 gap-3 mt-1">
           
           <FormField label="วันที่รีดนม" help="* ห้ามว่าง">
             <FormControl
@@ -26,35 +26,36 @@
           <FormField label="โค" help="* ห้ามว่าง">
               <DDLCow v-model="milk.cow"/>
           </FormField>
-          <FormField label="ปริมาณน้ำนม/เช้า" help="* ห้ามว่าง">
-            <FormControl
-              v-model="milk.morningQty"
-              type="number"
-              icon="weatherSunsetUp"
+          <FormField label="รอบ" >
+             <FormCheckRadioPicker
+              v-model="milk.time"
+              type="radio"
+              :options="{ M: 'เช้า', A: 'บ่าย' }"
             />
           </FormField>
-          <FormField label="ปริมาณน้ำนม/บ่าย" help="* ห้ามว่าง">
+          <FormField label="ปริมาณน้ำนมดิบ" help="* ห้ามว่าง">
             <FormControl
-              v-model="milk.afternoonQty"
+              v-model="milk.qty"
               type="number"
-              icon="weatherSunsetDown"
+              icon="scale"
             />
           </FormField>
-          <FormField label="ปริมาณน้ำนมรวม" help="คำนวณอัตโนมัติ">
-            <FormControl
-              v-model="sumQty"
-              type="number"
-              disabled
-              icon="water"
-            />
-          </FormField>
-          <FormField label="จำนวนเงินรวม" help="คำนวณอัตโนมัติ (ราคานม/กก. = 100.00)">
+          <FormField label="จำนวนเงินรวม" help="ราคาน้ำนมดิบ/กก. 100 บาท">
             <FormControl
               v-model="calAmount"
               type="number"
               icon="cashMultiple"
             />
           </FormField>
+          <BaseButtons
+          type="justify-center"
+          >
+            <BaseButton
+              label="เพิ่ม"
+              color="success"
+              @click="add()"
+            />
+          </BaseButtons>
         </div>
 
         <NotificationBar 
@@ -65,7 +66,73 @@
             {{ alert }}
         </NotificationBar>
   
-        <BaseDivider />
+        <header
+          class="flex items-stretch border-b border-gray-100 dark:border-gray-800"
+        >
+          <p
+            class="flex items-center py-3 grow font-bold"
+          >
+            รายการรีดนม
+          </p>
+        </header>
+          <div class="overflow-x-auto" v-if="milkDetails.length > 0">
+            <table>
+              <thead>
+                  <tr >
+                      <th class="whitespace-nowrap text-center">
+                        วันที่
+                      </th>
+                      <th class="whitespace-nowrap text-center">
+                        ปริมาณน้ำนมดิบ
+                      </th>
+                      <th class="whitespace-nowrap text-center">
+                        รอบ
+                      </th>
+                      <th class="whitespace-nowrap text-center">
+                        จำนวนเงิน
+                      </th>
+                      <th />
+                  </tr>
+              </thead>
+            <tbody >
+                <tr
+                  v-for="obj in milkDetails"
+                  :key="obj.cow"
+                >
+                  <td data-label="อาหาร/วัตถุดิบ" >
+                    {{ obj.date }}
+                  </td>
+                  <td data-label="ปริมาณน้ำนมดิบ" class="text-center">
+                    {{ obj.qty }}
+                  </td>
+                  <td data-label="รอบ" class="text-center">
+                    {{ obj.time }}
+                  </td>
+                  <td data-label="จำนวนเงิน" class="text-right">
+                    {{ obj.amount }}
+                  </td>
+                  <td class="lg:w-6 whitespace-nowrap">
+                      <BaseButtons
+                        type="justify-end lg:justify-start"
+                        no-wrap
+                      >
+                        <BaseButton
+                            color="danger"
+                            label="ลบ"
+                            @click="removeDetail(obj)"
+                        />
+                      </BaseButtons>
+                  </td>
+                </tr>
+            </tbody>
+            
+            </table>
+          </div>
+          <div v-else
+              class="text-center py-10 text-gray-500 dark:text-gray-400 "
+            >
+              <p>ไม่มีรายการ...</p>
+          </div>
   
         <BaseButtons
           type="justify-center"
@@ -94,22 +161,25 @@
   import OverlayLayer from '@/components/OverlayLayer.vue'
   import FormField from '@/components/FormField.vue'
   import FormControl from '@/components/FormControl.vue'
+  import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
   import NotificationBar from '@/components/NotificationBar.vue'
   import BaseLevel from '@/components/BaseLevel.vue'
   import DDLCow from '@/components/DDL/Cow.vue'
 
   import MilkingService from '@/services/milking'
-  
+  import { Toast } from "@/utils/alert";
+
   export default {
     data () {
       return {
         milk : {
           cow : null,  
           date : new Date(),
-          morningQty : 0,
-          afternoonQty : 0,
+          qty : 0,
+          time : 'M',
           amount : 0
         },
+        milkDetails : [],
         loading : false,
         alert : ""
       }
@@ -136,11 +206,11 @@
         }
     },
     watch:{
-      dataEdit : {
+      data : {
         handler (n,o) {
           if(n != null){
             if(this.mode == 'edit'){
-              this.milk = n
+              this.milkDetails = n.milkDetails
             }
             this.milk.date = new Date(n.date ? n.date : new Date())
           }
@@ -151,7 +221,7 @@
     methods: {
         clear(){
           if(this.mode === 'edit')
-            this.$emit('update:dataEdit',null);
+            this.$emit('update:data',null);
           this.milk.cow = null
           this.milk.date = new Date()
           this.milk.morningQty = 0
@@ -181,6 +251,10 @@
                       this.loading = false  
                       this.value = false
                       this.confirmCancel('confirm')
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'บันทึกข้อมูลสำเร็จ'
+                      })
                   }
                 }else{
                   const resp = await MilkingService.update(this.milk._id,this.milk);
@@ -209,6 +283,7 @@
       NotificationBar,
       BaseLevel,
       DDLCow,
+      FormCheckRadioPicker,
     },
     props : {
         modelValue: {
@@ -219,7 +294,7 @@
           type : String,
           default : ""
         },
-        dataEdit : {
+        data : {
           type : Object,
           default : null
         }

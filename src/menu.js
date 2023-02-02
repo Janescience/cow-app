@@ -86,7 +86,7 @@ export default [
       icon: 'textBoxSearchOutline',
       menu: [
         {
-          to: '/report/parameter',
+          to: '/report/history',
           icon: 'chartLine',
           label: 'ประวัติและคุณลักษณะของวัว'
         },

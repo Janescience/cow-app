@@ -15,7 +15,6 @@
         :mode="mode" 
         :dataEdit="dataEdit" 
         @confirm="getMilks" 
-        @cancel="getMilks" 
       />
 
       <Criteria
@@ -25,10 +24,10 @@
         :forms="forms" 
         :search="search"
       />
-      <CardBox>
+      <CardBox v-if="!loading">
         <Calendar :events="events"/>
-
       </CardBox>
+      <CardBox v-else loading />
     </SectionMain>
   </LayoutAuthenticated>
 </template>
@@ -40,7 +39,7 @@ import Table from "@/components/Table.vue";
 import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 
 import DDLCow from '@/components/DDL/Cow.vue'
-import MilkModal from './MilkModal.vue'
+import MilkModal from './Modal.vue'
 import MilkingService from '@/services/milking'
 import Criteria from "@/components/Criteria.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -160,6 +159,7 @@ export default {
       this.loading = true
       const resp = await MilkingService.all(this.search);
       this.items = []
+      this.events = []
       if(resp.data){
         for(let milk of resp.data.milkings){
           milk.date = moment(milk.date,'YYYY-MM-DD').format('DDMMYYYY');
