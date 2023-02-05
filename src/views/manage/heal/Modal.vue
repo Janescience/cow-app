@@ -15,7 +15,7 @@
       
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-5">
           <FormField label="โค" help="* ห้ามว่าง">
-              <DDLCow v-model="heal.cow"/>
+              <DDLCow v-model="heal.cow" />
           </FormField>
           <FormField label="วันที่รักษา" help="* ห้ามว่าง" >
             <FormControl
@@ -31,14 +31,14 @@
               icon="doctor"
             />
           </FormField>
-          <FormField label="อาการ/โรค"  help="* ห้ามว่าง" class="col-span-2">
+          <FormField label="อาการ/โรค"  help="* ห้ามว่าง" class="col-span-2 ">
             <FormControl
               v-model="heal.disease"
               type="textarea"
               required
             />
           </FormField>
-          <FormField label="วิธีการรักษา" class="col-span-2">
+          <FormField label="วิธีการรักษา" class="col-span-2 lg:col-span-1">
             <FormControl
               v-model="heal.method"
               type="textarea"

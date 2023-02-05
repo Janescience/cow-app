@@ -24,10 +24,14 @@ class AuthService {
 
     register(user) {
         return http.post("/auth/signup", {
-            username: user.username,
-            password: user.password,
-            name: user.name
+            username : user.username,
+            password : user.password,
+            farmName : user.farmName
         })
+    }
+
+    user() {
+        return http.get("/auth/user")
     }
 
 }

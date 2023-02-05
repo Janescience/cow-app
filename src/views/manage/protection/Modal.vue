@@ -141,6 +141,11 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           this.protection.dateNext = addMonths(new Date(this.protection.dateCurrent),n);
         }
       },
+      'protection.dateCurrent'(n){
+        if(n){
+          this.protection.dateNext = addMonths(new Date(n),this.protection.frequency);
+        }
+      },
 
     },
     methods: {

@@ -32,7 +32,8 @@ const props = defineProps({
   modelValue: {
     type: [String, Number, Boolean],
     default: null
-  }
+  },
+  loading : Boolean
 })
 
 const emit = defineEmits(['update:modelValue', 'cancel', 'confirm'])
@@ -60,7 +61,7 @@ const cancel = () => confirmCancel('cancel')
     <CardBox
       v-show="value"
       :title="title"
-      class="shadow-lg w-full max-h-modal md:w-3/5 lg:w-2/5 z-50"
+      class="shadow-lg w-full max-h-modal md:w-1/5 z-50"
       header-icon="close"
       modal
       @header-icon-click="cancel"
@@ -82,12 +83,15 @@ const cancel = () => confirmCancel('cancel')
           :label="buttonLabel"
           :color="button"
           @click="confirm"
+          :loading="loading"
+          :disabled="loading"
         />
         <BaseButton
           v-if="hasCancel"
           label="ยกเลิก"
           color="danger"
           @click="cancel"
+          :disabled="loading"
         />
       </BaseButtons>
     </CardBox>

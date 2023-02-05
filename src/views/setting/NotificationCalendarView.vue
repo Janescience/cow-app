@@ -1,7 +1,7 @@
 <template>
     <LayoutAuthenticated>
       <SectionMain>
-        <div v-if="user.farm.lineToken === ''">
+        <div v-if="!user?.farm?.lineToken">
             <SectionTitle class="text-2xl">
                 เชื่อมต่อ LINE Notify เพื่อรับการแจ้งเตือน
             </SectionTitle>
@@ -16,14 +16,14 @@
                     3. เลือกกลุ่มหรือเลือกส่งหาตัวเองใน <span class="text-green-300 font-bold">LINE</span> 
                 </div>
                 <div class="py-2 px-5">
-                    4. เมื่อเชื่อมต่อสำเร็จระบบจะส่งข้อความเข้ากลุ่มใน <span class="text-green-300 font-bold">LINE</span> นั้นว่า 
-                    <i class="font-light">`` 'Cow-System' is now connected.Invite the account to ''Cow-System' to receive notifications. ``</i>
-                </div> 
-                <div class="py-2 px-5">
-                    5. เชิญ <span class="text-green-500 font-bold">LINE Notify</span> เข้ากลุ่มที่ได้เลือกไว้
+                    4. เชิญ <span class="text-green-500 font-bold">LINE Notify</span> เข้ากลุ่มที่ได้เลือกไว้
                 </div>
                 <div class="py-2 px-5">
-                    6. กลับมาที่ระบบและเลือกเมนู 'ตั้งค่า > การแจ้งเตือน > กดปุ่ม "ทดสอบการแจ้งเตือน" (ถ้าปุ่มไม่แสดง Refresh หน้าจออีกครั้ง)'
+                    5. เมื่อเชื่อมต่อสำเร็จระบบจะส่งข้อความเข้ากลุ่มใน <span class="text-green-300 font-bold">LINE</span> ว่า 
+                    <i class="font-light">`` เชื่อมต่อสำเร็จ ``</i>
+                </div> 
+                <div class="py-2 px-5">
+                    6. กลับมาที่ระบบแล้วรีเฟรชอีกครั้ง
                 </div>
             </div>
             
@@ -31,17 +31,8 @@
                 <BaseButton icon="connection" class="bg-gradient-to-r from-emerald-500 to-lime-600" label="เชื่อมต่อ LINE" target="_blank" :href="urlAuth"/>
             </BaseButtons>
         </div>
-        <div v-else>
-            <BaseButtons type="justify-end" class="mb-2 p-2 lg:p-0">
-                <BaseButton 
-                    small
-                    label="ทดสอบการแจ้งเตือน" 
-                    @click="notify('ทดสอบการแจ้งเตือน')"
-                    :loading="loading"
-                    :disabled="loading"/>
-            </BaseButtons>
-        </div>
         <CardBox
+            v-if="user?.farm?.lineToken"
             title="ตารางกำหนดการ"
             header-icon=""
             >
@@ -225,6 +216,7 @@ import Calendar from '@/components/calendar/Calendar.vue'
 import { Toast } from "@/utils/alert";
 
 import LineService from '@/services/line'
+import AuthService from '@/services/auth'
         
 export default {
     data() {
@@ -297,7 +289,8 @@ export default {
                     tags: "#fun #nightout #dance #veterantime",
                     location: "At the base",
                 }
-            ]
+            ],
+            user : {}
         }
     },
     components : {
@@ -311,35 +304,14 @@ export default {
         CardBox,
         Calendar,
     },
-    computed:{
-        urlAuth(){
-            const clientId = import.meta.env.VITE_LINE_CLIENT_ID
-            const engine = import.meta.env.VITE_API_ENGINE_URL
-            const username = this.user.username
-            return `https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${engine}/line/redirect&scope=notify&state=${username}`
-        },
-        user() {
-            return this.$store.state.auth.user;
-        }
+    created(){
+        this.getUser()
     },
     methods : {
-        async notify(message){
-            this.loading = true
-            try {
-                const resp = await LineService.notify({message : message, lineToken : this.user.farm.lineToken });
-                if(resp.data){
-                    this.loading = false
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'แจ้งเตือนสำเร็จ'
-                    })
-                }
-            } catch (error) {
-                this.loading = false
-                Toast.fire({
-                    icon: 'error',
-                    title: 'แจ้งเตือนไม่สำเร็จ'
-                })
+        async getUser(){
+            const resp = await AuthService.user();
+            if(resp.data){
+                this.user = resp.data.user
             }
         }
     }

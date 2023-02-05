@@ -123,9 +123,20 @@ export default [
   'ตั้งค่า',
   [
     {
-      to: '/setting/notification',
       icon: 'messageBadgeOutline',
-      label: 'การแจ้งเตือน'
+      label: 'การแจ้งเตือน',
+      menu : [
+        {
+          to: '/setting/notification/logs',
+          icon: 'chartLine',
+          label: 'ประวัติการแจ้งเตือน'
+        },
+        {
+          to: '/setting/notification/calendar',
+          icon: 'calendar',
+          label: 'ปฏิทินกำหนดการ'
+        }
+      ]
     },
     {
       to: '/setting/parameter',

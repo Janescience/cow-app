@@ -4,24 +4,6 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useStyleStore } from '@/store/theme/style.js'
 import { useLayoutStore } from '@/store/theme/layout.js'
-import {
-  mdiForwardburger,
-  mdiBackburger,
-  mdiClose,
-  mdiDotsVertical,
-  mdiMenu,
-  mdiClockOutline,
-  mdiCloud,
-  mdiCrop,
-  mdiAccount,
-  mdiCogOutline,
-  mdiEmail,
-  mdiLogout,
-  mdiGithub,
-  mdiThemeLightDark,
-  mdiMonitorShimmer,
-  mdiOpenInNew
-} from '@mdi/js'
 import NavBarItem from '@/components/NavBarItem.vue'
 import NavBarItemLabel from '@/components/NavBarItemLabel.vue'
 import NavBarMenu from '@/components/NavBarMenu.vue'
@@ -29,6 +11,7 @@ import BaseDivider from '@/components/BaseDivider.vue'
 import UserAvatarCurrentUser from '@/components/UserAvatarCurrentUser.vue'
 import BaseIcon from '@/components/BaseIcon.vue'
 import NavBarSearch from '@/components/NavBarSearch.vue'
+import CardBoxModal from '@/components/CardBoxModal.vue'
 
 import AuthService from '@/services/auth'
 import TokenService from '@/services/token'
@@ -66,6 +49,11 @@ const menuOpenLg = () => {
   layoutStore.asideLgToggle(true)
 }
 
+const modalConfirm = ref(false)
+
+const showModal = () => {
+  modalConfirm.value = true
+}
 const logout = () => {
   store.dispatch('auth/logout');
   router.push("/login")
@@ -192,7 +180,7 @@ const logout = () => {
             </NavBarItem>
             <BaseDivider nav-bar />
             <NavBarItem
-              @click="logout"
+              @click="showModal"
             >  
               <NavBarItemLabel
                 icon="logout"
@@ -236,4 +224,14 @@ const logout = () => {
       </div>
     </div>
   </nav>
+  <CardBoxModal
+        v-model="modalConfirm"
+        title="ยืนยันอีกครั้ง"
+        button-label="ยืนยัน"
+        @confirm="logout"
+        has-cancel
+        has-button
+      >
+      <p>ต้องการออกจากระบบใช่หรือไม่ ?</p>
+  </CardBoxModal>
 </template>

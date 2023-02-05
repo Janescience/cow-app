@@ -14,6 +14,14 @@ const routes = [
     component: () => import('@/views/auth/LoginView.vue')
   },
   {
+    meta: {
+      title: 'สร้างบัญชี'
+    },
+    path: '/register',
+    name: 'register',
+    component: () => import('@/views/auth/RegisterView.vue')
+  },
+  {
     // Document title tag
     // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
     meta: {
@@ -26,12 +34,21 @@ const routes = [
   },
   {
     meta: {
-      title: 'การแจ้งเตือน',
+      title: 'ประวัติการแจ้งเตือน',
       loginRequired : true
     },
-    path: '/setting/notification',
-    name: 'notification',
-    component: () => import('@/views/setting/NotificationView.vue')
+    path: '/setting/notification/logs',
+    name: 'notification-logs',
+    component: () => import('@/views/setting/NotificationLogsView.vue')
+  },
+  {
+    meta: {
+      title: 'ปฏิทินกำหนดการ',
+      loginRequired : true
+    },
+    path: '/setting/notification/calendar',
+    name: 'notification-calendar',
+    component: () => import('@/views/setting/NotificationCalendarView.vue')
   },
   {
     meta: {

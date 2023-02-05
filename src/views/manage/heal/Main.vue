@@ -100,11 +100,11 @@ export default {
         },
         {
           label : "รหัสโค",
-          value : 'cow.code',
+          value : 'relate.cow.code',
         },
         {
           label : "ชื่อโค",
-          value : 'cow.name',
+          value : 'relate.cow.name',
         },
         {
           label : "วันที่รักษา",
@@ -182,7 +182,7 @@ export default {
     },
     edit(obj){
       this.modalData = obj;
-      this.modalData.cow = obj.cow._id;
+      this.modalData.cow = obj.relate.cow._id;
 
       this.mode = 'edit';
       this.openModal = true;
