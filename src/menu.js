@@ -127,7 +127,7 @@ export default [
       label: 'การแจ้งเตือน',
       menu : [
         {
-          to: '/setting/notification/logs',
+          to: '/setting/notification/log',
           icon: 'chartLine',
           label: 'ประวัติการแจ้งเตือน'
         },

@@ -39,7 +39,7 @@ const routes = [
     },
     path: '/setting/notification/logs',
     name: 'notification-logs',
-    component: () => import('@/views/setting/notification/logs/Main.vue')
+    component: () => import('@/views/setting/notification/log/Main.vue')
   },
   {
     meta: {
