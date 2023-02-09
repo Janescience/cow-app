@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="mode === 'create' ? 'เพิ่มการรีดนม' : 'แก้ไขการรีดนม'"
-        class="shadow-lg w-full lg:w-3/5 z-50"
+        class="shadow-lg w-full lg:w-1/2 z-50"
         header-icon="close"
         modal
         form
@@ -20,6 +20,7 @@
               icon="calendar"
               type="date"
               required
+              :disabled="mode == 'edit'"
             />
           </FormField>
           <FormField label="รอบ" class="lg:col-span-3">
@@ -27,21 +28,22 @@
               v-model="milk.time"
               type="radio"
               :options="{ M: 'เช้า', A: 'บ่าย' }"
+              :disabled="mode == 'edit'"
             />
           </FormField>
         </div>
         <CardBox
           title="รายละเอียดการรีดนม"
-          class="shadow-lg dark:bg-slate-700"
+          class="shadow-lg dark:bg-slate-700 mb-3"
           header-icon=""
         >
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
             <FormField label="โค" help="* ห้ามว่าง">
-                <DDLCow v-model="milk.cow" valueType="object"/>
+                <DDLCow v-model="milkDetail.cow" valueType="object"/>
             </FormField>
             <FormField label="ปริมาณน้ำนมดิบ" help="* ห้ามว่าง">
               <FormControl
-                v-model="milk.qty"
+                v-model="milkDetail.qty"
                 type="number"
                 icon="scale"
               />
@@ -100,9 +102,9 @@
             <tbody >
                 <tr
                   v-for="obj in milkDetails"
-                  :key="obj.cow"
+                  :key="obj.cow._id"
                 >
-                <td data-label="โค" class="text-center">
+                <td data-label="โค" >
                     {{ obj.cow.code }} : {{ obj.cow.name }}
                   </td>
                   <td data-label="ปริมาณน้ำนมดิบ" class="text-center">
@@ -133,7 +135,7 @@
             >
               <p>ไม่มีรายการ...</p>
           </div>
-          </CardBox>
+        </CardBox>
 
   
         <BaseButtons
@@ -176,11 +178,13 @@
     data () {
       return {
         milk : {
-          cow : null,  
           date : new Date(),
-          qty : 0,
           time : 'M',
-          amount : 0
+        },
+        milkDetail : {
+          cow : null,
+          qty : null,
+          amount : null
         },
         milkDetails : [],
         loading : false,
@@ -190,8 +194,8 @@
     emits:['update:modelValue', 'cancel', 'confirm'],
     computed:{
         calAmount(){
-            this.milk.amount = this.milk.qty * 100
-            return this.milk.amount
+            this.milkDetail.amount = this.milkDetail.qty * 100
+            return this.milkDetail.amount
         },
         user() {
           return this.$store.state.auth.user;
@@ -213,20 +217,20 @@
               this.milkDetails = n.milkDetails
             }
             this.milk.date = new Date(n.date ? n.date : new Date())
+            this.milk.time = n.time ? n.time : 'M'
+            this.milk._id = n._id
           }
-        },
-        deep : true
+        },deep : true
       }
     },
     methods: {
         clear(){
           if(this.mode === 'edit')
             this.$emit('update:data',null);
-          this.milk.cow = null
           this.milk.date = new Date()
-          this.milk.qty = 0
           this.milk.time = 'M'
-          this.milk.amount = 0
+          this.milkDetails = []
+          this.$emit('update:mode',"");
           delete this.milk?._id
         },
         confirmCancel(mode){
@@ -248,9 +252,15 @@
           }
         },
         add(){
-          if(this.milk.date && this.milk.cow && this.milk.qty > 0 && this.milk.amount){
-              this.milkDetails.push(this.milk)
+          if(this.milkDetail.cow && this.milkDetail.qty > 0 && this.milkDetail.amount){
+            let dup = this.milkDetails.filter(x => x.cow.code === this.milkDetail?.cow.code).length
+            if(dup <= 0){
+              this.milkDetails.push(this.milkDetail)
               this.alert = ""
+              this.milkDetail = {}
+            }else{
+              this.alert = "โคซ้ำ"
+            }
           }else{
               this.alert = "กรุณากรอกข้อมูลให้ครบ"
           }
@@ -265,7 +275,7 @@
                   if(resp){
                       this.loading = false  
                       this.value = false
-                      this.confirmCancel('confirm')
+                      this.confirm()
                       Toast.fire({
                         icon: 'success',
                         title: 'บันทึกข้อมูลสำเร็จ'
@@ -276,7 +286,7 @@
                   if(resp){
                       this.loading = false  
                       this.value = false
-                      this.confirmCancel('confirm')
+                      this.confirm()
                   }
                 }
             } catch (error) {

@@ -39,6 +39,11 @@ export default {
     computed:{
         value:{
             get(){
+                if(this.valueType === 'object'){
+                    if(this.modelValue?.cow_data){
+                        this.modelValue.cow_data = this.modelValue?.code + " : " + this.modelValue?.name
+                    }
+                }
                 return this.modelValue
             },
             set(newValue){

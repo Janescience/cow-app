@@ -18,7 +18,8 @@ const props = defineProps({
   modelValue: {
     type: [Object, Array, String, Number],
     default: null
-  }
+  },
+  disabled : Boolean
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -49,6 +50,7 @@ const inputType = computed(() => props.type === 'radio' ? 'radio' : 'checkbox')
         :type="inputType"
         :name="name"
         :value="key"
+        :disabled="disabled"
       >
       <span class="check" />
       <span class="control-label">{{ value }}</span>

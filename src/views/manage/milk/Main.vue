@@ -158,30 +158,28 @@ export default {
     async getMilks(){
       this.loading = true
       const resp = await MilkingService.all(this.search);
-      this.items = []
       this.events = []
       if(resp.data){
         for(let milk of resp.data.milks){
-          milk.date = moment(milk.date,'YYYY-MM-DD').format('DDMMYYYY');
-        }
-        this.items = _.groupBy(resp.data.milks,'date');
-        Object.keys(this.items).forEach(key => {
-          let milks = this.items[key];
-
           let event = {};
-          event.date = key
-          event.count = milks.length;
-          event.sumQty = 0;
-          event.sumAmt = 0;
 
-          milks.map((m) => {
-            event.sumQty += m.morningQty + m.afternoonQty
-            event.sumAmt += m.amount
+          event.sumQty = 0;
+            event.sumAmt = 0;
+
+          milk.milkDetails.forEach(milkDetail => {
+            milkDetail.cow = milkDetail.relate.cow
+            event.sumQty += milkDetail.qty;
+            event.sumAmt += milkDetail.amount;
           })
 
-          event.milks = milks
+          event.count = milk.milkDetails.length;
+          event.milks = milk.milkDetails
+          event.date = moment(milk.date,'YYYY-MM-DD').format('DDMMYYYY');
+          event.time = milk.time
+          event.id = milk._id
           this.events.push(event)
-      })
+        }
+        
       }
       this.loading = false
     },

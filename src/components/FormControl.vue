@@ -147,6 +147,7 @@ onMounted(() => {
       :required="required"
       :locale="th"
       :typeable="true"
+      :disabled="disabled"
       :lowerLimit="lowerLimit"
       inputFormat="dd/MM/yyyy"
     />

@@ -89,38 +89,43 @@
           class="h-16 md:h-36 w-full border-t border-gray-600 align-top "
         >
           <div
-            class="w-full h-full text-xs md:text-sm lg:text-base text-center transition-colors p-3 "
+            class="w-full h-full text-xs md:text-sm lg:text-base text-center transition-colors  p-2"
             :class="{
               'bg-slate-300 text-gray-900 font-medium  ': isToday(day),
               'hover:bg-gray-100 hover:text-gray-700': !isToday(day),
             }"
           >
             {{ day }}
-  
-            <div
-              v-show="maxThreeTodaysEvent(day, events).length > 0"
-              v-for="evt in maxThreeTodaysEvent(day, events)"
-              :key="evt.title"
-              class="hidden md:block"
-            >
+            <div class="grid grid-cols-2 mt-2 gap-2">
               <div
-                class="w-full text-left overflow-hidden hover:border hover:border-gray-200 cursor-pointer rounded-lg"
-                @click="openModal(day, allTodaysEvent(day, events))"
+                v-show="maxThreeTodaysEvent(day, events).length > 0"
+                v-for="evt in maxThreeTodaysEvent(day, events)"
+                :key="evt.date"
+                class="hidden md:block"
               >
-                
-                <!-- <div class="w -11/12"> -->
-                  <p class="text-sm  text-clip overflow-hidden">
-                    <BaseIcon path="water"/> {{ evt.sumQty }} กก.
-                  </p>
-                  <p class="text-sm tracking-tight text-clip overflow-hidden">
-                    <BaseIcon path="cow"/> {{ evt.count }} ตัว
-                  </p>
-                  <p class="text-sm tracking-tight text-clip overflow-hidden">
-                    <BaseIcon path="cashMultiple"/> {{ evt.sumAmt }} บ.
-                  </p>
-                <!-- </div> -->
+                <div
+                  class="w-full text-left overflow-hidden border border-gray-800 shadow cursor-pointer rounded-lg"
+                  @click="openModal(day, allTodaysEvent(day, events,false,evt.time),evt.time,evt.id)"
+                >
+                  
+                  <!-- <div class="w -11/12"> -->
+                    <p class="text-sm  text-clip overflow-hidden">
+                      <BaseIcon path="clock" size="14"/> {{ evt.time == 'M' ? 'เช้า' : 'บ่าย' }} 
+                    </p>
+                    <p class="text-sm  text-clip overflow-hidden ">
+                      <BaseIcon path="water"/> {{ evt.sumQty }} กก.
+                    </p>
+                    <p class="text-sm tracking-tight text-clip overflow-hidden">
+                      <BaseIcon path="cow"/> {{ evt.count }} ตัว
+                    </p>
+                    <!-- <p class="text-sm tracking-tight text-clip overflow-hidden">
+                      <BaseIcon path="cashMultiple"/> {{ evt.sumAmt }} บ.
+                    </p> -->
+                  <!-- </div> -->
+                </div>
               </div>
             </div>
+            
 
             <div
               v-show="maxThreeTodaysEvent(day, events).length === 0"
@@ -290,11 +295,11 @@
    * @param {string} startdate The event start date
    * @return boolean True or false if event is today or not
    */
-  const isEventToday = (day, date,isPrevMonth) => {
+  const isEventToday = (day, date,isPrevMonth,time,curTime) => {
     if (
       calendarStore.getYear == date.substring(4, 8) &&
       calendarStore.getMonth + (isPrevMonth ? 0 : 1) == date.substring(2, 4) &&
-      day == date.substring(0, 2)
+      day == date.substring(0, 2) && time == curTime
     )
       return true;
     return false;
@@ -326,11 +331,11 @@
    *
    * @return array Array of the filtered day's event(s)
    */
-  const allTodaysEvent = (day, events, isPrevMonth) => {
+  const allTodaysEvent = (day, events, isPrevMonth,time) => {
     if (!events.length) return [];
     let todaysEvent = [];
     events.forEach((event) => {
-      if (isEventToday(day, event.date,isPrevMonth)) {
+      if (isEventToday(day, event.date,isPrevMonth,event.time,time)) {
         todaysEvent = event.milks ;
       }
     });
@@ -344,10 +349,10 @@
    *
    * @return null
    */
-  const openModal = (day, events) => {
+  const openModal = (day, events,time,id) => {
     mode.value = 'edit';
     let date = calendarStore.getYear + "-" + (calendarStore.getMonth+1) + "-" + day
-    data.value = { date : date , milkDetails : events};
+    data.value = { _id : id, date : date , time : time ,milkDetails : events};
     modalShow.value = true;
   };
 
