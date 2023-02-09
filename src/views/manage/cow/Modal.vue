@@ -200,14 +200,14 @@
                   if(resp){
                       this.loading = false  
                       this.value = false
-                      this.confirmCancel('confirm')
+                      this.confirm()
                   }
                 }else{
                   const resp = await CowService.update(this.cow._id,this.cow);
                   if(resp){
                       this.loading = false  
                       this.value = false
-                      this.confirmCancel('confirm')
+                      this.confirm();
                   }
                 }
             } catch (error) {

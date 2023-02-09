@@ -161,10 +161,10 @@ export default {
       this.items = []
       this.events = []
       if(resp.data){
-        for(let milk of resp.data.milkings){
+        for(let milk of resp.data.milks){
           milk.date = moment(milk.date,'YYYY-MM-DD').format('DDMMYYYY');
         }
-        this.items = _.groupBy(resp.data.milkings,'date');
+        this.items = _.groupBy(resp.data.milks,'date');
         Object.keys(this.items).forEach(key => {
           let milks = this.items[key];
 

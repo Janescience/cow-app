@@ -7,8 +7,8 @@ async function getSearchQuery (opts = {}) {
         query = query + `cow=${opts.cow}&`;
     }
     if (opts.date) {
-        const dateNoTime = moment(new Date(opts.date)).format('YYYY-MM-DD') 
-        query = query + `date=${dateNoTime}&`;
+        // const dateNoTime = moment(new Date(opts.date)).format('YYYY-MM-DD') 
+        query = query + `date=${opts.date}&`;
     } 
     if (opts.quantity) {
         query = query + `quantity=${opts.quantity}&`;

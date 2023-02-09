@@ -13,7 +13,6 @@
       <CreateCowModal 
         v-model="modalCow" 
         @confirm="getCows" 
-        @cancel="getCows" 
         :mode="mode" 
         :dataEdit="dataEdit"
       />
@@ -115,12 +114,12 @@ export default {
           module : 'cow',
           valueType : 'code'
         },
-        {
-          label : 'วันเกิด',
-          value : 'birthDate',
-          icon : 'calendar',
-          type : 'date'
-        },
+        // {
+        //   label : 'วันเกิด',
+        //   value : 'birthDate',
+        //   icon : 'calendar',
+        //   type : 'date'
+        // },
         {
           label : 'สถานะ',
           value : 'status',
@@ -140,7 +139,7 @@ export default {
       search : {
         code : null,
         status : "",
-        birthDate : null,
+        // birthDate : null,
         corral : "",
         flag : "Y",
       },
@@ -221,7 +220,7 @@ export default {
     reset(){
       this.search.code = null
       this.search.status = ""
-      this.search.birthDate = null
+      // this.search.birthDate = null
       this.search.corral = ""
     },
     calAge(bdDate){

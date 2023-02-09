@@ -291,7 +291,7 @@ export default {
         },
         formatDate(date){
             if(!date){
-                return ""
+                return null
             }
             return moment(new Date(date)).format('DD/MM/YYYY');
         },

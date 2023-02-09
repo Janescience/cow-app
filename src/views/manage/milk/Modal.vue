@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="mode === 'create' ? 'เพิ่มการรีดนม' : 'แก้ไขการรีดนม'"
-        class="shadow-lg w-full lg:w-4/5 z-50"
+        class="shadow-lg w-full lg:w-3/5 z-50"
         header-icon="close"
         modal
         form
@@ -13,8 +13,7 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-2 lg:grid-cols-6 gap-3 mt-1">
-          
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-1">
           <FormField label="วันที่รีดนม" help="* ห้ามว่าง">
             <FormControl
               v-model="milk.date"
@@ -23,40 +22,47 @@
               required
             />
           </FormField>
-          <FormField label="โค" help="* ห้ามว่าง">
-              <DDLCow v-model="milk.cow"/>
-          </FormField>
-          <FormField label="รอบ" >
+          <FormField label="รอบ" class="lg:col-span-3">
              <FormCheckRadioPicker
               v-model="milk.time"
               type="radio"
               :options="{ M: 'เช้า', A: 'บ่าย' }"
             />
           </FormField>
-          <FormField label="ปริมาณน้ำนมดิบ" help="* ห้ามว่าง">
-            <FormControl
-              v-model="milk.qty"
-              type="number"
-              icon="scale"
-            />
-          </FormField>
-          <FormField label="จำนวนเงินรวม" help="ราคาน้ำนมดิบ/กก. 100 บาท">
-            <FormControl
-              v-model="calAmount"
-              type="number"
-              icon="cashMultiple"
-            />
-          </FormField>
-          <BaseButtons
-          type="justify-center"
-          >
-            <BaseButton
-              label="เพิ่ม"
-              color="success"
-              @click="add()"
-            />
-          </BaseButtons>
         </div>
+        <CardBox
+          title="รายละเอียดการรีดนม"
+          class="shadow-lg dark:bg-slate-700"
+          header-icon=""
+        >
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            <FormField label="โค" help="* ห้ามว่าง">
+                <DDLCow v-model="milk.cow" valueType="object"/>
+            </FormField>
+            <FormField label="ปริมาณน้ำนมดิบ" help="* ห้ามว่าง">
+              <FormControl
+                v-model="milk.qty"
+                type="number"
+                icon="scale"
+              />
+            </FormField>
+            <FormField label="จำนวนเงินรวม" help="ราคาน้ำนมดิบ/กก. 100 บาท">
+              <FormControl
+                v-model="calAmount"
+                type="number"
+                icon="cashMultiple"
+              />
+            </FormField>
+            <BaseButtons
+            type="justify-start"
+            >
+              <BaseButton
+                label="เพิ่ม"
+                color="success"
+                @click="add()"
+              />
+            </BaseButtons>
+          </div>
 
         <NotificationBar 
           v-if="alert" 
@@ -80,13 +86,10 @@
               <thead>
                   <tr >
                       <th class="whitespace-nowrap text-center">
-                        วันที่
+                        โค
                       </th>
                       <th class="whitespace-nowrap text-center">
                         ปริมาณน้ำนมดิบ
-                      </th>
-                      <th class="whitespace-nowrap text-center">
-                        รอบ
                       </th>
                       <th class="whitespace-nowrap text-center">
                         จำนวนเงิน
@@ -99,14 +102,11 @@
                   v-for="obj in milkDetails"
                   :key="obj.cow"
                 >
-                  <td data-label="อาหาร/วัตถุดิบ" >
-                    {{ obj.date }}
+                <td data-label="โค" class="text-center">
+                    {{ obj.cow.code }} : {{ obj.cow.name }}
                   </td>
                   <td data-label="ปริมาณน้ำนมดิบ" class="text-center">
                     {{ obj.qty }}
-                  </td>
-                  <td data-label="รอบ" class="text-center">
-                    {{ obj.time }}
                   </td>
                   <td data-label="จำนวนเงิน" class="text-right">
                     {{ obj.amount }}
@@ -133,6 +133,8 @@
             >
               <p>ไม่มีรายการ...</p>
           </div>
+          </CardBox>
+
   
         <BaseButtons
           type="justify-center"
@@ -168,6 +170,7 @@
 
   import MilkingService from '@/services/milking'
   import { Toast } from "@/utils/alert";
+  import moment from 'moment';
 
   export default {
     data () {
@@ -186,11 +189,8 @@
     },
     emits:['update:modelValue', 'cancel', 'confirm'],
     computed:{
-        sumQty(){
-          return this.milk.morningQty + this.milk.afternoonQty
-        },
         calAmount(){
-            this.milk.amount = (this.milk.morningQty + this.milk.afternoonQty) * 100
+            this.milk.amount = this.milk.qty * 100
             return this.milk.amount
         },
         user() {
@@ -224,8 +224,8 @@
             this.$emit('update:data',null);
           this.milk.cow = null
           this.milk.date = new Date()
-          this.milk.morningQty = 0
-          this.milk.afternoonQty = 0
+          this.milk.qty = 0
+          this.milk.time = 'M'
           this.milk.amount = 0
           delete this.milk?._id
         },
@@ -241,9 +241,24 @@
             this.clear()
             this.confirmCancel('cancel')
         },
+        removeDetail(milk){
+          let index = this.milkDetails.indexOf(milk);
+          if (index !== -1) {
+            this.milkDetails.splice(index, 1);
+          }
+        },
+        add(){
+          if(this.milk.date && this.milk.cow && this.milk.qty > 0 && this.milk.amount){
+              this.milkDetails.push(this.milk)
+              this.alert = ""
+          }else{
+              this.alert = "กรุณากรอกข้อมูลให้ครบ"
+          }
+        },
         async submit(){
             this.loading = true
             this.alert = ""
+            this.milk.milkDetails = this.milkDetails
             try {
                 if(this.mode === 'create'){
                   const resp = await MilkingService.create(this.milk);
@@ -271,6 +286,9 @@
             }
             
         },
+        formatDate(date){
+          return moment(date).format('DD/MM/YYYY HH:mm')
+        }
     },
     components : {
       BaseButton,

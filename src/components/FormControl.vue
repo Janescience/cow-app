@@ -57,7 +57,13 @@ const emit = defineEmits(['update:modelValue', 'setRef'])
 const computedValue = computed({
   get: () => props.modelValue,
   set: value => {
-    emit('update:modelValue', value)
+    if(props.type === 'date'){
+      if(value){
+        emit('update:modelValue', value)
+      }
+    }else{
+      emit('update:modelValue', value)
+    }
   }
 })
 

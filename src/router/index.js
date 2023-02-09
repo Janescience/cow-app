@@ -39,7 +39,7 @@ const routes = [
     },
     path: '/setting/notification/logs',
     name: 'notification-logs',
-    component: () => import('@/views/setting/NotificationLogsView.vue')
+    component: () => import('@/views/setting/notification/logs/Main.vue')
   },
   {
     meta: {
@@ -48,7 +48,7 @@ const routes = [
     },
     path: '/setting/notification/calendar',
     name: 'notification-calendar',
-    component: () => import('@/views/setting/NotificationCalendarView.vue')
+    component: () => import('@/views/setting/notification/calendar/Main.vue')
   },
   {
     meta: {
