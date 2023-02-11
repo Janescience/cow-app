@@ -192,18 +192,7 @@
           qty : null,
           amount : null
         },
-        milkDetails : [
-          {
-            cow : {code : 'C100',name : 'ทองมัน'},
-            qty : 10,
-            amunt : 1000
-          },
-          {
-            cow : {code : 'C200',name : 'ทองบด'},
-            qty : 8,
-            amunt : 800
-          }
-        ],
+        milkDetails : [],
         loading : false,
         alert : ""
       }

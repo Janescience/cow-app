@@ -40,10 +40,8 @@ import SectionMain from '@/components/SectionMain.vue';
 import Table from "@/components/Table.vue";
 import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 
-import DDLCow from '@/components/DDL/Cow.vue'
 import MilkModal from './Modal.vue'
 import MilkingService from '@/services/milking'
-import Criteria from "@/components/Criteria.vue";
 import CardBox from "@/components/CardBox.vue";
 
 import Calendar from './Calendar.vue'
@@ -142,9 +140,7 @@ export default {
     LayoutAuthenticated,
     Table,
     SectionTitleBarSub,
-    DDLCow,
     MilkModal,
-    Criteria,
     Calendar,
     CardBox
   },
