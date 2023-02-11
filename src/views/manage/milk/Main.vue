@@ -1,6 +1,6 @@
 <template>
   <LayoutAuthenticated>
-    <SectionMain>
+    <SectionMain >
 
       <SectionTitleBarSub 
         icon="cupWater" 
@@ -17,17 +17,19 @@
         @confirm="getMilks" 
       />
 
-      <Criteria
+      <!-- <Criteria
         grid="grid-cols-2 lg:grid-cols-4"
         @search="getMilks" 
         @reset="reset" 
         :forms="forms" 
         :search="search"
-      />
+      /> -->
+
       <CardBox v-if="!loading">
         <Calendar :events="events"/>
       </CardBox>
       <CardBox v-else loading />
+
     </SectionMain>
   </LayoutAuthenticated>
 </template>

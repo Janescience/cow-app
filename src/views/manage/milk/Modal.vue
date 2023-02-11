@@ -4,17 +4,18 @@
     >
       <CardBox
         v-show="value"
-        :title="mode === 'create' ? 'เพิ่มการรีดนม' : 'แก้ไขการรีดนม'"
-        class="shadow-lg w-full lg:w-1/2 z-50"
+        :title="mode === 'create' ? 'การรีดนม' : 'การรีดนม (' + ((milk.time == 'M' ? 'เช้า':'บ่าย') + ' - ' + formatDate(milk.date)) + ')'"
+        class="shadow-lg w-full  lg:w-1/2 z-50"
         header-icon="close"
         modal
         form
+        has-scroll
         @submit.prevent="submit"
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-1">
-          <FormField label="วันที่รีดนม" help="* ห้ามว่าง">
+        <div class="grid grid-cols-2 gap-3 mt-1" v-if="mode != 'edit'">
+          <FormField label="วันที่รีดนม" help="* ห้ามว่าง" >
             <FormControl
               v-model="milk.date"
               icon="calendar"
@@ -23,7 +24,7 @@
               :disabled="mode == 'edit'"
             />
           </FormField>
-          <FormField label="รอบ" class="lg:col-span-3">
+          <FormField label="รอบ" >
              <FormCheckRadioPicker
               v-model="milk.time"
               type="radio"
@@ -32,20 +33,22 @@
             />
           </FormField>
         </div>
-        <CardBox
+        <BaseDivider v-if="mode != 'edit'"/>
+        <!-- <CardBox
           title="รายละเอียดการรีดนม"
           class="shadow-lg dark:bg-slate-700 mb-3"
           header-icon=""
-        >
+        > -->
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
             <FormField label="โค" help="* ห้ามว่าง">
                 <DDLCow v-model="milkDetail.cow" valueType="object"/>
             </FormField>
-            <FormField label="ปริมาณน้ำนมดิบ" help="* ห้ามว่าง">
+            <FormField label="น้ำนมดิบ/กก." help="* ห้ามว่าง">
               <FormControl
                 v-model="milkDetail.qty"
                 type="number"
                 icon="scale"
+                
               />
             </FormField>
             <FormField label="จำนวนเงินรวม" help="ราคาน้ำนมดิบ/กก. 100 บาท">
@@ -60,7 +63,7 @@
             >
               <BaseButton
                 label="เพิ่ม"
-                color="success"
+                color="info"
                 @click="add()"
               />
             </BaseButtons>
@@ -91,7 +94,7 @@
                         โค
                       </th>
                       <th class="whitespace-nowrap text-center">
-                        ปริมาณน้ำนมดิบ
+                        น้ำนมดิบ/กก.
                       </th>
                       <th class="whitespace-nowrap text-center">
                         จำนวนเงิน
@@ -107,7 +110,7 @@
                 <td data-label="โค" >
                     {{ obj.cow.code }} : {{ obj.cow.name }}
                   </td>
-                  <td data-label="ปริมาณน้ำนมดิบ" class="text-center">
+                  <td data-label="น้ำนมดิบ/กก." class="text-center">
                     {{ obj.qty }}
                   </td>
                   <td data-label="จำนวนเงิน" class="text-right">
@@ -120,7 +123,9 @@
                       >
                         <BaseButton
                             color="danger"
-                            label="ลบ"
+                            
+                            icon="trashCanOutline"
+                            small
                             @click="removeDetail(obj)"
                         />
                       </BaseButtons>
@@ -135,11 +140,11 @@
             >
               <p>ไม่มีรายการ...</p>
           </div>
-        </CardBox>
+        <!-- </CardBox> -->
 
   
         <BaseButtons
-          type="justify-center"
+          type="justify-center mt-3"
         >
           <BaseButton
             label="บันทึก"
@@ -168,6 +173,7 @@
   import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
   import NotificationBar from '@/components/NotificationBar.vue'
   import BaseLevel from '@/components/BaseLevel.vue'
+  import BaseIcon from '@/components/BaseIcon.vue'
   import DDLCow from '@/components/DDL/Cow.vue'
 
   import MilkingService from '@/services/milking'
@@ -186,7 +192,18 @@
           qty : null,
           amount : null
         },
-        milkDetails : [],
+        milkDetails : [
+          {
+            cow : {code : 'C100',name : 'ทองมัน'},
+            qty : 10,
+            amunt : 1000
+          },
+          {
+            cow : {code : 'C200',name : 'ทองบด'},
+            qty : 8,
+            amunt : 800
+          }
+        ],
         loading : false,
         alert : ""
       }
@@ -297,7 +314,7 @@
             
         },
         formatDate(date){
-          return moment(date).format('DD/MM/YYYY HH:mm')
+          return moment(date).format('DD/MM/YYYY')
         }
     },
     components : {
@@ -312,6 +329,7 @@
       BaseLevel,
       DDLCow,
       FormCheckRadioPicker,
+      BaseIcon,
     },
     props : {
         modelValue: {

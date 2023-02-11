@@ -91,37 +91,31 @@
           <div
             class="w-full h-full text-xs md:text-sm lg:text-base text-center transition-colors  p-2"
             :class="{
-              'bg-slate-300 text-gray-900 font-medium  ': isToday(day),
+              'bg-gray-600 text-gray-900 font-medium  ': isToday(day),
               'hover:bg-gray-100 hover:text-gray-700': !isToday(day),
             }"
           >
             {{ day }}
-            <div class="grid grid-cols-2 mt-2 gap-2">
+            <div class="mt-2">
               <div
                 v-show="maxThreeTodaysEvent(day, events).length > 0"
                 v-for="evt in maxThreeTodaysEvent(day, events)"
                 :key="evt.date"
-                class="hidden md:block"
+                class="hidden md:block p-1"
               >
                 <div
-                  class="w-full text-left overflow-hidden border border-gray-800 shadow cursor-pointer rounded-lg"
+                  class="w-full  flex p-1 shadow-lg border border-gray-800 shadow cursor-pointer rounded-md"
                   @click="openModal(day, allTodaysEvent(day, events,false,evt.time),evt.time,evt.id)"
                 >
                   
-                  <!-- <div class="w -11/12"> -->
-                    <p class="text-sm  text-clip overflow-hidden">
-                      <BaseIcon path="clock" size="14"/> {{ evt.time == 'M' ? 'เช้า' : 'บ่าย' }} 
+                    <p class="text-sm  text-clip overflow-hidden items-center ">
+                      <BaseIcon 
+                        :path="evt.time === 'M' ? 'clockTimeSevenOutline' : 'clockTimeThreeOutline'"
+                        :class="evt.time === 'M' ? 'text-yellow-400' : 'text-orange-500'"
+                        />
+                      {{ evt.time == 'M' ? 'เช้า' : 'บ่าย' }} - {{ evt.sumQty }} กก.
                     </p>
-                    <p class="text-sm  text-clip overflow-hidden ">
-                      <BaseIcon path="water"/> {{ evt.sumQty }} กก.
-                    </p>
-                    <p class="text-sm tracking-tight text-clip overflow-hidden">
-                      <BaseIcon path="cow"/> {{ evt.count }} ตัว
-                    </p>
-                    <!-- <p class="text-sm tracking-tight text-clip overflow-hidden">
-                      <BaseIcon path="cashMultiple"/> {{ evt.sumAmt }} บ.
-                    </p> -->
-                  <!-- </div> -->
+
                 </div>
               </div>
             </div>
@@ -142,15 +136,15 @@
 
             <!-- Mobile -->
             <div
-              v-if="allTodaysEvent(day, events).length > 0"
+              v-if="allTodaysQty(day, events) > 0"
               class="flex md:hidden h-2/3 w-full justify-center items-center"
-              @click="openModal(day, allTodaysEvent(day, events))"
+              @click="openCardBox(day, events)"
             >
               <div
                 class="h-6 w-6 flex justify-center items-center text-xs bg-orange-600 rounded-full shadow-sm"
               >
                 <h3 class="font-medium text-white">
-                  {{ allTodaysEvent(day, events).length }}
+                  {{ allTodaysQty(day, events) }}
                 </h3>
               </div>
             </div>
@@ -167,21 +161,52 @@
         
       </div>
       <!-- mobile navigation -->
-      <BaseLevel type="justify-between w-full " class="md:hidden">
-            <BaseIcon 
-                path="chevronLeft" 
-                size="30" 
-                class="cursor-pointer hover:text-gray-300"
-                @click="calendarStore.decrementMonth(1)"
-            />
-            <BaseIcon 
-                path="chevronRight" 
-                size="30" 
-                class="cursor-pointer hover:text-gray-300"
-                @click="calendarStore.incrementMonth(1)"
-            />
-        </BaseLevel>
+      <BaseLevel type="justify-between w-full mt-2" class="md:hidden">
+          <BaseIcon 
+              path="chevronLeft" 
+              size="30" 
+              class="cursor-pointer hover:text-gray-300"
+              @click="calendarStore.decrementMonth(1)"
+          />
+          <BaseIcon 
+              path="chevronRight" 
+              size="30" 
+              class="cursor-pointer hover:text-gray-300"
+              @click="calendarStore.incrementMonth(1)"
+          />
+      </BaseLevel>
+
+      <BaseDivider/>
+
+        <div class="md:hidden" v-if="cardBoxShow">
+          รายการรีดนม  {{ cardBoxDay }}/{{calendarStore.getMonth+1}}/{{calendarStore.getYear+543}}
+          <div
+            v-show="cardBoxData.length > 0"
+            v-for="evt in cardBoxData"
+            :key="evt.date"
+          >
+            <div
+              class="w-full text-left flex overflow-hidden p-2 mt-2 border border-gray-800 shadow cursor-pointer rounded-md"
+              @click="openModal(cardBoxDay, allTodaysEvent(cardBoxDay, events,false,evt.time),evt.time,evt.id)"
+            >
+              
+                <p class="text-sm  text-clip overflow-hidden">
+                  รอบ {{ evt.time == 'M' ? 'เช้า' : 'บ่าย' }} 
+                
+                  น้ำนมดิบ {{ evt.sumQty }} กก.
+                
+                  รีดแล้ว {{ evt.count }} ตัว
+                </p>
+
+            </div>
+          </div>
+        </div>
+
     </div>
+
+    
+
+
   
     <Modal
       v-model="modalShow"
@@ -198,6 +223,8 @@
   import Top from "@/components/calendar/Top.vue";
   import BaseIcon from "@/components/BaseIcon.vue";
   import BaseLevel from "@/components/BaseLevel.vue";
+  import BaseDivider from "@/components/BaseDivider.vue";
+  import CardBox from "@/components/CardBox.vue";
   import Modal from './Modal.vue';
 
   import { useCalendarStore } from "@/store/calendar";
@@ -232,6 +259,9 @@
   const firstDayOfCurrentMonth = ref(0);
   const lastEmptyCells = ref(0);
   const modalShow = ref(false);
+  const cardBoxShow = ref(false);
+  const cardBoxData = ref([]);
+  const cardBoxDay = ref("");
   const mode = ref("create");
   const data = ref({});
   /**
@@ -295,11 +325,21 @@
    * @param {string} startdate The event start date
    * @return boolean True or false if event is today or not
    */
-  const isEventToday = (day, date,isPrevMonth,time,curTime) => {
+  const isEventTodayWithTime = (day, date,isPrevMonth,time,curTime) => {
     if (
       calendarStore.getYear == date.substring(4, 8) &&
       calendarStore.getMonth + (isPrevMonth ? 0 : 1) == date.substring(2, 4) &&
       day == date.substring(0, 2) && time == curTime
+    )
+      return true;
+    return false;
+  };
+
+  const isEventToday = (day, date,isPrevMonth) => {
+    if (
+      calendarStore.getYear == date.substring(4, 8) &&
+      calendarStore.getMonth + (isPrevMonth ? 0 : 1) == date.substring(2, 4) &&
+      day == date.substring(0, 2)
     )
       return true;
     return false;
@@ -317,7 +357,7 @@
     if (!events.length) return [];
     let threeTodaysEventArr = [];
     events.forEach((event) => {
-      if (isEventToday(day, event.date,isPrevMonth)) {
+      if (isEventTodayWithTime(day, event.date,isPrevMonth)) {
         threeTodaysEventArr.push(event);
       }
     });
@@ -335,11 +375,23 @@
     if (!events.length) return [];
     let todaysEvent = [];
     events.forEach((event) => {
-      if (isEventToday(day, event.date,isPrevMonth,event.time,time)) {
+      if (isEventTodayWithTime(day, event.date,isPrevMonth,event.time,time)) {
         todaysEvent = event.milks ;
       }
     });
     return todaysEvent;
+  };
+
+  const allTodaysQty = (day, events, isPrevMonth) => {
+    if (!events.length) return 0;
+    let todaysQty = 0;
+    events.forEach((event) => {
+      console.log('allTodaysQty : ',event)
+      if (isEventToday(day, event.date,isPrevMonth)) {
+        todaysQty += event.sumQty ;
+      }
+    });
+    return todaysQty;
   };
   /**
    * Open the event details modal
@@ -356,12 +408,17 @@
     modalShow.value = true;
   };
 
+  const openCardBox = (day,events) => {
+    const list = maxThreeTodaysEvent(day, events)
+    cardBoxData.value = list;
+    cardBoxDay.value = day;
+    cardBoxShow.value = true;
+  }
   /**
    * Close the event details modal
    */
   const closeModal = () => {
     modalShow.value = false;
-    datas.value = [];
   };
   /************************************************************************
    *  LIFECYCLE HOOKS

@@ -26,6 +26,7 @@ const props = defineProps({
   form: Boolean,
   hoverable: Boolean,
   modal: Boolean,
+  hasScroll : Boolean
 })
 
 const emit = defineEmits(['header-icon-click', 'submit'])
@@ -108,7 +109,9 @@ const submit = e => {
     </div>
     <div
       v-else
-      :class="{'p-4':!hasTable}"
+      :class="{'p-4':!hasTable,
+               'overflow-x-hidden overflow-y-auto max-h-modal' : hasScroll
+              }"
     >
       <slot />
     </div>
