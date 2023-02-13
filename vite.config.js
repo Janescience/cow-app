@@ -15,10 +15,6 @@ export default defineConfig((command,mode) =>{
       VitePWA({ 
         registerType: 'autoUpdate' ,
         injectRegister: 'auto',
-        workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,json,vue,txt,woff2}'],
-          cleanupOutdatedCaches: false
-        },
         manifest : {
           name : 'Dairy Farm',
           short_name : 'Dairy Farm',
