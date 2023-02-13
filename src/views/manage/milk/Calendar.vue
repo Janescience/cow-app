@@ -383,7 +383,6 @@
     if (!events.length) return 0;
     let todaysQty = 0;
     events.forEach((event) => {
-      console.log('allTodaysQty : ',event)
       if (isEventToday(day, event.date,isPrevMonth)) {
         todaysQty += event.sumQty ;
       }
