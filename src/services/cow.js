@@ -42,6 +42,9 @@ class CowService{
     get(id){
         return http.get(`/cow/${id}`);
     }
+    getDetails(id){
+        return http.get(`/cow/detail/${id}`);
+    }
     create(payload){
         if (payload.birthDate) {
             payload.birthDate = moment(new Date(payload.birthDate)).format('YYYY-MM-DD') 

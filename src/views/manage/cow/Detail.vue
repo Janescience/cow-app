@@ -42,7 +42,7 @@
         title="ข้อมูลโค"
         header-icon=""
       >
-        <div class="grid lg:gap-3 gap-2 grid-cols-2 lg:grid-cols-7 md:grid-cols-4">
+        <div class="grid lg:gap-3 gap-2 grid-cols-2 lg:grid-cols-7 md:grid-cols-6">
           <div class="row-span-2">
             <ImageUpload v-model="cow.image"/>
             <BaseLevel type="justify-center text-xs ">
@@ -105,8 +105,8 @@
             />
           </FormField>
           <BaseButtons
-            type="lg:justify-end justify-center"
-            class="lg:col-span-4 col-span-2 lg:mt-5"
+            type="md:justify-end lg:justify-end justify-center"
+            class="md:col-span-2 lg:col-span-4 col-span-2 md:mt-5"
           >
             <BaseButton
               label="บันทึก"
@@ -640,47 +640,40 @@ export default {
     async getCowData(id){
       this.loading = true;
       try {
-        const resp = await CowService.get(id);
+        const resp = await CowService.getDetails(id);
 
         if (resp.data) {
-          this.cow = resp.data.cow;
+          const detail = resp.data
+          this.cow = detail.cow;
           this.cow.birthDate = new Date(this.cow.birthDate);
 
-          const milkResp = await MilkService.all({ cow: id });
-          if (milkResp.data) {
-            for(let milk of milkResp.data.milks){
-              milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD') + milk.time
+          if (detail.milks.length > 0) {
+            for(let milk of detail.milks){
+              milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
             }
-            this.milks = _.groupBy(milkResp.data.milks,'groupKey');
+            this.milks = _.groupBy(detail.milks,'groupKey');
           }
 
-          const reproductResp = await ReproductService.all({ cow: id });
-          if (reproductResp.data) {
-            this.reproducts = reproductResp.data.reproducts;
+          if (detail.reproductions.length > 0) {
+            this.reproducts = detail.reproductions;
           }
 
-          const birthResp = await BirthService.all({ cow: id});
-          if (birthResp) {
-            this.births = birthResp.data.births; 
+          if (detail.births.length > 0) {
+            this.births = detail.births; 
           }
 
-          const healResp = await HealService.all({ cow: id }); 
-          if (healResp) { 
-            this.heals = healResp.data.heals; 
+          if (detail.heals.length > 0) { 
+            this.heals = detail.heals; 
           }
 
-          // const protectionResp = await ProtectionService.all(); 
-          // if (protectionResp) { 
-          //   this.protections = protectionResp.data.protections; 
-          // }
+          if (detail.protections.length > 0) { 
+            this.protections = detail.protections; 
+          }
 
-          // const foodResp = await FoodService.all({ corral: this.cow.corral }); 
-          // if (foodResp) { 
-          //   this.foods = foodResp.data.foods; 
-          // }
-        } else { 
-          this.cow = null;   // If no data is returned, set the cow to null  
-        }  
+          if (detail.foods.length > 0) { 
+            this.foods = detail.foods; 
+          }
+        } 
         this.loading = false; 
       } catch (error) {
         this.loading = false; 
@@ -717,14 +710,13 @@ export default {
       this.historyMilks = []
       Object.keys(this.milks).forEach(key => {
         let milks = this.milks[key];
+        let historyMilk = {}
+        let mQty = 0;
+        let aQty = 0;
+        let amount = 0;
+
         milks.map((m) => {
-          let historyMilk = {}
-
           historyMilk.date = m.date;
-
-          let mQty = 0;
-          let aQty = 0;
-          let amount = 0;
           count += m.milkDetails.length;
 
           m.milkDetails.map((d) => {
@@ -741,8 +733,9 @@ export default {
           historyMilk.mQty = mQty;
           historyMilk.aQty = aQty;
           historyMilk.amount = amount;
-          this.historyMilks.push(historyMilk)
         })
+        this.historyMilks.push(historyMilk)
+
       })
 
       let avg = (totalM+totalA)/count;
