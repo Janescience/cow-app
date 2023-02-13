@@ -639,50 +639,53 @@ export default {
   methods : {
     async getCowData(id){
       this.loading = true;
-      const resp = await CowService.get(id);
+      try {
+        const resp = await CowService.get(id);
 
-      if (resp.data) {
-        this.cow = resp.data.cow;
-        this.cow.birthDate = new Date(this.cow.birthDate);
+        if (resp.data) {
+          this.cow = resp.data.cow;
+          this.cow.birthDate = new Date(this.cow.birthDate);
 
-        const milkResp = await MilkService.all({ cow: id });
-        if (milkResp.data) {
-          for(let milk of milkResp.data.milks){
-            milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD') + milk.time
+          const milkResp = await MilkService.all({ cow: id });
+          if (milkResp.data) {
+            for(let milk of milkResp.data.milks){
+              milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD') + milk.time
+            }
+            this.milks = _.groupBy(milkResp.data.milks,'groupKey');
           }
-          this.milks = _.groupBy(milkResp.data.milks,'groupKey');
-        }
 
-        const reproductResp = await ReproductService.all({ cow: id });
-        if (reproductResp.data) {
-          this.reproducts = reproductResp.data.reproducts;
-        }
+          const reproductResp = await ReproductService.all({ cow: id });
+          if (reproductResp.data) {
+            this.reproducts = reproductResp.data.reproducts;
+          }
 
-        const birthResp = await BirthService.all({ cow: id});
-        if (birthResp) {
-          this.births = birthResp.data.births; 
-        }
+          const birthResp = await BirthService.all({ cow: id});
+          if (birthResp) {
+            this.births = birthResp.data.births; 
+          }
 
-        const healResp = await HealService.all({ cow: id }); 
-        if (healResp) { 
-          this.heals = healResp.data.heals; 
-        }
+          const healResp = await HealService.all({ cow: id }); 
+          if (healResp) { 
+            this.heals = healResp.data.heals; 
+          }
 
-        const protectionResp = await ProtectionService.all(); 
-        if (protectionResp) { 
-          this.protections = protectionResp.data.protections; 
-        }
+          const protectionResp = await ProtectionService.all(); 
+          if (protectionResp) { 
+            this.protections = protectionResp.data.protections; 
+          }
 
-        const foodResp = await FoodService.all({ corral: this.cow.corral }); 
-        if (foodResp) { 
-          this.foods = foodResp.data.foods; 
-        }
-
-      } else { 
-         this.cow = null;   // If no data is returned, set the cow to null  
-      }  
-
-      this.loading = false;   // Set the loading state to false after all data has been fetched and processed   
+          const foodResp = await FoodService.all({ corral: this.cow.corral }); 
+          if (foodResp) { 
+            this.foods = foodResp.data.foods; 
+          }
+        } else { 
+          this.cow = null;   // If no data is returned, set the cow to null  
+        }  
+        this.loading = false; 
+      } catch (error) {
+        this.loading = false; 
+        console.error(error) 
+      }
     },  
     async update(){
         this.loading = true
