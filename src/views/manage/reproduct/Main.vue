@@ -15,7 +15,6 @@
         :mode="mode" 
         :dataEdit="dataEdit" 
         @confirm="getReproductions" 
-        @cancel="getReproductions" 
       />
 
       <Criteria

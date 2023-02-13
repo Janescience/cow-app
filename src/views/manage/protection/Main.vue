@@ -14,9 +14,7 @@
         v-model="openModal"
         :data="modalData"
         :mode="mode"
-        @confirm="getDatas"
-        @cancel="getDatas"
-         
+        @confirm="getDatas"         
       />
 
       <Criteria

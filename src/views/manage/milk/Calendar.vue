@@ -204,16 +204,13 @@
 
     </div>
 
-    
-
-
+  
   
     <Modal
       v-model="modalShow"
       :mode="mode" 
       :data="data" 
       @confirm="getMilks" 
-      @cancel="getMilks" 
     />
   
   </template>

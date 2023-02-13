@@ -1,6 +1,6 @@
 <template>
   <LayoutAuthenticated>
-    <SectionMain>
+    <SectionMain class=" text-sm lg:text-base">
       
       <section class="px-4 sm:px-0 mb-4 flex items-center justify-between">
         <div class="flex items-center justify-start">
@@ -9,26 +9,29 @@
             size="30"
             class="mr-3"
           />
-          <h1 class="text-2xl">
+          <h1 class="text-base lg:text-2xl">
             รายละเอียดโค
           </h1>
         </div>
-        <BaseButtons>
+        <BaseButtons class="text-sm lg:text-base " type="justify-end">
           <BaseButton
+            class="lg:p-2 p-1"
             label="ย้อนกลับ"
-            color="info"
+            color="light"
             @click="this.$router.push('/manage/cow')"
           />
           <BaseButton
+            class="lg:p-2 p-1"
+            label="ออกรายงาน"
+            color="info"
+            @click="exportReport()"
+          />
+          <BaseButton
+            class="lg:p-2 p-1"
             v-if="canRemove"
             label="ลบ"
             color="danger"
             @click="remove()"
-          />
-          <BaseButton
-            label="บันทึก"
-            color="success"
-            @click="update()"
           />
         </BaseButtons>
       </section>
@@ -39,7 +42,7 @@
         title="ข้อมูลโค"
         header-icon=""
       >
-        <div class="grid lg:gap-3 md:gap-2 gap-5 grid-cols-2 lg:grid-cols-7 md:grid-cols-4">
+        <div class="grid lg:gap-3 gap-2 grid-cols-2 lg:grid-cols-7 md:grid-cols-4">
           <div class="row-span-2">
             <ImageUpload v-model="cow.image"/>
             <BaseLevel type="justify-center text-xs ">
@@ -101,6 +104,16 @@
               icon="genderFemale"
             />
           </FormField>
+          <BaseButtons
+            type="lg:justify-end justify-center"
+            class="lg:col-span-4 col-span-2 lg:mt-5"
+          >
+            <BaseButton
+              label="บันทึก"
+              color="success"
+              @click="update()"
+            />
+          </BaseButtons>
         </div>
       </CardBox>
 
@@ -335,9 +348,9 @@
       </div>
 
       <Table
-        v-if="milks.length > 0"
+        v-if="historyMilks.length > 0"
         title="ประวัติการรีดนม" 
-        :items="milks" 
+        :items="historyMilks" 
         :datas="milkDatas"
         :loading="loading"
 
@@ -395,6 +408,8 @@ import FoodService from '@/services/food'
 
 import getAge from "@/utils/age-calculate";
 import moment from "moment";
+import _ from "lodash";
+
 import { Toast } from "@/utils/alert";
 import { status,quality } from '@/constants/cow'
 import { reproductResult,reproductStatus } from '@/constants/reproduct'
@@ -406,6 +421,7 @@ export default {
     return {
       cow : {},
       milks : [],
+      historyMilks : [],
       reproducts : [],
       births : [],
       heals : [],
@@ -426,18 +442,18 @@ export default {
         {
           label : "ปริมาณน้ำนมดิบ/เช้า (กก.)",
           class : 'text-center',
-          value : 'morningQty',
+          value : 'mQty',
         },
         {
           label : "ปริมาณน้ำนมดิบ/บ่าย (กก.)",
           class : 'text-center',
-          value : 'afternoonQty',
+          value : 'aQty',
         },
         {
           label : "ปริมาณน้ำนมดิบรวม (กก.)",
           class : 'text-center',
           func : (obj) => {
-            return obj.morningQty + obj.afternoonQty
+            return obj.mQty + obj.aQty
           },
         },
         {
@@ -631,7 +647,10 @@ export default {
 
         const milkResp = await MilkService.all({ cow: id });
         if (milkResp.data) {
-          this.milks = milkResp.data.milkings;
+          for(let milk of milkResp.data.milks){
+            milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD') + milk.time
+          }
+          this.milks = _.groupBy(milkResp.data.milks,'groupKey');
         }
 
         const reproductResp = await ReproductService.all({ cow: id });
@@ -689,15 +708,44 @@ export default {
         }
     },
     milk(){
-      let count = this.milks.length
-      let total = 0;
-      for(let milk of this.milks){
-        total += milk.morningQty + milk.afternoonQty
-      }
-      let avg = total/count;
+      let count = 0;
+      let totalM = 0;
+      let totalA = 0;
+      this.historyMilks = []
+      Object.keys(this.milks).forEach(key => {
+        let milks = this.milks[key];
+        milks.map((m) => {
+          let historyMilk = {}
+
+          historyMilk.date = m.date;
+
+          let mQty = 0;
+          let aQty = 0;
+          let amount = 0;
+          count += m.milkDetails.length;
+
+          m.milkDetails.map((d) => {
+            if(m.time === 'M'){
+              totalM += d.qty
+              mQty += d.qty 
+            }else{
+              totalA += d.qty
+              aQty += d.qty
+            }
+            amount += d.amount
+          })
+
+          historyMilk.mQty = mQty;
+          historyMilk.aQty = aQty;
+          historyMilk.amount = amount;
+          this.historyMilks.push(historyMilk)
+        })
+      })
+
+      let avg = (totalM+totalA)/count;
       return { 
         avg : (count > 0 ? avg.toFixed(2) : 0) , 
-        all : total.toFixed(2)
+        all : (totalM+totalA).toFixed(2)
       };
     },
     reproduct(){

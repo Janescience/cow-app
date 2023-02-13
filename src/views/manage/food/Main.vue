@@ -15,8 +15,6 @@
         :data="modalData"
         :mode="mode"
         @confirm="getDatas"
-        @cancel="getDatas"
-         
       />
 
       <Criteria

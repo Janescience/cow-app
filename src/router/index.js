@@ -37,7 +37,7 @@ const routes = [
       title: 'ประวัติการแจ้งเตือน',
       loginRequired : true
     },
-    path: '/setting/notification/logs',
+    path: '/setting/notification/log',
     name: 'notification-logs',
     component: () => import('@/views/setting/notification/log/Main.vue')
   },
