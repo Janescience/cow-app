@@ -76,8 +76,8 @@
                   </thead>
                   <tbody>
                       <tr>
-                        <td>น้ำนมดิบ</td>
-                        <td>15,317</td>
+                        <td data-label="รายการ">น้ำนมดิบ</td>
+                        <td data-label="จำนวนเงิน">15,317</td>
                       </tr>
                   </tbody>
                 </table>
@@ -99,20 +99,14 @@
                   </thead>
                   <tbody>
                       <tr>
-                        <td>อาหาร</td>
-                        <td>25,000</td>
+                        <td data-label="รายการ">อาหาร</td>
+                        <td data-label="จำนวนเงิน">25,000</td>
                       </tr>
                       <tr>
-                        <td>การรักษา</td>
-                        <td>12,000</td>
+                        <td data-label="รายการ">การรักษา</td>
+                        <td data-label="จำนวนเงิน">12,000</td>
                       </tr>
                   </tbody>
-                  <tfoot>
-                    <tr class="font-bold ">
-                        <td>รวม</td>
-                        <td>37,000</td>
-                    </tr>
-                  </tfoot>
                 </table>
               </CardBox>
             </CardBox>
@@ -131,7 +125,7 @@
                 
             </CardBox>
           </div>
-          <div class="grid grid-cols-3 gap-5 mt-5">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-5">
             <CardBox
               :title="'น้ำนมดิบรวมรายเดือน ปี '+(new Date().getFullYear())"
               icon="chartBellCurveCumulative"
