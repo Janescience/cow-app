@@ -2,138 +2,164 @@
   <LayoutAuthenticated>
     <SectionMain>
       <SectionTitleBarSub
-        icon="chartLine"
-        title="ภาพรวมฟาร์ม"
+        icon="homeSiloOutline"
+        :title="'ภาพรวมฟาร์ม - '+formatDate(new Date())"
       />
-      <CardBox
-        title="โค"
-        class="text-center"
-        header-icon=""
+      <div
+        v-if="!loading"
       >
-        <div
-          class="grid gap-5 grid-cols-3 lg:grid-cols-6"
-        >
-          <CardBox
-          >
-            <BaseIcon path="cow" size="50" class="mt-5 text-gray-400"/>
-            <div class="text-center mt-2">
-              <h1 class="lg:text-5xl text-4xl text-orange-700">{{  cow.all }}</h1>
-              <p class="text-sm mt-2">
-                 ทั้งหมด 
-              </p>
-            </div>
-          </CardBox>
-          <CardBox>
-            <BaseIcon path="water" size="50" class="mt-5 text-gray-400"/>
-            <div class="text-center mt-2">
-              <h1 class="lg:text-5xl text-4xl text-yellow-600">{{  cow.milk }}</h1>
-              <p class="text-sm mt-2">
-                 ให้ผลผลิต 
-              </p>
-            </div>
-          </CardBox>
-          <CardBox>
-            <BaseIcon path="humanPregnant" size="50" class="mt-5 text-gray-400"/>
-            <div class="text-center mt-2">
-              <h1 class="lg:text-5xl text-4xl text-yellow-600">{{  cow.pregnant }}</h1>
-              <p class="text-sm mt-2">
-                 ท้อง 
-              </p>
-            </div>
-          </CardBox>
-          <CardBox>
-            <BaseIcon path="babyFaceOutline" size="50" class="mt-5 text-gray-400"/>
-            <div class="text-center mt-2">
-              <h1 class="lg:text-5xl text-4xl text-yellow-600">{{  cow.baby }}</h1>
-              <p class="text-sm mt-2">
-                 เด็ก 
-              </p>
-            </div>
-          </CardBox>
-          <CardBox>
-            <BaseIcon path="waterOff" size="50" class="mt-5 text-gray-400"/>
-            <div class="text-center mt-2">
-              <h1 class="lg:text-5xl text-4xl text-yellow-600">{{  cow.dry }}</h1>
-              <p class="text-sm mt-2">
-                 นมแห้ง
-              </p>
-            </div>
-          </CardBox>
-          <CardBox>
-            <BaseIcon path="medicalBag" size="50" class="mt-5 text-gray-400"/>
-            <div class="text-center mt-2">
-              <h1 class="lg:text-5xl text-4xl text-red-500">{{  cow.dry }}</h1>
-              <p class="text-sm mt-2">
-                 ป่วย/กำลังรักษา
-              </p>
-            </div>
-          </CardBox>
-        </div>
-      </CardBox>
-      <div class="grid gap-5 grid-cols-1 lg:grid-cols-3">
-        <CardBox
-          :title="'ปริมาณน้ำนมดิบรวมรายเดือน ปี '+(new Date().getFullYear())"
-          icon=""
-          class="mt-5 lg:col-span-2 lg:row-span-5"
-          header-icon=""
-        >
-          <div v-if="chartData">
-            <line-chart
-              :data="chartData"
-              class="h-96"
-            />
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div class="grid grid-cols-1 gap-5">
+            <CardBox
+              icon="cow"
+              title="สถานะโค"
+              class="text-center "
+              header-icon=""
+            >
+              <div
+                class="grid grid-cols-2 gap-5"
+              >
+                <p class="text-left mt-2">
+                  ให้ผลผลิต 
+                </p>
+                <h1 class="lg:text-3xl text-2xl text-yellow-600">{{  cow.milk }}</h1>
+                <p class="text-left mt-2">
+                  ท้อง 
+                </p>
+                <h1 class="lg:text-3xl text-2xl text-yellow-600">{{  cow.pregnant }}</h1>
+                <p class="text-left mt-2">
+                  เด็ก 
+                </p>
+                <h1 class="lg:text-3xl text-2xl text-yellow-600">{{  cow.baby }}</h1>
+                <p class="text-left mt-2">
+                  นมแห้ง 
+                </p>
+                <h1 class="lg:text-3xl text-2xl text-yellow-600">{{  cow.dry }}</h1>
+                <p class="text-left mt-2">
+                  ป่วย/กำลังรักษา 
+                </p>
+                <h1 class="lg:text-3xl text-2xl text-yellow-600">{{  cow.sick }}</h1>
+              </div>
+            </CardBox>
+            <CardBox
+                icon="thermometerWater"
+                title="คุณภาพนม"
+                class="text-center"
+                header-icon=""
+              >
+                <div class="grid grid-cols-2 gap-5">
+                  <p class="text-left mt-2">
+                    คุณภาพดี 
+                  </p>
+                  <h1 class="lg:text-3xl text-2xl text-yellow-600">{{  cow.premiuem }}</h1>
+                </div>
+                
+            </CardBox>
           </div>
-        </CardBox>
-        <CardBox
-          class="mt-5"
-          icon=""
-          title="ผลประกอบการ"
-          header-icon=""
-        >
-          <div class="grid grid-cols-2">
-            <div class="row-span-2">
-              <p >ราคาน้ำนมดิบ/กก. 53 บาท</p>
-              <p>น้ำนมดิบทั้งหมด 289 กก.</p>
-            </div>
-            <p class="text-3xl text-right text-green-500">+15,317</p>
-            
-          </div>
-          <BaseDivider/>
-
-          <div class="grid grid-cols-2">
-            <div class="row-span-2">
-              <p >ค่าอาหาร 25,000 บาท</p>
-              <p>ค่ารักษา 12,000 บาท</p>
-            </div>
-            <p class="text-3xl text-right text-red-500">-37,000</p>
-          </div>
-        </CardBox>
-        <CardBox
-          icon=""
-          header-icon=""
-        >
-          <div class="grid grid-cols-3">
-            <UserAvatar :avatar="cow.avgMaxMilk?.cow?.image" class="w-16 h-16 shadow-lg row-span-2 " />
-            <div class="col-span-2">
-              <p class="text-lg"> {{ cow.avgMaxMilk?.cow?.name }} - {{ cow.avgMaxMilk?.avg }} กก.</p>
-              <p class="text-gray-400">น้ำนมดิบเฉลี่ย/วัน มากที่สุด</p>
-            </div>
-          </div>
-        </CardBox>
-        <CardBox
-          icon=""
-          header-icon=""
-        >
-          <div class="grid grid-cols-3">
-            <UserAvatar :avatar="cow.sumMaxMilk?.cow?.image" class="w-16 h-16 shadow-lg row-span-2 " />
-            <div class="col-span-2">
-              <p class="text-lg"> {{ cow.sumMaxMilk?.cow?.name }} - {{ cow.sumMaxMilk?.sum }} กก.</p>
-              <p class="text-gray-400">น้ำนมดิบรวมมากที่สุด</p>
-            </div>
-          </div>
-        </CardBox>
         
+            <CardBox
+              icon="cashRegister"
+              title="ผลประกอบการ"
+              header-icon=""
+            >
+              <CardBox
+                icon=""
+                class="text-sm"
+                title="รายรับรวม"
+                has-table
+                header-icon=""
+              >
+                <table>
+                  <thead>
+                      <th>รายการ</th>
+                      <th>จำนวนเงิน</th>
+                  </thead>
+                  <tbody>
+                      <tr>
+                        <td>น้ำนมดิบ</td>
+                        <td>15,317</td>
+                      </tr>
+                  </tbody>
+                </table>
+              </CardBox>
+              
+              <BaseDivider/>
+
+              <CardBox
+                icon=""
+                class="text-sm"
+                title="รายจ่ายรวม"
+                has-table
+                header-icon=""
+              >
+                <table>
+                  <thead>
+                      <th>รายการ</th>
+                      <th>จำนวนเงิน</th>
+                  </thead>
+                  <tbody>
+                      <tr>
+                        <td>อาหาร</td>
+                        <td>25,000</td>
+                      </tr>
+                      <tr>
+                        <td>การรักษา</td>
+                        <td>12,000</td>
+                      </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr class="font-bold ">
+                        <td>รวม</td>
+                        <td>37,000</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </CardBox>
+            </CardBox>
+            <CardBox
+                icon="calendarBadgeOutline"
+                title="กำหนดการ"
+                class="text-center"
+                header-icon=""
+              >
+                <div class="grid grid-cols-2 gap-5">
+                  <p class="text-left">
+                    ฉีดวัคซีนปากเท้าเปื่อย 
+                  </p>
+                  <h1 class="text-xl text-orange-600">{{  addMonths(new Date('2023-01-01'),6) }}</h1>
+                </div>
+                
+            </CardBox>
+          </div>
+          <div class="grid grid-cols-3 gap-5 mt-5">
+            <CardBox
+              :title="'น้ำนมดิบรวมรายเดือน ปี '+(new Date().getFullYear())"
+              icon="chartBellCurveCumulative"
+              class="lg:col-span-2"
+              header-icon=""
+            >
+              <div v-if="chartData">
+                <line-chart
+                  :data="chartData"
+                  class="h-66"
+                />
+              </div>
+              <div v-else>
+                ไม่มีรายการรีดนม...
+              </div>
+            </CardBox>
+            <CardBox
+              class="text-center items-center p-5"
+              header-icon=""
+            >
+              <h1 class="text-4xl">น้ำนมดิบทั้งหมด</h1>
+              <h1 class="text-5xl mt-4 text-green-600">108.56</h1>
+              <h1 class="text-4xl mt-4">กิโลกรัม</h1>
+            </CardBox>
+          </div>
+          
       </div>
+      <CardBox v-else loading/>
       
     </SectionMain>
     
@@ -163,13 +189,16 @@ import DashboardService from '@/services/dashboard'
 import moment from "moment";
 import _ from "lodash";
 
+import { addDays,addMonths } from 'date-fns'
+
 export default {
   data(){
     return {
       chartData : null,
       chartColors : {primary: '#00D1B2',danger: '#FF3860'},
       milks : [],
-      cow : {}
+      cow : {},
+      loading : false
     }
   },
   components : {
@@ -200,6 +229,7 @@ export default {
   },
   methods : {
     async getDashboard(){
+      this.loading = true;
       const resp = await DashboardService.get(this.user.farm._id)
       if(resp){
         for(let milk of resp.data.milks){
@@ -208,6 +238,8 @@ export default {
         this.milks = _.groupBy(resp.data.milks,'date')
         this.cow = resp.data.cow
         this.chartData = this.createChart()
+        this.loading = false;
+
       }
     },
     getChartData(type){
@@ -216,7 +248,9 @@ export default {
         let milks = this.milks[key];
         let sum = 0 ;
         milks.map((m) => {
-          sum += m.morningQty + m.afternoonQty
+          m.milkDetails.map((d) => {
+            sum += d.qty
+          })
         })
         datas.push(sum)
       })
@@ -224,6 +258,7 @@ export default {
     },
     getDatasetObject(color,type){
       return {
+        label : 'น้ำนมดิบ',
         fill: true,
         borderColor: this.chartColors[color],
         borderWidth: 2,
@@ -237,7 +272,7 @@ export default {
         pointHoverBorderWidth: 15,
         pointRadius: 4,
         data: this.getChartData(type),
-        tension: 1,
+        tension: 0.5,
         cubicInterpolationMode: 'default'
       }
     },
@@ -261,6 +296,9 @@ export default {
         }
         return moment(new Date(date)).format('DD/MM/YYYY');
     },
+    addMonths(date,months){
+      return this.formatDate(addMonths(date,months))
+    }
   }
 }
 </script>

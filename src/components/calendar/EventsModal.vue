@@ -61,8 +61,6 @@ import BaseButtons from '@/components/BaseButtons.vue'
 import CardBox from '@/components/CardBox.vue'
 
 import moment from 'moment';
-import 'moment/dist/locale/th';
-moment.locale('th')
 
 export default {
     data () {

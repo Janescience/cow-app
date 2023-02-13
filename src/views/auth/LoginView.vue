@@ -20,8 +20,8 @@ import NotificationBarInCard from '@/components/NotificationBarInCard.vue'
 import { ref,computed } from '@vue/reactivity'
 
 const form = reactive({
-  login: 'devFarm',
-  pass: 'P@ssw0rd',
+  login: '',
+  pass: '',
   remember: ['remember']
 })
 

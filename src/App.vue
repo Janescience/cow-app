@@ -7,6 +7,8 @@
 import EventBus from "@/utils/event-bus";
 import { RouterView } from 'vue-router'
 import TokenService from '@/services/token'
+import 'moment/dist/locale/th';
+
 
 export default {
   components : {
