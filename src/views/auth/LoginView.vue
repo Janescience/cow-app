@@ -2,10 +2,8 @@
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import AuthService from '@/services/auth'
 import SectionFullScreen from '@/components/SectionFullScreen.vue'
 import CardBox from '@/components/CardBox.vue'
-import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
 import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
 import BaseDivider from '@/components/BaseDivider.vue'
@@ -16,8 +14,7 @@ import SectionTitle from '@/components/SectionTitle.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
-import NotificationBarInCard from '@/components/NotificationBarInCard.vue'
-import { ref,computed } from '@vue/reactivity'
+import { ref } from '@vue/reactivity'
 
 const form = reactive({
   login: '',
