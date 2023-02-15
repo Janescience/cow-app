@@ -293,6 +293,10 @@
                       this.loading = false  
                       this.value = false
                       this.confirm()
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'บันทึกข้อมูลสำเร็จ'
+                      })
                   }
                 }
             } catch (error) {

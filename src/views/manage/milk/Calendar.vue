@@ -398,7 +398,7 @@
    * @return null
    */
   const openModal = (day, events,time,id) => {
-    mode.value = 'edit';
+    mode.value = time ? 'edit' : 'create';
     let date = calendarStore.getYear + "-" + (calendarStore.getMonth+1) + "-" + day
     data.value = { _id : id, date : date , time : time ,milkDetails : events};
     modalShow.value = true;
