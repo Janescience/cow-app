@@ -639,14 +639,14 @@ export default {
   methods : {
     async getCowData(id){
       this.loading = true;
-      try {
+      // try {
           // const resp = await CowService.get(id);
 
         // if (resp.data) {
           // this.cow = resp.data.cow;
           // this.cow.birthDate = new Date(this.cow.birthDate);
 
-          const milkResp = await MilkService.get({ cow: id });
+          const milkResp = await MilkService.all({ cow: id });
           if (milkResp.data) {
             for(let milk of milkResp.data.milks){
               milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
@@ -681,10 +681,10 @@ export default {
 
         // } 
         this.loading = false; 
-      } catch (error) {
-        this.loading = false; 
-        console.error(error) 
-      }
+      // } catch (error) {
+      //   this.loading = false; 
+      //   console.error(error) 
+      // }
     },  
     async update(){
         this.loading = true
