@@ -25,7 +25,10 @@ class MilkingService{
     }
     async get(search){
         const query = await getSearchQuery(search);
-        return http.get(`/milking`+query);
+        return http.get(`/milking`+query)
+            .then(response => {
+                return response;
+            });
     }
     create(payload){
         if (payload.date) {
