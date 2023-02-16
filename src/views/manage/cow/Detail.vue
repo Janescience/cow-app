@@ -640,17 +640,13 @@ export default {
     async getCowData(id){
       this.loading = true;
       try {
-        const cowResp = await CowService.get(id);
-        
-        if(cowResp.data){
-          this.cow = cowResp.data.cow;
-          this.cow.birthDate = new Date(this.cow.birthDate);
-        }
-
         const resp = await CowService.getDetails(id);
 
         if (resp.data) {
           const detail = resp.data
+          
+          this.cow = detail.cow;
+          this.cow.birthDate = new Date(this.cow.birthDate);
 
           if (detail.milks.length > 0) {
             for(let milk of detail.milks){
