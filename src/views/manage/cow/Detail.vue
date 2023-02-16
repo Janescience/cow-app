@@ -640,40 +640,45 @@ export default {
     async getCowData(id){
       this.loading = true;
       try {
-        const resp = await CowService.getDetails(id);
+        const resp = await CowService.get(id);
 
         if (resp.data) {
-          const detail = resp.data
-          
-          this.cow = detail.cow;
+          this.cow = resp.data.cow;
           this.cow.birthDate = new Date(this.cow.birthDate);
 
-          if (detail.milks.length > 0) {
-            for(let milk of detail.milks){
+          const milkResp = await MilkService.get({ cow: id });
+          if (milkResp.data) {
+            for(let milk of milkResp.data.milks){
               milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
             }
-            this.milks = _.groupBy(detail.milks,'groupKey');
+            this.milks = _.groupBy(milkResp.data.milks,'groupKey');
           }
 
-          if (detail.reproductions.length > 0) {
-            this.reproducts = detail.reproductions;
+          const reproductResp = await ReproductService.all({ cow: id });
+          if (reproductResp.data) {
+            this.reproducts = reproductResp.data.reproducts;
           }
 
-          if (detail.births.length > 0) {
-            this.births = detail.births; 
+          const birthResp = await BirthService.all({ cow: id});
+          if (birthResp) {
+            this.births = birthResp.data.births; 
           }
 
-          if (detail.heals.length > 0) { 
-            this.heals = detail.heals; 
+          const healResp = await HealService.all({ cow: id }); 
+          if (healResp) { 
+            this.heals = healResp.data.heals; 
           }
 
-          if (detail.protections.length > 0) { 
-            this.protections = detail.protections; 
+          const protectionResp = await ProtectionService.all(); 
+          if (protectionResp) { 
+            this.protections = protectionResp.data.protections; 
           }
 
-          if (detail.foods.length > 0) { 
-            this.foods = detail.foods; 
+          const foodResp = await FoodService.all({ corral: this.cow.corral }); 
+          if (foodResp) {  
+            this.foods = foodResp.data.foods; 
           }
+
         } 
         this.loading = false; 
       } catch (error) {

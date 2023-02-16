@@ -18,13 +18,14 @@ async function getSearchQuery (opts = {}) {
 class MilkingService{
     async all(search){
         const query = await getSearchQuery(search);
-        return http.get(`/milking`+query)
+        return http.get(`/milking/all`+query)
             .then(response => {
                 return response;
             });
     }
-    get(id){
-        return http.get(`/milking/${id}`);
+    async get(search){
+        const query = await getSearchQuery(search);
+        return http.get(`/milking`+query);
     }
     create(payload){
         if (payload.date) {
