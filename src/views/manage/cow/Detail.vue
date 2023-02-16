@@ -669,15 +669,15 @@ export default {
           //   this.heals = healResp.data.heals; 
           // }
 
-          const protectionResp = await ProtectionService.all(); 
-          if (protectionResp) { 
-            this.protections = protectionResp.data.protections; 
-          }
+          // const protectionResp = await ProtectionService.all(); 
+          // if (protectionResp) { 
+          //   this.protections = protectionResp.data.protections; 
+          // }
 
-          const foodResp = await FoodService.all({ corral: this.cow.corral }); 
-          if (foodResp) {  
-            this.foods = foodResp.data.foods; 
-          }
+          // const foodResp = await FoodService.all({ corral: this.cow.corral }); 
+          // if (foodResp) {  
+          //   this.foods = foodResp.data.foods; 
+          // }
 
         } 
         this.loading = false; 
