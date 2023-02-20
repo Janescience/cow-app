@@ -640,24 +640,24 @@ export default {
     async getCowData(id){
       this.loading = true;
       // try {
-          // const resp = await CowService.get(id);
+          const resp = await CowService.get(id);
 
-        // if (resp.data) {
-          // this.cow = resp.data.cow;
-          // this.cow.birthDate = new Date(this.cow.birthDate);
+        if (resp.data) {
+          this.cow = resp.data.cow;
+          this.cow.birthDate = new Date(this.cow.birthDate);
 
-          const milkResp = await MilkService.all();
-          if (milkResp.data) {
-            for(let milk of milkResp.data.milks){
-              milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
-            }
-            this.milks = _.groupBy(milkResp.data.milks,'groupKey');
-          }
-
-          // const reproductResp = await ReproductService.all({ cow: id });
-          // if (reproductResp.data) {
-          //   this.reproducts = reproductResp.data.reproducts;
+          // const milkResp = await MilkService.all();
+          // if (milkResp.data) {
+          //   for(let milk of milkResp.data.milks){
+          //     milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
+          //   }
+          //   this.milks = _.groupBy(milkResp.data.milks,'groupKey');
           // }
+
+          const reproductResp = await ReproductService.all({ cow: id });
+          if (reproductResp.data) {
+            this.reproducts = reproductResp.data.reproducts;
+          }
 
           // const birthResp = await BirthService.all({ cow: id});
           // if (birthResp) {
@@ -679,7 +679,7 @@ export default {
           //   this.foods = foodResp.data.foods; 
           // }
 
-        // } 
+        } 
         this.loading = false; 
       // } catch (error) {
       //   this.loading = false; 
