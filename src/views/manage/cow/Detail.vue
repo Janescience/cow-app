@@ -26,26 +26,20 @@
             color="info"
             @click="exportReport()"
           />
-          <BaseButton
-            class="lg:p-2 p-1"
-            v-if="canRemove"
-            label="ลบ"
-            color="danger"
-            @click="remove()"
-          />
-        </BaseButtons>
+         </BaseButtons>
       </section>
 
       <CardBox 
         class="mb-5"
-        :loading="loading"
+        :loading="loading.cow"
         title="ข้อมูลโค"
         header-icon=""
+        icon="cardTextOutline"
       >
         <div class="grid lg:gap-3 gap-2 grid-cols-2 lg:grid-cols-7 md:grid-cols-6">
           <div class="row-span-2">
-            <ImageUpload v-model="cow.image"/>
-            <BaseLevel type="justify-center text-xs ">
+            <ImageUpload v-model="cow.image" class="mt-8 mr-2"/>
+            <BaseLevel type="justify-center text-xs font-thin text-slate-500">
               อัพโหลดรูปภาพ (คลิกที่รูป)
             </BaseLevel>
           </div>
@@ -109,6 +103,12 @@
             class="md:col-span-2 lg:col-span-4 col-span-2 md:mt-5"
           >
             <BaseButton
+              :disabled="!canRemove"
+              label="ลบ"
+              color="danger"
+              @click="remove()"
+            />
+            <BaseButton
               label="บันทึก"
               color="success"
               @click="update()"
@@ -120,13 +120,13 @@
       <div class="grid gap-5 grid-cols-1 lg:grid-cols-2 md:grid-cols-2 mb-5">
         <CardBox 
           icon="cupWater"
-          :loading="loading"
+          :loading="loading.milk"
           title="ข้อมูลน้ำนม"
           header-icon=""
         >
           <div class="grid gap-5 grid-cols-4 ">
             <p class="col-span-2">
-              <BaseIcon path="waterPercent" size="20"/> ผลผลิตน้ำนมเฉลี่ย/วัน 
+               น้ำนมดิบ เฉลี่ย/วัน 
             </p>
             <p>
               {{ milk().avg }}
@@ -135,7 +135,7 @@
               กิโลกรัม
             </p>
             <p class="col-span-2">
-              <BaseIcon path="water" size="20"/> ผลผลิตน้ำนมทั้งหมด
+               น้ำนมดิบ ทั้งหมด
             </p>
             <p>
               {{ milk().all }}
@@ -148,89 +148,89 @@
         </CardBox>
         <CardBox 
           icon="reproduction"
-          class="row-span-2"
-          :loading="loading"
+          class="row-span-2 "
+          :loading="loading.reproduct"
           title="ข้อมูลการสืบพันธุ์/ผสมพันธุ์"
           header-icon=""
         >
-          <div class="grid gap-5 grid-cols-3 ">
-            <p class="row-span-3">
+          <div class="grid gap-5 lg:grid-cols-3 grid-cols-2">
+            <p class="lg:row-span-3 col-span-2 lg:col-span-1 font-bold ">
                การเข้าระบบสืบพันธุ์
             </p>
-            <p>
+            <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p>
+            <p class="ml-5">
               {{ reproduct().login.count }}
             </p>
-            <p >
-              วันที่เข้าครั้งล่าสุด
+            <p class="ml-5">
+              เข้าระบบครั้งล่าสุด
             </p>
-            <p>
+            <p class="ml-5">
               {{ reproduct().login.lastDate }}
             </p>
-            <p>
+            <p class="ml-5">
               ผลครั้งล่าสุด
             </p>
-            <p>
+            <p class="ml-5">
               {{ reproduct().login.result }}
             </p>
             <!-- ================================ -->
-            <p class="row-span-2">
+            <p class="lg:row-span-2 col-span-2 lg:col-span-1 font-bold ">
                การเป็นสัด
             </p>
-            <p>
+            <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p>
+            <p class="ml-5">
               {{ reproduct().estrus.count }}
             </p>
-            <p >
-              วันที่เป็นสัดครั้งล่าสุด
+            <p class="ml-5">
+              เป็นสัดครั้งล่าสุด
             </p>
-            <p>
+            <p class="ml-5">
               {{ reproduct().estrus.lastDate }}
             </p>
             <!-- //================================ -->
-            <p class="row-span-2">
+            <p class="lg:row-span-2 col-span-2 lg:col-span-1 font-bold ">
                การผสม
             </p>
-            <p>
+            <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p>
+            <p class="ml-5">
               {{ reproduct().mating.count }}
             </p>
-            <p >
-              วันที่ผสมครั้งล่าสุด
+            <p class="ml-5">
+              ผสมครั้งล่าสุด
             </p>
-            <p>
+            <p class="ml-5">
               {{ reproduct().mating.lastDate }}
             </p>
             <!-- //================================ -->
-            <p class="row-span-2">
+            <p class="lg:row-span-2 col-span-2 lg:col-span-1 font-bold ">
                การตรวจท้อง
             </p>
-            <p>
+            <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p>
+            <p class="ml-5">
               {{ reproduct().check.count }}
             </p>
-            <p >
-              วันที่ตรวจท้องครั้งล่าสุด
+            <p class="ml-5">
+              ตรวจท้องครั้งล่าสุด
             </p>
-            <p>
+            <p class="ml-5">
               {{ reproduct().check.lastDate }}
             </p>
             <!-- //================================ -->
           </div>
   
         </CardBox>
-        <div class="grid gap-5 grid-cols-2 ">
+        <div class="grid gap-5 grid-cols-1 lg:grid-cols-2">
           <CardBox 
           icon="babyFace"
-          :loading="loading"
+          :loading="loading.birth"
           title="การคลอดลูก"
           header-icon=""
         >
@@ -243,7 +243,7 @@
               {{ birth().count }}
             </p>
             <p >
-              วันที่คลอดลูกล่าสุด
+              คลอดลูกล่าสุด
             </p>
             <p>
               {{ birth().lastDate }}
@@ -265,7 +265,7 @@
         </CardBox>
         <CardBox 
           icon="doctor"
-          :loading="loading"
+          :loading="loading.heal"
           title="การรักษา"
           header-icon=""
         >
@@ -277,7 +277,7 @@
               {{ heal().count }}
             </p>
             <p >
-              วันที่รักษาล่าสุด
+              รักษาล่าสุด
             </p>
             <p>
               {{ heal().lastDate }}
@@ -301,7 +301,7 @@
 
         <CardBox 
           icon="pillMultiple"
-          :loading="loading"
+          :loading="loading.protection"
           title="การป้องกัน/บำรุง"
           header-icon=""
         >
@@ -309,17 +309,17 @@
             v-for="protection in protections"
             :key="protection.vaccine"
           >
-              <p class="row-span-2">
+              <p class="row-span-2 font-bold">
                 {{  protection.vaccine }}
               </p>
               <p>
-                วันที่ให้ยาล่าสุด
+                ให้ยาล่าสุด
               </p>
               <p >
                 {{ formatDate(protection.dateCurrent)  }}
               </p>
               <p>
-                วันที่ให้ยาครั้งต่อไป
+                ให้ยาครั้งต่อไป
               </p>
               <p >
                 {{ formatDate(protection.dateNext)  }}
@@ -330,11 +330,14 @@
 
         <CardBox 
           icon="foodDrumstickOutline"
-          :loading="loading"
+          :loading="loading.food"
           :title="'การให้อาหาร' + ' (คอก '+cow.corral+')'"
           header-icon=""
         >
-          <div class="grid gap-5 grid-cols-1 "
+          <div v-if="foods.length <= 0" class="text-slate-600">
+            ไม่มีรายการให้อาหาร...
+          </div>
+          <div v-else class="grid gap-5 grid-cols-1 "
             v-for="(food,index) in foods"
             :key="food.recipe._id"
           >
@@ -352,8 +355,9 @@
         title="ประวัติการรีดนม" 
         :items="historyMilks" 
         :datas="milkDatas"
-        :loading="loading"
-
+        :loading="loading.milk"
+        class="bg-gray-100"
+        icon="waterCheck"
       />
 
       <Table
@@ -361,7 +365,7 @@
         title="ประวัติการสืบพันธ์ุ/ผสมพันธ์ุ" 
         :items="reproducts" 
         :datas="reproductDatas" 
-        :loading="loading"
+        :loading="loading.reproduct"
       />
 
       <Table
@@ -369,7 +373,7 @@
         title="ประวัติการคลอดลูก" 
         :items="births" 
         :datas="birthDatas" 
-        :loading="loading"
+        :loading="loading.birth"
       />
 
       <Table
@@ -377,7 +381,7 @@
         title="ประวัติการรักษา" 
         :items="heals" 
         :datas="healDatas" 
-        :loading="loading"
+        :loading="loading.heal"
       />
           
     </SectionMain>
@@ -427,7 +431,15 @@ export default {
       heals : [],
       protections : [],
       foods : [],
-      loading : false,
+      loading : {
+        cow : false,
+        milk : false,
+        reproduct : false,
+        birth : false,
+        heal : false,
+        protection : false,
+        food : false,
+      },
       alert : "",
       newCow : false,
       status : status('create'),
@@ -638,53 +650,62 @@ export default {
   },
   methods : {
     async getCowData(id){
-      this.loading = true;
-      try {
-          const resp = await CowService.get(id);
+      this.loading.cow = true;
+        const resp = await CowService.get(id);
 
         if (resp.data) {
           this.cow = resp.data.cow;
           this.cow.birthDate = new Date(this.cow.birthDate);
+          this.loading.cow = false;
 
-          // const milkResp = await MilkService.all();
-          // if (milkResp.data) {
-          //   for(let milk of milkResp.data.milks){
-          //     milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
-          //   }
-          //   this.milks = _.groupBy(milkResp.data.milks,'groupKey');
-          // }
+          this.loading.milk = true;
+          const milkResp = await MilkService.all();
+          if (milkResp.data) {
+            for(let milk of milkResp.data.milks){
+              milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
+            }
+            this.milks = _.groupBy(milkResp.data.milks,'groupKey');
+          }
+          this.loading.milk = false;
 
+          this.loading.reproduct = true;
           const reproductResp = await ReproductService.all({ cow: id });
           if (reproductResp.data) {
             this.reproducts = reproductResp.data.reproducts;
           }
+          this.loading.reproduct = false;
 
+
+          this.loading.birth = true;
           const birthResp = await BirthService.all({ cow: id});
           if (birthResp) {
             this.births = birthResp.data.births; 
           }
+          this.loading.birth = false;
 
+
+          this.loading.heal = true;
           const healResp = await HealService.all({ cow: id }); 
           if (healResp) { 
             this.heals = healResp.data.heals; 
           }
+          this.loading.heal = false;
 
+          this.loading.protection = true;
           const protectionResp = await ProtectionService.all(); 
           if (protectionResp) { 
             this.protections = protectionResp.data.protections; 
           }
+          this.loading.protection = false;
 
+          this.loading.food = true;
           const foodResp = await FoodService.all({ corral: this.cow.corral }); 
           if (foodResp) {  
             this.foods = foodResp.data.foods; 
           }
+          this.loading.food = false;
 
         } 
-        this.loading = false; 
-      } catch (error) {
-        this.loading = false; 
-        console.error(error) 
-      }
     },  
     async update(){
         this.loading = true

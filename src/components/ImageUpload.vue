@@ -9,7 +9,7 @@
             hidden
             />
             <UserAvatar
-                class="lg:w-38 lg:h-38 w-32 h-32"
+                class="lg:w-38 lg:h-38 w-28 h-28 shadow"
                 :avatar="value"
                 @click="chooseImg"
             />
