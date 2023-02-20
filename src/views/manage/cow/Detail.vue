@@ -658,16 +658,6 @@ export default {
           this.cow.birthDate = new Date(this.cow.birthDate);
           this.loading.cow = false;
 
-          this.loading.milk = true;
-          const milkResp = await MilkService.all();
-          if (milkResp.data) {
-            for(let milk of milkResp.data.milks){
-              milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
-            }
-            this.milks = _.groupBy(milkResp.data.milks,'groupKey');
-          }
-          this.loading.milk = false;
-
           this.loading.reproduct = true;
           const reproductResp = await ReproductService.all({ cow: id });
           if (reproductResp.data) {
@@ -704,6 +694,16 @@ export default {
             this.foods = foodResp.data.foods; 
           }
           this.loading.food = false;
+
+          this.loading.milk = true;
+          const milkResp = await MilkService.all();
+          if (milkResp.data) {
+            for(let milk of milkResp.data.milks){
+              milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
+            }
+            this.milks = _.groupBy(milkResp.data.milks,'groupKey');
+          }
+          this.loading.milk = false;
 
         } 
     },  
