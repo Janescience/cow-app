@@ -400,11 +400,11 @@ import Table from "@/components/Table.vue";
 
 import CowService from '@/services/cow'
 import MilkService from '@/services/milking'
-// import ReproductService from '@/services/reproduction'
-// import BirthService from '@/services/birth'
-// import HealService from '@/services/heal'
-// import ProtectionService from '@/services/protection'
-// import FoodService from '@/services/food'
+import ReproductService from '@/services/reproduction'
+import BirthService from '@/services/birth'
+import HealService from '@/services/heal'
+import ProtectionService from '@/services/protection'
+import FoodService from '@/services/food'
 
 import getAge from "@/utils/age-calculate";
 import moment from "moment";
