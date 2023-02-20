@@ -639,7 +639,7 @@ export default {
   methods : {
     async getCowData(id){
       this.loading = true;
-      // try {
+      try {
           const resp = await CowService.get(id);
 
         if (resp.data) {
@@ -659,32 +659,32 @@ export default {
             this.reproducts = reproductResp.data.reproducts;
           }
 
-          // const birthResp = await BirthService.all({ cow: id});
-          // if (birthResp) {
-          //   this.births = birthResp.data.births; 
-          // }
+          const birthResp = await BirthService.all({ cow: id});
+          if (birthResp) {
+            this.births = birthResp.data.births; 
+          }
 
-          // const healResp = await HealService.all({ cow: id }); 
-          // if (healResp) { 
-          //   this.heals = healResp.data.heals; 
-          // }
+          const healResp = await HealService.all({ cow: id }); 
+          if (healResp) { 
+            this.heals = healResp.data.heals; 
+          }
 
-          // const protectionResp = await ProtectionService.all(); 
-          // if (protectionResp) { 
-          //   this.protections = protectionResp.data.protections; 
-          // }
+          const protectionResp = await ProtectionService.all(); 
+          if (protectionResp) { 
+            this.protections = protectionResp.data.protections; 
+          }
 
-          // const foodResp = await FoodService.all({ corral: this.cow.corral }); 
-          // if (foodResp) {  
-          //   this.foods = foodResp.data.foods; 
-          // }
+          const foodResp = await FoodService.all({ corral: this.cow.corral }); 
+          if (foodResp) {  
+            this.foods = foodResp.data.foods; 
+          }
 
         } 
         this.loading = false; 
-      // } catch (error) {
-      //   this.loading = false; 
-      //   console.error(error) 
-      // }
+      } catch (error) {
+        this.loading = false; 
+        console.error(error) 
+      }
     },  
     async update(){
         this.loading = true
