@@ -14,6 +14,7 @@
             :title="title + ' ' + countChecked()"
             class="shadow-lg mb-5"
             has-table
+            :icon="icon"
             header-icon=""
         >
             <div
@@ -165,6 +166,10 @@ export default {
         checkedData : {
             type : Object,
             default : null
+        },
+        icon : {
+            type : String ,
+            default : ""
         },
         loading : Boolean
     },
