@@ -242,7 +242,7 @@ export default {
         let milks = this.milks[key];
         let sum = 0 ;
         milks.map((m) => {
-          m.milkDetails.map((d) => {
+          m.details.map((d) => {
             sum += d.qty
           })
         })

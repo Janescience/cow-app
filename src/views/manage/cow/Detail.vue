@@ -696,7 +696,7 @@ export default {
           this.loading.food = false;
 
           this.loading.milk = true;
-          const milkResp = await MilkService.all();
+          const milkResp = await MilkService.get({cow : id});
           if (milkResp.data) {
             for(let milk of milkResp.data.milks){
               milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
@@ -744,9 +744,9 @@ export default {
 
         milks.map((m) => {
           historyMilk.date = m.date;
-          count += m.milkDetails.length;
+          count += m.details.length;
 
-          m.milkDetails.map((d) => {
+          m.details.map((d) => {
             if(m.time === 'M'){
               totalM += d.qty
               mQty += d.qty 

@@ -164,14 +164,14 @@ export default {
           event.sumQty = 0;
             event.sumAmt = 0;
 
-          milk.milkDetails.forEach(milkDetail => {
+          milk.details.forEach(milkDetail => {
             milkDetail.cow = milkDetail.relate.cow
             event.sumQty += milkDetail.qty;
             event.sumAmt += milkDetail.amount;
           })
 
-          event.count = milk.milkDetails.length;
-          event.milks = milk.milkDetails
+          event.count = milk.details.length;
+          event.milks = milk.details
           event.date = moment(milk.date,'YYYY-MM-DD').format('DDMMYYYY');
           event.time = milk.time
           event.id = milk._id
