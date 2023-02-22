@@ -300,30 +300,42 @@
         </div>
 
         <CardBox 
+          class=" "
           icon="pillMultiple"
           :loading="loading.protection"
           title="การป้องกัน/บำรุง"
           header-icon=""
         >
-          <div class="grid gap-5 grid-cols-3 "
-            v-for="protection in protections"
-            :key="protection.vaccine"
-          >
-              <p class="row-span-2 font-bold">
-                {{  protection.vaccine }}
-              </p>
-              <p>
-                ให้ยาล่าสุด
-              </p>
-              <p >
-                {{ formatDate(protection.dateCurrent)  }}
-              </p>
-              <p>
-                ให้ยาครั้งต่อไป
-              </p>
-              <p >
-                {{ formatDate(protection.dateNext)  }}
-              </p>
+          <div class="grid gap-5 grid-cols-3 font-bold p-3">
+            <div >
+              วัคซีน
+            </div>
+            <div >
+              ให้ยาล่าสุด
+            </div>
+            <div>
+              ให้ยาครั้งต่อไป
+            </div>
+          </div>
+          <div class="overflow-x-hidden overflow-y-auto h-20">
+            <div
+              class="grid gap-5 grid-cols-3 p-3"
+              v-for="protection in protections"
+              :key="protection.vaccine"
+            > 
+                <p class="font-bold">
+                  {{  protection.vaccine }}
+                </p>
+                
+                <p >
+                  {{ formatDate(protection.dateCurrent)  }}
+                </p>
+                
+                <p >
+                  {{ formatDate(protection.dateNext)  }}
+                </p>
+            </div>
+              
           </div>
   
         </CardBox>
@@ -331,7 +343,7 @@
         <CardBox 
           icon="foodDrumstickOutline"
           :loading="loading.food"
-          :title="'การให้อาหาร' + ' (คอก '+cow.corral+')'"
+          :title="'การให้อาหาร' + ' - คอก '+cow.corral "
           header-icon=""
         >
           <div v-if="foods.length <= 0" class="text-slate-600">
@@ -698,15 +710,14 @@ export default {
 
           this.loading.milk = true;
           const milkResp = await MilkService.get();
-          if (milkResp.data) {
+          const milkDetailResp = await MilkService.getDetail({cow : id});
+
+          if (milkResp.data && milkDetailResp.data) {
             for(let milk of milkResp.data.milks){
               milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
+              milk.details = milkDetailResp.data.milkDetails.filter(d => d.milk == milk._id);
             }
             this.milks = _.groupBy(milkResp.data.milks,'groupKey');
-          }
-          const milkDetailResp = await MilkService.getDetail({cow : id});
-          if (milkDetailResp.data) {
-            this.milkDetails = milkDetailResp.data.milkDetails
           }
           this.loading.milk = false;
         } 
@@ -747,8 +758,7 @@ export default {
         let amount = 0;
 
         milks.map((m) => {
-          historyMilk.date = m.date;
-          count += m.details.length;
+          
 
           m.details.map((d) => {
             if(m.time === 'M'){
@@ -761,17 +771,23 @@ export default {
             amount += d.amount
           })
 
-          historyMilk.mQty = mQty;
-          historyMilk.aQty = aQty;
-          historyMilk.amount = amount;
-        })
-        this.historyMilks.push(historyMilk)
+          if(m.details.length > 0){
+            count += m.details.length;
 
+            historyMilk.date = m.date;
+            historyMilk.mQty = mQty;
+            historyMilk.aQty = aQty;
+            historyMilk.amount = amount;
+          }
+        })
+        if(Object.keys(historyMilk).length !== 0){
+          this.historyMilks.push(historyMilk)
+        }
       })
 
       let avg = (totalM+totalA)/count;
       return { 
-        avg : (count > 0 ? avg.toFixed(2) : 0) , 
+        avg : (count > 0 ? avg : 0).toFixed(2) , 
         all : (totalM+totalA).toFixed(2)
       };
     },
