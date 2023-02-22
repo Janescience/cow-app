@@ -695,19 +695,15 @@ export default {
           }
           this.loading.food = false;
 
-          setTimeout(async () =>   {
-            this.loading.milk = true;
-            const milkResp = await MilkService.get({cow : id});
-            if (milkResp.data) {
-              for(let milk of milkResp.data.milks){
-                milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
-              }
-              this.milks = _.groupBy(milkResp.data.milks,'groupKey');
+          this.loading.milk = true;
+          const milkResp = await MilkService.get({cow : id});
+          if (milkResp.data) {
+            for(let milk of milkResp.data.milks){
+              milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
             }
-            this.loading.milk = false;
-          },10000)
-          
-
+            this.milks = _.groupBy(milkResp.data.milks,'groupKey');
+          }
+          this.loading.milk = false;
         } 
     },  
     async update(){
