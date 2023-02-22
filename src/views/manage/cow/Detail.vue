@@ -425,6 +425,7 @@ export default {
     return {
       cow : {},
       milks : [],
+      milkDetails : [],
       historyMilks : [],
       reproducts : [],
       births : [],
@@ -696,12 +697,16 @@ export default {
           this.loading.food = false;
 
           this.loading.milk = true;
-          const milkResp = await MilkService.get({cow : id});
+          const milkResp = await MilkService.get();
           if (milkResp.data) {
             for(let milk of milkResp.data.milks){
               milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
             }
             this.milks = _.groupBy(milkResp.data.milks,'groupKey');
+          }
+          const milkDetailResp = await MilkService.getDetail({cow : id});
+          if (milkDetailResp.data) {
+            this.milkDetails = milkDetailResp.data.milkDetails
           }
           this.loading.milk = false;
         } 
