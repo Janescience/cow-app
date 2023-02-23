@@ -162,7 +162,7 @@ const logout = () => {
         </NavBarMenu> -->
         <NavBarMenu has-divider>
           <NavBarItemLabel :label="farmName">
-            <UserAvatarCurrentUser :username="farmCode" class="w-6 h-6 mr-3 inline-flex" />
+            <UserAvatarCurrentUser :username="farmCode" avatar="/image/profile.png" class="w-6 h-6 mr-3 inline-flex" />
           </NavBarItemLabel>
 
           <template #dropdown>
