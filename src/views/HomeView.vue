@@ -228,6 +228,7 @@ export default {
       if(resp){
         for(let milk of resp.data.milks){
           milk.date = moment(milk.date,'DD-MM-YYYY').format('MMM')
+          milk.details = resp.data.milkDetails.filter(d => d.milk === milk._id)
         }
         this.milks = _.groupBy(resp.data.milks,'date')
         this.cow = resp.data.cow
