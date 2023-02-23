@@ -147,7 +147,7 @@
               header-icon=""
             >
               <h1 class="text-4xl">น้ำนมดิบทั้งหมด</h1>
-              <h1 class="text-5xl mt-4 text-green-600">108.56</h1>
+              <h1 class="text-5xl mt-4 text-green-600">{{ milk.sum }}</h1>
               <h1 class="text-4xl mt-4">กิโลกรัม</h1>
             </CardBox>
           </div>
@@ -191,6 +191,7 @@ export default {
       chartData : null,
       chartColors : {primary: '#00D1B2',danger: '#FF3860'},
       milks : [],
+      milk : {},
       cow : {},
       loading : false
     }
@@ -226,8 +227,11 @@ export default {
       this.loading = true;
       const resp = await DashboardService.get(this.user.farm._id)
       if(resp){
+        this.milk.sum = 0;
         for(let milk of resp.data.milks){
           milk.date = moment(milk.date,'DD-MM-YYYY').format('MMM')
+          let sum  = milk.milkDetails.reduce((prev,cur) => prev + cur.qty,0)
+          this.milk.sum += sum
         }
         this.milks = _.groupBy(resp.data.milks,'date')
         this.cow = resp.data.cow
