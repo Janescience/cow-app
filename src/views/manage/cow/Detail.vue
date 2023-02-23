@@ -317,11 +317,11 @@
               ให้ยาครั้งต่อไป
             </div>
           </div>
-          <div class="overflow-x-hidden overflow-y-auto h-20">
+          <div class="overflow-x-hidden overflow-y-auto h-20" v-if="protections.length > 0">
             <div
               class="grid gap-5 grid-cols-3 p-3"
               v-for="protection in protections"
-              :key="protection.vaccine"
+              :key="protection._id"
             > 
                 <p class="font-bold">
                   {{  protection.vaccine }}
@@ -351,7 +351,7 @@
           </div>
           <div v-else class="grid gap-5 grid-cols-1 "
             v-for="(food,index) in foods"
-            :key="food.recipe._id"
+            :key="food._id"
           >
               <p >
                 {{ (index+1) +'. สูตร'+ food.recipe.name + ' จำนวน ' + food.qty + ' กก./วัน คิดเป็นเงินต้นทุน '+ food.amount + ' บาท/วัน และ ' + food.amountAvg + ' บาท/ตัว โดยมีวัวทั้งหมด ' +food.numCow+ ' ตัว'}}
@@ -368,7 +368,6 @@
         :items="historyMilks" 
         :datas="milkDatas"
         :loading="loading.milk"
-        class="bg-gray-100"
         icon="waterCheck"
       />
 
@@ -714,10 +713,10 @@ export default {
 
           if (milkResp.data && milkDetailResp.data) {
             for(let milk of milkResp.data.milks){
-              milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
-              milk.details = milkDetailResp.data.milkDetails.filter(d => d.milk == milk._id);
+              // milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
+              // milk.details = milkDetailResp.data.milkDetails.filter(d => d.milk == milk._id);
             }
-            this.milks = _.groupBy(milkResp.data.milks,'groupKey');
+            // this.milks = _.groupBy(milkResp.data.milks,'date');
           }
           this.loading.milk = false;
         } 

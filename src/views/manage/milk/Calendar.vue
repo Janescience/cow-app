@@ -358,6 +358,7 @@
         threeTodaysEventArr.push(event);
       }
     });
+    console.log(threeTodaysEventArr)
     return threeTodaysEventArr;
   };
   /**
