@@ -50,7 +50,7 @@ const menuClick = () => {
       </NavBarItem>
       <div class="flex-1 px-3">
         <BaseLevel type="justify-start">
-          <UserAvatar avatar="/image/cow-logo.jpg" class="w-8 mr-2" />
+          <UserAvatar avatar="/image/cow-logo.jpg" class="w-8 mr-2" username="logo"/>
           <span>Dairy Farm</span>
         </BaseLevel>
         

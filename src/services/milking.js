@@ -33,13 +33,6 @@ class MilkingService{
                 return response;
             });
     }
-    async getDetail(search){
-        const query = await getSearchQuery(search);
-        return http.get(`/milking/detail`+query)
-            .then(response => {
-                return response;
-            });
-    }
     create(payload){
         if (payload.date) {
             payload.date = moment(new Date(payload.date)).format('YYYY-MM-DD') 

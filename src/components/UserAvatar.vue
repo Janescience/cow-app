@@ -17,7 +17,7 @@ const props = defineProps({
 })
 
 const avatar = computed(
-  () => props.username ? `https://avatars.dicebear.com/api/${props.api}/${props.username}.svg` : (props.avatar === '' ? '/image/img-mockup.png' : props.avatar)
+  () => props.avatar === '' ? '/image/img-mockup.png' : props.avatar
 )
 
 const username = computed(

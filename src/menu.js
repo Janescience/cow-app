@@ -53,34 +53,34 @@ export default [
   ],
   'รายงาน',
   [
-    {
-      label: 'ผลผลิต',
-      icon: 'chartBoxOutline',
-      menu: [
-        {
-          to: '/report/notification',
-          icon: 'chartLine',
-          label: 'ผลผลิตน้ำนมดิบของโค'
-        }
-      ]
-    },
-    {
-      label: 'รายรับ-รายจ่าย',
-      icon: 'cashRegister',
-      menu: [
-        {
-          to: '/report/parameter',
-          icon: 'chartLine',
-          label: 'รายได้จากผลผลิตน้ำนมดิบ'
-        },
+    // {
+    //   label: 'ผลผลิต',
+    //   icon: 'chartBoxOutline',
+    //   menu: [
+    //     {
+    //       to: '/report/notification',
+    //       icon: 'chartLine',
+    //       label: 'ผลผลิตน้ำนมดิบของโค'
+    //     }
+    //   ]
+    // },
+    // {
+    //   label: 'รายรับ-รายจ่าย',
+    //   icon: 'cashRegister',
+    //   menu: [
+    //     {
+    //       to: '/report/parameter',
+    //       icon: 'chartLine',
+    //       label: 'รายได้จากผลผลิตน้ำนมดิบ'
+    //     },
 
-        {
-          to: '/report/parameter',
-          icon: 'chartLine',
-          label: 'รายจ่ายไม่ก่อเกิดรายได้'
-        },
-      ]
-    },
+    //     {
+    //       to: '/report/parameter',
+    //       icon: 'chartLine',
+    //       label: 'รายจ่ายไม่ก่อเกิดรายได้'
+    //     },
+    //   ]
+    // },
     {
       label: 'ประวัติต่างๆ',
       icon: 'textBoxSearchOutline',
@@ -90,34 +90,34 @@ export default [
           icon: 'chartLine',
           label: 'ประวัติและคุณลักษณะของวัว'
         },
-        {
-          to: '/report/parameter',
-          icon: 'chartLine',
-          label: 'ประวัติการรักษา ป้องกัน และฟื้นฟู'
-        },
-        {
-          to: '/report/parameter',
-          icon: 'chartLine',
-          label: 'ประวัติการสืบพันธุ์ และการคลอดลูก'
-        },
+        // {
+        //   to: '/report/parameter',
+        //   icon: 'chartLine',
+        //   label: 'ประวัติการรักษา ป้องกัน และฟื้นฟู'
+        // },
+        // {
+        //   to: '/report/parameter',
+        //   icon: 'chartLine',
+        //   label: 'ประวัติการสืบพันธุ์ และการคลอดลูก'
+        // },
       ]
     },
-    {
-      label: 'วิเคราะห์',
-      icon: 'calculator',
-      menu: [
-        {
-          to: '/report/parameter',
-          icon: 'chartLine',
-          label: 'ผลประกอบกิจการ'
-        },
-        {
-          to: '/report/parameter',
-          icon: 'chartLine',
-          label: 'ความคุ้มค่าของวัว'
-        },
-      ]
-    },
+    // {
+    //   label: 'วิเคราะห์',
+    //   icon: 'calculator',
+    //   menu: [
+    //     {
+    //       to: '/report/parameter',
+    //       icon: 'chartLine',
+    //       label: 'ผลประกอบกิจการ'
+    //     },
+    //     {
+    //       to: '/report/parameter',
+    //       icon: 'chartLine',
+    //       label: 'ความคุ้มค่าของวัว'
+    //     },
+    //   ]
+    // },
     
   ],
   'ตั้งค่า',

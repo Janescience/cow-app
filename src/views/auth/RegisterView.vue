@@ -74,7 +74,7 @@ const login = () => {
       >
       
         <BaseLevel type="justify-center">
-          <UserAvatar avatar="/image/cow-logo.jpg" class="w-28" />
+          <UserAvatar avatar="/image/cow-logo.jpg" class="w-28" username="logo"/>
         </BaseLevel>
 
         <SectionTitle>

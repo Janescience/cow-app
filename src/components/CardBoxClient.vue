@@ -130,6 +130,7 @@ const statusStyle = computed(() => {
       </BaseLevel>
       <BaseLevel type="justify-center">
         <UserAvatar
+          username="profile-card"
           class="lg:w-32 lg:h-32 w-24 h-24"
           :avatar="img"
         />

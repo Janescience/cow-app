@@ -156,26 +156,23 @@ export default {
   methods : {
     async getMilks(){
       this.loading = true
-      const resp = await MilkingService.get(this.search);
+      const resp = await MilkingService.all(this.search);
       this.events = []
       if(resp.data){
         for(let milk of resp.data.milks){
-          const detailResp = await MilkingService.getDetail({milk:milk._id});
-          const details = detailResp.data.milkDetails
           let event = {};
 
           event.sumQty = 0;
           event.sumAmt = 0;
 
-          details.forEach(async milkDetail => {
-            const respCow = await CowService.get(milkDetail.cow);
-            milkDetail.cow = respCow.data.cow;
+          milk.milkDetails.map((milkDetail) => {
+            milkDetail.cow = milkDetail.relate.cow;
             event.sumQty += milkDetail.qty;
             event.sumAmt += milkDetail.amount;
           })
 
-          event.count = details.length;
-          event.milks = details
+          event.count = milk.milkDetails.length;
+          event.milks = milk.milkDetails
           event.date = moment(milk.date,'YYYY-MM-DD').format('DDMMYYYY');
           event.time = milk.time
           event.id = milk._id

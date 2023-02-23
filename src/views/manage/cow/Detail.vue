@@ -129,7 +129,7 @@
                น้ำนมดิบ เฉลี่ย/วัน 
             </p>
             <p>
-              {{ milk().avg }}
+              {{ milk.avg }}
             </p>
             <p>
               กิโลกรัม
@@ -138,7 +138,7 @@
                น้ำนมดิบ ทั้งหมด
             </p>
             <p>
-              {{ milk().all }}
+              {{ milk.all }}
             </p>
             <p>
               กิโลกรัม
@@ -654,6 +654,52 @@ export default {
     },
     user() {
       return this.$store.state.auth.user;
+    },
+    milk(){
+      let count = 0;
+      let totalM = 0;
+      let totalA = 0;
+      this.historyMilks = []
+      Object.keys(this.milks).forEach(key => {
+        let milks = this.milks[key];
+        let historyMilk = {}
+        let mQty = 0;
+        let aQty = 0;
+        let amount = 0;
+
+        milks.map((m) => {
+          
+
+          m.milkDetails.map((d) => {
+            if(m.time === 'M'){
+              totalM += d.qty
+              mQty += d.qty 
+            }else{
+              totalA += d.qty
+              aQty += d.qty
+            }
+            amount += d.amount
+          })
+
+          if(m.milkDetails.length > 0){
+            count += m.milkDetails.length;
+
+            historyMilk.date = m.date;
+            historyMilk.mQty = mQty;
+            historyMilk.aQty = aQty;
+            historyMilk.amount = amount;
+          }
+        })
+        if(Object.keys(historyMilk).length !== 0){
+          this.historyMilks.push(historyMilk)
+        }
+      })
+
+      let avg = (totalM+totalA)/count;
+      return { 
+        avg : (count > 0 ? avg : 0).toFixed(2) , 
+        all : (totalM+totalA).toFixed(2)
+      };
     }
   },
   created() {
@@ -708,15 +754,13 @@ export default {
           this.loading.food = false;
 
           this.loading.milk = true;
-          const milkResp = await MilkService.get();
-          const milkDetailResp = await MilkService.getDetail({cow : id});
+          const milkResp = await MilkService.get({cow : id});
 
-          if (milkResp.data && milkDetailResp.data) {
+          if (milkResp.data) {
             for(let milk of milkResp.data.milks){
-              // milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
-              // milk.details = milkDetailResp.data.milkDetails.filter(d => d.milk == milk._id);
+              milk.groupKey = moment(milk.date,'YYYY-MM-DD').format('YYYYMMDD')
             }
-            // this.milks = _.groupBy(milkResp.data.milks,'date');
+            this.milks = _.groupBy(milkResp.data.milks,'groupKey');
           }
           this.loading.milk = false;
         } 
@@ -744,52 +788,52 @@ export default {
             })
         }
     },
-    milk(){
-      let count = 0;
-      let totalM = 0;
-      let totalA = 0;
-      this.historyMilks = []
-      Object.keys(this.milks).forEach(key => {
-        let milks = this.milks[key];
-        let historyMilk = {}
-        let mQty = 0;
-        let aQty = 0;
-        let amount = 0;
+    // milk(){
+    //   let count = 0;
+    //   let totalM = 0;
+    //   let totalA = 0;
+    //   this.historyMilks = []
+    //   Object.keys(this.milks).forEach(key => {
+    //     let milks = this.milks[key];
+    //     let historyMilk = {}
+    //     let mQty = 0;
+    //     let aQty = 0;
+    //     let amount = 0;
 
-        milks.map((m) => {
+    //     milks.map((m) => {
           
 
-          m.details.map((d) => {
-            if(m.time === 'M'){
-              totalM += d.qty
-              mQty += d.qty 
-            }else{
-              totalA += d.qty
-              aQty += d.qty
-            }
-            amount += d.amount
-          })
+    //       m.details.map((d) => {
+    //         if(m.time === 'M'){
+    //           totalM += d.qty
+    //           mQty += d.qty 
+    //         }else{
+    //           totalA += d.qty
+    //           aQty += d.qty
+    //         }
+    //         amount += d.amount
+    //       })
 
-          if(m.details.length > 0){
-            count += m.details.length;
+    //       if(m.details.length > 0){
+    //         count += m.details.length;
 
-            historyMilk.date = m.date;
-            historyMilk.mQty = mQty;
-            historyMilk.aQty = aQty;
-            historyMilk.amount = amount;
-          }
-        })
-        if(Object.keys(historyMilk).length !== 0){
-          this.historyMilks.push(historyMilk)
-        }
-      })
+    //         historyMilk.date = m.date;
+    //         historyMilk.mQty = mQty;
+    //         historyMilk.aQty = aQty;
+    //         historyMilk.amount = amount;
+    //       }
+    //     })
+    //     if(Object.keys(historyMilk).length !== 0){
+    //       this.historyMilks.push(historyMilk)
+    //     }
+    //   })
 
-      let avg = (totalM+totalA)/count;
-      return { 
-        avg : (count > 0 ? avg : 0).toFixed(2) , 
-        all : (totalM+totalA).toFixed(2)
-      };
-    },
+    //   let avg = (totalM+totalA)/count;
+    //   return { 
+    //     avg : (count > 0 ? avg : 0).toFixed(2) , 
+    //     all : (totalM+totalA).toFixed(2)
+    //   };
+    // },
     reproduct(){
       let now = moment();
 

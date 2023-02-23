@@ -28,6 +28,7 @@
              <FormCheckRadioPicker
               v-model="milk.time"
               type="radio"
+              name="milk-time"
               :options="{ M: 'เช้า', A: 'บ่าย' }"
               :disabled="mode == 'edit'"
             />

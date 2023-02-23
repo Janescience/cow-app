@@ -52,6 +52,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'พารามิเตอร์',
+      loginRequired : true
+    },
+    path: '/setting/parameter',
+    name: 'parameter',
+    component: () => import('@/views/setting/parameter/Main.vue')
+  },
+  {
+    meta: {
       title: 'โค',
       loginRequired : true
     },

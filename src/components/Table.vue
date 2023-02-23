@@ -74,6 +74,7 @@
                     <UserAvatar
                         v-if="row.type === 'image'"
                         :avatar="getValue(obj,row)"
+                        username="profile"
                         class="w-36 mx-auto lg:h-20 lg:w-20"
                     />
                     <span v-else >{{ getValue(obj,row) }}</span>
@@ -142,7 +143,6 @@ export default {
             perPage :10,
             currentPage : 0,
             checkedRows : [],
-            loading : false,
         }
     },
     props : {
