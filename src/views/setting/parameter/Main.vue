@@ -1,159 +1,190 @@
 <template>
-    <LayoutAuthenticated>
-      <SectionMain>
-  
-        <SectionTitleBarSub 
-          icon="bellCogOutline" 
-          title="ประวัติการแจ้งเตือน"
-          has-btn-add
-          btn-text="ทดสอบแจ้งเตือน"
-          @openModal="notify('ทดสอบการแจ้งเตือน')"
-        />
-  
-        <Criteria
-          grid="grid-cols-2 lg:grid-cols-4"
-          @search="getDatas" 
-          @reset="reset" 
-          :forms="forms" 
-          :search="search"
-        />
-  
-        <Table
-          title="รายการแจ้งเตือน" 
-          :items="items" 
-          :datas="datas" 
-          :loading="loading"
-        />
-  
-      </SectionMain>
-    </LayoutAuthenticated>
-  </template>
-  
-  <script>
-  import SectionMain from '@/components/SectionMain.vue';
-  import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-  import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
-  
-  import Table from "@/components/Table.vue";
-  import Criteria from "@/components/Criteria.vue";
+  <LayoutAuthenticated>
+    <SectionMain>
 
-  import NotificationService from '@/services/notification'
-  import LineService from '@/services/line'
+      <SectionTitleBarSub 
+        icon="applicationVariableOutline" 
+        title="พารามิเตอร์"
+        has-btn-add
+        @openModal="mode='create';openModal = true;modalData = null"
+        btnText="เพิ่มพารามิเตอร์"
+      />
 
-  import { Toast } from "@/utils/alert";
-  import { status,type } from '@/constants/notification'
+      <Modal
+        v-model="openModal"
+        :data="getDataCopy"
+        :mode="mode"
+        @confirm="getDatas"         
+      />
 
-  import moment from 'moment';
+      <Criteria
+        grid="grid-cols-2 lg:grid-cols-5"
+        @search="getDatas" 
+        @reset="reset" 
+        :forms="forms" 
+        :search="search"
+      />
 
-  export default {
-    data (){
-      return {
-        items : [],
-        forms : [
-          {
-            label : 'วันที่',
-            value : 'createdAt',
-            icon : 'calendar',
-            type : 'date',
-          },
-          {
-            label : 'ประเภท',
-            value : 'type',
-            options : type('ddl'),
-          },
-          {
-            label : 'สถานะ',
-            value : 'status',
-            options : status('ddl'),
-          },  
-        ],
-        search : {
-            createdAt : null,
-            type : '',
-            status : ''
+      <Table
+        title="รายการพารามิเตอร์" 
+        has-checkbox
+        :checked-data="checked" 
+        :items="items" 
+        :datas="datas" 
+        :buttons="buttons" 
+        @edit="edit" 
+        @delete="remove" 
+        @deleteSelected="removeSelected"
+        :loading="loading"
+      />
+
+    </SectionMain>
+  </LayoutAuthenticated>
+</template>
+
+<script>
+import SectionMain from '@/components/SectionMain.vue';
+import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
+import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
+
+import Table from "@/components/Table.vue";
+import Criteria from "@/components/Criteria.vue";
+
+import Modal from './Modal.vue'
+import Service from '@/services/param'
+
+import { Toast } from "@/utils/alert";
+
+export default {
+  data (){
+    return {
+      openModal : false,
+      modalData : null,
+      items : [],
+      forms : [
+      {
+          label : "กลุ่ม",
+          value : 'group',
         },
-        loading : false,
-        datas : [
-          {
-            label : "วันที่",
-            class : 'text-center',
-            func : (obj) => {
-                return moment(obj.createdAt).format('DD/MM/YYYY HH:mm:ss')
-            },
-          },
-          {
-            label : "ประเภท",
-            class : 'text-center',
-            func : (obj) => {
-                return type()[obj.type]
-            },
-          },
-          {
-            label : "ข้อความ",
-            class : 'text-center',
-            value : 'message'
-          },
-          {
-            label : "สถานะ",
-            class : 'text-center',
-            func : (obj) => {
-                return status()[obj.status]
-            },
-          },
-        ],
-      }
-    },
-    components : {
-      SectionMain,
-      LayoutAuthenticated,
-      SectionTitleBarSub,
-      Table,
-      Criteria
-    },
-    computed : {
-      user() {
-        return this.$store.state.auth.user;
+        {
+          label : "รหัส",
+          value : 'code',
+        },
+        {
+          label : "ชื่อ",
+          value : 'name',
+        },
+        {
+          label : "ข้อมูล(ตัวเลข)",
+          value : 'valueNumber',
+          type : 'number'
+        },
+        {
+          label : "ข้อมูล(ตัวหนังสือ)",
+          value : 'valueString',
+        }
+      ],
+      search : {
+        name : '',
+        code : '',
+        group : '',
+        valueNumber : null,
+        valueString : '',
       },
-    },
-    created() {
-      this.getDatas();
-    },
-    methods : {
-        async getDatas(){
-            this.loading = true
-            const resp = await NotificationService.get(this.search);
-            this.items = []
-            if(resp.data){
-                this.items = resp.data.notifications
-            }
-            this.loading = false
+      loading : false,
+      mode : "create",
+      dataEdit : null,
+      checked : {
+        code : {
+          value : 'code',
         },
-        async notify(message){
-            this.loading = true
-            try {
-                const resp = await LineService.notify({message : message, lineToken : this.user.farm.lineToken });
-                if(resp.data){
-                    this.loading = false
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'แจ้งเตือนสำเร็จ'
-                    })
-                    this.getDatas()
-                }
-            } catch (error) {
-                this.loading = false
-                Toast.fire({
-                    icon: 'error',
-                    title: 'แจ้งเตือนไม่สำเร็จ'
-                })
-            }
+        label : {
+          value : 'name'
+        }
+      },
+      datas : [
+      
+        {
+          label : "กลุ่ม",
+          value : 'group',
         },
-        reset(){
-            this.search.recipe = null
-            this.search.corral = ''
-            this.getDatas()
+        {
+          label : "รหัส",
+          value : 'code',
         },
+        {
+          label : "ชื่อ",
+          value : 'name',
+        },
+        {
+          label : "ข้อมูล(ตัวเลข)",
+          value : 'valueNumber',
+        },
+        {
+          label : "ข้อมูล(ตัวหนังสือ)",
+          value : 'valueString',
+        }
+      ],
+      buttons : [
+        {
+          label : 'ลบ',
+          type : 'delete',
+          color : 'danger',
+        },
+        {
+          label : 'แก้ไข',
+          type : 'edit',
+          color : 'warning',
+        },
+      ]
     }
+  },
+  components : {
+    SectionMain,
+    LayoutAuthenticated,
+    SectionTitleBarSub,
+    Table,
+    Modal,
+    Criteria
+  },
+  computed: {
+    getDataCopy() {
+      return {...this.modalData};
+    }
+  },
+  created() {
+    this.getDatas();
+  },
+  methods : {
+    async getDatas(search){
+      this.loading = true
+      const resp = await Service.all(search);
+      this.items = []
+      if(resp.data){
+        this.items = resp.data.params
+      }
+      this.loading = false
+    },
+    async remove(id){
+      this.loading = true
+      const resp = await Service.delete(id);
+      if(resp.data){
+        this.getDatas()
+      }
+      this.loading = false
+      Toast.fire({
+        icon: 'success',
+        title: 'ลบข้อมูลสำเร็จ'
+      })
+    },
+    edit(obj){
+      this.modalData = obj;
+      this.mode = 'edit';
+      this.openModal = true;
+    },
+    reset(){
+      this.search.name = ""
+    },
   }
-  </script>
-  
+}
+</script>
