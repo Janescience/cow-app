@@ -135,6 +135,11 @@ export default [
           to: '/setting/notification/calendar',
           icon: 'calendar',
           label: 'ปฏิทินกำหนดการ'
+        },
+        {
+          to: '/setting/notification/parameter',
+          icon: 'applicationVariableOutline',
+          label: 'พารามิเตอร์'
         }
       ]
     },

@@ -55,6 +55,15 @@ const routes = [
       title: 'พารามิเตอร์',
       loginRequired : true
     },
+    path: '/setting/notification/parameter',
+    name: 'notification-parameter',
+    component: () => import('@/views/setting/notification/parameter/Main.vue')
+  },
+  {
+    meta: {
+      title: 'พารามิเตอร์',
+      loginRequired : true
+    },
     path: '/setting/parameter',
     name: 'parameter',
     component: () => import('@/views/setting/parameter/Main.vue')
