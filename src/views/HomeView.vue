@@ -116,7 +116,24 @@
                 class="text-center"
                 header-icon=""
               >
-                <div 
+                <table class="text-sm ">
+                  <!-- <thead>
+                      <th>หัวข้อ</th>
+                      <th>โค</th>
+                      <th>วันที่</th>
+                  </thead> -->
+                  <tbody >
+                      <tr
+                      v-for="event in events"
+                        :key="event.title"
+                      >
+                        <td data-label="หัวข้อ">{{ event.title }}</td>
+                        <td data-label="โค">{{ event.cow }}</td>
+                        <td class="text-orange-600" data-label="วันที่">{{ event.date }}</td>
+                      </tr>
+                  </tbody>
+                </table>
+                <!-- <div 
                   v-for="event in events"
                   :key="event.title"
                   class="grid grid-cols-2 gap-5 p-1">
@@ -124,7 +141,7 @@
                     {{ event.title }}
                   </p>
                   <h1 class="text-base text-orange-600 text-right">{{ event.date }}</h1>
-                </div>
+                </div> -->
                 
             </CardBox>
           </div>
