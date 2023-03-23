@@ -32,12 +32,13 @@
             </BaseButtons>
         </div>
         <CardBox
-            v-if="user?.farm?.lineToken"
+            v-if="user?.farm?.lineToken && !loading"
             title="ตารางกำหนดการ"
             header-icon=""
             >
             <Calendar :events="events" />                
         </CardBox>
+        <CardBox v-else loading />
 
       </SectionMain>
     </LayoutAuthenticated>
@@ -55,25 +56,16 @@ import Calendar from '@/components/calendar/Calendar.vue'
 
 import { Toast } from "@/utils/alert";
 
+import _ from "lodash"
+
+import NotificationService from '@/services/notification'
 import AuthService from '@/services/auth'
         
 export default {
     data() {
         return {
             loading : false,
-            events : [
-                {
-                    id: 1,
-                    url: "https://github.com/dev-charles15531",
-                    title: "Dummy Event Name 1",
-                    time: { start: "2022-01-01 12:00", end: "2022-01-01 14:00" },
-                    description:
-                    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-                    image: "test-img.png",
-                    tags: "#fun #nightout #dance #veterantime",
-                    location: "At the base",
-                },
-            ],
+            events : [],
             user : {}
         }
     },
@@ -90,8 +82,17 @@ export default {
     },
     created(){
         this.getUser()
+        this.getNotificationCalendar()
     },
     methods : {
+        async getNotificationCalendar(){
+            this.loading = true;
+            const resp = await NotificationService.getCalendar();
+            if(resp.data){
+                this.events = _.orderBy(resp.data.events,'date')
+                this.loading = false;
+            }
+        },
         async getUser(){
             const resp = await AuthService.user();
             if(resp.data){

@@ -6,7 +6,7 @@
       <CardBox
         v-show="value"
         :title="date"
-        class="shadow-lg w-full  md:w-3/5 lg:w-1/1 z-50"
+        class="shadow-lg w-full md:w-3/5 lg:w-1/1 z-50"
         header-icon="close"
         modal
         form
@@ -16,9 +16,10 @@
         <table>
           <thead>
             <tr >
-                <th class="whitespace-nowrap">เวลา</th>
+                <th class="whitespace-nowrap">วันที่ครบกำหนด</th>
                 <th class="whitespace-nowrap">หัวข้อ</th>
                 <th class="whitespace-nowrap">รายละเอียด</th>
+                <th class="whitespace-nowrap">การแจ้งเตือน</th>
             </tr>
           </thead>
           <tbody>
@@ -26,14 +27,17 @@
               v-for="event in events"
               :key="event._id"
             >
-              <td data-label="เวลา" class="whitespace-nowrap">
-                {{ event.time.start }}
+              <td data-label="วันที่ครบกำหนด" class="whitespace-nowrap">
+                {{ formatDate(event.date,'dddd DD MMMM yyyy') }}
               </td>
               <td data-label="หัวข้อ" class="whitespace-nowrap">
                 {{ event.title }}
               </td>
               <td data-label="รายละเอียด" class="whitespace-nowrap">
                 {{ event.description }}
+              </td>
+              <td data-label="การแจ้งเตือน" class="whitespace-nowrap">
+                {{ event.alert ? 'แจ้งเตือนแล้ว' : 'ยังไม่แจ้งเตือน' }}
               </td>
             </tr>
           </tbody>
@@ -43,11 +47,13 @@
   
         <BaseButtons
           type="justify-center"
+          class="mt-5"
         >
           <BaseButton
             label="ปิด"
             color="danger"
             @click="cancel"
+            small
           />
         </BaseButtons>
       </CardBox>
@@ -89,6 +95,9 @@ export default {
         cancel(){
             this.confirmCancel('cancel')
         },
+        formatDate(date,format){
+          return moment(date).format(format);
+        }
     },
     components : {
       BaseButton,

@@ -121,7 +121,7 @@
     methods : {
         async getDatas(){
             this.loading = true
-            const resp = await NotificationService.get(this.search);
+            const resp = await NotificationService.getLogs(this.search);
             this.items = []
             if(resp.data){
                 this.items = resp.data.notifications

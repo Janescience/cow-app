@@ -16,9 +16,15 @@ async function getSearchQuery (opts = {}) {
 }
 
 class NotificationService {
-  async get(search){
+  async getLogs(search){
     const query = await getSearchQuery(search);
     return http.get(`/notification/logs`+query)
+        .then(response => {
+            return response;
+        });
+  }
+  async getCalendar(){
+    return http.get(`/notification/calendar`)
         .then(response => {
             return response;
         });

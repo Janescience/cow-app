@@ -105,13 +105,14 @@
             >
               <div
                 class="w-full px-2 py-1 flex space-x-1 items-center whitespace-nowrap overflow-hidden hover:border hover:border-gray-200 cursor-pointer rounded-lg"
-                @click="togglePopover($event, evt)"
+                @click="openModal(day, allTodaysEvent(day, events))"
               >
                 <div class="w-1/12">
-                  <div class="h-2 w-2 rounded-full bg-orange-600"></div>
+                  <div v-if="evt.alert" class="h-2 w-2 rounded-full bg-green-600"></div>
+                  <div v-else class="h-2 w-2 rounded-full bg-orange-600"></div>
                 </div>
                 <div class="w-11/12">
-                  <h5 class="text-xs tracking-tight text-clip overflow-hidden">
+                  <h5 class="text-xs text-left tracking-tight text-clip overflow-hidden">
                     {{ evt.title }}
                   </h5>
                 </div>
