@@ -36,10 +36,10 @@ const openModal = () => confirmOpenModal('openModal')
       <BaseIcon
         v-if="icon"
         :path="icon"
-        size="30"
+        size="26"
         class="mr-3"
       />
-      <h1 class="text-2xl">
+      <h1 class="text-xl">
         {{ title }}
       </h1>
     </div>
@@ -49,6 +49,7 @@ const openModal = () => confirmOpenModal('openModal')
       :label="btnText"
       color="success"
       @click="openModal"
+      small
     />
   </section>
 </template>
