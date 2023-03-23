@@ -116,11 +116,14 @@
                 class="text-center"
                 header-icon=""
               >
-                <div class="grid grid-cols-2 gap-5">
-                  <p class="text-left">
-                    ฉีดวัคซีนปากเท้าเปื่อย 
+                <div 
+                  v-for="event in events"
+                  :key="event.title"
+                  class="grid grid-cols-2 gap-5 p-1">
+                  <p class="text-left text-sm">
+                    {{ event.title }}
                   </p>
-                  <h1 class="text-xl text-orange-600">{{  addMonths(new Date('2023-01-01'),6) }}</h1>
+                  <h1 class="text-base text-orange-600 text-right">{{ event.date }}</h1>
                 </div>
                 
             </CardBox>
@@ -191,6 +194,7 @@ export default {
       chartData : null,
       chartColors : {primary: '#00D1B2',danger: '#FF3860'},
       milks : [],
+      events : [],
       milk : {},
       cow : {},
       loading : false
@@ -228,6 +232,10 @@ export default {
       const resp = await DashboardService.get(this.user.farm._id)
       if(resp){
         this.milk.sum = 0;
+        this.events = _.orderBy(resp.data.events,'date')
+        for(let event of this.events){
+          event.date = moment(event.date).format('DD/MM/YYYY')
+        }
         for(let milk of resp.data.milks){
           milk.date = moment(milk.date,'DD-MM-YYYY').format('MMM')
           let sum  = milk.milkDetails.reduce((prev,cur) => prev + cur.qty,0)
