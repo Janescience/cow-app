@@ -15,12 +15,6 @@
     >
     
       <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-1">
-        <FormField label="รหัส" help="ห้ามแก้ไข" >
-          <FormControl
-            v-model="notiParam.code"
-            icon="barcode"
-          />
-        </FormField>
         <FormField label="ชื่อ" help="* ห้ามว่าง" >
           <FormControl
             v-model="notiParam.name"
@@ -108,8 +102,7 @@ export default {
         beforeType : 'D',
         dueDate : true,
         after : "",
-        afterType : 'D',
-        code : ""
+        afterType : 'D'
       },
       loading : false,
       alert : ""
@@ -137,7 +130,6 @@ export default {
   methods: {
       clear(){
         this.$emit('update:data',null);
-        this.notiParam.code = ""
         this.notiParam.before = ""
         this.notiParam.beforeType = 'D'
         this.notiParam.after = ""

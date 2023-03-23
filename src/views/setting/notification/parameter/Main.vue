@@ -14,18 +14,8 @@
         @confirm="getDatas"         
       />
 
-      <Criteria
-        grid="grid-cols-2 lg:grid-cols-5"
-        @search="getDatas" 
-        @reset="reset" 
-        :forms="forms" 
-        :search="search"
-      />
-
       <Table
         title="รายการพารามิเตอร์ (การแจ้งเตือน)" 
-        has-checkbox
-        :checked-data="checked" 
         :items="items" 
         :datas="datas" 
         :buttons="buttons" 
@@ -45,7 +35,6 @@ import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 
 import Table from "@/components/Table.vue";
-import Criteria from "@/components/Criteria.vue";
 
 import Modal from './Modal.vue'
 import Service from '@/services/notificationParam'
@@ -56,30 +45,10 @@ export default {
       openModal : false,
       modalData : null,
       items : [],
-      forms : [
-      {
-          label : "รหัส/ชื่อ",
-          value : 'code',
-        }
-      ],
-      search : {
-        code : '',
-      },
+      forms : [],
       loading : false,
       dataEdit : null,
-      checked : {
-        code : {
-          value : 'code',
-        },
-        label : {
-          value : 'name'
-        }
-      },
       datas : [
-        {
-          label : "รหัส",
-          value : 'code',
-        },
         {
           label : "ชื่อ",
           value : 'name',
@@ -91,20 +60,30 @@ export default {
           },
         },
         {
-          label : "แจ้งเตือน(ก่อน)",
-          value : 'before',
+          label : "แจ้งเตือน (ก่อน)",
+          func : (obj) => {
+            return obj.before ? obj.before :'-'
+          },
+          class : 'text-center'
         },
         {
-          label : "ประเภทระยะเวลา(ก่อน)",
-          value : 'beforeType',
+          label : "หน่วย (ก่อน)",
+          func : (obj) => {
+            return obj.beforeType == 'D' ? 'วัน':'เดือน'
+          },
         },
         {
-          label : "แจ้งเตือน(หลัง)",
-          value : 'after',
+          label : "แจ้งเตือน (หลัง)",
+          func : (obj) => {
+            return obj.after ? obj.after :'-'
+          },
+          class : 'text-center'
         },
         {
-          label : "ประเภทระยะเวลา(ก่อน)",
-          value : 'afterType',
+          label : "หน่วย (หลัง)",
+          func : (obj) => {
+            return obj.afterType == 'D' ? 'วัน':'เดือน'
+          },
         }
       ],
       buttons : [
@@ -121,8 +100,7 @@ export default {
     LayoutAuthenticated,
     SectionTitleBarSub,
     Table,
-    Modal,
-    Criteria
+    Modal
   },
   computed: {
     getDataCopy() {
@@ -145,9 +123,6 @@ export default {
     edit(obj){
       this.modalData = obj;
       this.openModal = true;
-    },
-    reset(){
-      this.search.name = ""
     },
   }
 }

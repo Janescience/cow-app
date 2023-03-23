@@ -54,6 +54,8 @@ import Modal from './Modal.vue'
 import ReproductionService from '@/services/reproduction'
 
 import { reproductStatus,reproductResult } from '@/constants/reproduct'
+import { Toast } from "@/utils/alert";
+
 
 export default {
   data (){
@@ -233,6 +235,10 @@ export default {
       const resp = await ReproductionService.delete(id);
       if(resp.data){
         this.getReproductions()
+        Toast.fire({
+          icon: 'success',
+          title: 'ลบข้อมูลสำเร็จ'
+        })
       }
       this.loading = false
     },
