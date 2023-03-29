@@ -53,17 +53,17 @@ export default [
   ],
   'รายงาน',
   [
-    // {
-    //   label: 'ผลผลิต',
-    //   icon: 'chartBoxOutline',
-    //   menu: [
-    //     {
-    //       to: '/report/notification',
-    //       icon: 'chartLine',
-    //       label: 'ผลผลิตน้ำนมดิบของโค'
-    //     }
-    //   ]
-    // },
+    {
+      label: 'ผลผลิต',
+      icon: 'chartBoxOutline',
+      menu: [
+        {
+          to: '/report/raw-milk',
+          icon: 'chartLine',
+          label: 'ผลผลิตน้ำนมดิบ'
+        }
+      ]
+    },
     // {
     //   label: 'รายรับ-รายจ่าย',
     //   icon: 'cashRegister',

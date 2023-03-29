@@ -160,6 +160,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'รายงานน้ำนมดิบ',
+      loginRequired : true
+    },
+    path: '/report/raw-milk',
+    name: 'report-raw-milk',
+    component: () => import('@/views/report/raw-milk/Main.vue')
+  },
+  {
+    meta: {
       title: 'Tables',
       loginRequired : true
     },
