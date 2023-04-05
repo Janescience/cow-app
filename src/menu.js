@@ -41,6 +41,11 @@ export default [
       label: 'การป้องกัน/บำรุง'
     },
     {
+      to: '/manage/vaccine',
+      icon: 'needle',
+      label: 'วัคซีน'
+    },
+    {
       to: '/manage/food',
       icon: 'foodDrumstickOutline',
       label: 'การให้อาหาร'

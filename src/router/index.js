@@ -52,7 +52,7 @@ const routes = [
   },
   {
     meta: {
-      title: 'พารามิเตอร์',
+      title: 'ตั้งค่าแจ้งเตือน',
       loginRequired : true
     },
     path: '/setting/notification/parameter',
@@ -121,6 +121,15 @@ const routes = [
     path: '/manage/heal',
     name: 'heal',
     component: () => import('@/views/manage/heal/Main.vue')
+  },
+  {
+    meta: {
+      title: 'วัคซีน',
+      loginRequired : true
+    },
+    path: '/manage/vaccine',
+    name: 'vaccine',
+    component: () => import('@/views/manage/vaccine/Main.vue')
   },
   {
     meta: {

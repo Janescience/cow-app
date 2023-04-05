@@ -72,6 +72,12 @@ export default {
           options : [{id : '', label :"ทั้งหมด"},{id : 'M', label :"ตัวผู้"},{id : 'F', label :"ตัวเมีย"}]
         },
         {
+          label : 'วันที่ตั้งครร',
+          value : 'pregnantDate',
+          icon : 'calendar',
+          type : 'date'
+        },
+        {
           label : 'วันที่คลอด',
           value : 'birthDate',
           icon : 'calendar',
@@ -81,6 +87,7 @@ export default {
       search : {
         cow : null,
         birthDate : null,
+        pregnantDate : null,
         sex : "",
       },
       loading : false,

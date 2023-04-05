@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การคลอดลูก'"
-        class="shadow-lg w-full lg:w-2/5 z-50"
+        class="shadow-lg w-full lg:w-3/5 z-50"
         header-icon="close"
         modal
         form
@@ -15,15 +15,18 @@
       
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-8">
           <BaseLevel type="justify-start" >
-            <BaseIcon path="cow" size="24" class="mr-3"/> {{ show.cow?.name }}
+            <BaseIcon path="cow" size="24" class="mr-3"/> {{ birth.cow?.code }} - {{ birth.cow?.name }}
           </BaseLevel>
           <BaseLevel type="justify-start" >
-            สืบพันธุ์ครั้งที่  {{ show?.reproduction?.seq }}
+            สืบพันธุ์ครั้งที่  {{ birth?.reproduction?.seq }}
           </BaseLevel>
           <BaseLevel type="justify-start" >
-            อายุครรภ์ {{ calAge(show?.pregnantDate,show.birthDate) }}
+            ตั้งครรภ์ {{ formatDate(birth?.pregnantDate) }}
           </BaseLevel>
-          <FormField label="วันที่คลอด" help="* ห้ามว่าง" >
+          <BaseLevel type="justify-start" >
+            อายุครรภ์ {{ calAge(birth?.pregnantDate,birth.birthDate) }}
+          </BaseLevel>
+          <FormField label="คลอด" help="* ห้ามว่าง" >
             <FormControl
               v-model="birth.birthDate"
               icon="calendar"
@@ -31,24 +34,28 @@
               required
             />
           </FormField>
-          <FormField label="เพศ" help="* ห้ามว่าง">
+          <FormField label="สถานะ" >
+            <FormCheckRadioPicker
+              v-model="birth.status"
+              type="radio"
+              :options="{ B: 'คลอดแล้ว', P: 'ตั้งครรภ์' }"
+            />
+          </FormField>
+          <FormField v-if="birth.status == 'B'" label="เพศ" >
             <FormCheckRadioPicker
               v-model="birth.sex"
               type="radio"
               :options="{ M: 'เพศผู้', F: 'เพศเมีย' }"
             />
           </FormField>
-          <BaseLevel type="justify-start" v-if="mode === 'edit'">
-             <BaseIcon path="babyFaceOutline" size="24" class="mr-3"/> ชื่อลูก {{  show.calf?.name }}
-          </BaseLevel>
-          <FormField label="ชื่อลูก" v-if="(birth.sex == 'F' && mode === 'create')" help="* ห้ามว่าง">
+          <FormField label="ชื่อลูก" v-if="birth.status == 'B' && birth.sex == 'F'" help="* ห้ามว่าง">
             <FormControl
               v-model="birth.newCow.name"
               icon="babyFaceOutline"
               required
             />
           </FormField>
-          <FormField label="รก" help="* ห้ามว่าง" >
+          <FormField v-if="birth.status == 'B'" label="รก" help="* ห้ามว่าง" >
             <FormCheckRadioPicker
               v-model="birth.overgrown"
               type="radio"
@@ -118,7 +125,9 @@ import BaseLevel from '@/components/BaseLevel.vue'
 import DDLCow from '@/components/DDL/Cow.vue'
 
 import { addDays } from 'date-fns'
+import moment from 'moment';
 import getAge from "@/utils/age-calculate";
+import { Toast } from "@/utils/alert";
 
 import BirthService from '@/services/birth'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
@@ -127,8 +136,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     data () {
       return {
         birth : {
-          sex : "F",
-          overgrown : "N",
+          sex : "",
+          overgrown : "",
           birthDate : new Date(),
           drugDate : addDays(new Date(),15),
           washDate : addDays(new Date(),29),
@@ -136,6 +145,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             name : "",
             mom : "",
           },
+          status : "",
           reproduction : ""
         },
         show : {
@@ -163,45 +173,49 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     watch:{
       data(n){
         if(n){
-          this.show = n
-          this.birth.newCow.mom = n.cow.code
-          this.birth.newCow.name = n.calf?.name
-          this.birth.reproduction = n.reproduction?._id
-          if(this.mode === 'edit'){
+          this.birth = n
+          // this.birth.newCow.mom = n.cow.code
+          // this.birth.newCow.name = n.calf?.name
+          // this.birth.reproduction = n.reproduction?._id
+          // if(this.mode === 'edit'){
             this.birth.birthDate = new Date(n.birthDate)
-            this.birth.drugDate = new Date(n.drugDate)
-            this.birth.washDate = new Date(n.washDate)
-            this.birth.overgrown = n.overgrown
-          }
+            this.birth.drugDate = n.drugDate ? new Date(n.drugDate) : null
+            this.birth.washDate = n.washDate ? new Date(n.washDate) : null
+          //   this.birth.overgrown = n.overgrown
+          // }
             
         }
       },
       'birth.birthDate'(n){
-        this.birth.drugDate = addDays(n,15);
+        if(this.birth.status == 'B'){
+          this.birth.drugDate = addDays(n,15);
+        }
       },
       'birth.drugDate'(n){
-        this.birth.washDate = addDays(n,14);
+        if(this.birth.status == 'B'){
+          this.birth.washDate = addDays(n,14);
+        }
       },
     },
     methods: {
-        clear(){
-          this.birth.sex = "F"
-          this.birth.overgrown = "N"
-          this.birth.newCow.name = "" 
-          this.birth.birthDate = new Date()
-          this.birth.drugDate = addDays(new Date(),15)
-          this.birth.washDate = addDays(new Date(),14)
-        },
+        // clear(){
+        //   this.birth.sex = "F"
+        //   this.birth.overgrown = "N"
+        //   this.birth.newCow.name = "" 
+        //   this.birth.birthDate = new Date()
+        //   this.birth.drugDate = addDays(new Date(),15)
+        //   this.birth.washDate = addDays(new Date(),14)
+        // },
         confirmCancel(mode){
             this.value = false
             this.$emit(mode)
         },
         confirm(){
-            this.clear()
+            // this.clear()
             this.confirmCancel('confirm')
         },
         cancel(){
-            this.clear()
+            // this.clear()
             this.confirmCancel('cancel')
         },
         async submit(){
@@ -213,18 +227,27 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
                 this.birth.washDate = null
               }
               if(this.mode === 'create'){
-                const resp = await BirthService.create(this.show._id,this.birth);
+                const resp = await BirthService.create(this.birth._id,this.birth);
                 if(resp){
                     this.loading = false
                     this.value = false 
                     this.confirmCancel('confirm') 
                 }
               }else{
-                const resp = await BirthService.update(this.show._id,this.birth);
+                if(this.birth.status == 'P'){
+                  this.birth.sex = ""
+                  this.birth.drugDate = null
+                  this.birth.washDate = null
+                }
+                const resp = await BirthService.update(this.birth._id,this.birth);
                 if(resp){
                     this.loading = false
                     this.value = false
                     this.confirmCancel('confirm')  
+                    Toast.fire({
+                      icon: 'success',
+                      title: 'บันทึกข้อมูลสำเร็จ'
+                    })
                 }
               }
             } catch (error) {
@@ -236,6 +259,9 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         },
         calAge(checkDate){
           return getAge(checkDate);
+        },
+        formatDate(date){
+          return moment(date).format('DD/MM/YYYY')
         }
     },
     components : {
