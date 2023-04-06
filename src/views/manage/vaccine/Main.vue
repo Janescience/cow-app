@@ -3,11 +3,11 @@
     <SectionMain>
 
       <SectionTitleBarSub 
-        icon="doctor" 
-        title="การป้องกัน/บำรุง"
+        icon="needle" 
+        title="วัคซีน"
         has-btn-add
         @openModal="mode='create';openModal = true;"
-        btnText="เพิ่มการป้องกัน/บำรุง"
+        btnText="เพิ่มวัคซีน"
       />
 
       <Modal
@@ -26,7 +26,7 @@
       />
 
       <Table
-        title="รายการป้องกัน/บำรุง" 
+        title="รายการวัคซีน" 
         has-checkbox
         :checked-data="checked" 
         :items="items" 
@@ -51,9 +51,11 @@ import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
 
 import Modal from './Modal.vue'
-import ProtectionService from '@/services/protection'
+import VaccineService from '@/services/vaccine'
 
 import { Toast } from "@/utils/alert";
+import _ from "lodash";
+import moment from "moment";
 
 
 export default {
@@ -96,24 +98,48 @@ export default {
       },
       datas : [
         {
-          label : "วัคซีน",
-          value : 'vaccine.name'
+          label : "รหัสวัคซีน",
+          value : 'code'
         },
         {
-          label : "จำนวนที่ฉีด (ตัว)",
+          label : "ชื่อวัคซีน",
+          value : 'name'
+        },
+        {
+          label : "ความถี่ (เดือน)",
           class : 'text-center',
-          value : 'qty'
+          value : 'frequency'
         },
         {
-          label : "รวมเป็นเงิน (บาท)",
+          label : "ราคาวัคซีน/ขวด",
+          class : 'text-center',
+          value : 'price'
+        },
+        {
+          label : "ใช้ได้ (ตัว)",
+          class : 'text-center',
+          value : 'use'
+        },
+        {
+          label : "คิดเป็นเงิน/ตัว",
           class : 'text-center',
           value : 'amount'
         },
         {
-          label : "วันที่ฉีดวัคซีน",
+          label : "ฉีดวัคซีนล่าสุด",
           class : 'text-center',
-          value : 'date',
-          type : 'date',
+          func : (obj) => {
+            const sorted = _.orderBy(obj.protections,'date','desc');
+            return sorted.length > 0 ? moment(sorted[0].date).format('DD/MM/YYYY') : null
+          },
+        },
+        {
+          label : "ฉีดวัคซีนครั้งต่อไป",
+          class : 'text-center',
+          func : (obj) => {
+            const sorted = _.orderBy(obj.protections,'date','desc');
+            return sorted.length > 0 ? moment(sorted[0].date).add(obj.frequency,'months').format('DD/MM/YYYY') : null
+          },
         },
         {
           label : "หมายเหตุ",
@@ -131,6 +157,29 @@ export default {
           label : 'แก้ไข',
           type : 'edit',
           color : 'warning',
+        },
+        {
+          label : 'ตั้งค่าแจ้งเตือน',
+          type : 'oth',
+          color : 'info',
+          func : (obj) => {
+            this.$router.push({
+                name: "notification-parameter"
+            });
+          },
+        },
+        {
+          label : 'ประวัติ',
+          type : 'oth',
+          color : 'info',
+          func : (obj) => {
+            this.$router.push({
+                name: "protection",
+                params : {
+                    code: obj.code ,
+                }
+            });
+          },
         },
       ]
     }
@@ -154,16 +203,16 @@ export default {
   methods : {
     async getDatas(search){
       this.loading = true
-      const resp = await ProtectionService.all(search);
+      const resp = await VaccineService.all(search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.protections
+        this.items = resp.data.vaccines
       }
       this.loading = false
     },
     async remove(id){
       this.loading = true
-      const resp = await ProtectionService.delete(id);
+      const resp = await VaccineService.delete(id);
       if(resp.data){
         this.getDatas()
       }

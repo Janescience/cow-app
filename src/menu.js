@@ -58,6 +58,11 @@ export default [
       label: 'คนงาน'
     },
     {
+      to: '/manage/vaccine',
+      icon: 'needle',
+      label: 'วัคซีน'
+    },
+    {
       to: '/manage/food',
       icon: 'corn',
       label: 'การให้อาหาร'
