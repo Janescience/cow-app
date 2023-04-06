@@ -303,7 +303,7 @@
           class=" "
           icon="pillMultiple"
           :loading="loading.protection"
-          title="การป้องกัน/บำรุง"
+          title="การป้องกัน/วัคซีน"
           header-icon=""
         >
           <div class="grid gap-5 grid-cols-3 font-bold p-3">

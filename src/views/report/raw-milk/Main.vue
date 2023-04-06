@@ -3,7 +3,7 @@
     <SectionMain>
 
       <SectionTitleBarSub 
-        icon="doctor" 
+        icon="water" 
         title="ผลผลิตน้ำนมดิบ"
       />
 
@@ -14,6 +14,8 @@
         :forms="forms" 
         :search="search"
         btnSubmitLabel="ออกรายงาน"
+        :btnLoading="loading"
+        :collapse="false"
       />
     </SectionMain>
   </LayoutAuthenticated>
@@ -29,6 +31,7 @@ import Criteria from "@/components/Criteria.vue";
 import ReportService from '@/services/report'
 
 import { Toast } from "@/utils/alert";
+import moment from "moment";
 
 export default {
   data (){
@@ -38,16 +41,25 @@ export default {
           label : 'ปี',
           value : 'year',
           type : 'number',
+          required : true
         },
         {
-          label : 'เดือน',
-          value : 'month',
+          label : 'เดือน ตั้งแต่',
+          value : 'monthFrom',
           type : 'number',
+          required : true
+        },
+        {
+          label : 'เดือน ถึง',
+          value : 'monthTo',
+          type : 'number',
+          required : true
         },  
       ],
       search : {
-        year : null,
-        month : null,
+        year : moment().format('YYYY'),
+        monthFrom : moment().subtract(1,'months').format('MM'),
+        monthTo : moment().format('MM'),
       },
       loading : false,
     }
@@ -62,11 +74,17 @@ export default {
     async exportExcel(search){
       this.loading = true
       const resp = await ReportService.rawMilk(search);
-      if(resp.data){
+      console.log(resp)
+      if(resp.data.size <= 4){
+        Toast.fire({
+          icon: 'warning',
+          title: 'ไม่พบข้อมูล'
+        })
+      }else{
         const url = window.URL.createObjectURL(new Blob([resp.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'ผลลิตน้ำนมดิบ '+this.search.month+'/'+this.search.year+'.xlsx');
+        link.setAttribute('download', 'ผลลิตน้ำนมดิบ ปี '+this.search.year+' '+moment().format('DDMMYYYYHHmm')+'.xlsx');
         document.body.appendChild(link);
         link.click();
         link.remove();

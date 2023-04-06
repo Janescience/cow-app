@@ -37,6 +37,7 @@
                     v-model="search[form.value]"
                     :type="form.type"
                     :options="form.options"
+                    :required="form.required"
                 />
                 <FormControl
                     v-else
@@ -44,6 +45,7 @@
                     :icon="form.icon"
                     :options="form.options"
                     :type="form.type"
+                    :required="form.required"
                 />
             </FormField>
         </div>
@@ -58,6 +60,8 @@
                 type="submit"
                 color="info"
                 :label="btnSubmitLabel"
+                :loading="btnLoading"
+                :disabled="btnLoading"
             />
             <BaseButton
                 type="reset"
@@ -97,7 +101,8 @@ export default {
         btnSubmitLabel : {
             type : String ,
             default : 'ค้นหา'
-        }
+        },
+        btnLoading : Boolean,
     },
     components : {
         BaseButton,

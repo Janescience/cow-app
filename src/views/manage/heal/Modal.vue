@@ -44,7 +44,12 @@
               type="textarea"
             />
           </FormField>
-          
+          <FormField label="ค่ารักษา" >
+            <FormControl
+              v-model="heal.amount"
+              type="number"
+            />
+          </FormField>
         </div>
 
         <NotificationBar 
@@ -103,6 +108,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           disease : "",
           method : "",
           healer : "",
+          amount : null
         },
         loading : false,
         alert : ""
@@ -137,6 +143,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           this.heal.disease = "" 
           this.heal.method = ""
           this.heal.healer = ""
+          this.heal.amount = null
         },
         confirmCancel(mode){
             this.value = false
@@ -162,7 +169,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
                     this.confirmCancel('confirm') 
                 }
               }else{
-                const resp = await HealService.update(this.heal);
+                const resp = await HealService.update(this.heal._id,this.heal);
                 if(resp){
                     this.loading = false
                     this.value = false

@@ -125,6 +125,11 @@ export default {
           class : 'text-center',
           value : 'healer',
         },
+        {
+          label : "ค่ารักษา",
+          class : 'text-center',
+          value : 'amount',
+        },
       ],
       buttons : [
         {

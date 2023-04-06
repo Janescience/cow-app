@@ -15,6 +15,8 @@
         :search="search"
         btnSubmitLabel="ออกรายงาน"
       />
+
+      <div v-html="excelHtml"></div>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
@@ -30,9 +32,12 @@ import ReportService from '@/services/report'
 
 import { Toast } from "@/utils/alert";
 
+import * as XLSX from 'xlsx';
+
 export default {
   data (){
     return {
+      excelHtml : "",
       forms : [
         {
           label : 'โค',

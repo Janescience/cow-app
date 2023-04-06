@@ -124,7 +124,7 @@ const routes = [
   },
   {
     meta: {
-      title: 'การป้องกัน/บำรุง',
+      title: 'การป้องกัน/วัคซีน',
       loginRequired : true
     },
     path: '/manage/protection',

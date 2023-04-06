@@ -8,17 +8,12 @@ export default [
     }
   ]
   ,
-  'การจัดการ',
+  'โค',
   [
     {
       to: '/manage/cow',
       icon: 'cow',
-      label: 'โค'
-    },
-    {
-      to: '/manage/milk',
-      icon: 'cupWater',
-      label: 'น้ำนมดิบ (การรีดนม)'
+      label: 'ข้อมูลโค'
     },
     {
       to: '/manage/reproduct',
@@ -30,25 +25,52 @@ export default [
       icon: 'babyFaceOutline',
       label: 'การคลอดลูก'
     },
+    
+  ],
+  'ผลผลิต',
+  [
+    {
+      to: '/manage/milk',
+      icon: 'cupWater',
+      label: 'น้ำนมดิบ (การรีดนม)'
+    },
+  ],
+  'ต้นทุน',
+  [
     {
       to: '/manage/heal',
-      icon: 'doctor',
+      icon: 'medication',
       label: 'การรักษา'
     },
     {
       to: '/manage/protection',
-      icon: 'pillMultiple',
-      label: 'การป้องกัน/บำรุง'
+      icon: 'needle',
+      label: 'การป้องกัน/วัคซีน'
+    },
+    {
+      to: '/manage/recipe',
+      icon: 'shovel',
+      label: 'อุปกรณ์'
+    },
+    {
+      to: '/manage/recipe',
+      icon: 'accountHardHat',
+      label: 'คนงาน'
     },
     {
       to: '/manage/food',
-      icon: 'foodDrumstickOutline',
+      icon: 'corn',
       label: 'การให้อาหาร'
     },
     {
       to: '/manage/recipe',
-      icon: 'calculatorVariantOutline',
+      icon: 'scale',
       label: 'สูตรอาหาร'
+    },
+    {
+      to: '/manage/recipe',
+      icon: 'homeLightningBoltOutline',
+      label: 'ค่าใช้จ่ายอื่นๆ'
     },
   ],
   'รายงาน',
@@ -59,8 +81,8 @@ export default [
       menu: [
         {
           to: '/report/raw-milk',
-          icon: 'chartLine',
-          label: 'ผลผลิตน้ำนมดิบ'
+          icon: 'water',
+          label: 'น้ำนมดิบ'
         }
       ]
     },
@@ -87,7 +109,7 @@ export default [
       menu: [
         {
           to: '/report/history',
-          icon: 'chartLine',
+          icon: 'cow',
           label: 'ประวัติและคุณลักษณะของวัว'
         },
         // {
@@ -128,7 +150,7 @@ export default [
       menu : [
         {
           to: '/setting/notification/log',
-          icon: 'chartLine',
+          icon: 'clipboardTextClockOutline',
           label: 'ประวัติการแจ้งเตือน'
         },
         {
@@ -138,8 +160,8 @@ export default [
         },
         {
           to: '/setting/notification/parameter',
-          icon: 'applicationVariableOutline',
-          label: 'พารามิเตอร์'
+          icon: 'bellCogOutline',
+          label: 'ตั้งค่าแจ้งเตือน'
         }
       ]
     },
