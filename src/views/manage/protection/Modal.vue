@@ -100,7 +100,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       return {
         protection : {
           date : new Date(),
-          vaccine : null,
+          vaccine : {},
           qty : null,
           amount : null,
           remark : '',
@@ -139,7 +139,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     methods: {
         clear(){
           this.protection.date = new Date()
-          this.protection.vaccine = null
+          this.protection.vaccine = {}
           this.protection.qty = null
           this.protection.amount = null
           this.protection.remark = ''

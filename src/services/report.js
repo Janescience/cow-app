@@ -9,8 +9,11 @@ async function getSearchQuery (opts = {}) {
     if (opts.year) {
         query = query + `year=${opts.year}&`;
     } 
-    if (opts.month) {
-        query = query + `month=${opts.month}&`;
+    if (opts.monthFrom) {
+        query = query + `monthFrom=${opts.monthFrom}&`;
+    }
+    if (opts.monthTo) {
+        query = query + `monthTo=${opts.monthTo}&`;
     } 
     if (opts.date) {
         const dateNoTime = moment(new Date(opts.date)).format('YYYY-MM-DD') 

@@ -204,27 +204,27 @@
 
     </div>
 
-  
-  
     <Modal
       v-model="modalShow"
       :mode="mode" 
       :data="data" 
-      @confirm="getMilks" 
+      @confirm="confirm" 
     />
   
   </template>
   
   <script setup>
-  import { ref, onMounted, onUpdated } from "vue";
+  import { ref, onMounted, onUpdated ,defineEmits} from "vue";
   import Top from "@/components/calendar/Top.vue";
   import BaseIcon from "@/components/BaseIcon.vue";
   import BaseLevel from "@/components/BaseLevel.vue";
   import BaseDivider from "@/components/BaseDivider.vue";
   import CardBox from "@/components/CardBox.vue";
   import Modal from './Modal.vue';
-
   import { useCalendarStore } from "@/store/calendar";
+
+  const emit = defineEmits(['confirm'])
+
   /**************************************
    * PROPS
    * ************************************
@@ -415,6 +415,9 @@
    */
   const closeModal = () => {
     modalShow.value = false;
+  };
+  const confirm = (data) => {
+    emit('confirm',data)
   };
   /************************************************************************
    *  LIFECYCLE HOOKS

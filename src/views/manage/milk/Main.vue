@@ -17,16 +17,11 @@
         @confirm="getMilks" 
       />
 
-      <!-- <Criteria
-        grid="grid-cols-2 lg:grid-cols-4"
-        @search="getMilks" 
-        @reset="reset" 
-        :forms="forms" 
-        :search="search"
-      /> -->
-
       <CardBox v-if="!loading">
-        <Calendar :events="events"/>
+        <Calendar 
+          :events="events"
+          @confirm="addMilk"
+          />
       </CardBox>
       <CardBox v-else loading />
 
@@ -70,10 +65,6 @@ export default {
           type : 'date'
         }
       ],
-      search : {
-        cow : null,
-        date : null,
-      },
       loading : false,
       mode : "create",
       dataEdit : null,
@@ -156,27 +147,11 @@ export default {
   methods : {
     async getMilks(){
       this.loading = true
-      const resp = await MilkingService.all(this.search);
+      const resp = await MilkingService.all();
       this.events = []
       if(resp.data){
         for(let milk of resp.data.milks){
-          let event = {};
-
-          event.sumQty = 0;
-          event.sumAmt = 0;
-
-          milk.milkDetails.map((milkDetail) => {
-            milkDetail.cow = milkDetail.relate.cow;
-            event.sumQty += milkDetail.qty;
-            event.sumAmt += milkDetail.amount;
-          })
-
-          event.count = milk.milkDetails.length;
-          event.milks = milk.milkDetails
-          event.date = moment(milk.date,'YYYY-MM-DD').format('DDMMYYYY');
-          event.time = milk.time
-          event.id = milk._id
-          this.events.push(event)
+          this.filterMilk(milk)
         }
         
       }
@@ -190,14 +165,32 @@ export default {
       }
       this.loading = false
     },
+    filterMilk(milk){
+      let event = {};
+
+      event.sumQty = 0;
+      event.sumAmt = 0;
+
+      milk.milkDetails.map((milkDetail) => {
+        milkDetail.cow = typeof milkDetail.cow === 'string' ? milkDetail.relate.cow : milkDetail.cow;
+        event.sumQty += milkDetail.qty;
+        event.sumAmt += milkDetail.amount;
+      })
+
+      event.count = milk.milkDetails.length;
+      event.milks = milk.milkDetails
+      event.date = moment(milk.date,'YYYY-MM-DD').format('DDMMYYYY');
+      event.time = milk.time
+      event.id = milk._id
+      this.events.push(event)
+    },
+    addMilk(data){
+      this.filterMilk(data)
+    },
     edit(milk){
       this.dataEdit = milk;
       this.mode = 'edit';
       this.modalMilk = true;
-    },
-    reset(){
-      this.search.cow = null
-      this.search.date = new Date()
     },
   }
 }

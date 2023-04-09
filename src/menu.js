@@ -27,6 +27,24 @@ export default [
     },
     
   ],
+  'ดูแล',
+  [
+    {
+      to: '/manage/heal',
+      icon: 'medication',
+      label: 'การรักษา'
+    },
+    {
+      to: '/manage/protection',
+      icon: 'needle',
+      label: 'การป้องกัน/บำรุง'
+    },
+    {
+      to: '/manage/food',
+      icon: 'corn',
+      label: 'การให้อาหาร'
+    },
+  ],
   'ผลผลิต',
   [
     {
@@ -38,22 +56,22 @@ export default [
   'ต้นทุน',
   [
     {
-      to: '/manage/heal',
-      icon: 'medication',
-      label: 'การรักษา'
+      to: '/manage/maintenance',
+      icon: 'progressWrench',
+      label: 'การซ่อมบำรุง'
     },
     {
-      to: '/manage/protection',
-      icon: 'needle',
-      label: 'การป้องกัน/วัคซีน'
-    },
-    {
-      to: '/manage/recipe',
+      to: '/manage/equipment',
       icon: 'shovel',
       label: 'อุปกรณ์'
     },
     {
-      to: '/manage/recipe',
+      to: '/manage/building',
+      icon: 'barn',
+      label: 'สิ่งปลูกสร้าง'
+    },
+    {
+      to: '/manage/worker',
       icon: 'accountHardHat',
       label: 'คนงาน'
     },
@@ -61,11 +79,6 @@ export default [
       to: '/manage/vaccine',
       icon: 'needle',
       label: 'วัคซีน'
-    },
-    {
-      to: '/manage/food',
-      icon: 'corn',
-      label: 'การให้อาหาร'
     },
     {
       to: '/manage/recipe',

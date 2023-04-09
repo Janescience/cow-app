@@ -12,7 +12,7 @@
 
       <Modal
         v-model="openModal"
-        :data="modalData"
+        :data="getDataCopy"
         :mode="mode"
         @confirm="getDatas"         
       />
@@ -91,7 +91,10 @@ export default {
       dataEdit : null,
       checked : {
         label : {
-          value : 'vaccine'
+          value : 'vaccine.name'
+        },
+        code : {
+          value : 'vaccine.code'
         }
       },
       datas : [
@@ -146,6 +149,9 @@ export default {
   computed : {
     user() {
       return this.$store.state.auth.user;
+    },
+    getDataCopy() {
+      return {...this.modalData};
     }
   },
   created() {

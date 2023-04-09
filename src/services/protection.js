@@ -28,11 +28,8 @@ class ProtectionService{
         return http.get(`/protection/${id}`);
     }
     create(payload){
-        if (payload.dateCurrent) {
-            payload.dateCurrent = moment(new Date(payload.dateCurrent)).format('YYYY-MM-DD') 
-        }
-        if (payload.dateNext) {
-            payload.dateNext = moment(new Date(payload.dateNext)).format('YYYY-MM-DD') 
+        if (payload.date) {
+            payload.date = moment(new Date(payload.date)).format('YYYY-MM-DD') 
         }
         return http.post(`/protection`,payload);
     }

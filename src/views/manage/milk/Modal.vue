@@ -35,11 +35,6 @@
           </FormField>
         </div>
         <BaseDivider v-if="mode != 'edit'"/>
-        <!-- <CardBox
-          title="รายละเอียดการรีดนม"
-          class="shadow-lg dark:bg-slate-700 mb-3"
-          header-icon=""
-        > -->
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
             <FormField label="โค" help="* ห้ามว่าง">
                 <DDLCow v-model="milkDetail.cow" valueType="object"/>
@@ -140,10 +135,7 @@
               class="text-center py-10 text-gray-500 dark:text-gray-400 "
             >
               <p>ไม่มีรายการ...</p>
-          </div>
-        <!-- </CardBox> -->
-
-  
+          </div>  
         <BaseButtons
           type="justify-center mt-3"
         >
@@ -223,30 +215,26 @@
             if(this.mode == 'edit'){
               this.milkDetails = n.milkDetails
             }
-            this.milk.date = new Date(n.date ? n.date : new Date())
+            this.milk.date = n.date ? new Date(n.date) : new Date()
             this.milk.time = n.time ? n.time : 'M'
             this.milk._id = n._id
           }
-        },deep : true
+        }
       }
     },
     methods: {
         clear(){
-          if(this.mode === 'edit')
-            this.$emit('update:data',null);
           this.milk.date = new Date()
           this.milk.time = 'M'
           this.milkDetails = []
-          this.$emit('update:mode',"");
-          delete this.milk?._id
         },
-        confirmCancel(mode){
+        confirmCancel(mode,data){
             this.value = false
-            this.$emit(mode)
+            this.$emit(mode,data)
         },
-        confirm(){
+        confirm(data){
             this.clear()
-            this.confirmCancel('confirm')
+            this.confirmCancel('confirm',data)
         },
         cancel(){
             this.clear()
@@ -276,13 +264,14 @@
             this.loading = true
             this.alert = ""
             this.milk.milkDetails = this.milkDetails
+            const milkCreate = {...this.milk};
             try {
                 if(this.mode === 'create'){
-                  const resp = await MilkingService.create(this.milk);
+                  const resp = await MilkingService.create(milkCreate);
                   if(resp){
                       this.loading = false  
                       this.value = false
-                      this.confirm()
+                      this.confirm(milkCreate)
                       Toast.fire({
                         icon: 'success',
                         title: 'บันทึกข้อมูลสำเร็จ'
