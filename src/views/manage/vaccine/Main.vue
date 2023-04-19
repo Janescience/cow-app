@@ -159,9 +159,9 @@ export default {
           color : 'warning',
         },
         {
-          label : 'ตั้งค่าแจ้งเตือน',
+          label : 'การแจ้งเตือน',
           type : 'oth',
-          color : 'info',
+          color : 'light',
           func : (obj) => {
             this.$router.push({
                 name: "notification-parameter"

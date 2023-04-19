@@ -54,6 +54,7 @@ import Modal from './Modal.vue'
 import ProtectionService from '@/services/protection'
 
 import { Toast } from "@/utils/alert";
+import _ from "lodash";
 
 
 export default {
@@ -99,6 +100,10 @@ export default {
       },
       datas : [
         {
+          label : "ครั้งที่",
+          value : 'seq'
+        },
+        {
           label : "วัคซีน",
           value : 'vaccine.name'
         },
@@ -134,6 +139,19 @@ export default {
           label : 'แก้ไข',
           type : 'edit',
           color : 'warning',
+          condition : (obj) => {
+            const groupVacs = _.groupBy(this.items,'vaccine._id');
+            for(let vac of Object.keys(groupVacs)){
+              const vacs = groupVacs[vac];
+              const sortedVacs = _.orderBy(vacs,'seq','desc');
+              if(sortedVacs.length > 0){
+                if(obj.vaccine._id == sortedVacs[0].vaccine._id){
+                  return true
+                }
+              }
+            }
+            return false
+          }
         },
       ]
     }

@@ -40,9 +40,9 @@ export default {
         value:{
             get(){
                 if(this.valueType === 'object'){
-                    // if(this.modelValue?.vaccine_data){
-                        this.modelValue.vaccine_data = this.modelValue?.code + ' : ' + this.modelValue?.name
-                    // }
+                    if(this.modelValue.vaccine_data){
+                        this.modelValue.vaccine_data =  this.modelValue?.name
+                    }
                 }
                 return this.modelValue
             },
@@ -62,7 +62,7 @@ export default {
                 this.datas = [];
                 if (resp) {
                     this.datas = resp.data.vaccines;
-                    this.datas.map((x)=> x.vaccine_data =  x.code + ' : ' + x.name);
+                    this.datas.map((x)=> x.vaccine_data =  x.name);
                 }
 
                 if(this.defaultValue) {
@@ -85,7 +85,7 @@ export default {
         },
         handleInput (text) {
             this.$emit("update:value", text);
-            this.dataSelected = this.datas.find((x) => x.name === text || x.code === text );
+            this.dataSelected = this.datas.find((x) => x.name === text );
             this.$emit("update:dataSelected", this.dataSelected);
             
         }

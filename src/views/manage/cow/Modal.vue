@@ -120,6 +120,7 @@
   
   import CowService from '@/services/cow'
   import { status , quality } from "@/constants/cow";
+  import { Toast } from '@/utils/alert'
 
   export default {
     data () {
@@ -201,6 +202,10 @@
                       this.loading = false  
                       this.value = false
                       this.confirm()
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'บันทึกข้อมูลสำเร็จ'
+                      })
                   }
                 }else{
                   const resp = await CowService.update(this.cow._id,this.cow);
@@ -208,12 +213,20 @@
                       this.loading = false  
                       this.value = false
                       this.confirm();
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'บันทึกข้อมูลสำเร็จ'
+                      })
                   }
                 }
             } catch (error) {
               console.error('Error : ',error)
                 this.loading = false  
                 this.alert = error.response.data.message
+                Toast.fire({
+                  icon: 'error',
+                  title: 'บันทึกข้อมูลไม่สำเร็จ'
+                })
             }
             
         },

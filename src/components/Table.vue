@@ -86,6 +86,7 @@
                       >
                         <BaseButton
                             v-for="btn in buttons"
+                            small
                             :key="btn.label"
                             :color="btn.color"
                             :label="btn.label"

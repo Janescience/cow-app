@@ -32,8 +32,8 @@
             </BaseButtons>
         </div>
         <CardBox
-            v-if="user?.farm?.lineToken && !loading"
-            title="ตารางกำหนดการ"
+            v-else-if="user?.farm?.lineToken && !loading"
+            title="ตารางกำหนดการแจ้งเตือน"
             header-icon=""
             >
             <Calendar :events="events" />                

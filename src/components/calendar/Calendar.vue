@@ -38,11 +38,45 @@
                 class="w-full px-2 py-1 flex space-x-1 items-center whitespace-nowrap overflow-hidden hover:border hover:border-gray-200 cursor-pointer rounded-lg"
                 @click="togglePopover($event, evt)"
               >
-                <div class="w-1/12">
-                  <div class="h-2 w-2 rounded-full bg-orange-600"></div>
+              <div class="w-1/12">
+                  <div v-if="evt.type == 'VACCINE' " class="w-6">
+                    <BaseIcon 
+                        path="needle" 
+                        size="18" 
+                        class="text-green-600" 
+                    />
+                  </div>
+                  <div v-if="evt.type == 'BIRTH' " class="mr-2">
+                    <BaseIcon 
+                        path="cow" 
+                        size="18" 
+                        class="text-amber-600"
+                    />
+                  </div>
+                  <div v-if="evt.code == 'REPRO_MATING' " class="w-6">
+                    <BaseIcon 
+                        path="reproduction" 
+                        size="18"
+                        class="text-yellow-500" 
+                    />
+                  </div>
+                  <div v-if="evt.code == 'REPRO_ESTRUST' " class="mr-2">
+                    <BaseIcon 
+                        path="heart" 
+                        size="14"
+                        class="text-red-400" 
+                    />
+                  </div>
+                  <div v-if="evt.code == 'REPRO_CHECK' " class="mr-2">
+                    <BaseIcon 
+                        path="stethoscope" 
+                        size="14"
+                        class="text-blue-400" 
+                    />
+                  </div>
                 </div>
                 <div class="w-11/12">
-                  <h5 class="text-xs tracking-tight text-clip overflow-hidden">
+                  <h5 class="text-xs text-left tracking-tight text-clip overflow-hidden">
                     {{ evt.title }}
                   </h5>
                 </div>
@@ -108,8 +142,41 @@
                 @click="openModal(day, allTodaysEvent(day, events))"
               >
                 <div class="w-1/12">
-                  <div v-if="evt.alert" class="h-2 w-2 rounded-full bg-green-600"></div>
-                  <div v-else class="h-2 w-2 rounded-full bg-orange-600"></div>
+                  <div v-if="evt.type == 'VACCINE' " class="w-6">
+                    <BaseIcon 
+                        path="needle" 
+                        size="18" 
+                        class="text-green-600" 
+                    />
+                  </div>
+                  <div v-if="evt.type == 'BIRTH' " class="mr-2">
+                    <BaseIcon 
+                        path="cow" 
+                        size="18" 
+                        class="text-amber-600"
+                    />
+                  </div>
+                  <div v-if="evt.code == 'REPRO_MATING' " class="w-6">
+                    <BaseIcon 
+                        path="reproduction" 
+                        size="18"
+                        class="text-yellow-500" 
+                    />
+                  </div>
+                  <div v-if="evt.code == 'REPRO_ESTRUST' " class="mr-2">
+                    <BaseIcon 
+                        path="heart" 
+                        size="14"
+                        class="text-red-400" 
+                    />
+                  </div>
+                  <div v-if="evt.code == 'REPRO_CHECK' " class="mr-2">
+                    <BaseIcon 
+                        path="stethoscope" 
+                        size="14"
+                        class="text-blue-400" 
+                    />
+                  </div>
                 </div>
                 <div class="w-11/12">
                   <h5 class="text-xs text-left tracking-tight text-clip overflow-hidden">
