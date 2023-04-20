@@ -15,12 +15,6 @@
       >
       
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
-          <FormField label="วัคซีน" help="* ห้ามว่าง" class="col-span-2 lg:col-span-1">
-            <DDLVaccine
-              v-model="protection.vaccine"
-              valueType="object"
-            />
-          </FormField>
           <FormField label="วันที่" help="* ห้ามว่าง" >
             <FormControl
               v-model="protection.date"
@@ -29,64 +23,45 @@
               required
             />
           </FormField>
-          <FormField label="รวมจำนวนที่ฉีด (ตัว)"  >
-            {{ protection.qty  }}
+          <FormField label="วัคซีน/ยา" help="* ห้ามว่าง" class="col-span-2">
+            <DDLVaccine
+              v-model="protection.vaccine"
+              valueType="object"
+            />
           </FormField>
-          <FormField label="รวมเป็นเงิน (บาท)"  >
-            {{ protection.amount  }}
-          </FormField>
-          <FormField label="คอก"  >
+          <FormField label="คอก" v-if="protection.vaccine?.code" >
             <FormControl
               v-model="corral"
               :options="ddlCorral"
               required
             />
           </FormField>
-          <FormField v-if="showVaccineCond" label="ฉีดวัคซีน"  >
-            <FormCheckRadioPicker
-              v-model="vaccineCond"
-              type="radio"
-              :options="{ Y: 'ฉีดทุกตัว', N: 'ฉีดบางตัว' }"
-            />
-          </FormField>
-          <BaseButtons
-              v-if="vaccineCond == 'Y' && showVaccineCond"
-              class="mt-2"
-              type="justify-start"
-            >
-              <BaseButton
-                label="ยืนยัน"
-                color="info"
-                @click="submitCow"
-
-              />
-          </BaseButtons>
         </div>
-
+        <BaseDivider  v-if="this.cows.length > 0"/>
           <header
             class="flex items-stretch border-b border-gray-100 dark:border-gray-800"
-            v-if="showCows"
+            v-if="this.cows.length > 0"
           >
             <p
               class="flex items-center py-3 grow font-bold"
             >
-              เลือกลบโคที่ไม่ต้องการ
+              เลือกโค คอก {{ corral }} จำนวน {{ cows.length }} ตัว
             </p>
             <FormControl
               v-model="search"
-              placeholder="ค้นหาโค"
-              required
+              icon="magnify"
+              placeholder="ค้นหาชื่อโค"
             />
           </header>
-          <div class="overflow-x-hidden overflow-y-auto h-48" v-if="showCows">
+          <div class="overflow-x-hidden overflow-y-auto max-h-48" v-if="this.cows.length > 0">
             <table >
               <thead>
                   <tr >
-                      <th class="whitespace-nowrap text-center">
-                        โค
+                    <th class="whitespace-nowrap text-center">
+                        รหัสโค
                       </th>
                       <th class="whitespace-nowrap text-center">
-                        คอก
+                        ชื่อโค
                       </th>
                       <th class="whitespace-nowrap text-center">
                         สถานะ
@@ -99,11 +74,11 @@
                   v-for="cow in resultSearch"
                   :key="cow._id"
                 >
-                  <td data-label="โค" >
-                    {{ cow.code }} : {{ cow.name }}
+                  <td data-label="รหัสโค" >
+                    {{ cow.code }} 
                   </td>
-                  <td data-label="คอก" >
-                    {{ cow.corral }}
+                  <td data-label="ชื่อโค" >
+                    {{ cow.name }}
                   </td>
                   <td data-label="สถานะ" >
                     {{ cow.status }}
@@ -125,17 +100,25 @@
               </tbody>
             </table>
           </div>
+          <NotificationBar 
+              v-if="alertSubmitCow" 
+              color="warning" 
+              outline
+              icon="alertCircleOutline">
+                {{ alertSubmitCow }}
+            </NotificationBar>
           <BaseButtons
-              v-if="showCows"
-              class="mt-2"
+              v-if="this.cows.length > 0"
               type="justify-center"
+              class="mt-2"
             >
               <BaseButton
-                @click="submitCow"
+                @click="submitCowConfirm"
                 label="ยืนยัน"
                 color="info"
               />
           </BaseButtons>
+          <BaseDivider  v-if="this.cows.length > 0"/>
           <header
             class="flex items-stretch border-b border-gray-100 dark:border-gray-800"
           >
@@ -150,19 +133,22 @@
             >
               <BaseButton
                 :disabled="protection.cows.length <= 0"
-                @click="reset"
+                @click="resetConfirm"
                 label="ล้าง"
                 small
                 color="danger"
               />
           </BaseButtons>
           </header>
-          <div class="overflow-x-hidden overflow-y-auto h-48" v-if="protection.cows.length > 0">
+          <div class="overflow-x-hidden overflow-y-auto max-h-48" v-if="protection.cows.length > 0">
             <table >
               <thead>
                   <tr >
                       <th class="whitespace-nowrap text-center">
-                        โค
+                        รหัสโค
+                      </th>
+                      <th class="whitespace-nowrap text-center">
+                        ชื่อโค
                       </th>
                       <th class="whitespace-nowrap text-center">
                         คอก
@@ -177,8 +163,11 @@
                   v-for="cow in protection.cows"
                   :key="cow._id"
                 >
-                  <td data-label="โค" >
-                    {{ cow.code }} : {{ cow.name }}
+                  <td data-label="รหัสโค" >
+                    {{ cow.code }}
+                  </td>
+                  <td data-label="ชื่อโค" >
+                    {{ cow.name }}
                   </td>
                   <td data-label="คอก" >
                     {{ cow.corral }}
@@ -208,6 +197,9 @@
             >
               <p>ไม่มีรายการ...</p>
           </div> 
+          <FormField  class="text-right mt-2" v-if="protection.cows.length > 0">
+            รวมฉีดวัคซีน {{ protection.qty ? protection.qty : '-' }} ตัว เป็นเงิน {{ protection.amount ? protection.amount : '-' }} บาท
+          </FormField>
         <NotificationBar 
           v-if="alert" 
           color="danger" 
@@ -231,10 +223,21 @@
           <BaseButton
             label="ยกเลิก"
             color="danger"
-            @click="cancel"
+            @click="cancelConfirm"
           />
         </BaseButtons>
+        <CardBoxModal
+            v-model="confirmObj.modal"
+            title="ยืนยันอีกครั้ง"
+            button-label="ยืนยัน"
+            @confirm="confirmObj.func"
+            has-cancel
+            has-button
+          >
+          <p>{{ confirmObj.text }}</p>
+      </CardBoxModal>
       </CardBox>
+      
     </OverlayLayer>
   </template>
   
@@ -243,6 +246,7 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseIcon from '@/components/BaseIcon.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
 import CardBox from '@/components/CardBox.vue'
+import CardBoxModal from '@/components/CardBoxModal.vue'
 import DDLVaccine from '@/components/DDL/Vaccine.vue'
 import BaseDivider from '@/components/BaseDivider.vue'
 import OverlayLayer from '@/components/OverlayLayer.vue'
@@ -263,22 +267,30 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       return {
         protection : {
           date : new Date(),
-          vaccine : {},
+          vaccine : null,
           qty : null,
           amount : null,
           remark : '',
           cows : []
         },
-        corral : null,
+        corral : '',
         corrals : null,
-        ddlCorral : [],
+        ddlCorral : [{id:'',label:'เลือกคอก'}],
         cows : [],
         showCows : false,
         showVaccineCond : false,
         vaccineCond : 'Y',
         loading : false,
         alert : "",
-        search : ''
+        search : '',
+        alertSubmitCow : '',
+        confirmObj : {
+          text : '',
+          func : null,
+          id : null,
+          dataSelected : null,
+          modal : false
+        }
       }
     },
     emits:['update:modelValue', 'cancel', 'confirm'],
@@ -318,8 +330,13 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       },
       'corral'(n){
         if(n){
-          this.cows = this.corrals[n];
-          this.showVaccineCond = true
+          const corralDup = this.protection.cows.filter(c => c.corral == n).length;
+          if(corralDup > 0){
+            this.alertSubmitCow = 'คอกนี้ถูกเลือกไปแล้ว กรุณาเลือกคอกใหม่หรือล้างรายการเดิมก่อน'
+          }else{
+            this.cows = this.corrals[n];
+            this.alertSubmitCow = ''
+          }
         }else{
           this.showVaccineCond = false
         }
@@ -338,18 +355,25 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     methods: {
         clear(){
           this.protection.date = new Date()
-          this.protection.vaccine = {}
+          this.protection.vaccine = null
           this.protection.qty = null
           this.protection.amount = null
           this.protection.remark = ''
+          this.protection.cows = []
+          this.corral = ''
+          this.cows = []
+          this.showCows = false
         },
         confirmCancel(mode){
             this.value = false
             this.$emit(mode)
         },
-        confirm(){
-            this.clear()
-            this.confirmCancel('confirm')
+        cancelConfirm(){
+          if(this.protection.cows.length > 0){
+            this.confirm('มีรายการโคฉีดวัคซีนยังไม่ได้บันทึก ยืนยันยกเลิกใช่หรือไม่ ?',null,null,this.cancel)
+          }else{
+            this.cancel()
+          }
         },
         cancel(){
             this.clear()
@@ -414,16 +438,30 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.protection.qty = this.protection.cows.length
           }
         },
+        submitCowConfirm(){
+          this.confirm('ยืนยันเลือกคอก ' + this.corral + ' และโคจำนวน ' + this.cows.length + ' ตัว ใช่หรือไม่ ?',null,null,this.submitCow)
+        },
         submitCow(){
-          this.protection.qty = this.cows.length
-          this.protection.cows.push(...this.cows)
-          this.cows = []
-          this.corral = ''
-          this.showCows = false
+            this.protection.qty += this.cows.length
+            this.protection.cows.push(...this.cows)
+            this.cows = []
+            this.corral = ''
+            this.showCows = false
+        },
+        resetConfirm(){
+          this.confirm('ต้องการล้างรายการโคฉีดวัคซีนทั้งหมดใช่หรือไม่ ?',null,null,this.reset)
         },
         reset(){
           this.protection.cows = []
-        }
+          this.protection.qty = ''
+        },
+        confirm(text,id,datas,func){
+            this.confirmObj.text = text
+            this.confirmObj.func = func
+            this.confirmObj.id = id
+            this.confirmObj.dataSelected = datas
+            this.confirmObj.modal = true
+        },
     },
     components : {
     BaseButton,
@@ -437,7 +475,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     BaseLevel,
     FormCheckRadioPicker,
     BaseIcon,
-    DDLVaccine
+    DDLVaccine,
+    CardBoxModal
 },
     props : {
         modelValue: {

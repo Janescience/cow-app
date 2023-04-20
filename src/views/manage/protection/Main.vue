@@ -145,7 +145,7 @@ export default {
               const vacs = groupVacs[vac];
               const sortedVacs = _.orderBy(vacs,'seq','desc');
               if(sortedVacs.length > 0){
-                if(obj.vaccine._id == sortedVacs[0].vaccine._id){
+                if(obj._id == sortedVacs[0]._id){
                   return true
                 }
               }
