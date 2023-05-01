@@ -89,6 +89,12 @@
                         no-wrap
                       >
                         <BaseButton
+                            color="success"
+                            icon="plus"
+                            small
+                            @click="addCow(cow)"
+                        />
+                        <BaseButton
                             color="danger"
                             icon="close"
                             small
@@ -114,7 +120,7 @@
             >
               <BaseButton
                 @click="submitCowConfirm"
-                label="ยืนยัน"
+                label="เลือกทั้งหมด"
                 color="info"
               />
           </BaseButtons>
@@ -267,7 +273,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       return {
         protection : {
           date : new Date(),
-          vaccine : null,
+          vaccine : {},
           qty : null,
           amount : null,
           remark : '',
@@ -275,7 +281,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         },
         corral : '',
         corrals : null,
-        ddlCorral : [{id:'',label:'เลือกคอก'}],
+        ddlCorral : [{id:'',label:'เลือกคอก'},{id:'all',label:'ทุกคอก'}],
         cows : [],
         showCows : false,
         showVaccineCond : false,
@@ -330,13 +336,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       },
       'corral'(n){
         if(n){
-          const corralDup = this.protection.cows.filter(c => c.corral == n).length;
-          if(corralDup > 0){
-            this.alertSubmitCow = 'คอกนี้ถูกเลือกไปแล้ว กรุณาเลือกคอกใหม่หรือล้างรายการเดิมก่อน'
-          }else{
-            this.cows = this.corrals[n];
-            this.alertSubmitCow = ''
-          }
+          this.cows = this.corrals[n];
+          this.alertSubmitCow = ''
         }else{
           this.showVaccineCond = false
         }
@@ -355,7 +356,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     methods: {
         clear(){
           this.protection.date = new Date()
-          this.protection.vaccine = null
+          this.protection.vaccine = {}
           this.protection.qty = null
           this.protection.amount = null
           this.protection.remark = ''
@@ -431,6 +432,17 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.search = ''
           }
         },
+        addCow(cow){
+          const checkDup = this.protection.cows.filter(c => c.code == cow.code).length
+          if (checkDup > 0) {
+            this.alertSubmitCow = 'โคซ้ำ กรุณาเลือกโคใหม่'
+          }else{
+            this.protection.qty += 1;
+            this.protection.cows.push(cow)
+            this.alertSubmitCow = ''
+            this.removeCow(cow)
+          }
+        },
         removeSubmitCow(cow){
           let index = this.protection.cows.indexOf(cow);
           if (index !== -1) {
@@ -439,15 +451,29 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           }
         },
         submitCowConfirm(){
-          this.confirm('ยืนยันเลือกคอก ' + this.corral + ' และโคจำนวน ' + this.cows.length + ' ตัว ใช่หรือไม่ ?',null,null,this.submitCow)
+          let isDup = false;
+          this.protection.cows.forEach((pc) => {
+            this.cows.forEach((c) => {
+              if(pc.code == c.code){
+                isDup = true;
+              }
+            })
+          })
+          if(isDup){
+            this.alertSubmitCow = 'คอกนี้มีโคซ้ำ กรุณาเลือกคอกใหม่'
+          }else{
+            this.confirm('ยืนยันเลือกคอก ' + this.corral + ' และโคจำนวน ' + this.cows.length + ' ตัว ใช่หรือไม่ ?',null,null,this.submitCow);
+          }
         },
         submitCow(){
-            this.protection.qty += this.cows.length
-            this.protection.cows.push(...this.cows)
-            this.cows = []
-            this.corral = ''
-            this.showCows = false
+          this.protection.qty += this.cows.length
+          this.protection.cows.push(...this.cows)
+          this.cows = []
+          this.corral = ''
+          this.showCows = false
+          this.alertSubmitCow = ''
         },
+
         resetConfirm(){
           this.confirm('ต้องการล้างรายการโคฉีดวัคซีนทั้งหมดใช่หรือไม่ ?',null,null,this.reset)
         },

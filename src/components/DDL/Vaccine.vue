@@ -40,9 +40,9 @@ export default {
         value:{
             get(){
                 if(this.valueType === 'object'){
-                    if(this.modelValue?.vaccine_data){
+                    // if(this.modelValue?.vaccine_data){
                         this.modelValue.vaccine_data =  this.modelValue?.name
-                    }
+                    // }
                 }
                 return this.modelValue
             },

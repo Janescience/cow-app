@@ -32,6 +32,11 @@
                     v-model="search[form.value]"
                     :valueType="form.valueType"
                 />
+                <DDLVaccine 
+                    v-else-if="form.type === 'ddl' && form.module === 'vaccine' " 
+                    v-model="search[form.value]"
+                    :valueType="form.valueType"
+                />
                 <FormCheckRadioPicker
                     v-else-if="form.type === 'radio' "
                     v-model="search[form.value]"
@@ -82,6 +87,7 @@ import FormControl from "@/components/FormControl.vue";
 import FormCheckRadioPicker from "@/components/FormCheckRadioPicker.vue";
 import DDLCow from "@/components/DDL/Cow.vue";
 import DDLRecipe from "@/components/DDL/Recipe.vue";
+import DDLVaccine from "@/components/DDL/Vaccine.vue";
 
 export default {
     props : {
@@ -113,7 +119,8 @@ export default {
         FormControl,
         FormCheckRadioPicker,
         DDLCow,
-        DDLRecipe
+        DDLRecipe,
+        DDLVaccine
     },
     methods : {
         submit(){

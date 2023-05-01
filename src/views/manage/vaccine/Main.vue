@@ -176,7 +176,7 @@ export default {
             this.$router.push({
                 name: "protection",
                 params : {
-                    code: obj.code ,
+                    vaccine: obj._id ,
                 }
             });
           },

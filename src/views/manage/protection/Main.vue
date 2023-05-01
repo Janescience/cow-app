@@ -68,6 +68,9 @@ export default {
           label : 'วัคซีน',
           value : 'vaccine',
           icon : 'needle',
+          type : 'ddl',
+          module : 'vaccine',
+          valueType : '_id'
         }, 
         {
           label : 'ฉีดวัคซีนล่าสุด',
@@ -173,7 +176,8 @@ export default {
     }
   },
   created() {
-    this.getDatas();
+    this.search.vaccine = this.$route.params.vaccine
+    this.getDatas(this.search);
   },
   methods : {
     async getDatas(search){
