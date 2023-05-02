@@ -6,15 +6,8 @@
         icon="doctor" 
         title="การป้องกัน/บำรุง"
         has-btn-add
-        @openModal="mode='create';openModal = true;"
+        @openModal="add"
         btnText="เพิ่มการป้องกัน/บำรุง"
-      />
-
-      <Modal
-        v-model="openModal"
-        :data="getDataCopy"
-        :mode="mode"
-        @confirm="getDatas"         
       />
 
       <Criteria
@@ -50,7 +43,6 @@ import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
 
-import Modal from './Modal.vue'
 import ProtectionService from '@/services/protection'
 
 import { Toast } from "@/utils/alert";
@@ -164,7 +156,6 @@ export default {
     LayoutAuthenticated,
     SectionTitleBarSub,
     Table,
-    Modal,
     Criteria
   },
   computed : {
@@ -201,10 +192,21 @@ export default {
         title: 'ลบข้อมูลสำเร็จ'
       })
     },
+    add(){
+      this.$router.push({
+          name: "protectionDetail",
+          params: {
+              id: 'add',
+          }
+      });
+    },
     edit(obj){
-      this.modalData = obj;
-      this.mode = 'edit';
-      this.openModal = true;
+      this.$router.push({
+          name: "protectionDetail",
+          params: {
+              id: obj._id ,
+          }
+      });
     },
     reset(){
       this.search.dateCurrent = null

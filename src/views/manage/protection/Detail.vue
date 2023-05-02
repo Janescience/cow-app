@@ -1,51 +1,80 @@
 <template>
-    <OverlayLayer
-      v-show="value"
-    >
-      <CardBox
-        v-show="value"
-        :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การป้องกัน/บำรุง'"
-        class="shadow-lg w-full lg:w-3/5 z-50"
-        header-icon="close"
-        modal
-        form
-        has-scroll
-        @submit.prevent="submit"
-        @header-icon-click="cancel"
-      >
-      
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
-          <FormField label="วันที่" help="* ห้ามว่าง" >
-            <FormControl
-              v-model="protection.date"
-              icon="calendar"
-              type="date"
-              required
-            />
-          </FormField>
-          <FormField label="วัคซีน/ยา" help="* ห้ามว่าง" class="col-span-2">
-            <DDLVaccine
-              v-model="protection.vaccine"
-              valueType="object"
-            />
-          </FormField>
-          <FormField label="คอก" v-if="protection.vaccine?.code" >
-            <FormControl
-              v-model="corral"
-              :options="ddlCorral"
-              required
-            />
-          </FormField>
+  <LayoutAuthenticated>
+    <SectionMain>
+
+      <section class="px-4 sm:px-0 mb-4 flex items-center justify-between">
+        <div class="flex items-center justify-start">
+          <BaseIcon
+            path="needle"
+            size="30"
+            class="mr-3"
+          />
+          <h1 class="text-base lg:text-2xl">
+            รายละเอียดการป้องกัน/บำรุง {{ '('+(this.$route.params.id != 'add' ?'(แก้ไข)' : '') }}
+          </h1>
         </div>
-        <BaseDivider  v-if="this.cows.length > 0"/>
+        <BaseButtons class="text-sm lg:text-base " type="justify-end">
+          <BaseButton
+            class="lg:p-2 p-1"
+            label="ย้อนกลับ"
+            color="light"
+            @click="this.$router.push('/manage/protection')"
+          />
+          <BaseButton
+            label="บันทึก"
+            color="success"
+            type="submit"
+            :disabled="protection.cows.length <= 0"
+            :loading="loading"
+          />
+         </BaseButtons>
+      </section>
+
+      <CardBox
+        title="ข้อมูลการป้องกัน/บำรุง"
+        class="shadow-lg w-full mb-3"
+        header-icon=""
+        form
+      >
+        
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            <FormField label="วันที่" help="* ห้ามว่าง" >
+              <FormControl
+                v-model="protection.date"
+                icon="calendar"
+                type="date"
+                required
+              />
+            </FormField>
+            <FormField label="วัคซีน/ยา" help="* ห้ามว่าง" class="col-span-2">
+              <DDLVaccine
+                v-model="protection.vaccine"
+                valueType="object"
+              />
+            </FormField>
+            <FormField label="คอก" v-if="protection.vaccine?.code" >
+              <FormControl
+                v-model="corral"
+                :options="ddlCorral"
+                required
+              />
+            </FormField>
+          </div>
+        
+        
+          <CardBox
+            title=""
+            class="shadow-lg dark:bg-slate-700"
+            header-icon=""
+            v-if="this.cows.length > 0"
+        >
           <header
             class="flex items-stretch border-b border-gray-100 dark:border-gray-800"
-            v-if="this.cows.length > 0"
           >
             <p
               class="flex items-center py-3 grow font-bold"
             >
-              เลือกโค คอก {{ corral }} จำนวน {{ cows.length }} ตัว
+              เลือกโค (คอก {{ corral }} / {{ cows.length }} ตัว)
             </p>
             <FormControl
               v-model="search"
@@ -53,7 +82,7 @@
               placeholder="ค้นหาชื่อโค"
             />
           </header>
-          <div class="overflow-x-hidden overflow-y-auto max-h-48" v-if="this.cows.length > 0">
+          <div class="overflow-x-hidden overflow-y-auto max-h-52" v-if="this.cows.length > 0">
             <table >
               <thead>
                   <tr >
@@ -81,7 +110,7 @@
                     {{ cow.name }}
                   </td>
                   <td data-label="สถานะ" >
-                    {{ cow.status }}
+                    {{ status()[cow.status].label }}
                   </td>
                   <td class="lg:w-6 whitespace-nowrap">
                       <BaseButtons
@@ -90,13 +119,13 @@
                       >
                         <BaseButton
                             color="success"
-                            icon="plus"
+                            label="เลือก"
                             small
                             @click="addCow(cow)"
                         />
                         <BaseButton
                             color="danger"
-                            icon="close"
+                            label="ลบ"
                             small
                             @click="removeCow(cow)"
                         />
@@ -106,6 +135,7 @@
               </tbody>
             </table>
           </div>
+          </CardBox>
           <NotificationBar 
               v-if="alertSubmitCow" 
               color="warning" 
@@ -113,10 +143,10 @@
               icon="alertCircleOutline">
                 {{ alertSubmitCow }}
             </NotificationBar>
+            <BaseDivider  v-if="this.cows.length > 0"/>
           <BaseButtons
               v-if="this.cows.length > 0"
               type="justify-center"
-              class="mt-2"
             >
               <BaseButton
                 @click="submitCowConfirm"
@@ -124,88 +154,6 @@
                 color="info"
               />
           </BaseButtons>
-          <BaseDivider  v-if="this.cows.length > 0"/>
-          <header
-            class="flex items-stretch border-b border-gray-100 dark:border-gray-800"
-          >
-            <p
-              class="flex items-center py-3 grow font-bold"
-            >
-              รายการโคฉีดวัคซีน
-            </p>
-            <BaseButtons
-              class="mt-2"
-              type="justify-center"
-            >
-              <BaseButton
-                :disabled="protection.cows.length <= 0"
-                @click="resetConfirm"
-                label="ล้าง"
-                small
-                color="danger"
-              />
-          </BaseButtons>
-          </header>
-          <div class="overflow-x-hidden overflow-y-auto max-h-48" v-if="protection.cows.length > 0">
-            <table >
-              <thead>
-                  <tr >
-                      <th class="whitespace-nowrap text-center">
-                        รหัสโค
-                      </th>
-                      <th class="whitespace-nowrap text-center">
-                        ชื่อโค
-                      </th>
-                      <th class="whitespace-nowrap text-center">
-                        คอก
-                      </th>
-                      <th class="whitespace-nowrap text-center">
-                        สถานะ
-                      </th>
-                  </tr>
-              </thead>
-              <tbody >
-                <tr
-                  v-for="cow in protection.cows"
-                  :key="cow._id"
-                >
-                  <td data-label="รหัสโค" >
-                    {{ cow.code }}
-                  </td>
-                  <td data-label="ชื่อโค" >
-                    {{ cow.name }}
-                  </td>
-                  <td data-label="คอก" >
-                    {{ cow.corral }}
-                  </td>
-                  <td data-label="สถานะ" >
-                    {{ cow.status }}
-                  </td>
-                  <td class="lg:w-6 whitespace-nowrap">
-                      <BaseButtons
-                        type="justify-end lg:justify-start"
-                        no-wrap
-                      >
-                        <BaseButton
-                            color="danger"
-                            icon="close"
-                            small
-                            @click="removeSubmitCow(cow)"
-                        />
-                      </BaseButtons>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div v-else
-              class="text-center py-10 text-gray-500 dark:text-gray-400 "
-            >
-              <p>ไม่มีรายการ...</p>
-          </div> 
-          <FormField  class="text-right mt-2" v-if="protection.cows.length > 0">
-            รวมฉีดวัคซีน {{ protection.qty ? protection.qty : '-' }} ตัว เป็นเงิน {{ protection.amount ? protection.amount : '-' }} บาท
-          </FormField>
         <NotificationBar 
           v-if="alert" 
           color="danger" 
@@ -213,26 +161,19 @@
           icon="alertCircleOutline">
             {{ alert }}
         </NotificationBar>
-  
-        <BaseDivider />
-  
-        <BaseButtons
-          type="justify-center"
-        >
-          <BaseButton
-            label="บันทึก"
-            color="success"
-            type="submit"
-            :disabled="protection.cows.length <= 0"
-            :loading="loading"
-          />
-          <BaseButton
-            label="ยกเลิก"
-            color="danger"
-            @click="cancelConfirm"
-          />
-        </BaseButtons>
-        <CardBoxModal
+      </CardBox>
+      <Table
+      :title="'รายการโคฉีดวัคซีน' + (protection.qty ? ' (' + protection.qty + ' ตัว เป็นเงิน ' + protection.amount + ' บาท' + ')': '')" 
+        has-checkbox
+        :checked-data="checked" 
+        :items="protection.cows" 
+        :datas="datas" 
+        :buttons="buttons" 
+        @delete="removeSubmitCow" 
+        @deleteSelected="removeSelected"
+        :loading="loading"
+      />
+      <CardBoxModal
             v-model="confirmObj.modal"
             title="ยืนยันอีกครั้ง"
             button-label="ยืนยัน"
@@ -242,12 +183,13 @@
           >
           <p>{{ confirmObj.text }}</p>
       </CardBoxModal>
-      </CardBox>
-      
-    </OverlayLayer>
-  </template>
+    </SectionMain>
+  </LayoutAuthenticated>
+</template>
   
 <script>
+import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
+import SectionMain from '@/components/SectionMain.vue';
 import BaseButton from '@/components/BaseButton.vue'
 import BaseIcon from '@/components/BaseIcon.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
@@ -260,8 +202,10 @@ import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
+import Table from '@/components/Table.vue'
 
 import { Toast } from "@/utils/alert";
+import { status } from '@/constants/cow'
 import _ from 'lodash'
 
 import ProtectionService from '@/services/protection'
@@ -290,13 +234,50 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         alert : "",
         search : '',
         alertSubmitCow : '',
+        status : status,
         confirmObj : {
           text : '',
           func : null,
           id : null,
           dataSelected : null,
           modal : false
-        }
+        },
+        checked : {
+          label : {
+            value : 'name'
+          },
+          code : {
+            value : 'code'
+          }
+        },
+        datas : [
+          {
+            label : "รหัสโค",
+            value : 'code'
+          },
+          {
+            label : "ชื่อโค",
+            value : 'name'
+          },
+          {
+            label : "คอก",
+            class : 'text-center',
+            value : 'corral'
+          },
+          {
+            label : "สถานะ",
+            func : (obj) => {
+              return status()[obj.status].label;
+            }
+          },
+        ],
+        buttons : [
+          {
+            label : 'ลบ',
+            type : 'delete',
+            color : 'danger',
+          },
+        ]
       }
     },
     emits:['update:modelValue', 'cancel', 'confirm'],
@@ -323,12 +304,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         }
     },
     watch:{
-      data(n){
-        if(n && this.mode === 'edit'){
-          this.protection = n;
-          this.protection.date = new Date(n.date);
-        }
-      },
       'protection.qty'(n){
         if(n){
           this.protection.amount = n * this.protection.vaccine.amount;
@@ -336,8 +311,23 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       },
       'corral'(n){
         if(n){
-          this.cows = this.corrals[n];
-          this.alertSubmitCow = ''
+          const cows = [...this.corrals[n]] ;
+          this.cows = [...this.corrals[n]] ;
+          cows.forEach((c) => {
+            this.protection.cows.forEach((pc) => {
+              if(c.code === pc.code){
+                let index = this.cows.map(cow => cow.code).indexOf(c.code);
+                if (index !== -1) {
+                  this.cows.splice(index, 1);
+                }
+              }
+            })
+          })
+          if(this.cows.length == 0){
+            this.alertSubmitCow = 'โคทั้งหมดของคอกนี้ถูกเลือกให้ฉีดวัคซีนแล้ว'
+          }else{
+            this.alertSubmitCow = ''
+          }
         }else{
           this.showVaccineCond = false
         }
@@ -352,8 +342,19 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     },
     created(){
       this.getCorrals()
+
+      if(this.$route.params.id && this.$route.params.id != 'add'){
+        this.getProtection();
+      }
     },
     methods: {
+        async getProtection(){
+          const resp = await ProtectionService.get(this.$route.params.id);
+          if(resp){
+             this.protection = resp.data.protection 
+             this.protection.date = new Date(this.protection.date);
+          }
+        },
         clear(){
           this.protection.date = new Date()
           this.protection.vaccine = {}
@@ -443,11 +444,15 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.removeCow(cow)
           }
         },
-        removeSubmitCow(cow){
-          let index = this.protection.cows.indexOf(cow);
+        removeSubmitCow(id){
+          const cow = this.protection.cows.filter(c => c._id === id);
+          let index = this.protection.cows.map(c => c._id).indexOf(id);
           if (index !== -1) {
             this.protection.cows.splice(index, 1);
             this.protection.qty = this.protection.cows.length
+            if(cow[0].corral == this.corral){
+              this.cows.push(cow[0]);
+            }
           }
         },
         submitCowConfirm(){
@@ -502,7 +507,10 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     FormCheckRadioPicker,
     BaseIcon,
     DDLVaccine,
-    CardBoxModal
+    CardBoxModal,
+    LayoutAuthenticated,
+    SectionMain,
+    Table
 },
     props : {
         modelValue: {

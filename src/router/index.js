@@ -142,6 +142,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'รายละเอียดการป้องกัน/บำรุง',
+      loginRequired : true
+    },
+    path: '/manage/protection/detail/:id',
+    name: 'protectionDetail',
+    component: () => import('@/views/manage/protection/Detail.vue')
+  },
+  {
+    meta: {
       title: 'การให้อาหาร',
       loginRequired : true
     },
