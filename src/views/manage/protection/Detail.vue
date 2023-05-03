@@ -2,20 +2,21 @@
   <LayoutAuthenticated>
     <SectionMain>
 
-      <section class="px-4 sm:px-0 mb-4 flex items-center justify-between">
-        <div class="flex items-center justify-start">
-          <BaseIcon
+      <section class="grid mb-3 px-3 lg:px-0 grid-flow-col ">
+        <div class="flex ">
+          
+          <h1 class="text-lg">
+            <BaseIcon
             path="needle"
-            size="30"
-            class="mr-3"
+            size="26"
+            
           />
-          <h1 class="text-base lg:text-2xl">
-            รายละเอียดการป้องกัน/บำรุง {{ '('+(this.$route.params.id != 'add' ?'(แก้ไข)' : '') }}
+            รายละเอียดการป้องกัน/บำรุง {{ (this.$route.params.id != 'add' ?'(แก้ไข)' : '') }}
           </h1>
         </div>
-        <BaseButtons class="text-sm lg:text-base " type="justify-end">
+        <BaseButtons class="text-sm  lg:text-base " type="justify-end">
           <BaseButton
-            class="lg:p-2 p-1"
+            class="lg:p-2 p-1 lg:visible invisible"
             label="ย้อนกลับ"
             color="light"
             @click="this.$router.push('/manage/protection')"
@@ -23,7 +24,7 @@
           <BaseButton
             label="บันทึก"
             color="success"
-            type="submit"
+            @click="submit"
             :disabled="protection.cows.length <= 0"
             :loading="loading"
           />
@@ -37,7 +38,7 @@
         form
       >
         
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="grid grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-5">
             <FormField label="วันที่" help="* ห้ามว่าง" >
               <FormControl
                 v-model="protection.date"
@@ -69,16 +70,17 @@
             v-if="this.cows.length > 0"
         >
           <header
-            class="flex items-stretch border-b border-gray-100 dark:border-gray-800"
+            class="flex grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-5 items-stretch border-b border-gray-100 dark:border-gray-800"
           >
             <p
               class="flex items-center py-3 grow font-bold"
             >
-              เลือกโค (คอก {{ corral }} / {{ cows.length }} ตัว)
+              เลือกโค ( {{ corral === 'all' ? 'ทุกคอก' : 'คอก ' + corral }} / {{ cows.length }} ตัว)
             </p>
             <FormControl
               v-model="search"
               icon="magnify"
+              class="col-end-2 lg:col-end-7"
               placeholder="ค้นหาชื่อโค"
             />
           </header>
@@ -163,7 +165,7 @@
         </NotificationBar>
       </CardBox>
       <Table
-      :title="'รายการโคฉีดวัคซีน' + (protection.qty ? ' (' + protection.qty + ' ตัว เป็นเงิน ' + protection.amount + ' บาท' + ')': '')" 
+      :title="'รายการโคฉีดวัคซีน' + (protection.qty ? ' (' + protection.qty + ' ตัว / ' + protection.amount + ' บาท' + ')': '')" 
         has-checkbox
         :checked-data="checked" 
         :items="protection.cows" 
@@ -311,8 +313,18 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       },
       'corral'(n){
         if(n){
-          const cows = [...this.corrals[n]] ;
-          this.cows = [...this.corrals[n]] ;
+          let cows = []
+          if(n == 'all'){
+            for(let key of Object.keys(this.corrals)){
+              console.log(this.corrals[key])
+              cows.push(...this.corrals[key])
+              this.cows.push(...this.corrals[key])
+            }
+          }else{
+            cows = [...this.corrals[n]];
+            this.cows = [...this.corrals[n]];
+          }
+          
           cows.forEach((c) => {
             this.protection.cows.forEach((pc) => {
               if(c.code === pc.code){
@@ -366,10 +378,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           this.cows = []
           this.showCows = false
         },
-        confirmCancel(mode){
-            this.value = false
-            this.$emit(mode)
-        },
         cancelConfirm(){
           if(this.protection.cows.length > 0){
             this.confirm('มีรายการโคฉีดวัคซีนยังไม่ได้บันทึก ยืนยันยกเลิกใช่หรือไม่ ?',null,null,this.cancel)
@@ -377,27 +385,25 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.cancel()
           }
         },
-        cancel(){
-            this.clear()
-            this.confirmCancel('cancel')
-        },
         async submit(){
             this.loading = true
             this.alert = ""
             try {
-              if(this.mode === 'create'){
+              if(this.$route.params.id === 'add'){
                 const resp = await ProtectionService.create(this.protection);
                 if(resp){
                     this.loading = false
-                    this.value = false 
-                    this.confirmCancel('confirm') 
+                    this.$router.push({
+                        name: "protectionDetail",
+                        params: {
+                            id: resp.data._id ,
+                        }
+                    });
                 }
               }else{
                 const resp = await ProtectionService.update(this.protection._id,this.protection);
                 if(resp){
                     this.loading = false
-                    this.value = false
-                    this.confirmCancel('confirm')  
                 }
               }
               Toast.fire({
@@ -455,6 +461,14 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             }
           }
         },
+        removeSelected(datas){
+          for(let data of datas){
+            let index = this.protection.cows.indexOf(data);
+            if (index !== -1) {
+              this.protection.cows.splice(index, 1);
+            }
+          }
+        },
         submitCowConfirm(){
           let isDup = false;
           this.protection.cows.forEach((pc) => {
@@ -467,7 +481,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           if(isDup){
             this.alertSubmitCow = 'คอกนี้มีโคซ้ำ กรุณาเลือกคอกใหม่'
           }else{
-            this.confirm('ยืนยันเลือกคอก ' + this.corral + ' และโคจำนวน ' + this.cows.length + ' ตัว ใช่หรือไม่ ?',null,null,this.submitCow);
+            this.confirm('ยืนยันเลือกโคทั้งหมดใช่หรือไม่ ?',null,null,this.submitCow);
           }
         },
         submitCow(){
@@ -480,7 +494,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         },
 
         resetConfirm(){
-          this.confirm('ต้องการล้างรายการโคฉีดวัคซีนทั้งหมดใช่หรือไม่ ?',null,null,this.reset)
+          this.confirm('ยืนยันล้างรายการโคฉีดวัคซีนทั้งหมดใช่หรือไม่ ?',null,null,this.reset)
         },
         reset(){
           this.protection.cows = []

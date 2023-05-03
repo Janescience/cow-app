@@ -260,6 +260,7 @@ export default {
         },
         removeSelected(){
             this.$emit('deleteSelected',this.dataSelectedConfirm);
+            this.checkedRows = []
         },
         edit(value){
             this.$emit('edit',value)

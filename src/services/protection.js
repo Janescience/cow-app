@@ -3,13 +3,9 @@ import moment from 'moment'
 
 async function getSearchQuery (opts = {}) {
     let query = "?";
-    if (opts.dateCurrent) {
-        const dateNoTime = moment(new Date(opts.dateCurrent)).format('YYYY-MM-DD') 
-        query = query + `dateCurrent=${dateNoTime}&`;
-    }
-    if (opts.dateNext) {
-        const dateNoTime = moment(new Date(opts.dateNext)).format('YYYY-MM-DD') 
-        query = query + `dateNext=${dateNoTime}&`;
+    if (opts.date) {
+        const dateNoTime = moment(new Date(opts.date)).format('YYYY-MM-DD') 
+        query = query + `date=${dateNoTime}&`;
     }
     if (opts.vaccine) {
         query = query + `vaccine=${opts.vaccine}&`;

@@ -3,7 +3,7 @@
     <SectionMain>
 
       <SectionTitleBarSub 
-        icon="doctor" 
+        icon="needle" 
         title="การป้องกัน/บำรุง"
         has-btn-add
         @openModal="add"
@@ -65,14 +65,8 @@ export default {
           valueType : '_id'
         }, 
         {
-          label : 'ฉีดวัคซีนล่าสุด',
-          value : 'dateCurrent',
-          icon : 'calendar',
-          type : 'date'
-        },
-        {
-          label : 'ฉีดวัคซีนครั้งต่อไป',
-          value : 'dateNext',
+          label : 'วันที่ฉีดวัคซีน',
+          value : 'date',
           icon : 'calendar',
           type : 'date'
         },
@@ -209,9 +203,9 @@ export default {
       });
     },
     reset(){
-      this.search.dateCurrent = null
-      this.search.dateNext = null
-      this.search.vaccine = ''
+      this.search.date = new Date()
+      this.search.vaccine = null
+      this.getDatas()
     },
   }
 }
