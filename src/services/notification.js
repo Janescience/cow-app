@@ -12,6 +12,9 @@ async function getSearchQuery (opts = {}) {
   if (opts.type) {
       query = query + `type=${opts.type}&`;
   } 
+  if (opts.cow) {
+    query = query + `cow=${opts.cow}&`;
+} 
   return opts ? query.replace(/&*$/, "") : "";
 }
 
@@ -23,8 +26,9 @@ class NotificationService {
             return response;
         });
   }
-  async getCalendar(){
-    return http.get(`/notification/calendar`)
+  async getCalendar(search){
+    const query = await getSearchQuery(search);
+    return http.get(`/notification/calendar`+query)
         .then(response => {
             return response;
         });

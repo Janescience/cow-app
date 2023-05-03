@@ -10,6 +10,9 @@ async function getSearchQuery (opts = {}) {
     if (opts.vaccine) {
         query = query + `vaccine=${opts.vaccine}&`;
     } 
+    if (opts.cows) {
+        query = query + `cows=${opts.cows}&`;
+    } 
     return opts ? query.replace(/&*$/, "") : "";
 }
 class ProtectionService{

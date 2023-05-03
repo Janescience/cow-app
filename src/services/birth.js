@@ -12,6 +12,9 @@ async function getSearchQuery (opts = {}) {
     }
     if (opts.sex) {
         query = query + `sex=${opts.sex}&`;
+    }
+    if (opts.status) {
+        query = query + `status=${opts.status}&`;
     } 
     return opts ? query.replace(/&*$/, "") : "";
 }

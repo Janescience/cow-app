@@ -125,10 +125,10 @@
           header-icon=""
         >
           <div class="grid gap-5 grid-cols-4 ">
-            <p class="col-span-2">
+            <p class="col-span-2 ">
                น้ำนมดิบ เฉลี่ย/วัน 
             </p>
-            <p>
+            <p class=" underline decoration-orange-700 decoration-4 ">
               {{ milk.avg }}
             </p>
             <p>
@@ -137,7 +137,7 @@
             <p class="col-span-2">
                น้ำนมดิบ ทั้งหมด
             </p>
-            <p>
+            <p class=" underline decoration-orange-700 decoration-4 ">
               {{ milk.all }}
             </p>
             <p>
@@ -160,19 +160,19 @@
             <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p class="ml-5">
+            <p class="ml-5 underline decoration-sky-700 decoration-4">
               {{ reproduct().login.count }}
             </p>
             <p class="ml-5">
               เข้าระบบครั้งล่าสุด
             </p>
-            <p class="ml-5">
+            <p class="ml-5 underline decoration-sky-700 decoration-4">
               {{ reproduct().login.lastDate }}
             </p>
             <p class="ml-5">
               ผลครั้งล่าสุด
             </p>
-            <p class="ml-5">
+            <p class="ml-5 underline decoration-sky-700 decoration-4">
               {{ reproduct().login.result }}
             </p>
             <!-- ================================ -->
@@ -182,13 +182,13 @@
             <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p class="ml-5">
+            <p class="ml-5 underline decoration-sky-700 decoration-4">
               {{ reproduct().estrus.count }}
             </p>
             <p class="ml-5">
               เป็นสัดครั้งล่าสุด
             </p>
-            <p class="ml-5">
+            <p class="ml-5 underline decoration-sky-700 decoration-4">
               {{ reproduct().estrus.lastDate }}
             </p>
             <!-- //================================ -->
@@ -198,13 +198,13 @@
             <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p class="ml-5">
+            <p class="ml-5 underline decoration-sky-700 decoration-4">
               {{ reproduct().mating.count }}
             </p>
             <p class="ml-5">
               ผสมครั้งล่าสุด
             </p>
-            <p class="ml-5">
+            <p class="ml-5 underline decoration-sky-700 decoration-4">
               {{ reproduct().mating.lastDate }}
             </p>
             <!-- //================================ -->
@@ -214,13 +214,13 @@
             <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p class="ml-5">
+            <p class="ml-5 underline decoration-sky-700 decoration-4">
               {{ reproduct().check.count }}
             </p>
             <p class="ml-5">
               ตรวจท้องครั้งล่าสุด
             </p>
-            <p class="ml-5">
+            <p class="ml-5 underline decoration-sky-700 decoration-4">
               {{ reproduct().check.lastDate }}
             </p>
             <!-- //================================ -->
@@ -239,25 +239,25 @@
             <p>
               จำนวนครั้ง
             </p>
-            <p>
+            <p class="underline decoration-pink-500 decoration-4">
               {{ birth().count }}
             </p>
             <p >
               คลอดลูกล่าสุด
             </p>
-            <p>
+            <p class="underline decoration-pink-500 decoration-4">
               {{ birth().lastDate }}
             </p>
             <p>
               จำนวนเพศผู้
             </p>
-            <p>
+            <p class="underline decoration-pink-500 decoration-4">
               {{ birth().countMale }}
             </p>
             <p>
               จำนวนเพศเมีย
             </p>
-            <p>
+            <p class="underline decoration-pink-500 decoration-4">
               {{ birth().countFemale }}
             </p>
           </div>
@@ -270,28 +270,28 @@
           header-icon=""
         >
           <div class="grid gap-5 grid-cols-2 ">
-            <p>
+            <p >
               จำนวนครั้ง
             </p>
-            <p>
+            <p class="underline decoration-emerald-500 decoration-4">
               {{ heal().count }}
             </p>
             <p >
               รักษาล่าสุด
             </p>
-            <p>
+            <p class="underline decoration-emerald-500 decoration-4">
               {{ heal().lastDate }}
             </p>
-            <p>
+            <p > 
               อาการ/โรคล่าสุด
             </p>
-            <p>
+            <p class="underline decoration-emerald-500 decoration-4">
               {{ heal().lastDisease }}
             </p>
-            <p>
+            <p >
               วิธีการรักษาล่าสุด
             </p>
-            <p>
+            <p class="underline decoration-emerald-500 decoration-4">
               {{ heal().lastMethod }}
             </p>
           </div>
@@ -299,47 +299,16 @@
         </CardBox>
         </div>
 
-        <CardBox 
-          class=" "
-          icon="pillMultiple"
+        <Table
+          v-if="protections.length > 0"
+          title="การป้องกัน/วัคซีน" 
+          :items="protections" 
+          :datas="protectionDatas"
           :loading="loading.protection"
-          title="การป้องกัน/วัคซีน"
-          header-icon=""
-        >
-          <div class="grid gap-5 grid-cols-3 font-bold p-3">
-            <div >
-              วัคซีน
-            </div>
-            <div >
-              ให้ยาล่าสุด
-            </div>
-            <div>
-              ให้ยาครั้งต่อไป
-            </div>
-          </div>
-          <div class="overflow-x-hidden overflow-y-auto h-20" v-if="protections.length > 0">
-            <div
-              class="grid gap-5 grid-cols-3 p-3"
-              v-for="protection in protections"
-              :key="protection._id"
-            > 
-                <p class="font-bold">
-                  {{  protection.vaccine }}
-                </p>
-                
-                <p >
-                  {{ formatDate(protection.dateCurrent)  }}
-                </p>
-                
-                <p >
-                  {{ formatDate(protection.dateNext)  }}
-                </p>
-            </div>
-              
-          </div>
-  
-        </CardBox>
-
+          perPage="5"
+          icon="pillMultiple"
+        />
+        
         <CardBox 
           icon="foodDrumstickOutline"
           :loading="loading.food"
@@ -420,6 +389,7 @@ import BirthService from '@/services/birth'
 import HealService from '@/services/heal'
 import ProtectionService from '@/services/protection'
 import FoodService from '@/services/food'
+import NotificationService from '@/services/notification'
 
 import getAge from "@/utils/age-calculate";
 import moment from "moment";
@@ -443,6 +413,7 @@ export default {
       heals : [],
       protections : [],
       foods : [],
+      notifications : [],
       loading : {
         cow : false,
         milk : false,
@@ -597,6 +568,29 @@ export default {
         },
 
       ],
+      protectionDatas : [
+      {
+          label : "วัคซีน",
+          value : 'vaccine.name',
+        },
+        {
+          label : "ครั้งที่",
+          class : 'text-center',
+          value : 'seq',
+        },
+        {
+          label : "ให้ยาล่าสุด",
+          class : 'text-center',
+          value : 'vaccine.currentDate',
+          type : 'date'
+        },
+        {
+          label : "ให้ยาครั้งต่อไป",
+          class : 'text-center',
+          value : 'vaccine.nextDate',
+          type : 'date'
+        },
+      ],
       healDatas : [
         {
           label : "ครั้งที่",
@@ -725,7 +719,7 @@ export default {
 
 
           this.loading.birth = true;
-          const birthResp = await BirthService.all({ cow: id});
+          const birthResp = await BirthService.all({ cow: id,status : 'B'});
           if (birthResp) {
             this.births = birthResp.data.births; 
           }
@@ -740,9 +734,18 @@ export default {
           this.loading.heal = false;
 
           this.loading.protection = true;
-          const protectionResp = await ProtectionService.all(); 
-          if (protectionResp) { 
-            this.protections = protectionResp.data.protections; 
+          const protectionResp = await ProtectionService.all({cows:id}); 
+          if (protectionResp) {
+            const groupVacs = _.groupBy(protectionResp.data.protections,'vaccine._id');
+            for(let vac of Object.keys(groupVacs)){
+              const vacs = groupVacs[vac];
+              const sortedVacs = _.orderBy(vacs,'seq','desc');
+              if(sortedVacs.length > 0){
+                this.protections.push(sortedVacs[0])
+
+              }
+            } 
+            // this.protections = protectionResp.data.protections; 
           }
           this.loading.protection = false;
 
@@ -763,6 +766,11 @@ export default {
             this.milks = _.groupBy(milkResp.data.milks,'groupKey');
           }
           this.loading.milk = false;
+
+          const notiResp = await NotificationService.getCalendar({cow:id});
+          if (notiResp.data) {
+            this.notifications = notiResp.data.events
+          }
         } 
     },  
     async update(){

@@ -141,7 +141,7 @@ export default {
             funcConfirm : Function,
             idConfirm : null,
             dataSelectedConfirm : [],
-            perPage :10,
+            // perPage :10,
             currentPage : 0,
             checkedRows : [],
         }
@@ -167,6 +167,10 @@ export default {
         checkedData : {
             type : Object,
             default : null
+        },
+        perPage : {
+            type : Number,
+            default : 10
         },
         icon : {
             type : String ,
