@@ -77,6 +77,11 @@
                         username="profile"
                         class="w-36 mx-auto lg:h-20 lg:w-20"
                     />
+                    <BaseIcon
+                        v-else-if="row.type === 'icon'"
+                        :path="getValue(obj,row)"
+                        size="22"
+                    />
                     <span v-else >{{ getValue(obj,row) }}</span>
                   </td>
                   <td v-if="buttons.length > 0" class="lg:w-6 whitespace-nowrap" >
@@ -126,6 +131,7 @@
 import BaseButton from "@/components/BaseButton.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
+import BaseIcon from "@/components/BaseIcon.vue";
 import CardBox from "@/components/CardBox.vue";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
@@ -206,6 +212,7 @@ export default {
         TableCheckboxCell,
         UserAvatar,
         BaseLevel,
+        BaseIcon,
     },
     methods : {
         getValue(obj,row){
@@ -225,6 +232,8 @@ export default {
                 case 'date':
                     return this.formatDate(value)
                 case 'image':
+                    return value
+                case 'icon':
                     return value
             }
         },

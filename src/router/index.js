@@ -124,6 +124,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'คนงาน',
+      loginRequired : true
+    },
+    path: '/manage/worker',
+    name: 'worker',
+    component: () => import('@/views/manage/worker/Main.vue')
+  },
+  {
+    meta: {
       title: 'วัคซีน',
       loginRequired : true
     },

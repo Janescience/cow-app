@@ -117,7 +117,7 @@
         </div>
       </CardBox>
 
-      <div class="grid gap-5 grid-cols-1 lg:grid-cols-2 md:grid-cols-2 mb-5">
+      <div class="grid gap-5 grid-cols-1 lg:grid-cols-2 md:grid-cols-2 ">
         <CardBox 
           icon="cupWater"
           :loading="loading.milk"
@@ -308,12 +308,24 @@
           perPage="5"
           icon="pillMultiple"
         />
-        
-        <CardBox 
+
+        <Table
+          v-if="notifications.length > 0"
+          title="การแจ้งเตือน" 
+          :items="notifications" 
+          :datas="notificationDatas"
+          :loading="loading.protection"
+          perPage="5"
+          icon="messageBadgeOutline"
+        />
+      </div>
+
+      <CardBox 
           icon="foodDrumstickOutline"
           :loading="loading.food"
           :title="'การให้อาหาร' + ' - คอก '+cow.corral "
           header-icon=""
+          class="mb-5"
         >
           <div v-if="foods.length <= 0" class="text-slate-600">
             ไม่มีรายการให้อาหาร...
@@ -323,13 +335,11 @@
             :key="food._id"
           >
               <p >
-                {{ (index+1) +'. สูตร'+ food.recipe.name + ' จำนวน ' + food.qty + ' กก./วัน คิดเป็นเงินต้นทุน '+ food.amount + ' บาท/วัน และ ' + food.amountAvg + ' บาท/ตัว โดยมีวัวทั้งหมด ' +food.numCow+ ' ตัว'}}
+                {{ (index+1) +'.' }} <a class="underline decoration-sky-500 decoration-2" href="/manage/recipe">{{ 'สูตร' + food.recipe.name }}</a>  {{ ' จำนวน ' + food.qty + ' กก./วัน คิดเป็นเงินต้นทุน '+ food.amount + ' บาท/วัน และ ' + food.amountAvg + ' บาท/ตัว โดยมีวัวทั้งหมด ' +food.numCow+ ' ตัว'}}
               </p>
           </div>
   
         </CardBox>
-        
-      </div>
 
       <Table
         v-if="historyMilks.length > 0"
@@ -422,6 +432,7 @@ export default {
         heal : false,
         protection : false,
         food : false,
+        notification : false
       },
       alert : "",
       newCow : false,
@@ -591,6 +602,33 @@ export default {
           type : 'date'
         },
       ],
+      notificationDatas : [
+      {
+          label : "รายการ",
+          value : 'name',
+        },
+        {
+          label : "ก่อน",
+          class : 'text-center',
+          value : 'before',
+        },
+        {
+          label : "มีผล",
+          class : 'text-center',
+          value : 'date',
+        },
+        {
+          label : "หลัง",
+          class : 'text-center',
+          value : 'after',
+        },
+        {
+          label : "แจ้งเตือน",
+          class : 'text-center',
+          value : 'alert',
+          type : 'icon',
+        },
+      ],
       healDatas : [
         {
           label : "ครั้งที่",
@@ -617,6 +655,11 @@ export default {
           label : "คนรักษา",
           class : 'text-center',
           value : 'healer',
+        },
+        {
+          label : "ค่ารักษา",
+          class : 'text-center',
+          value : 'amount',
         },
       ],
     }
@@ -745,7 +788,6 @@ export default {
 
               }
             } 
-            // this.protections = protectionResp.data.protections; 
           }
           this.loading.protection = false;
 
@@ -769,7 +811,39 @@ export default {
 
           const notiResp = await NotificationService.getCalendar({cow:id});
           if (notiResp.data) {
-            this.notifications = notiResp.data.events
+            const groupCode = _.groupBy(notiResp.data.events,'code');
+            const today = moment(new Date()).startOf('day');
+            let notifications = []
+            for(let code of Object.keys(groupCode)){
+              const notis = groupCode[code];
+              let name = '';
+              let date = null;
+              let before = null;
+              let after = null;
+              let dueDate = null
+
+              for(let noti of notis){
+                if(noti.period == 'today'){
+                  name = noti.name;
+                  date = moment(noti.time.start).format('DD/MM/YYYY');
+                  dueDate = moment(noti.time.start).startOf('day');
+                }else if(noti.period == 'before'){
+                  before = moment(noti.time.start).format('DD/MM/YYYY');
+                }else if(noti.period == 'after'){
+                  after = moment(noti.time.start).format('DD/MM/YYYY');
+                }
+              }
+
+              notifications.push({
+                name : name,
+                date : date,
+                dueDate : dueDate,
+                before : before,
+                after : after,
+                alert : today.isAfter(dueDate) ? 'bellCheckOutline' : 'bellAlertOutline'
+              })
+            }
+            this.notifications = _.orderBy(notifications,'dueDate','desc');
           }
         } 
     },  
