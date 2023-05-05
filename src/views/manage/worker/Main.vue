@@ -66,8 +66,7 @@ export default {
         {
           label : 'สถานะ',
           value : 'status',
-          type : 'ddl',
-          module : 'worker'
+          options : status('ddl')
         }, 
       ],
       search : {
