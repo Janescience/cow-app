@@ -4,7 +4,7 @@
     >
       <CardBox
         v-show="value"
-        :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การรักษา'"
+        :title="'คนงาน '+(this.mode === 'create' ?'' : '(แก้ไข)')"
         class="shadow-lg w-full   lg:w-1/2 z-50"
         header-icon="close"
         modal
@@ -14,40 +14,73 @@
       >
       
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-5">
-          <FormField label="โค" help="* ห้ามว่าง">
-              <DDLCow v-model="heal.cow" />
-          </FormField>
-          <FormField label="วันที่รักษา" help="* ห้ามว่าง" >
+          <FormField label="ชื่อ" help="* ห้ามว่าง" >
             <FormControl
-              v-model="heal.date"
+              v-model="worker.name"
+              icon="accountEdit"
+              required
+            />
+          </FormField>
+          <FormField label="อายุ"  >
+            <FormControl
+              v-model="worker.age"
+              type="number"
+              icon="cardAccountDetails"
+            />
+          </FormField>
+          <FormField label="เบอร์โทรศัพท์"  >
+            <FormControl
+              v-model="worker.phoneNumber"
+              icon="phone"
+            />
+          </FormField>
+          <FormField label="ประเทศ"  help="* ห้ามว่าง">
+            <FormControl
+              v-model="worker.country"
+              icon="flag"
+              required
+            />
+          </FormField>
+          <FormField label="วันที่เริ่มงาน"  help="* ห้ามว่าง" >
+            <FormControl
+              v-model="worker.startDate"
               icon="calendar"
               type="date"
               required
             />
           </FormField>
-          <FormField label="คนรักษา"  >
+          <FormField label="วันที่สิ้นสุดงาน"  >
             <FormControl
-              v-model="heal.healer"
-              icon="doctor"
+              v-model="worker.endDate"
+              icon="calendar"
+              type="date"
             />
           </FormField>
-          <FormField label="อาการ/โรค"  help="* ห้ามว่าง" class="col-span-2 ">
+          <FormField label="หน้าที่" help="* ห้ามว่าง" >
             <FormControl
-              v-model="heal.disease"
-              type="textarea"
+              v-model="worker.duty"
+              icon="shovel"
               required
             />
           </FormField>
-          <FormField label="วิธีการรักษา" class="col-span-2 lg:col-span-1">
+          <FormField label="เงินเดือน" help="* ห้ามว่าง" >
             <FormControl
-              v-model="heal.method"
-              type="textarea"
+              v-model="worker.salary"
+              type="number"
+              icon="cashMultiple"
+              required
             />
           </FormField>
-          <FormField label="ค่ารักษา" >
+          <FormField label="สถานะ" >
             <FormControl
-              v-model="heal.amount"
-              type="number"
+              v-model="worker.status"
+              :options="status"
+            />
+          </FormField>
+          <FormField label="หมายเหตุ" >
+            <FormControl
+              v-model="worker.remark"
+              type="textarea"
             />
           </FormField>
         </div>
@@ -92,24 +125,29 @@ import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
-import DDLCow from '@/components/DDL/Cow.vue'
 
 import { Toast } from "@/utils/alert";
 
-import HealService from '@/services/heal'
+import Service from '@/services/worker'
+import { status } from '@/constants/worker'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
   
   export default {
     data () {
       return {
-        heal : {
-          cow : null,
-          date : new Date(),
-          disease : "",
-          method : "",
-          healer : "",
-          amount : null
+        worker : {
+          name : '',
+          age : '',
+          duty : '',
+          startDate : new Date(),
+          endDate : null,
+          phoneNumber : '',
+          country : '',
+          status : 'W',
+          salary : '',
+          remark : ''
         },
+        status : status('ddl'),
         loading : false,
         alert : ""
       }
@@ -131,19 +169,24 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     watch:{
       data(n){
         if(n && this.mode === 'edit'){
-          this.heal = n;
-          this.heal.date = new Date(n.date);
+          this.worker = n;
+          this.worker.startDate = new Date(n.startDate);
+          this.worker.endDate = n.endDate ? new Date(n.endDate) : null;
         }
       },
     },
     methods: {
         clear(){
-          this.heal.cow = null
-          this.heal.date = new Date()
-          this.heal.disease = "" 
-          this.heal.method = ""
-          this.heal.healer = ""
-          this.heal.amount = null
+          this.worker.name = ''
+          this.worker.age = ''
+          this.worker.startDate = new Date()
+          this.worker.endDate = null
+          this.worker.country = "" 
+          this.worker.phoneNumber = "" 
+          this.worker.duty = "" 
+          this.worker.remark = ""
+          this.worker.salary = ""
+          this.worker.status = 'W'
         },
         confirmCancel(mode){
             this.value = false
@@ -162,14 +205,14 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.alert = ""
             try {
               if(this.mode === 'create'){
-                const resp = await HealService.create(this.heal);
+                const resp = await Service.create(this.worker);
                 if(resp){
                     this.loading = false
                     this.value = false 
                     this.confirmCancel('confirm') 
                 }
               }else{
-                const resp = await HealService.update(this.heal._id,this.heal);
+                const resp = await Service.update(this.worker._id,this.worker);
                 if(resp){
                     this.loading = false
                     this.value = false
@@ -202,7 +245,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     FormControl,
     NotificationBar,
     BaseLevel,
-    DDLCow,
     FormCheckRadioPicker,
     BaseIcon
 },

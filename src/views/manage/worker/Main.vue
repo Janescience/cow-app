@@ -54,6 +54,7 @@ import Modal from './Modal.vue'
 import Service from '@/services/worker'
 
 import { Toast } from "@/utils/alert";
+import { status } from '@/constants/worker'
 
 export default {
   data (){
@@ -70,7 +71,7 @@ export default {
         }, 
       ],
       search : {
-        status : null,
+        status : status('ddl'),
       },
       loading : false,
       mode : "create",
@@ -121,7 +122,10 @@ export default {
         },
         {
           label : "สถานะ",
-          value : 'status',
+          // value : 'status',
+          func : (obj) => {
+            return status()[obj.status]
+          }
         },
         {
           label : "ประเทศ",

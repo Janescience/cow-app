@@ -3,12 +3,8 @@ import moment from 'moment'
 
 async function getSearchQuery (opts = {}) {
     let query = "?";
-    if (opts.cow) {
-        query = query + `cow=${opts.cow}&`;
-    } 
-    if (opts.date) {
-        const dateNoTime = moment(new Date(opts.date)).format('YYYY-MM-DD') 
-        query = query + `date=${dateNoTime}&`;
+    if (opts.status) {
+        query = query + `status=${opts.status}&`;
     } 
     return opts ? query.replace(/&*$/, "") : "";
 }
@@ -24,8 +20,11 @@ class WorkerService{
         return http.get(`/worker/${id}`);
     }
     create(payload){
-        if (payload.date) {
-            payload.date = moment(new Date(payload.date)).format('YYYY-MM-DD') 
+        if (payload.startDate) {
+            payload.startDate = moment(new Date(payload.startDate)).format('YYYY-MM-DD') 
+        }
+        if (payload.endDate) {
+            payload.endDate = moment(new Date(payload.endDate)).format('YYYY-MM-DD') 
         }
         return http.post(`/worker`,payload);
     }
@@ -33,8 +32,11 @@ class WorkerService{
         return http.delete(`/worker/${id}`);
     }
     update(id,payload){
-        if (payload.date) {
-            payload.date = moment(new Date(payload.date)).format('YYYY-MM-DD') 
+        if (payload.startDate) {
+            payload.startDate = moment(new Date(payload.startDate)).format('YYYY-MM-DD') 
+        }
+        if (payload.endDate) {
+            payload.endDate = moment(new Date(payload.endDate)).format('YYYY-MM-DD') 
         }
         return http.put(`/worker/${id}`,payload);
     }
