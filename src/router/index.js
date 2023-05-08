@@ -133,6 +133,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'อุปกรณ์',
+      loginRequired : true
+    },
+    path: '/manage/equipment',
+    name: 'equipment',
+    component: () => import('@/views/manage/equipment/Main.vue')
+  },
+  {
+    meta: {
       title: 'วัคซีน',
       loginRequired : true
     },
