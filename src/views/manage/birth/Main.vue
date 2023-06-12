@@ -9,9 +9,10 @@
 
       <Modal
         v-model="openModal"
-        :data="birthData"
+        :data.sync="getDataCopy"
         :mode="mode"
         @confirm="getDatas" 
+        @cancel="resetData"
       />
 
       <Criteria
@@ -20,6 +21,7 @@
         @reset="reset" 
         :forms="forms" 
         :search="search"
+        :btnLoading="loading"
       />
 
       <Table
@@ -57,7 +59,7 @@ export default {
   data (){
     return {
       openModal : false,
-      birthData : null,
+      modalData : null,
       items : [],
       forms : [
         {
@@ -72,7 +74,7 @@ export default {
           options : [{id : '', label :"ทั้งหมด"},{id : 'M', label :"ตัวผู้"},{id : 'F', label :"ตัวเมีย"}]
         },
         {
-          label : 'วันที่ตั้งครร',
+          label : 'วันที่ตั้งครรภ์',
           value : 'pregnantDate',
           icon : 'calendar',
           type : 'date'
@@ -192,7 +194,7 @@ export default {
           func : (obj) => {
             this.mode = 'create';
             this.openModal = true;
-            this.birthData = obj
+            this.modalData = obj
           },
           condition : (obj) => {
             return !obj.birthDate
@@ -210,8 +212,8 @@ export default {
     Criteria
   },
   computed: {
-    user() {
-      return this.$store.state.auth.user;
+    getDataCopy() {
+      return {...this.modalData};
     }
   },
   created() {
@@ -236,14 +238,19 @@ export default {
       this.loading = false
     },
     edit(obj){
-      this.birthData = obj;
+      this.modalData = obj
       this.mode = 'edit';
       this.openModal = true;
+    },
+    resetData(){
+      this.modalData = null
     },
     reset(){
       this.search.cow = null
       this.search.birthDate = null
-      this.search.sex = null
+      this.search.pregnantDate = null
+      this.search.sex = ""
+      this.getDatas();
     },
     calAge(date){
       return getAge(date);

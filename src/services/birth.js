@@ -10,6 +10,10 @@ async function getSearchQuery (opts = {}) {
         const dateNoTime = moment(new Date(opts.birthDate)).format('YYYY-MM-DD') 
         query = query + `birthDate=${dateNoTime}&`;
     }
+    if (opts.pregnantDate) {
+        const dateNoTime = moment(new Date(opts.pregnantDate)).format('YYYY-MM-DD') 
+        query = query + `pregnantDate=${dateNoTime}&`;
+    }
     if (opts.sex) {
         query = query + `sex=${opts.sex}&`;
     }

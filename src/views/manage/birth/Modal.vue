@@ -131,6 +131,7 @@ import { Toast } from "@/utils/alert";
 
 import BirthService from '@/services/birth'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
+import { handleError } from 'vue'
   
   export default {
     data () {
@@ -171,20 +172,25 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         }
     },
     watch:{
-      data(n){
-        if(n){
-          this.birth = n
-          // this.birth.newCow.mom = n.cow.code
-          // this.birth.newCow.name = n.calf?.name
-          // this.birth.reproduction = n.reproduction?._id
-          // if(this.mode === 'edit'){
+      data : {
+        handler(n,o){
+          if(n){
+            this.birth = n
+            if(!this.birth.newCow){
+              this.birth.newCow = {}
+            }
+            // this.birth.newCow.name = n.calf?.name
+            // this.birth.reproduction = n.reproduction?._id
+            // if(this.mode === 'edit'){
             this.birth.birthDate = new Date(n.birthDate)
             this.birth.drugDate = n.drugDate ? new Date(n.drugDate) : null
             this.birth.washDate = n.washDate ? new Date(n.washDate) : null
-          //   this.birth.overgrown = n.overgrown
-          // }
-            
-        }
+            //   this.birth.overgrown = n.overgrown
+            // }
+              
+          }
+        },
+        // deep : true
       },
       'birth.birthDate'(n){
         if(this.birth.status == 'B'){
@@ -198,24 +204,20 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       },
     },
     methods: {
-        // clear(){
-        //   this.birth.sex = "F"
-        //   this.birth.overgrown = "N"
-        //   this.birth.newCow.name = "" 
-        //   this.birth.birthDate = new Date()
-        //   this.birth.drugDate = addDays(new Date(),15)
-        //   this.birth.washDate = addDays(new Date(),14)
-        // },
+        clear(){
+          this.birth = {}
+        },
         confirmCancel(mode){
             this.value = false
             this.$emit(mode)
+            this.$emit('update:data',null)
         },
         confirm(){
-            // this.clear()
+            this.clear()
             this.confirmCancel('confirm')
         },
         cancel(){
-            // this.clear()
+            this.clear()
             this.confirmCancel('cancel')
         },
         async submit(){

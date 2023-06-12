@@ -155,9 +155,6 @@ export default {
   computed : {
     user() {
       return this.$store.state.auth.user;
-    },
-    getDataCopy() {
-      return {...this.modalData};
     }
   },
   created() {

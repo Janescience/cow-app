@@ -3,7 +3,7 @@
     <SectionMain>
       <SectionTitleBarSub
         icon="homeSiloOutline"
-        :title="'ภาพรวมฟาร์ม - '+formatDate(new Date())"
+        title="ภาพรวมฟาร์ม"
       />
       <div
         v-if="!loading"
