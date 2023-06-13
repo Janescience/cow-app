@@ -13,8 +13,9 @@
       <Modal
         v-model="openModal"
         :mode="mode" 
-        :dataEdit="dataEdit" 
-        @confirm="getReproductions" 
+        :data="getDataCopy" 
+        @confirm="getReproductions"
+        @cancel="resetData" 
       />
 
       <Criteria
@@ -23,6 +24,7 @@
         @reset="reset" 
         :forms="forms" 
         :search="search"
+        :btnLoading="loading"
       />
 
       <Table
@@ -116,7 +118,7 @@ export default {
       },
       loading : false,
       mode : "create",
-      dataEdit : null,
+      modalData : null,
       checked : {
         code : {
           value : 'seq',
@@ -213,8 +215,8 @@ export default {
     Criteria
   },
   computed : {
-    user() {
-      return this.$store.state.auth.user;
+    getDataCopy() {
+      return {...this.modalData};
     }
   },
   created() {
@@ -242,16 +244,40 @@ export default {
       }
       this.loading = false
     },
+    async removeSelected(datas){
+      this.loading = true
+      let ids = []
+      for(let data of datas){
+        ids.push(data._id)
+      }
+      const resp = await ReproductionService.deletes(ids);
+      if(resp.data){
+        this.getReproductions()
+        Toast.fire({
+          icon: 'success',
+          title: 'ลบข้อมูลสำเร็จ'
+        })
+      }
+      this.loading = false
+    },
     edit(obj){
-      this.dataEdit = obj;
-      this.dataEdit.cow = obj.cow._id;
+      this.modalData = obj;
       this.mode = 'edit';
       this.openModal = true;
     },
     reset(){
       this.search.cow = null
-      this.search.date = null
+      this.search.loginDate = null
+      this.search.estrusDate = null
+      this.search.matingDate = null
+      this.search.checkDate = null
+      this.search.status = ""
+      this.search.result = ""
+      this.getReproductions()
     },
+    resetData(){
+      this.modalData = null
+    }
   }
 }
 </script>

@@ -139,7 +139,7 @@ export default {
       search : {
         code : null,
         status : "",
-        // birthDate : null,
+        quality : "",
         corral : "",
         flag : "Y",
       },
@@ -220,7 +220,7 @@ export default {
     reset(){
       this.search.code = null
       this.search.status = ""
-      // this.search.birthDate = null
+      this.search.quality = ""
       this.search.corral = ""
     },
     calAge(bdDate){

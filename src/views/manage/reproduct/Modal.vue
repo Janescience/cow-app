@@ -15,7 +15,7 @@
       
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-1">
           <FormField label="โค" help="* ห้ามว่าง">
-            <DDLCow v-model="reproduct.cow" />
+            <DDLCow v-model="reproduct.cow" valueType="object" />
           </FormField>
           <FormField label="พ่อพันธุ์" help="">
             <FormControl
@@ -121,6 +121,7 @@
   import DDLCow from '@/components/DDL/Cow.vue'
 
   import { addDays,addMonths } from 'date-fns'
+  import { Toast } from "@/utils/alert";
 
   import { reproductStatus , reproductResult  } from '@/constants/reproduct'
   import ReproductService from '@/services/reproduction'
@@ -129,7 +130,7 @@
     data () {
       return {
         reproduct : {
-          cow : null,  
+          cow : {},  
           loginDate : new Date(),
           estrusDate : addDays(new Date(),21),
           matingDate : addDays(new Date(),22),
@@ -176,32 +177,21 @@
           this.reproduct.status = 1
         }
       },
-      dataEdit : {
+      data : {
         handler (n,o) {
-          if(n != null && this.mode == 'edit'){
+          if(n){
             this.reproduct = n
-            this.reproduct.loginDate = new Date(n.loginDate)
-            this.reproduct.estrusDate = new Date(n.estrusDate)
-            this.reproduct.matingDate = new Date(n.matingDate)
-            this.reproduct.checkDate = new Date(n.checkDate)
+            this.reproduct.loginDate = n.loginDate ? new Date(n.loginDate) : null
+            this.reproduct.estrusDate = n.estrusDate ? new Date(n.estrusDate) : null
+            this.reproduct.matingDate = n.matingDate ? new Date(n.matingDate) : null
+            this.reproduct.checkDate = n.checkDate ? new Date(n.checkDate) : null
           }
         }
       }
     },
     methods: {
         clear(){
-          if(this.mode === 'edit')
-            this.$emit('update:dataEdit',null);
-          this.reproduct.cow = null
-          this.reproduct.loginDate = new Date()
-          this.reproduct.estrusDate = addDays(new Date(),21)
-          this.reproduct.matingDate = addDays(new Date(),22)
-          this.reproduct.checkDate = addMonths(addDays(new Date(),43),2)
-          this.reproduct.dad = ""
-          this.reproduct.howTo = ""
-          this.reproduct.status = 1
-          this.reproduct.result = 2
-          delete this.reproduct?._id
+          this.reproduct = {}
         },
         confirmCancel(mode){
             this.value = false
@@ -225,6 +215,10 @@
                       this.loading = false  
                       this.value = false
                       this.confirmCancel('confirm')
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'บันทึกข้อมูลสำเร็จ'
+                      })
                   }
                 }else{
                   const resp = await ReproductService.update(this.reproduct._id,this.reproduct);
@@ -232,6 +226,10 @@
                       this.loading = false  
                       this.value = false
                       this.confirmCancel('confirm')
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'บันทึกข้อมูลสำเร็จ'
+                      })
                   }
                 }
             } catch (error) {
@@ -263,7 +261,7 @@
           type : String,
           default : ""
         },
-        dataEdit : {
+        data : {
           type : Object,
           default : null
         }

@@ -62,6 +62,9 @@ class ReproductService{
     delete(id){
         return http.delete(`/reproduction/${id}`);
     }
+    deletes(ids){
+        return http.post(`/reproduction/delete/selected`,ids);
+    }
     update(id,payload){
         return http.put(`/reproduction/${id}`,payload);
     }

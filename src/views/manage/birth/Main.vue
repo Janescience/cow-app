@@ -9,7 +9,7 @@
 
       <Modal
         v-model="openModal"
-        :data.sync="getDataCopy"
+        :data="getDataCopy"
         :mode="mode"
         @confirm="getDatas" 
         @cancel="resetData"
@@ -54,6 +54,7 @@ import BirthService from '@/services/birth'
 
 import getAge from "@/utils/age-calculate";
 import { sex,overgrown } from '@/constants/birth'
+import { Toast } from "@/utils/alert";
 
 export default {
   data (){
@@ -176,7 +177,7 @@ export default {
           type : 'delete',
           color : 'danger',
           condition : (obj) => {
-            return !obj.birthDate
+            return !obj.sex
           }
         },
         {
@@ -234,6 +235,10 @@ export default {
       const resp = await BirthService.delete(id);
       if(resp.data){
         this.getDatas()
+        Toast.fire({
+          icon: 'success',
+          title: 'ลบข้อมูลสำเร็จ'
+        })
       }
       this.loading = false
     },

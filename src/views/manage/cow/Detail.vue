@@ -148,31 +148,31 @@
         </CardBox>
         <CardBox 
           icon="reproduction"
-          class="row-span-2 "
+          class="row-span-2"
           :loading="loading.reproduct"
           title="ข้อมูลการสืบพันธุ์/ผสมพันธุ์"
           header-icon=""
         >
           <div class="grid gap-5 lg:grid-cols-3 grid-cols-2">
-            <p class="lg:row-span-3 col-span-2 lg:col-span-1 font-bold ">
+            <p class="lg:row-span-3 col-span-2 lg:col-span-1">
                การเข้าระบบสืบพันธุ์
             </p>
-            <p class="ml-5">
+            <p class="ml-5 ">
               จำนวนครั้ง
             </p>
-            <p class="ml-5 underline decoration-sky-700 decoration-4">
+            <p class="ml-5 ">
               {{ reproduct().login.count }}
             </p>
-            <p class="ml-5">
+            <p class="ml-5 ">
               เข้าระบบครั้งล่าสุด
             </p>
-            <p class="ml-5 underline decoration-sky-700 decoration-4">
+            <p class="ml-5 ">
               {{ reproduct().login.lastDate }}
             </p>
-            <p class="ml-5">
+            <p class="ml-5 ">
               ผลครั้งล่าสุด
             </p>
-            <p class="ml-5 underline decoration-sky-700 decoration-4">
+            <p class="ml-5 ">
               {{ reproduct().login.result }}
             </p>
             <!-- ================================ -->
@@ -182,13 +182,13 @@
             <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p class="ml-5 underline decoration-sky-700 decoration-4">
+            <p class="ml-5 ">
               {{ reproduct().estrus.count }}
             </p>
             <p class="ml-5">
               เป็นสัดครั้งล่าสุด
             </p>
-            <p class="ml-5 underline decoration-sky-700 decoration-4">
+            <p class="ml-5 ">
               {{ reproduct().estrus.lastDate }}
             </p>
             <!-- //================================ -->
@@ -198,13 +198,13 @@
             <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p class="ml-5 underline decoration-sky-700 decoration-4">
+            <p class="ml-5 ">
               {{ reproduct().mating.count }}
             </p>
             <p class="ml-5">
               ผสมครั้งล่าสุด
             </p>
-            <p class="ml-5 underline decoration-sky-700 decoration-4">
+            <p class="ml-5 ">
               {{ reproduct().mating.lastDate }}
             </p>
             <!-- //================================ -->
@@ -214,13 +214,13 @@
             <p class="ml-5">
               จำนวนครั้ง
             </p>
-            <p class="ml-5 underline decoration-sky-700 decoration-4">
+            <p class="ml-5 ">
               {{ reproduct().check.count }}
             </p>
             <p class="ml-5">
               ตรวจท้องครั้งล่าสุด
             </p>
-            <p class="ml-5 underline decoration-sky-700 decoration-4">
+            <p class="ml-5 ">
               {{ reproduct().check.lastDate }}
             </p>
             <!-- //================================ -->
@@ -239,25 +239,25 @@
             <p>
               จำนวนครั้ง
             </p>
-            <p class="underline decoration-pink-500 decoration-4">
+            <p >
               {{ birth().count }}
             </p>
             <p >
               คลอดลูกล่าสุด
             </p>
-            <p class="underline decoration-pink-500 decoration-4">
+            <p >
               {{ birth().lastDate }}
             </p>
             <p>
               จำนวนเพศผู้
             </p>
-            <p class="underline decoration-pink-500 decoration-4">
+            <p >
               {{ birth().countMale }}
             </p>
             <p>
               จำนวนเพศเมีย
             </p>
-            <p class="underline decoration-pink-500 decoration-4">
+            <p >
               {{ birth().countFemale }}
             </p>
           </div>
@@ -273,25 +273,25 @@
             <p >
               จำนวนครั้ง
             </p>
-            <p class="underline decoration-emerald-500 decoration-4">
+            <p >
               {{ heal().count }}
             </p>
             <p >
               รักษาล่าสุด
             </p>
-            <p class="underline decoration-emerald-500 decoration-4">
+            <p >
               {{ heal().lastDate }}
             </p>
             <p > 
               อาการ/โรคล่าสุด
             </p>
-            <p class="underline decoration-emerald-500 decoration-4">
+            <p >
               {{ heal().lastDisease }}
             </p>
             <p >
               วิธีการรักษาล่าสุด
             </p>
-            <p class="underline decoration-emerald-500 decoration-4">
+            <p >
               {{ heal().lastMethod }}
             </p>
           </div>
@@ -744,6 +744,15 @@ export default {
     this.getCowData(cowId);
   },
   methods : {
+    async getCow(id){
+      this.loading.cow = true;
+      const resp = await CowService.get(id);
+      if (resp.data) {
+          this.cow = resp.data.cow;
+          this.cow.birthDate = new Date(this.cow.birthDate);
+          this.loading.cow = false;
+      }
+    },
     async getCowData(id){
       this.loading.cow = true;
         const resp = await CowService.get(id);
@@ -848,13 +857,12 @@ export default {
         } 
     },  
     async update(){
-        this.loading = true
+        this.loading.cow = true
         this.alert = ""
         try {
             const resp = await CowService.update(this.cow._id,this.cow);
             if(resp){
               this.getCow(this.$route.params.id)
-              this.loading = false  
               Toast.fire({
                 icon: 'success',
                 title: 'บันทึกข้อมูลสำเร็จ'

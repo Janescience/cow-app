@@ -40,9 +40,7 @@ export default {
         value:{
             get(){
                 if(this.valueType === 'object'){
-                    if(this.modelValue?.cow_data){
-                        this.modelValue.cow_data = this.modelValue?.code + " : " + this.modelValue?.name
-                    }
+                    this.modelValue.cow_data = this.modelValue?.code + " : " + this.modelValue?.name
                 }
                 return this.modelValue
             },
@@ -104,7 +102,7 @@ export default {
         defaultValue: { default: null, type: Object },
         modelValue: {
             type: [String, Number, Boolean, Array, Object],
-            default: ''
+            default: {}
         },
         multiple : { default: false, type: Boolean }
     }

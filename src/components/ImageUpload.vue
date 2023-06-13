@@ -2,11 +2,11 @@
 
         <BaseLevel type="justify-center items-center align-middle mb-2 " role="button">
             <input
-            id="imageUpload"
-            @change="handleFile"
-            type="file"
-            accept="image/*"
-            hidden
+                id="imageUpload"
+                @change="handleFile"
+                type="file"
+                accept="image/*"
+                hidden
             />
             <UserAvatar
                 class="lg:w-38 lg:h-38 w-28 h-28 shadow"
@@ -42,13 +42,19 @@
                 }
             },
             handleFile (e) {
-            var files = e.target.files || e.dataTransfer.files;
+                const files = e.target.files || e.dataTransfer.files;
+                console.log('files : ',files)
                 if (!files.length)
                     return;
-                this.createBase64(files[0]);
+                if(files[0].size <= 1000000){
+                    this.createBase64(files[0]);
+                }else{
+                    window.alert('ขนาดไฟล์รูปภาพต้องน้อยกว่าหรือเท่ากับ 1 MB.')
+                    return;
+                }
             },
             createBase64(fileObj) {
-                var reader = new FileReader();
+                const reader = new FileReader();
                 reader.onload = (e) => {
                     this.value = e.target.result;
                 };
