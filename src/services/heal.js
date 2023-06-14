@@ -32,6 +32,9 @@ class HealService{
     delete(id){
         return http.delete(`/heal/${id}`);
     }
+    deletes(ids){
+        return http.post(`/heal/delete/selected`,ids);
+    }
     update(id,payload){
         if (payload.date) {
             payload.date = moment(new Date(payload.date)).format('YYYY-MM-DD') 

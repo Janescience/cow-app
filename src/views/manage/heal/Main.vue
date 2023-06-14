@@ -12,9 +12,10 @@
 
       <Modal
         v-model="openModal"
-        :data="modalData"
+        :data="getDataCopy"
         :mode="mode"
-        @confirm="getDatas"         
+        @confirm="getDatas"    
+        @cancel="resetData"     
       />
 
       <Criteria
@@ -23,6 +24,7 @@
         @reset="reset" 
         :forms="forms" 
         :search="search"
+        :btnLoading="loading"
       />
 
       <Table
@@ -98,11 +100,11 @@ export default {
         },
         {
           label : "รหัสโค",
-          value : 'relate.cow.code',
+          value : 'cow.code',
         },
         {
           label : "ชื่อโค",
-          value : 'relate.cow.name',
+          value : 'cow.name',
         },
         {
           label : "วันที่รักษา",
@@ -154,8 +156,8 @@ export default {
     Criteria
   },
   computed : {
-    user() {
-      return this.$store.state.auth.user;
+    getDataCopy() {
+      return {...this.modalData};
     }
   },
   created() {
@@ -183,17 +185,35 @@ export default {
         title: 'ลบข้อมูลสำเร็จ'
       })
     },
+    async removeSelected(datas){
+      this.loading = true
+      let ids = []
+      for(let data of datas){
+        ids.push(data._id)
+      }
+      const resp = await HealService.deletes(ids);
+      if(resp.data){
+        this.getDatas()
+        Toast.fire({
+          icon: 'success',
+          title: 'ลบข้อมูลสำเร็จ'
+        })
+      }
+      this.loading = false
+    },
     edit(obj){
       this.modalData = obj;
-      this.modalData.cow = obj.relate.cow._id;
-
       this.mode = 'edit';
       this.openModal = true;
     },
     reset(){
       this.search.cow = null
       this.search.date = null
+      this.getDatas();
     },
+    resetData(){
+      this.modalData = null
+    }
   }
 }
 </script>

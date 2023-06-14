@@ -16,6 +16,7 @@
         @reset="reset" 
         :forms="forms" 
         :search="search"
+        :btnLoading="loading"
       />
 
       <Table
@@ -72,9 +73,8 @@ export default {
         },
       ],
       search : {
-        dateCurrent : null,
-        dateNext : null,
-        vaccine : '',
+        date : null,
+        vaccine : null,
       },
       loading : false,
       mode : "create",
@@ -84,7 +84,7 @@ export default {
           value : 'vaccine.name'
         },
         code : {
-          value : 'vaccine.code'
+          value : 'vaccine.seq'
         }
       },
       datas : [
@@ -152,11 +152,6 @@ export default {
     Table,
     Criteria
   },
-  computed : {
-    user() {
-      return this.$store.state.auth.user;
-    }
-  },
   created() {
     this.search.vaccine = this.$route.params.vaccine
     this.getDatas(this.search);
@@ -200,7 +195,7 @@ export default {
       });
     },
     reset(){
-      this.search.date = new Date()
+      this.search.date = null
       this.search.vaccine = null
       this.getDatas()
     },

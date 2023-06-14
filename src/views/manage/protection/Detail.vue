@@ -165,7 +165,7 @@
         </NotificationBar>
       </CardBox>
       <Table
-      :title="'รายการโคฉีดวัคซีน' + (protection.qty ? ' (' + protection.qty + ' ตัว / ' + protection.amount + ' บาท' + ')': '')" 
+        :title="'รายการโคฉีดวัคซีน' + (protection.qty ? ' (' + protection.qty + ' ตัว / ' + protection.amount + ' บาท' + ')': '')" 
         has-checkbox
         :checked-data="checked" 
         :items="protection.cows" 
@@ -291,9 +291,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           set(newValue){
               this.$emit('update:modelValue', newValue)
           }
-        },
-        user() {
-          return this.$store.state.auth.user;
         },
         resultSearch(){
           if(this.search){
@@ -444,6 +441,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           if (checkDup > 0) {
             this.alertSubmitCow = 'โคซ้ำ กรุณาเลือกโคใหม่'
           }else{
+            cow.new = true
             this.protection.qty += 1;
             this.protection.cows.push(cow)
             this.alertSubmitCow = ''

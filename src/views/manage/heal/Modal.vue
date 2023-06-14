@@ -13,9 +13,9 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="grid grid-cols-2 lg:grid-cols-3 grid-flow-row-dense gap-5">
           <FormField label="โค" help="* ห้ามว่าง">
-              <DDLCow v-model="heal.cow" />
+              <DDLCow v-model="heal.cow" valueType="object"/>
           </FormField>
           <FormField label="วันที่รักษา" help="* ห้ามว่าง" >
             <FormControl
@@ -103,7 +103,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     data () {
       return {
         heal : {
-          cow : null,
+          cow : {},
           date : new Date(),
           disease : "",
           method : "",
@@ -123,27 +123,19 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           set(newValue){
               this.$emit('update:modelValue', newValue)
           }
-        },
-        user() {
-          return this.$store.state.auth.user;
         }
     },
     watch:{
       data(n){
-        if(n && this.mode === 'edit'){
+        if(n){
           this.heal = n;
-          this.heal.date = new Date(n.date);
+          this.heal.date = n.date ? new Date(n.date) : null;
         }
       },
     },
     methods: {
         clear(){
-          this.heal.cow = null
-          this.heal.date = new Date()
-          this.heal.disease = "" 
-          this.heal.method = ""
-          this.heal.healer = ""
-          this.heal.amount = null
+          this.heal = {}
         },
         confirmCancel(mode){
             this.value = false
@@ -166,46 +158,51 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
                 if(resp){
                     this.loading = false
                     this.value = false 
-                    this.confirmCancel('confirm') 
+                    this.confirmCancel('confirm')
+                    Toast.fire({
+                      icon: 'success',
+                      title: 'บันทึกข้อมูลสำเร็จ'
+                    }) 
                 }
               }else{
                 const resp = await HealService.update(this.heal._id,this.heal);
                 if(resp){
                     this.loading = false
                     this.value = false
-                    this.confirmCancel('confirm')  
+                    this.confirmCancel('confirm')
+                    Toast.fire({
+                      icon: 'success',
+                      title: 'บันทึกข้อมูลสำเร็จ'
+                    })   
                 }
               }
-              Toast.fire({
-                icon: 'success',
-                title: 'บันทึกข้อมูลสำเร็จ'
-              })
+              
             } catch (error) {
               console.error('Error : ',error)
                 this.loading = false  
                 this.alert = error.response.data.message
                 Toast.fire({
                   icon: 'error',
-                  title: 'บันทึกข้อมูลไม่สำเร็จ'
+                  title: 'บันทึกข้อมูลไม่สำเร็จ กรุณาติดต่อผู้ดูแลระบบ'
                 })
             }
             
         },
     },
     components : {
-    BaseButton,
-    BaseButtons,
-    CardBox,
-    BaseDivider,
-    OverlayLayer,
-    FormField,
-    FormControl,
-    NotificationBar,
-    BaseLevel,
-    DDLCow,
-    FormCheckRadioPicker,
-    BaseIcon
-},
+      BaseButton,
+      BaseButtons,
+      CardBox,
+      BaseDivider,
+      OverlayLayer,
+      FormField,
+      FormControl,
+      NotificationBar,
+      BaseLevel,
+      DDLCow,
+      FormCheckRadioPicker,
+      BaseIcon
+    },
     props : {
         modelValue: {
             type: [String, Number, Boolean],

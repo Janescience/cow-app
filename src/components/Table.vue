@@ -63,6 +63,7 @@
                   <tr
                     v-for="obj in itemsPaginated"
                     :key="obj._id"
+                    :class="obj.new ? 'text-green-300' : ''"
                   >
                   <TableCheckboxCell
                     v-if="hasCheckbox"
