@@ -39,7 +39,7 @@ export default {
     computed:{
         value:{
             get(){
-                if(this.valueType === 'object'){
+                if(this.valueType === 'object' && Object.keys(this.modelValue).length > 0){
                     this.modelValue.recipe_data = this.modelValue?.name
                 }
                 return this.modelValue
@@ -101,7 +101,7 @@ export default {
         defaultValue: { default: null, type: Object },
         modelValue: {
             type: [String, Number, Boolean, Array, Object],
-            default: ''
+            default: {}
         },
         multiple : { default: false, type: Boolean }
     }

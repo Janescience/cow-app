@@ -12,9 +12,10 @@
 
       <Modal
         v-model="openModal"
-        :data="modalData"
+        :data="getDataCopy"
         :mode="mode"
         @confirm="getDatas"
+        @cancel="resetData"
       />
 
       <Criteria
@@ -23,6 +24,7 @@
         @reset="reset" 
         :forms="forms" 
         :search="search"
+        :btnLoading="loading"
       />
 
       <Table
@@ -76,7 +78,7 @@ export default {
         }, 
       ],
       search : {
-        recipe : null,
+        recipe : {},
         corral : '',
       },
       loading : false,
@@ -117,7 +119,7 @@ export default {
           value : 'amount',
         },
         {
-          label : "รวมเป็นเงิน/ตัว",
+          label : "คิดเป็นเงิน/ตัว",
           class : 'text-center',
           value : 'amountAvg',
         },
@@ -145,8 +147,8 @@ export default {
     Criteria
   },
   computed : {
-    user() {
-      return this.$store.state.auth.user;
+    getDataCopy() {
+      return {...this.modalData};
     }
   },
   created() {
@@ -184,6 +186,9 @@ export default {
       this.search.corral = ''
       this.getDatas()
     },
+    resetData(){
+      this.modalData = null;
+    }
   }
 }
 </script>

@@ -39,10 +39,8 @@ export default {
     computed:{
         value:{
             get(){
-                if(this.valueType === 'object'){
-                    // if(this.modelValue?.vaccine_data){
-                        this.modelValue.vaccine_data =  this.modelValue?.name
-                    // }
+                if(this.valueType === 'object' && Object.keys(this.modelValue).length > 0){
+                    this.modelValue.vaccine_data =  this.modelValue?.name
                 }
                 return this.modelValue
             },
@@ -99,7 +97,7 @@ export default {
         defaultValue: { default: null, type: Object },
         modelValue: {
             type: [String, Number, Boolean, Array, Object],
-            default: ''
+            default: {}
         },
         multiple : { default: false, type: Boolean }
     }

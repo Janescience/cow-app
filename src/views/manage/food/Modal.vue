@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การให้อาหาร'"
-        class="shadow-lg w-full  lg:w-5/6 z-50"
+        class="shadow-lg w-full  lg:w-1/2 z-50"
         header-icon="close"
         modal
         form
@@ -13,8 +13,8 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-2 gap-5">
-          <FormField label="สูตรอาหาร" help="* ห้ามว่าง" >
+        <div class="grid lg:grid-cols-3 grid-cols-2 gap-5">
+          <FormField label="สูตรอาหาร" help="* ห้ามว่าง" class="lg:col-span-1 col-span-2">
             <DDLRecipe
               v-model="food.recipe"
               valueType="object"
@@ -23,8 +23,7 @@
           <FormField label="คอก" help="* ห้ามว่าง" >
             <FormControl
               v-model="food.corral"
-              icon="barn"
-              type="number"
+              :options="ddlCorral"
               required
             />
           </FormField>
@@ -38,12 +37,16 @@
             />
           </FormField>
 
-          <FormField class="col-span-3">
+          <FormField class="lg:col-span-3 col-span-2">
             <BaseLevel type="justify-end">
-              ราคา/กก. <p class="text-red-700 font-bold p-2">{{ food.amount > 0 ? food.amount : '-' }}</p> บาท , 
+              ราคาสูตรอาหาร/กก. <p class="text-red-700 font-bold p-2">{{ food.amount > 0 ? food.amount : '-' }}</p> บาท <br/> 
+            </BaseLevel>
+            <BaseLevel type="justify-end">
+              จำนวนโค <p class="text-red-700 font-bold p-2">{{ numCowCorral > 0 ? numCowCorral : '-' }}</p> ตัว <br/> 
+            </BaseLevel>
+            <BaseLevel type="justify-end">
               รวมเป็นเงิน/วัน <p class="text-red-700 font-bold p-2">{{ food.qty && food.amount > 0 ? food.qty * food.amount : '-' }}</p> บาท
             </BaseLevel>
-            
           </FormField>
         </div>
 
@@ -90,8 +93,10 @@ import BaseLevel from '@/components/BaseLevel.vue'
 import DDLRecipe from '@/components/DDL/Recipe.vue'
 
 import { Toast } from "@/utils/alert";
+import _ from "lodash"
 
 import FoodService from '@/services/food'
+import CowService from '@/services/cow'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
   
   export default {
@@ -106,7 +111,10 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           numCow : 0,
         },
         loading : false,
-        alert : ""
+        alert : "",
+        ddlCorral : [],
+        numCowCorral : 0,
+        corrals : []
       }
     },
     emits:['update:modelValue', 'cancel', 'confirm'],
@@ -125,7 +133,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     },
     watch:{
       data(n){
-        if(n && this.mode === 'edit'){
+        if(n){
           this.food = n;
         }
       },
@@ -136,16 +144,22 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           this.food.amount = null;
         }
       },
+      'food.corral'(n){
+        if(n){
+          this.numCowCorral = this.corrals[n].length
+        }
+      }
+    },
+    created(){
+      this.getCorrals()
     },
     methods: {
         clear(){
-          this.food.corral = ''
-          this.food.recipe = {} 
-          this.food.qty = 0
+          this.food = {}
         },
         confirmCancel(mode){
             this.value = false
-            this.$emit(mode)
+            this.$emit(mode)  
         },
         confirm(){
             this.clear()
@@ -189,6 +203,16 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
                 })
             }
             
+        },
+        async getCorrals(){
+          const resp = await CowService.all();
+          if(resp){
+            const cows = resp.data.cows
+            this.corrals = _.groupBy(cows,'corral')
+            for(let key of Object.keys(this.corrals)){
+              this.ddlCorral.push({id:key,label:key})
+            }
+          }
         },
     },
     components : {
