@@ -181,7 +181,7 @@
           time : 'M',
         },
         milkDetail : {
-          cow : null,
+          cow : {},
           qty : null,
           amount : null
         },
@@ -224,6 +224,7 @@
     },
     methods: {
         clear(){
+          this.milk = {}
           this.milk.date = new Date()
           this.milk.time = 'M'
           this.milkDetails = []

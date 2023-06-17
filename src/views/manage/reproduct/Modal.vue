@@ -194,8 +194,9 @@
           this.reproduct = {}
         },
         confirmCancel(mode){
-            this.value = false
-            this.$emit(mode)
+          this.clear()
+          this.value = false
+          this.$emit(mode)
         },
         confirm(){
             this.clear()

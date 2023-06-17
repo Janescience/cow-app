@@ -1,7 +1,7 @@
 <template>
     <div ref="calendarContainer" class="min-h-full min-w-full text-gray-300 ">
       <div class="w-full grid grid-cols-7 ">
-        <Top />
+        <Top @month="getMonth" @year="getYear"/>
 
         <!-- Days list -->
         <div
@@ -166,13 +166,13 @@
               path="chevronLeft" 
               size="30" 
               class="cursor-pointer hover:text-gray-300"
-              @click="calendarStore.decrementMonth(1)"
+              @click="prevMonth()"
           />
           <BaseIcon 
               path="chevronRight" 
               size="30" 
               class="cursor-pointer hover:text-gray-300"
-              @click="calendarStore.incrementMonth(1)"
+              @click="nextMonth()"
           />
       </BaseLevel>
 
@@ -223,7 +223,7 @@
   import Modal from './Modal.vue';
   import { useCalendarStore } from "@/store/calendar";
 
-  const emit = defineEmits(['confirm'])
+  const emit = defineEmits(['confirm','month','year'])
 
   /**************************************
    * PROPS
@@ -241,6 +241,10 @@
     getDaysInMonth();
     getFirstDayOfMonth();
   });
+
+  emit('month',calendarStore.getMonth+1)
+  emit('year',calendarStore.getYear)
+  
   // component variables
   const daysOfTheWeek = {
     1: "อา",
@@ -295,7 +299,7 @@
    * Gets the last empty cells (if any) on the calendar grid
    */
   const lastCalendarCells = () => {
-    let totalGrid = firstDayOfCurrentMonth.value <= 5 ? 35 : 42;
+    let totalGrid = firstDayOfCurrentMonth.value <= 4 ? 35 : 42;
     lastEmptyCells.value =
       totalGrid - daysInCurrentMonth.value - firstDayOfCurrentMonth.value;
   };
@@ -419,6 +423,26 @@
   const confirm = (data) => {
     emit('confirm',data)
   };
+  const prevMonth = () => {
+    calendarStore.decrementMonth(1)
+    emit('month',calendarStore.getMonth+1)
+    emit('year',calendarStore.getYear)
+  }
+
+  const nextMonth = () => {
+    calendarStore.incrementMonth(1)
+    emit('month',calendarStore.getMonth+1)
+    emit('year',calendarStore.getYear)
+  }
+
+  const getMonth = (data) => {
+    emit('month',data)
+  }
+
+  const getYear = (data) => {
+    emit('year',data)
+  }
+
   /************************************************************************
    *  LIFECYCLE HOOKS
    * **********************************************************************

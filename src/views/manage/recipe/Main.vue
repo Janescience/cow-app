@@ -14,7 +14,8 @@
         v-model="openModal"
         :data="modalData"
         :mode="mode"
-        @confirm="getDatas"         
+        @confirm="getDatas"   
+        @cancel="resetData"      
       />
 
       <Criteria
@@ -179,6 +180,9 @@ export default {
       this.search.type = ''
       this.getDatas()
     },
+    resetData(){
+      this.modalData = null
+    }
   }
 }
 </script>

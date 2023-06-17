@@ -21,6 +21,8 @@
         <Calendar 
           :events="events"
           @confirm="addMilk"
+          @month="getMonthMilk"
+          @year="getYearMilk"
           />
       </CardBox>
       <CardBox v-else loading />
@@ -48,6 +50,8 @@ export default {
   data (){
     return {
       modalMilk : false,
+      monthMilk : new Date().getMonth() + 1,
+      yearMilk : new Date().getFullYear(),
       items : [],
       events : [],
       forms : [
@@ -144,10 +148,18 @@ export default {
   created() {
     this.getMilks();
   },
+  watch:{
+    monthMilk(n){
+      this.getMilks()
+    }, 
+    yearMilk(n){
+      this.getMilks()
+    }
+  },
   methods : {
     async getMilks(){
       this.loading = true
-      const resp = await MilkingService.all();
+      const resp = await MilkingService.all({month:this.monthMilk,year:this.yearMilk});
       this.events = []
       if(resp.data){
         for(let milk of resp.data.milks){
@@ -186,6 +198,12 @@ export default {
     },
     addMilk(data){
       this.filterMilk(data)
+    },
+    getMonthMilk(data){
+      this.monthMilk = data
+    },
+    getYearMilk(data){
+      this.yearMilk = data
     },
     edit(milk){
       this.dataEdit = milk;

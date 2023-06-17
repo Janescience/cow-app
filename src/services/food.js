@@ -27,6 +27,9 @@ class FoodService{
     delete(id){
         return http.delete(`/food/${id}`);
     }
+    deletes(ids){
+        return http.post(`/food/delete/selected`,ids);
+    }
     update(id,payload){
         return http.put(`/food/${id}`,payload);
     }

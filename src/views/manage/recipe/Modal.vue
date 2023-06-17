@@ -254,16 +254,8 @@ import { type } from "@/constants/recipe";
     watch:{
       data(n){
         if(n){
-          if(this.mode === 'edit'){
-            this.recipe = n;
-            this.recipeDetails = n.recipeDetails;
-          }else{
-            this.recipe.name = ''
-            this.recipe.amount = 0
-            this.recipe.type = 1
-            this.recipeDetails = []
-          }
-          
+          this.recipe = n;
+          this.recipeDetails = n.recipeDetails;
         }
       },
       'recipe.frequency'(n){
@@ -288,11 +280,8 @@ import { type } from "@/constants/recipe";
     },
     methods: {
         clear(){
-          this.recipe.dateCurrent = new Date()
-          this.recipe.dateNext = null 
-          this.recipe.vaccine = ''
-          this.recipe.frequency = ''
-          this.recipe.remark = ''
+          this.recipe = {}
+          this.recipeDetails = []
         },
         confirmCancel(mode){
             this.value = false

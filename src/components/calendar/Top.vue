@@ -22,13 +22,13 @@
                 path="chevronLeft" 
                 size="38" 
                 class="cursor-pointer hover:text-gray-300"
-                @click="calendarStore.decrementMonth(1)"
+                @click="prevMonth()"
             />
             <BaseIcon 
                 path="chevronRight" 
                 size="38" 
                 class="cursor-pointer hover:text-gray-300"
-                @click="calendarStore.incrementMonth(1)"
+                @click="nextMonth()"
             />
           </div>
         </div>
@@ -55,7 +55,7 @@
             <BaseButton
                 label="วันนี้"
                 small
-                @click="calendarStore.resetDate()"
+                @click="resetDate()"
             />
           </div>
         </div>
@@ -64,12 +64,15 @@
   </template>
   
   <script setup>
-  import { ref, onMounted } from "vue";
+  import { ref, onMounted,defineEmits} from "vue";
   import { useCalendarStore } from "@/store/calendar";
   import BaseIcon from "@/components/BaseIcon.vue";
   import BaseButton from "@/components/BaseButton.vue";
   import Datepicker from "@vuepic/vue-datepicker";
   import "@vuepic/vue-datepicker/dist/main.css";
+
+  const emit = defineEmits(['month','year'])
+
   // Store initialization and subscription
   const calendarStore = useCalendarStore();
   calendarStore.$subscribe((mutation, state) => {
@@ -112,7 +115,30 @@
     calendarStore.setMonth(date.value.getMonth());
     calendarStore.setYear(date.value.getFullYear());
     // do something else with the data
+    emitDateDetail();
   };
+
+  const prevMonth = () => {
+    calendarStore.decrementMonth(1)
+    emitDateDetail();
+  }
+  
+  const nextMonth = () => {
+    calendarStore.incrementMonth(1)
+    emitDateDetail();
+  }
+
+  const resetDate = () =>{
+    calendarStore.resetDate();
+    emitDateDetail();
+  }
+
+  const emitDateDetail = () => {
+    emit('month',calendarStore.getMonth+1)
+    emit('year',calendarStore.getYear)
+  }
+
+
   /************************************************************************
    *  LIFECYCLE HOOKS
    * **********************************************************************

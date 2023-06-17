@@ -13,6 +13,12 @@ async function getSearchQuery (opts = {}) {
         // const dateNoTime = moment(new Date(opts.date)).format('YYYY-MM-DD') 
         query = query + `date=${opts.date}&`;
     } 
+    if (opts.year) {
+        query = query + `year=${opts.year}&`;
+    } 
+    if (opts.month) {
+        query = query + `month=${opts.month}&`;
+    } 
     if (opts.quantity) {
         query = query + `quantity=${opts.quantity}&`;
     } 

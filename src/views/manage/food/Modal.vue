@@ -39,13 +39,16 @@
 
           <FormField class="lg:col-span-3 col-span-2">
             <BaseLevel type="justify-end">
-              ราคาสูตรอาหาร/กก. <p class="text-red-700 font-bold p-2">{{ food.amount > 0 ? food.amount : '-' }}</p> บาท <br/> 
+              ราคาสูตรอาหาร/กก. <p class="text-red-700 font-bold p-2">{{ food?.recipe?.amount > 0 ? food.recipe.amount.toFixed(2) : '-' }}</p> บาท <br/> 
             </BaseLevel>
             <BaseLevel type="justify-end">
-              จำนวนโค <p class="text-red-700 font-bold p-2">{{ numCowCorral > 0 ? numCowCorral : '-' }}</p> ตัว <br/> 
+              จำนวนโค <p class="text-red-700 font-bold p-2">{{ numCowCorral > 0 && numCowCorral ? numCowCorral : '-' }}</p> ตัว <br/> 
             </BaseLevel>
             <BaseLevel type="justify-end">
-              รวมเป็นเงิน/วัน <p class="text-red-700 font-bold p-2">{{ food.qty && food.amount > 0 ? food.qty * food.amount : '-' }}</p> บาท
+              รวมเป็นเงิน/วัน <p class="text-red-700 font-bold p-2">{{ food.qty && food?.recipe?.amount > 0 ? food.amount.toFixed(2) : '-' }}</p> บาท
+            </BaseLevel>
+            <BaseLevel type="justify-end">
+              คิดเป็นเงิน/ตัว <p class="text-red-700 font-bold p-2">{{ food.qty && food.amount && numCowCorral ? (food.amount / numCowCorral).toFixed(2) : '-' }}</p> บาท
             </BaseLevel>
           </FormField>
         </div>
@@ -105,7 +108,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         food : {
           corral : '',
           recipe : {},
-          qty : 0,
+          qty : null,
           amount : 0,
           amountAvg : 0,
           numCow : 0,
@@ -113,7 +116,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         loading : false,
         alert : "",
         ddlCorral : [],
-        numCowCorral : 0,
+        numCowCorral : null,
         corrals : []
       }
     },
@@ -127,9 +130,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
               this.$emit('update:modelValue', newValue)
           }
         },
-        user() {
-          return this.$store.state.auth.user;
-        }
     },
     watch:{
       data(n){
@@ -139,14 +139,23 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       },
       'food.recipe'(n){
         if(n){
-          this.food.amount = n.amount;
+          const qty = this.food.qty ? this.food.qty : 0
+          this.food.amount = qty * n.amount;
+        }else{
+          this.food.amount = null;
+        }
+      },
+      'food.qty'(n){
+        if(n){
+          const amount = this.food?.recipe?.amount ? this.food?.recipe?.amount : 0
+          this.food.amount = n * amount;
         }else{
           this.food.amount = null;
         }
       },
       'food.corral'(n){
         if(n){
-          this.numCowCorral = this.corrals[n].length
+          this.numCowCorral = this.corrals[n].length > 0 ? this.corrals[n].length : null
         }
       }
     },
@@ -156,6 +165,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     methods: {
         clear(){
           this.food = {}
+          this.numCowCorral = null
         },
         confirmCancel(mode){
             this.value = false
@@ -177,15 +187,13 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
                 const resp = await FoodService.create(this.food);
                 if(resp){
                     this.loading = false
-                    this.value = false 
-                    this.confirmCancel('confirm') 
+                    this.confirm() 
                 }
               }else{
                 const resp = await FoodService.update(this.food._id,this.food);
                 if(resp){
                     this.loading = false
-                    this.value = false
-                    this.confirmCancel('confirm')  
+                    this.confirm()
                 }
               }
               Toast.fire({

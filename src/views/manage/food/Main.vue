@@ -6,7 +6,7 @@
         icon="foodDrumstickOutline" 
         title="การให้อาหาร"
         has-btn-add
-        @openModal="mode='create';openModal = true;"
+        @openModal="mode='create';openModal = true;this.modalData = null;"
         btnText="เพิ่มการให้อาหาร"
       />
 
@@ -54,6 +54,9 @@ import Criteria from "@/components/Criteria.vue";
 
 import Modal from './Modal.vue'
 import FoodService from '@/services/food'
+import CowService from '@/services/cow'
+
+import _ from 'lodash'
 
 import { Toast } from "@/utils/alert";
 
@@ -63,6 +66,7 @@ export default {
       openModal : false,
       modalData : null,
       items : [],
+      ddlCorral : [],
       forms : [
         {
           label : 'สูตรอาหาร',
@@ -117,11 +121,17 @@ export default {
           label : "รวมเป็นเงิน/วัน",
           class : 'text-center',
           value : 'amount',
+          func : (obj) => {
+            return obj.amount.toFixed(2)
+          }
         },
         {
           label : "คิดเป็นเงิน/ตัว",
           class : 'text-center',
           value : 'amountAvg',
+          func : (obj) => {
+            return obj.amountAvg.toFixed(2)
+          }
         },
       ],
       buttons : [
@@ -149,10 +159,14 @@ export default {
   computed : {
     getDataCopy() {
       return {...this.modalData};
+    },
+    corral(){
+      return this.ddlCorral;
     }
   },
   created() {
     this.getDatas();
+    this.getCorrals();
   },
   methods : {
     async getDatas(search){
@@ -175,6 +189,32 @@ export default {
         icon: 'success',
         title: 'ลบข้อมูลสำเร็จ'
       })
+    },
+    async removeSelected(datas){
+      this.loading = true
+      let ids = []
+      for(let data of datas){
+        ids.push(data._id)
+      }
+      const resp = await FoodService.deletes(ids);
+      if(resp.data){
+        this.getReproductions()
+        Toast.fire({
+          icon: 'success',
+          title: 'ลบข้อมูลสำเร็จ'
+        })
+      }
+      this.loading = false
+    },
+    async getCorrals(){
+      const resp = await CowService.all();
+      if(resp){
+        const cows = resp.data.cows
+        const corrals = _.groupBy(cows,'corral')
+        for(let key of Object.keys(corrals)){
+          this.ddlCorral.push({id:key,label:key})
+        }
+      }
     },
     edit(obj){
       this.modalData = obj;
