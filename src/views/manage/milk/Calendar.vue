@@ -17,7 +17,7 @@
           v-show="firstDayOfCurrentMonth > 0"
           v-for="day in firstDayOfCurrentMonth"
           :key="day"
-          class="h-16 md:h-36 w-full opacity-50 border-t border-gray-600 align-top "
+          class="h-26 md:h-36 w-full opacity-50 border-t border-gray-600 align-top "
         >
         <div
             class="w-full h-full text-xs md:text-sm lg:text-base text-center transition-colors p-3 "
@@ -86,7 +86,7 @@
         <div
           v-for="day in daysInCurrentMonth"
           :key="day"
-          class="h-16 md:h-36 w-full border-t border-gray-600 align-top "
+          class="h-26 md:h-36 w-full border-t border-gray-600 align-top "
         >
           <div
             class="w-full h-full text-xs md:text-sm lg:text-base text-center transition-colors  p-2"
@@ -96,7 +96,7 @@
             }"
           >
             {{ day }}
-            <div class="mt-2">
+            <div class="lg:mt-2">
               <div
                 v-show="maxThreeTodaysEvent(day, events).length > 0"
                 v-for="evt in maxThreeTodaysEvent(day, events)"
@@ -119,32 +119,36 @@
                 </div>
               </div>
             </div>
+
+            
             
 
             <div
-              v-show="maxThreeTodaysEvent(day, events).length === 0"
+              v-show="maxThreeTodaysEvent(day, events).length < 2"
             >
               <div
-                class="w-full mt-2 text-center items-center overflow-hidden hover:border hover:border-gray-200 cursor-pointer rounded-lg"
+                class="w-full lg:mt-2 text-center items-center overflow-hidden hover:border hover:border-gray-200 cursor-pointer rounded-lg"
                 @click="openModal(day, allTodaysEvent(day, events))"
               >
                 <div class="opacity-40">
-                  <BaseIcon path="plus"/> <p class="hidden md:block">รีดนม</p>
+                  <BaseIcon  path="plus"/><p class="hidden md:block"> รีดนม</p>
                 </div>
               </div>
             </div>
 
             <!-- Mobile -->
             <div
-              v-if="allTodaysQty(day, events) > 0"
-              class="flex md:hidden h-2/3 w-full justify-center items-center"
+              v-for="evt in maxThreeTodaysEvent(day, events)"
+              :key="evt.date"
+              class="flex md:hidden mt-1 w-full justify-center items-center "
               @click="openCardBox(day, events)"
             >
               <div
-                class="h-6 w-6 flex justify-center items-center text-xs bg-orange-600 rounded-full shadow-sm"
+                class="h-6 w-6 flex justify-center items-center text-xs rounded shadow-sm"
+                :class="[evt.time === 'M'?'bg-yellow-400':'bg-orange-500']"
               >
-                <h3 class="font-medium text-white">
-                  {{ allTodaysQty(day, events) }}
+                <h3 class="font-medium text-black">
+                  {{ evt.sumQty }}
                 </h3>
               </div>
             </div>
@@ -404,7 +408,7 @@
   const openModal = (day, events,time,id) => {
     mode.value = time ? 'edit' : 'create';
     let date = calendarStore.getYear + "-" + (calendarStore.getMonth+1) + "-" + day
-    data.value = { _id : id, date : date , time : time ,milkDetails : events};
+    data.value = { _id : id, date : date  ,time: (time ? time :null),milkDetails : events};
     modalShow.value = true;
   };
 

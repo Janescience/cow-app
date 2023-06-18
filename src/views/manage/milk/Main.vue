@@ -13,14 +13,13 @@
       <MilkModal
         v-model="modalMilk"
         :mode="mode" 
-        :dataEdit="dataEdit" 
         @confirm="getMilks" 
       />
 
       <CardBox v-if="!loading">
         <Calendar 
           :events="events"
-          @confirm="addMilk"
+          @confirm="getMilks"
           @month="getMonthMilk"
           @year="getYearMilk"
           />
@@ -71,7 +70,7 @@ export default {
       ],
       loading : false,
       mode : "create",
-      dataEdit : null,
+      modalData : null,
       checked : {
         code : {
           value : 'date',
@@ -165,7 +164,6 @@ export default {
         for(let milk of resp.data.milks){
           this.filterMilk(milk)
         }
-        
       }
       this.loading = false
     },
@@ -206,7 +204,7 @@ export default {
       this.yearMilk = data
     },
     edit(milk){
-      this.dataEdit = milk;
+      this.modalData = milk;
       this.mode = 'edit';
       this.modalMilk = true;
     },
