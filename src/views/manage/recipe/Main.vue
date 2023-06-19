@@ -109,6 +109,9 @@ export default {
           label : "ราคา/กก.",
           class : 'text-center',
           value : 'amount',
+          func : (obj) => {
+            return obj.amount.toFixed(2)
+          },
         },
         {
           label : "จำนวนอาหาร/วัตถุดิบ",

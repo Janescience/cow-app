@@ -320,26 +320,15 @@
         />
       </div>
 
-      <CardBox 
-          icon="foodDrumstickOutline"
+      <Table
+          v-if="foods.length > 0"
+          title="การให้อาหาร" 
+          :items="foods" 
+          :datas="foodDatas"
           :loading="loading.food"
-          :title="'การให้อาหาร' + ' - คอก '+cow.corral "
-          header-icon=""
-          class="mb-5"
-        >
-          <div v-if="foods.length <= 0" class="text-slate-600">
-            ไม่มีรายการให้อาหาร...
-          </div>
-          <div v-else class="grid gap-5 grid-cols-1 "
-            v-for="(food,index) in foods"
-            :key="food._id"
-          >
-              <p >
-                {{ (index+1) +'.' }} <a class="underline decoration-sky-500 decoration-2" href="/manage/recipe">{{ 'สูตร' + food.recipe.name }}</a>  {{ ' จำนวน ' + food.qty + ' กก./วัน คิดเป็นเงินต้นทุน '+ food.amount + ' บาท/วัน และ ' + food.amountAvg + ' บาท/ตัว โดยมีวัวทั้งหมด ' +food.numCow+ ' ตัว'}}
-              </p>
-          </div>
-  
-        </CardBox>
+          perPage="5"
+          icon="foodDrumstickOutline"
+        />
 
       <Table
         v-if="historyMilks.length > 0"
@@ -662,6 +651,38 @@ export default {
           value : 'amount',
         },
       ],
+      foodDatas : [
+      {
+          label : "สูตรอาหาร",
+          value : 'recipe.name',
+        },
+        {
+          label : "จำนวน/วัน (กก.)",
+          class : 'text-center',
+          value : 'qty'
+        },
+        {
+          label : "คิดเป็นเงิน/วัน",
+          class : 'text-right',
+          value : 'amount',
+          func : (obj) => {
+            return obj.amount.toFixed(2)
+          }
+        },
+        {
+          label : "คิดเป็นเงิน/ตัว",
+          class : 'text-right',
+          value : 'amountAvg',
+          func : (obj) => {
+            return obj.amountAvg.toFixed(2)
+          }
+        },
+        {
+          label : "จำนวนโค",
+          class : 'text-center',
+          value : 'numCow'
+        }
+      ]
     }
   },
  

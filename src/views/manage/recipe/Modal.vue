@@ -9,6 +9,7 @@
         header-icon="close"
         modal
         form
+        has-scroll
         @submit.prevent="submit"
         @header-icon-click="cancel"
       >
@@ -104,7 +105,7 @@
               รายการอาหาร/วัตถุดิบ
             </p>
           </header>
-            <div class="overflow-x-auto" v-if="recipeDetails.length > 0">
+            <div class="overflow-x-hidden overflow-y-auto h-80" v-if="recipeDetails.length > 0">
               <table>
                 <thead>
                     <tr >
@@ -132,13 +133,13 @@
                       {{ obj.food }}
                     </td>
                     <td data-label="ราคา/กก." class="text-center">
-                      {{ obj.cost }}
+                      {{ obj.cost.toFixed(2) }}
                     </td>
                     <td data-label="จำนวนที่ใช้ (กก.)" class="text-center">
                       {{ obj.qty }}
                     </td>
                     <td data-label="จำนวนเงิน" class="text-right">
-                      {{ obj.amount }}
+                      {{ obj.amount.toFixed(2) }}
                     </td>
                     <td class="lg:w-6 whitespace-nowrap">
                         <BaseButtons
@@ -265,14 +266,14 @@ import { type } from "@/constants/recipe";
       },
       'recipeDetail.cost'(n){
         if(n && this.recipeDetail?.qty){
-          this.recipeDetail.amount = n * this.recipeDetail?.qty
+          this.recipeDetail.amount = (n * this.recipeDetail?.qty).toFixed(2)
         }else{
           this.recipeDetail.amount = null
         }
       },
       'recipeDetail.qty'(n){
         if(n && this.recipeDetail?.cost){
-          this.recipeDetail.amount = n * this.recipeDetail?.cost
+          this.recipeDetail.amount = (n * this.recipeDetail?.cost).toFixed(2)
         }else{
           this.recipeDetail.amount = null
         }

@@ -2,7 +2,7 @@
   <LayoutAuthenticated>
     <SectionMain>
       <SectionTitleBarSub
-        icon="homeSiloOutline"
+        icon="chartPie"
         title="ภาพรวมฟาร์ม"
       />
       <div

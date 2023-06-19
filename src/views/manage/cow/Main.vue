@@ -27,7 +27,7 @@
 
         <div
           v-if="!loading"
-          class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-3 lg:grid-cols-6 md:grid-cols-4"
+          class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-3 lg:grid-cols-7 md:grid-cols-4"
         >
           <CardBoxClient
             v-for="item in itemsPaginated"
@@ -102,7 +102,7 @@ import { status,quality } from '@/constants/cow'
 export default {
   data (){
     return {
-      perPage :18,
+      perPage :28,
       currentPage : 0,
       modalCow : false,
       items : [],

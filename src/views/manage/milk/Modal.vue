@@ -305,7 +305,7 @@
         },
         async submit(){
             this.loading = true
-            this.alert = ""
+            this.alert = {}
             this.milk.milkDetails = this.milkDetails
             const milkCreate = {...this.milk};
             try {

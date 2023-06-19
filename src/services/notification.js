@@ -12,9 +12,9 @@ async function getSearchQuery (opts = {}) {
   if (opts.type) {
       query = query + `type=${opts.type}&`;
   } 
-  if (opts.cow) {
-    query = query + `cow=${opts.cow}&`;
-} 
+  if (opts.message) {
+    query = query + `message=${opts.message}&`; 
+  }
   return opts ? query.replace(/&*$/, "") : "";
 }
 

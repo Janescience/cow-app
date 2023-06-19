@@ -50,23 +50,6 @@
             </div>
   
             <div
-              v-if="allTodaysEvent(daysInPrevMonth - (firstDayOfCurrentMonth - day), events, true).length > 3"
-              class="hidden md:flex mt-2 w-full px-2 py-1 space-x-2 items-center whitespace-nowrap overflow-hidden hover:text-gray-800 hover:font-medium cursor-pointer rounded-sm"
-              @click="openModal(daysInPrevMonth - (firstDayOfCurrentMonth - day), allTodaysEvent(daysInPrevMonth - (firstDayOfCurrentMonth - day), events, true))"
-            >
-              <div class="w-1/12 mr-1">
-                <BaseIcon path="plus"/>
-              </div>
-              <div class="w-11/12">
-                <h6
-                  class="text-xs tracking-tight text-clip text-left overflow-hidden"
-                >
-                  {{ " มีอีก "+ (allTodaysEvent(daysInPrevMonth - (firstDayOfCurrentMonth - day), events, true).length - 3) + " รายการ" }}
-                </h6>
-              </div>
-            </div>
-  
-            <div
               v-if="allTodaysEvent(daysInPrevMonth - (firstDayOfCurrentMonth - day), events, true).length > 0"
               class="flex md:hidden h-2/3 w-full justify-center items-center"
               @click="openModal(daysInPrevMonth - (firstDayOfCurrentMonth - day), allTodaysEvent(daysInPrevMonth - (firstDayOfCurrentMonth - day), events, true))"
@@ -141,7 +124,7 @@
               v-for="evt in maxThreeTodaysEvent(day, events)"
               :key="evt.date"
               class="flex md:hidden mt-1 w-full justify-center items-center "
-              @click="openCardBox(day, events)"
+              @click="openModal(day, allTodaysEvent(day, events,false,evt.time),evt.time,evt.id)"
             >
               <div
                 class="h-6 w-6 flex justify-center items-center text-xs rounded shadow-sm"

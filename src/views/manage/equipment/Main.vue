@@ -12,9 +12,10 @@
 
       <Modal
         v-model="openModal"
-        :data="modalData"
+        :data="getDataCopy"
         :mode="mode"
-        @confirm="getDatas"         
+        @confirm="getDatas"
+        @cancel="resetData"
       />
 
       <Criteria
@@ -23,6 +24,7 @@
         @reset="reset" 
         :forms="forms" 
         :search="search"
+        :btnLoading="loading"
       />
 
       <Table
@@ -70,7 +72,7 @@ export default {
         }, 
       ],
       search : {
-        status : status('ddl'),
+        status : '',
       },
       loading : false,
       mode : "create",
@@ -111,6 +113,7 @@ export default {
         },
         {
           label : "สถานะ",
+          class : 'text-center',
           func : (obj) => {
             return status()[obj.status]
           }
@@ -143,8 +146,8 @@ export default {
     Criteria
   },
   computed : {
-    user() {
-      return this.$store.state.auth.user;
+    getDataCopy() {
+      return {...this.modalData}
     }
   },
   created() {
@@ -172,14 +175,33 @@ export default {
         title: 'ลบข้อมูลสำเร็จ'
       })
     },
+    async removeSelected(datas){
+      this.loading = true
+      let ids = []
+      for(let data of datas){
+        ids.push(data._id)
+      }
+      const resp = await Service.deletes(ids);
+      if(resp.data){
+        this.getDatas()
+        Toast.fire({
+          icon: 'success',
+          title: 'ลบข้อมูลสำเร็จ'
+        })
+      }
+      this.loading = false
+    },
     edit(obj){
       this.modalData = obj;
       this.mode = 'edit';
       this.openModal = true;
     },
     reset(){
-      this.search.status = null
+      this.search.status = ''
     },
+    resetData(){
+      this.modalData = null
+    }
   }
 }
 </script>

@@ -182,14 +182,12 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
                 const resp = await Service.create(this.equipment);
                 if(resp){
                     this.loading = false
-                    this.value = false 
                     this.confirmCancel('confirm') 
                 }
               }else{
                 const resp = await Service.update(this.equipment._id,this.equipment);
                 if(resp){
                     this.loading = false
-                    this.value = false
                     this.confirmCancel('confirm')  
                 }
               }

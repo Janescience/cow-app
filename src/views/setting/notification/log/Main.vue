@@ -16,6 +16,7 @@
           @reset="reset" 
           :forms="forms" 
           :search="search"
+          :btnLoading="loading"
         />
   
         <Table
@@ -65,7 +66,11 @@
             label : 'สถานะ',
             value : 'status',
             options : status('ddl'),
-          },  
+          },
+          {
+            label : 'ข้อความ',
+            value : 'message',
+          },   
         ],
         search : {
             createdAt : null,
@@ -90,7 +95,6 @@
           },
           {
             label : "ข้อความ",
-            class : 'text-center',
             value : 'message'
           },
           {
@@ -149,8 +153,9 @@
             }
         },
         reset(){
-            this.search.recipe = null
-            this.search.corral = ''
+            this.search.createdAt = null
+            this.search.type = ''
+            this.search.status = ''
             this.getDatas()
         },
     }
