@@ -14,10 +14,11 @@
       >
       
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-5">
-          <FormField label="รหัส" help="* ห้ามว่าง" >
+          <FormField label="รหัส" :help="mode === 'create' ?'* ห้ามว่าง (บันทึกแล้วแก้ไขไม่ได้)':'* แก้ไขไม่ได้'" >
             <FormControl
               v-model="building.code"
               icon="accountEdit"
+              :disabled="mode === 'edit'"
               required
             />
           </FormField>

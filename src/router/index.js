@@ -151,6 +151,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'การซ่อมบำรุง',
+      loginRequired : true
+    },
+    path: '/manage/maintenance',
+    name: 'maintenance',
+    component: () => import('@/views/manage/maintenance/Main.vue')
+  },
+  {
+    meta: {
       title: 'วัคซีน',
       loginRequired : true
     },

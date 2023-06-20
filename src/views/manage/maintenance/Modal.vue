@@ -4,7 +4,7 @@
     >
       <CardBox
         v-show="value"
-        :title="'อุปกรณ์ '+(this.mode === 'create' ?'' : '(แก้ไข)')"
+        :title="'การซ่อมบำรุง '+(this.mode === 'create' ?'' : '(แก้ไข)')"
         class="shadow-lg w-full   lg:w-1/2 z-50"
         header-icon="close"
         modal
@@ -14,54 +14,48 @@
       >
       
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-5">
-          <FormField label="รหัส" :help="mode === 'create' ?'* ห้ามว่าง (บันทึกแล้วแก้ไขไม่ได้)':'* แก้ไขไม่ได้'" >
+          <FormField label="หมวดหมู่" help="* ห้ามว่าง" >
             <FormControl
-              v-model="equipment.code"
+              v-model="maintenance.category"
               icon="accountEdit"
-              :disabled="mode === 'edit'"
+              :options="categories"
               required
             />
           </FormField>
-          <FormField label="ชื่อ" help="* ห้ามว่าง" >
+          <FormField label="รายการ" help="* ห้ามว่าง" v-if="maintenance?.category">
             <FormControl
-              v-model="equipment.name"
+              v-model="maintenance.code"
               icon="accountEdit"
+              :options="list"
               required
             />
           </FormField>
-          <FormField label="วันที่เริ่มใช้งาน"  help="* ห้ามว่าง" >
+          <FormField label="วันที่ซ่อม"  help="* ห้ามว่าง" >
             <FormControl
-              v-model="equipment.startDate"
+              v-model="maintenance.date"
               icon="calendar"
               type="date"
               required
             />
           </FormField>
-          <FormField label="วันที่สิ้นสุดใช้งาน"  >
+          <FormField label="รายละเอียด" >
             <FormControl
-              v-model="equipment.endDate"
-              icon="calendar"
-              type="date"
+              v-model="maintenance.reason"
+              type="textarea"
             />
           </FormField>
           <FormField label="ราคา" help="* ห้ามว่าง" >
             <FormControl
-              v-model="equipment.amount"
+              v-model="maintenance.amount"
               type="number"
               icon="cashMultiple"
               required
             />
           </FormField>
-          <FormField label="สถานะ" >
+          <FormField label="ผู้ซ่อมบำรุง"  >
             <FormControl
-              v-model="equipment.status"
-              :options="status"
-            />
-          </FormField>
-          <FormField label="หมายเหตุ" >
-            <FormControl
-              v-model="equipment.remark"
-              type="textarea"
+              v-model="maintenance.maintenancer"
+              icon="accountHardHat"
             />
           </FormField>
         </div>
@@ -109,23 +103,25 @@ import BaseLevel from '@/components/BaseLevel.vue'
 
 import { Toast } from "@/utils/alert";
 
-import Service from '@/services/equipment'
-import { status } from '@/constants/equipment'
+import Service from '@/services/maintenance'
+import EService from '@/services/equipment'
+import BService from '@/services/building'
+import { categories } from '@/constants/maintenance'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
   
   export default {
     data () {
       return {
-        equipment : {
-          name : '',
+        maintenance : {
           code : '',
-          startDate : new Date(),
-          endDate : null,
-          status : 'A',
-          amount : '',
-          remark : ''
+          date : null,
+          category : 'E',
+          amount : null,
+          maintenancer : '',
+          reason : ''
         },
-        status : status('ddl'),
+        list : [],
+        categories : categories('create'),
         loading : false,
         alert : ""
       }
@@ -140,28 +136,32 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
               this.$emit('update:modelValue', newValue)
           }
         },
-        user() {
-          return this.$store.state.auth.user;
-        }
+    },
+    created(){
+      if(this.mode === 'create'){
+        this.equipments()
+      }
     },
     watch:{
       data(n){
         if(n && this.mode === 'edit'){
-          this.equipment = n;
-          this.equipment.startDate = new Date(n.startDate);
-          this.equipment.endDate = n.endDate ? new Date(n.endDate) : null;
+          this.maintenance = n;
+          this.maintenance.date = new Date(n.date);
+        }
+      },
+      'maintenance.category'(n){
+        if(n === 'E'){
+          this.equipments()
+        }else if(n === 'B'){
+          this.buildings()
         }
       },
     },
     methods: {
         clear(){
-          this.equipment.name = ''
-          this.equipment.code = ''
-          this.equipment.startDate = new Date()
-          this.equipment.endDate = null
-          this.equipment.remark = ""
-          this.equipment.amount = ""
-          this.equipment.status = 'A'
+          this.maintenance = {}
+          this.maintenance.category = 'E'
+          this.maintenance.date = new Date()
         },
         confirmCancel(mode){
             this.value = false
@@ -172,7 +172,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.confirmCancel('confirm')
         },
         cancel(){
-            this.clear()
             this.confirmCancel('cancel')
         },
         async submit(){
@@ -180,16 +179,16 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.alert = ""
             try {
               if(this.mode === 'create'){
-                const resp = await Service.create(this.equipment);
+                const resp = await Service.create(this.maintenance);
                 if(resp){
                     this.loading = false
-                    this.confirmCancel('confirm') 
+                    this.confirm() 
                 }
               }else{
-                const resp = await Service.update(this.equipment._id,this.equipment);
+                const resp = await Service.update(this.maintenance._id,this.maintenance);
                 if(resp){
                     this.loading = false
-                    this.confirmCancel('confirm')  
+                    this.confirm()  
                 }
               }
               Toast.fire({
@@ -207,20 +206,44 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             }
             
         },
+        async equipments(){
+          const resp = await EService.all();
+          if(resp.data){
+            this.list = [{id:'',label:'เลือกรายการ'}]
+            const equipments = resp.data.equipments
+            for(let e of equipments){
+              this.list.push({id:e.code,label:e.code+ ' : '+e.name})
+            }
+          }else{
+            this.list = [{id:'',label:'ไม่มีรายการ'}]
+          }
+        },
+        async buildings(){
+          const resp = await BService.all();
+          if(resp.data){
+            this.list = [{id:'',label:'เลือกรายการ'}]
+            const buildings = resp.data.buildings
+            for(let b of buildings){
+              this.list.push({id:b.code,label:b.code+ ' : '+b.name})
+            }
+          }else{
+            this.list = [{id:'',label:'ไม่มีรายการ'}]
+          }
+        }
     },
     components : {
-    BaseButton,
-    BaseButtons,
-    CardBox,
-    BaseDivider,
-    OverlayLayer,
-    FormField,
-    FormControl,
-    NotificationBar,
-    BaseLevel,
-    FormCheckRadioPicker,
-    BaseIcon
-},
+      BaseButton,
+      BaseButtons,
+      CardBox,
+      BaseDivider,
+      OverlayLayer,
+      FormField,
+      FormControl,
+      NotificationBar,
+      BaseLevel,
+      FormCheckRadioPicker,
+      BaseIcon
+    },
     props : {
         modelValue: {
             type: [String, Number, Boolean],
