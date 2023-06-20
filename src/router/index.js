@@ -160,6 +160,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'ค่าใช้จ่ายเพิ่มเติม',
+      loginRequired : true
+    },
+    path: '/manage/bill',
+    name: 'bill',
+    component: () => import('@/views/manage/bill/Main.vue')
+  },
+  {
+    meta: {
       title: 'วัคซีน',
       loginRequired : true
     },

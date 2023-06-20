@@ -86,9 +86,9 @@ export default [
       label: 'สูตรอาหาร'
     },
     {
-      to: '/manage/recipe',
-      icon: 'homeLightningBoltOutline',
-      label: 'ค่าใช้จ่ายอื่นๆ'
+      to: '/manage/bill',
+      icon: 'cashMultiple',
+      label: 'ค่าใช้จ่ายเพิ่มเติม'
     },
   ],
   'รายงาน',
