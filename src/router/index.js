@@ -142,6 +142,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'สิ่งปลูกสร้าง',
+      loginRequired : true
+    },
+    path: '/manage/building',
+    name: 'building',
+    component: () => import('@/views/manage/building/Main.vue')
+  },
+  {
+    meta: {
       title: 'วัคซีน',
       loginRequired : true
     },

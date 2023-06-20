@@ -256,6 +256,7 @@ import { type } from "@/constants/recipe";
       data(n){
         if(n){
           this.recipe = n;
+          this.recipe.amount = this.recipe?.amount ? this.recipe?.amount.toFixed(2) : null
           this.recipeDetails = n.recipeDetails;
         }
       },

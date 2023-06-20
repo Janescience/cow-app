@@ -3,11 +3,11 @@
     <SectionMain>
 
       <SectionTitleBarSub 
-        icon="accountHardHat" 
-        title="คนงาน"
+        icon="barn" 
+        title="สิ่งปลูกสร้าง"
         has-btn-add
         @openModal="mode='create';openModal = true;"
-        btnText="เพิ่มคนงาน"
+        btnText="เพิ่มสิ่งปลูกสร้าง"
       />
 
       <Modal
@@ -28,7 +28,7 @@
       />
 
       <Table
-        title="รายการคนงาน" 
+        title="รายการสิ่งปลูกสร้าง" 
         has-checkbox
         :checked-data="checked" 
         :items="items" 
@@ -53,10 +53,10 @@ import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
 
 import Modal from './Modal.vue'
-import Service from '@/services/worker'
+import Service from '@/services/building'
 
 import { Toast } from "@/utils/alert";
-import { status } from '@/constants/worker'
+import { status } from '@/constants/building'
 
 export default {
   data (){
@@ -72,65 +72,49 @@ export default {
         }, 
       ],
       search : {
-        status :'',
+        status : '',
       },
       loading : false,
       mode : "create",
       dataEdit : null,
       checked : {
         code : {
-          value : 'name',
+          value : 'code',
         },
         label : {
-          value : 'duty'
+          value : 'name'
         }
       },
       datas : [
+        {
+          label : "รหัส",
+          value : 'code',
+        },
         {
           label : "ชื่อ",
           value : 'name',
         },
         {
-          label : "อายุ",
+          label : "วันที่สร้าง",
           class : 'text-center',
-          value : 'age',
-        },
-        {
-          label : "วันที่เริ่มงาน",
-          class : 'text-center',
-          value : 'startDate',
+          value : 'date',
           type : 'date'
         },
         {
-          label : "วันที่สิ้นสุดงาน",
-          class : 'text-center',
-          value : 'endDate',
-          type : 'date'
-        },
-        {
-          label : "หน้าที่",
-          value : 'duty',
-        },
-        {
-          label : "เงินเดือน",
-          value : 'salary',
+          label : "ราคา",
+          value : 'amount',
           class : 'text-right',
         },
         {
-          label : "เบอร​์โทรศัพท์",
-          class : 'text-center',
-          value : 'phoneNumber',
-        },
-        {
           label : "สถานะ",
-          // value : 'status',
+          class : 'text-center',
           func : (obj) => {
             return status()[obj.status]
           }
         },
         {
-          label : "ประเทศ",
-          value : 'country',
+          label : "ผู้ก่อสร้าง",
+          value : 'builder',
         },
         {
           label : "หมายเหตุ",
@@ -160,7 +144,7 @@ export default {
     Criteria
   },
   computed : {
-    getDataCopy(){
+    getDataCopy() {
       return {...this.modalData}
     }
   },
@@ -173,7 +157,7 @@ export default {
       const resp = await Service.all(search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.workers
+        this.items = resp.data.buildings
       }
       this.loading = false
     },
@@ -216,7 +200,7 @@ export default {
     },
     resetData(){
       this.modalData = null
-    },
+    }
   }
 }
 </script>

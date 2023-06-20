@@ -198,6 +198,7 @@ export default {
     },
     reset(){
       this.search.status = ''
+      this.getDatas()
     },
     resetData(){
       this.modalData = null
