@@ -84,6 +84,14 @@
             />
           </FormField>
         </div>
+        <FormField label="" help="* เลือก = บันทึกประวัติเงินเดือนก่อนการเปลี่ยนแปลง, ไม่เลือก = ต้องการอัพเดตแค่ข้อมูลปัจจุบัน">
+          <FormCheckRadioPicker
+              v-model="worker.change"
+              name="change"
+              v-if="mode === 'edit'"
+              :options="{ change: 'บันทึกประวัติการเปลี่ยนแปลง' }"
+          />
+          </FormField>
 
         <NotificationBar 
           v-if="alert" 
@@ -145,7 +153,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           country : '',
           status : 'W',
           salary : '',
-          remark : ''
+          remark : '',
+          change : true
         },
         status : status('ddl'),
         loading : false,
