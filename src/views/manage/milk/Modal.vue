@@ -44,7 +44,6 @@
                 v-model="milkDetail.qty"
                 type="number"
                 icon="scale"
-                
               />
             </FormField>
             <FormField label="คิดเป็นเงิน" :help="'ราคาน้ำนมดิบ/กก. '+priceRawMilk+' บาท'">

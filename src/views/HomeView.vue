@@ -67,11 +67,6 @@
                 header-icon=""
               >
                 <table class="text-sm ">
-                  <!-- <thead>
-                      <th>หัวข้อ</th>
-                      <th>โค</th>
-                      <th>วันที่</th>
-                  </thead> -->
                   <tbody >
                       <tr
                       v-for="event in events"
@@ -82,32 +77,50 @@
                         <td class="text-orange-600" data-label="วันที่">{{ event.date }}</td>
                       </tr>
                   </tbody>
-                </table>
-                <!-- <div 
-                  v-for="event in events"
-                  :key="event.title"
-                  class="grid grid-cols-2 gap-5 p-1">
-                  <p class="text-left text-sm">
-                    {{ event.title }}
-                  </p>
-                  <h1 class="text-base text-orange-600 text-right">{{ event.date }}</h1>
-                </div> -->
-                
+                </table>               
+            </CardBox>
+
+            <CardBox
+                icon="sort"
+                title="5 อันดับน้ำนมดิบมากที่สุด"
+                class="text-center text-sm"
+                header-icon=""
+              >
+                <table class="text-sm ">
+                  <tbody >
+                      <tr
+                      v-for="rawMilk in rawMilkSort"
+                        :key="rawMilk.cow.code"
+                      >
+                        <td data-label="">
+                          <UserAvatar
+                            :avatar="rawMilk.cow.image"
+                            username="profile"
+                            class="w-10 mx-auto lg:h-12 lg:w-12"
+                          />
+                        </td>
+                        <!-- <td data-label="รหัส">{{ rawMilk.cow.code }}
+                        </td> -->
+                        <td data-label="ชื่อ">{{ rawMilk.cow.name }}</td>
+                        <td class="text-orange-600 text-right text-xl font-extrabold" data-label="น้ำนมดิบ">{{ rawMilk.sumMilk }}</td>
+                      </tr>
+                  </tbody>
+                </table>               
             </CardBox>
             
           </div>
           <div class="grid grid-cols-1 gap-5 mt-5">
           <CardBox
-                icon="cashMinus"
-                class="text-base "
+                icon="cashRegister"
+                class="text-sm "
                 title="ผลประกอบการ"
                 header-icon=""
               >
                 <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
                   <CardBox
-                    icon=""
+                    icon="finance"
                     class="dark:border-gray-500"
-                    title="รายการผันผวน"
+                    title="ราคาผันผวน"
                     header-icon=""
                   >
                     <div class="grid grid-cols-2 gap-5 ">
@@ -121,8 +134,8 @@
                   </CardBox>
                   <CardBox
                     class="dark:border-gray-500"
-                    icon=""
-                    title="รายการดูแล"
+                    icon="needle"
+                    title="ดูแล"
                     header-icon=""
                   >
                     <div class="grid grid-cols-2 gap-5 grid-flow-row-dense">
@@ -136,9 +149,9 @@
                     
                   </CardBox>
                   <CardBox
-                    icon=""
+                    icon="accountCashOutline"
                     class="dark:border-gray-500"
-                    title="รายการต้นทุน"
+                    title="ต้นทุน"
                     header-icon=""
                   >
                     <div class="grid grid-cols-2 gap-5">
@@ -157,14 +170,14 @@
                   
                   </CardBox>
                   <CardBox
-                    icon=""
+                    icon="cashMultiple"
                     class="dark:border-gray-500"
-                    title="รายการผลผลิต"
+                    title="ผลผลิต"
                     header-icon=""
                   >
                     <div class="grid grid-cols-2 gap-5 ">
                       <p>น้ำนมดิบ</p>
-                      <p class="text-right"></p>
+                      <p class="text-right">{{ income?.rawMilk ? $filters.currency(income.rawMilk) : '-' }}</p>
                       <p>นมพาสเจอร์ไรส์</p>  
                       <p class="text-right">-</p>
                       <p>มูลสัตว์</p>  
@@ -205,11 +218,12 @@
                 </CardBox>
                 <CardBox
                     icon=""
-                    class="dark:border-gray-500 text-2xl text-center"
+                    class="dark:border-gray-500 text-2xl text-center text-green-500"
                     title=""
                     header-icon=""
                   >
-                  -
+                  {{  income.rawMilk ? $filters.currency(income.rawMilk) : '-' }}
+
                 </CardBox>
                 </div>
                 
@@ -286,7 +300,9 @@ export default {
       events : [],
       milk : {},
       cow : {},
+      rawMilkSort : [],
       expense : {},
+      income : {},
       loading : false
     }
   },
@@ -334,6 +350,8 @@ export default {
         this.milks = _.groupBy(resp.data.milks,'date')
         this.cow = resp.data.cow
         this.expense = resp.data.expense
+        this.income = resp.data.income
+        this.rawMilkSort = resp.data.rawMilkSort
         this.chartData = this.createChart()
         this.loading = false;
 
