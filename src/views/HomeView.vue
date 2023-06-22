@@ -57,59 +57,9 @@
             </CardBox>
           </div>
         
-            <CardBox
-              icon="cashRegister"
-              title="ผลประกอบการ"
-              header-icon=""
-            >
-              <CardBox
-                icon=""
-                class="text-sm"
-                title="รายรับรวม"
-                has-table
-                header-icon=""
-              >
-                <table>
-                  <thead>
-                      <th>รายการ</th>
-                      <th>จำนวนเงิน</th>
-                  </thead>
-                  <tbody>
-                      <tr>
-                        <td data-label="รายการ">น้ำนมดิบ</td>
-                        <td data-label="จำนวนเงิน">15,317</td>
-                      </tr>
-                  </tbody>
-                </table>
-              </CardBox>
-              
-              <BaseDivider/>
 
-              <CardBox
-                icon=""
-                class="text-sm"
-                title="รายจ่ายรวม"
-                has-table
-                header-icon=""
-              >
-                <table>
-                  <thead>
-                      <th>รายการ</th>
-                      <th>จำนวนเงิน</th>
-                  </thead>
-                  <tbody>
-                      <tr>
-                        <td data-label="รายการ">อาหาร</td>
-                        <td data-label="จำนวนเงิน">25,000</td>
-                      </tr>
-                      <tr>
-                        <td data-label="รายการ">การรักษา</td>
-                        <td data-label="จำนวนเงิน">12,000</td>
-                      </tr>
-                  </tbody>
-                </table>
-              </CardBox>
-            </CardBox>
+
+            
             <CardBox
                 icon="calendarBadgeOutline"
                 title="กำหนดการ"
@@ -143,6 +93,128 @@
                   <h1 class="text-base text-orange-600 text-right">{{ event.date }}</h1>
                 </div> -->
                 
+            </CardBox>
+            
+          </div>
+          <div class="grid grid-cols-1 gap-5 mt-5">
+          <CardBox
+                icon="cashMinus"
+                class="text-base "
+                title="ผลประกอบการ"
+                header-icon=""
+              >
+                <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
+                  <CardBox
+                    icon=""
+                    class="dark:border-gray-500"
+                    title="รายการผันผวน"
+                    header-icon=""
+                  >
+                    <div class="grid grid-cols-2 gap-5 ">
+                      <p>ค่าอาหาร/วัน</p>
+                      <p class="text-right">{{ expense.fluctuate.food ? $filters.currency(expense.fluctuate.food) : '-' }}</p>
+                      <p>ค่าจ้างคนงาน <br/>(ตามระยะเวลาจ้าง)</p>  
+                      <p class="text-right">{{ expense.fluctuate.worker ? $filters.currency(expense.fluctuate.worker) : '-'}}</p>
+                      <!-- <p class="mt-3 font-extrabold">รวม</p>
+                      <p class="text-right mt-3 underline font-extrabold decoration-red-500 decoration-4">{{ sumExpense() ? $filters.currency(sumExpense().sumFluctuate) : '-' }}</p> -->
+                    </div>
+                  </CardBox>
+                  <CardBox
+                    class="dark:border-gray-500"
+                    icon=""
+                    title="รายการดูแล"
+                    header-icon=""
+                  >
+                    <div class="grid grid-cols-2 gap-5 grid-flow-row-dense">
+                      <p>การรักษา</p>
+                      <p class="text-right">{{ expense.care.heal ? $filters.currency(expense.care.heal) : '-' }}</p>
+                      <p>การป้องกัน/บำรุง</p>  
+                      <p class="text-right">{{ expense.care.protection ? $filters.currency(expense.care.protection) : '-'}}</p>
+                      <!-- <p class="mt-3 font-extrabold ">รวม</p>
+                      <p class="text-right mt-3 underline font-extrabold decoration-red-500 decoration-4">{{ sumExpense() ? $filters.currency(sumExpense().sumCare) : '-'  }}</p> -->
+                    </div>
+                    
+                  </CardBox>
+                  <CardBox
+                    icon=""
+                    class="dark:border-gray-500"
+                    title="รายการต้นทุน"
+                    header-icon=""
+                  >
+                    <div class="grid grid-cols-2 gap-5">
+                      <p>อุปกรณ์</p>
+                    <p class="text-right">{{ expense.cost.equipment ? $filters.currency(expense.cost.equipment) : '-'}}</p>
+                    <p>สิ่งปลูกสร้าง</p>
+                    <p class="text-right">{{ expense.cost.building ? $filters.currency(expense.cost.building) : '-'}}</p>
+                    <p>การซ่อมบำรุง</p>
+                    <p class="text-right">{{ expense.cost.maintenance ? $filters.currency(expense.cost.maintenance) : '-'}}</p>
+                    <p>ค่าใช้จ่ายเพิ่มเติม</p>
+                    <p class="text-right ">{{ expense.cost.bill ? $filters.currency(expense.cost.bill) : '-'}}</p>
+                    <!-- <p class="mt-3 font-extrabold">รวม</p>
+                    <p class="text-right mt-3 underline font-extrabold decoration-red-500 decoration-4">{{ sumExpense() ? $filters.currency(sumExpense().sumCost) : '-'}}</p> -->
+                    </div>
+                    
+                  
+                  </CardBox>
+                  <CardBox
+                    icon=""
+                    class="dark:border-gray-500"
+                    title="รายการผลผลิต"
+                    header-icon=""
+                  >
+                    <div class="grid grid-cols-2 gap-5 ">
+                      <p>น้ำนมดิบ</p>
+                      <p class="text-right"></p>
+                      <p>นมพาสเจอร์ไรส์</p>  
+                      <p class="text-right">-</p>
+                      <p>มูลสัตว์</p>  
+                      <p class="text-right">-</p>
+                      <p>จำหน่ายโค</p>  
+                      <p class="text-right">-</p>
+                      <p>จำหน่ายเนื้อโค</p>  
+                      <p class="text-right">-</p>
+                      <!-- <p>รวม</p>
+                      <p class="text-right">{{ }}</p> -->
+                    </div>
+                    
+                  
+                  </CardBox>
+                  <CardBox
+                    icon=""
+                    class="dark:border-gray-500 text-2xl text-center text-red-500"
+                    title=""
+                    header-icon=""
+                  >
+                  {{  sumExpense() ? $filters.currency(sumExpense().sumFluctuate) : '-' }}
+                </CardBox>
+                <CardBox
+                    icon=""
+                    class="dark:border-gray-500 text-2xl text-center text-red-500"
+                    title=""
+                    header-icon=""
+                  >
+                  {{  sumExpense() ? $filters.currency(sumExpense().sumCare) : '-' }}
+                </CardBox>
+                <CardBox
+                    icon=""
+                    class="dark:border-gray-500 text-2xl text-center text-red-500"
+                    title=""
+                    header-icon=""
+                  >
+                  {{  sumExpense() ? $filters.currency(sumExpense().sumCost) : '-' }}
+                </CardBox>
+                <CardBox
+                    icon=""
+                    class="dark:border-gray-500 text-2xl text-center"
+                    title=""
+                    header-icon=""
+                  >
+                  -
+                </CardBox>
+                </div>
+                
+                                  
+        
             </CardBox>
           </div>
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-5">
@@ -214,6 +286,7 @@ export default {
       events : [],
       milk : {},
       cow : {},
+      expense : {},
       loading : false
     }
   },
@@ -260,6 +333,7 @@ export default {
         }
         this.milks = _.groupBy(resp.data.milks,'date')
         this.cow = resp.data.cow
+        this.expense = resp.data.expense
         this.chartData = this.createChart()
         this.loading = false;
 
@@ -312,6 +386,28 @@ export default {
           this.getDatasetObject('primary', 'qty'),
         ]
       }
+    },
+    sumExpense(){
+      let sumFluctuate = 0,sumCost = 0,sumCare = 0
+      for(let key of Object.keys(this.expense.fluctuate)){
+        const amount = this.expense.fluctuate[key]
+        if(amount){
+          sumFluctuate += amount
+        }
+      }
+      for(let key of Object.keys(this.expense.care)){
+        const amount = this.expense.care[key]
+        if(amount){
+          sumCare += amount
+        }
+      }
+      for(let key of Object.keys(this.expense.cost)){
+        const amount = this.expense.cost[key]
+        if(amount){
+          sumCost += amount
+        }
+      }
+      return {sumFluctuate,sumCare,sumCost}
     },
     formatDate(date){
         if(!date){

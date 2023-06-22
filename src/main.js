@@ -26,22 +26,36 @@ setupInterceptors(store);
 /* Init Pinia */
 const pinia = createPinia()
 
+const filter = {
+  currency(value) {
+    if (typeof value !== "number") {
+      return value;
+    }
+    var formatter = new Intl.NumberFormat('en-US', { 
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2, 
+    });
+    return formatter.format(value);
+  }
+}
+
 /* Create Vue app */
-createApp(App)
-.use(router)
-.use(store)
-.use(pinia)
-.use(mdiVue,{icons:mdijs})
-.use(Loading,{
+const app = createApp(App)
+app.use(router)
+app.use(store)
+app.use(pinia)
+app.use(mdiVue,{icons:mdijs})
+app.use(Loading,{
   loader: 'dots',
   color: '#FFFFFF',
   backgroundColor : '#0A1128',
   opacity: 0.9,
   zIndex : 100}
 )
-.component("v-select", vSelect)
-.component('Datepicker', Datepicker)
-.mount('#app')
+app.component("v-select", vSelect)
+app.component('Datepicker', Datepicker)
+app.config.globalProperties.$filters = filter
+app.mount('#app')
 
 /* Init Pinia stores */
 const styleStore = useStyleStore(pinia)
