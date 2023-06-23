@@ -148,6 +148,15 @@ export default {
           type : 'edit',
           color : 'warning',
         },
+        {
+          label : 'เงินเดือน',
+          type : 'oth',
+          color : 'light',
+          func : (obj) => {
+            this.salary(obj)
+          },
+          
+        },
       ]
     }
   },
@@ -157,7 +166,7 @@ export default {
     SectionTitleBarSub,
     Table,
     Modal,
-    Criteria
+    Criteria,
   },
   computed : {
     getDataCopy(){
@@ -204,6 +213,14 @@ export default {
         })
       }
       this.loading = false
+    },
+    salary(obj){
+      this.$router.push({
+          name: "salary",
+          params: {
+              id: obj._id ,
+          }
+      });
     },
     edit(obj){
       this.modalData = obj;

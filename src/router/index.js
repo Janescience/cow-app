@@ -133,6 +133,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'เงินเดือน',
+      loginRequired : true
+    },
+    path: '/manage/worker/salary/:id',
+    name: 'salary',
+    component: () => import('@/views/manage/worker/salary/Main.vue')
+  },
+  {
+    meta: {
       title: 'อุปกรณ์',
       loginRequired : true
     },

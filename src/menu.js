@@ -73,7 +73,7 @@ export default [
     {
       to: '/manage/worker',
       icon: 'accountHardHat',
-      label: 'คนงาน'
+      label: 'คนงาน',
     },
     {
       to: '/manage/vaccine',

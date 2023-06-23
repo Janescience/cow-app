@@ -124,8 +124,14 @@
               </BaseLevel>
             </div>
         </CardBox>
-        <CardBox v-else-if="loading" loading/>
-        <CardBox v-else empty/>
+        <CardBox 
+        :title="title + ' ' + countChecked()"
+        header-icon=""
+        v-else-if="loading" loading/>
+        <CardBox 
+        :title="title + ' ' + countChecked()"
+        header-icon=""
+        v-else empty/>
 </template>
 
 <script>
