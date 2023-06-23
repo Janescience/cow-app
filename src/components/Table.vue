@@ -111,27 +111,28 @@
             >
               <BaseLevel >
                   <BaseButtons>
-                  <BaseButton
-                      v-for="page in pagesList"
-                      :key="page"
-                      :active="page === currentPage"
-                      :label="page + 1"
-                      small
-                      @click="currentPage = page"
-                  />
+                    <BaseButton
+                        v-for="page in pagesList"
+                        :key="page"
+                        :active="page === currentPage"
+                        :label="page + 1"
+                        small
+                        class="p-0 text-sm"
+                        @click="currentPage = page"
+                    />
                   </BaseButtons>
                   <small>หน้า {{ currentPageHuman }} จาก {{ numPages }}</small>
               </BaseLevel>
             </div>
         </CardBox>
         <CardBox 
-        :title="title + ' ' + countChecked()"
-        header-icon=""
-        v-else-if="loading" loading/>
+            :title="title + ' ' + countChecked()"
+            header-icon=""
+            v-else-if="loading" loading/>
         <CardBox 
-        :title="title + ' ' + countChecked()"
-        header-icon=""
-        v-else empty/>
+            :title="title + ' ' + countChecked()"
+            header-icon=""
+            v-else empty/>
 </template>
 
 <script>

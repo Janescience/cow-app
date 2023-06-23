@@ -133,13 +133,13 @@
                       {{ obj.food }}
                     </td>
                     <td data-label="ราคา/กก." class="text-center">
-                      {{ obj.cost.toFixed(2) }}
+                      {{ $filters.currency(obj.cost) }}
                     </td>
                     <td data-label="จำนวนที่ใช้ (กก.)" class="text-center">
                       {{ obj.qty }}
                     </td>
                     <td data-label="จำนวนเงิน" class="text-right">
-                      {{ obj.amount.toFixed(2) }}
+                      {{ $filters.currency(obj.amount) }}
                     </td>
                     <td class="lg:w-6 whitespace-nowrap">
                         <BaseButtons
@@ -256,7 +256,7 @@ import { type } from "@/constants/recipe";
       data(n){
         if(n){
           this.recipe = n;
-          this.recipe.amount = this.recipe?.amount ? this.recipe?.amount.toFixed(2) : null
+          this.recipe.amount = this.recipe?.amount ? this.$filters.currency(this.recipe?.amount) : null
           this.recipeDetails = n.recipeDetails;
         }
       },

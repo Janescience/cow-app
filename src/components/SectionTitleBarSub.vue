@@ -39,7 +39,7 @@ const openModal = () => confirmOpenModal('openModal')
         size="26"
         class="mr-3"
       />
-      <h1 class="text-xl">
+      <h1 class="lg:text-xl text-base">
         {{ title }}
       </h1>
     </div>

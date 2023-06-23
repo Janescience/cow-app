@@ -95,22 +95,20 @@ export default {
       datas : [
         {
           label : "สูตรอาหาร",
-          class : 'text-center',
           value : 'name',
         },
         {
           label : "ประเภท",
-          class : 'text-center',
           func : (obj) => {
             return type()[obj.type].label
           },
         },
         {
           label : "ราคา/กก.",
-          class : 'text-center',
+          class : 'text-right',
           value : 'amount',
           func : (obj) => {
-            return obj.amount.toFixed(2)
+            return this.$filters.currency(obj.amount)
           },
         },
         {

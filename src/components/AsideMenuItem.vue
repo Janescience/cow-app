@@ -46,7 +46,7 @@ const menuClick = event => {
     >
       <BaseIcon
         v-if="item.icon"
-        size="20"
+        size="18"
         :path="item.icon"
         class="flex-none"
         :class="[ vSlot && vSlot.isExactActive ? styleStore.asideMenuItemActiveStyle : styleStore.asideMenuItemInactiveStyle ]"
