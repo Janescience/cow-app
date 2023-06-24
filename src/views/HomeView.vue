@@ -5,15 +5,13 @@
         icon="chartPie"
         title="ภาพรวมฟาร์ม"
       />
-      <div
-        v-if="!loading"
-      >
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div class="grid grid-cols-1 gap-5">
             <CardBox
+              v-if="!loading.cow"
               icon="cow"
               title="สถานะโค"
-              class="text-center "
+              class="text-center"
               header-icon=""
             >
               <div
@@ -35,13 +33,15 @@
                   นมแห้ง 
                 </p>
                 <h1 class="lg:text-3xl text-2xl text-yellow-600">{{  cow.dry }}</h1>
-                <p class="text-left mt-2">
-                  ป่วย/กำลังรักษา 
-                </p>
-                <h1 class="lg:text-3xl text-2xl text-yellow-600">{{  cow.sick }}</h1>
+                
               </div>
             </CardBox>
+            <CardBox 
+              title="สถานะโค"
+              header-icon=""
+              v-else loading/>
             <CardBox
+              v-if="!loading.cow"
                 icon="thermometerWater"
                 title="คุณภาพนม"
                 class="text-center"
@@ -55,12 +55,17 @@
                 </div>
                 
             </CardBox>
+            <CardBox 
+              title="คุณภาพนม"
+              header-icon=""
+              v-else loading/>
           </div>
         
 
 
             
             <CardBox
+              v-if="!loading.events"
                 icon="calendarBadgeOutline"
                 title="กำหนดการ"
                 class="text-center"
@@ -79,8 +84,14 @@
                   </tbody>
                 </table>               
             </CardBox>
+            <CardBox 
+              icon="calendarBadgeOutline"
+              title="กำหนดการ"
+              header-icon=""
+              v-else loading/>
 
             <CardBox
+                v-if="!loading.rawMilkSort"
                 icon="sort"
                 title="5 อันดับน้ำนมดิบมากที่สุด"
                 class="text-center text-sm"
@@ -107,7 +118,11 @@
                   </tbody>
                 </table>               
             </CardBox>
-            
+            <CardBox 
+              icon="sort"
+              title="5 อันดับน้ำนมดิบมากที่สุด"
+              header-icon=""
+              v-else loading/>
           </div>
           <div class="grid grid-cols-1 gap-5 mt-5">
           <CardBox
@@ -125,9 +140,9 @@
                   >
                     <div class="grid grid-cols-2 gap-5 ">
                       <p>ค่าอาหาร/วัน</p>
-                      <p class="text-right">{{ expense.fluctuate.food ? $filters.currency(expense.fluctuate.food) : '-' }}</p>
+                      <p class="text-right">{{ expense?.fluctuate?.food ? $filters.currency(expense.fluctuate.food) : '-' }}</p>
                       <p>ค่าจ้างคนงาน <br/>(ตามระยะเวลาจ้าง)</p>  
-                      <p class="text-right">{{ expense.fluctuate.worker ? $filters.currency(expense.fluctuate.worker) : '-'}}</p>
+                      <p class="text-right">{{ expense?.fluctuate?.worker ? $filters.currency(expense.fluctuate.worker) : '-'}}</p>
                       <!-- <p class="mt-3 font-extrabold">รวม</p>
                       <p class="text-right mt-3 underline font-extrabold decoration-red-500 decoration-4">{{ sumExpense() ? $filters.currency(sumExpense().sumFluctuate) : '-' }}</p> -->
                     </div>
@@ -140,9 +155,9 @@
                   >
                     <div class="grid grid-cols-2 gap-5 grid-flow-row-dense">
                       <p>การรักษา</p>
-                      <p class="text-right">{{ expense.care.heal ? $filters.currency(expense.care.heal) : '-' }}</p>
+                      <p class="text-right">{{ expense?.care?.heal ? $filters.currency(expense.care.heal) : '-' }}</p>
                       <p>การป้องกัน/บำรุง</p>  
-                      <p class="text-right">{{ expense.care.protection ? $filters.currency(expense.care.protection) : '-'}}</p>
+                      <p class="text-right">{{ expense?.care?.protection ? $filters.currency(expense.care.protection) : '-'}}</p>
                       <!-- <p class="mt-3 font-extrabold ">รวม</p>
                       <p class="text-right mt-3 underline font-extrabold decoration-red-500 decoration-4">{{ sumExpense() ? $filters.currency(sumExpense().sumCare) : '-'  }}</p> -->
                     </div>
@@ -156,13 +171,13 @@
                   >
                     <div class="grid grid-cols-2 gap-5">
                       <p>อุปกรณ์</p>
-                    <p class="text-right">{{ expense.cost.equipment ? $filters.currency(expense.cost.equipment) : '-'}}</p>
+                    <p class="text-right">{{ expense.cost?.equipment ? $filters.currency(expense.cost.equipment) : '-'}}</p>
                     <p>สิ่งปลูกสร้าง</p>
-                    <p class="text-right">{{ expense.cost.building ? $filters.currency(expense.cost.building) : '-'}}</p>
+                    <p class="text-right">{{ expense.cost?.building ? $filters.currency(expense.cost.building) : '-'}}</p>
                     <p>การซ่อมบำรุง</p>
-                    <p class="text-right">{{ expense.cost.maintenance ? $filters.currency(expense.cost.maintenance) : '-'}}</p>
+                    <p class="text-right">{{ expense.cost?.maintenance ? $filters.currency(expense.cost.maintenance) : '-'}}</p>
                     <p>ค่าใช้จ่ายเพิ่มเติม</p>
-                    <p class="text-right ">{{ expense.cost.bill ? $filters.currency(expense.cost.bill) : '-'}}</p>
+                    <p class="text-right ">{{ expense.cost?.bill ? $filters.currency(expense.cost.bill) : '-'}}</p>
                     <!-- <p class="mt-3 font-extrabold">รวม</p>
                     <p class="text-right mt-3 underline font-extrabold decoration-red-500 decoration-4">{{ sumExpense() ? $filters.currency(sumExpense().sumCost) : '-'}}</p> -->
                     </div>
@@ -257,10 +272,7 @@
               <h1 class="text-4xl mt-4">กิโลกรัม</h1>
             </CardBox>
           </div>
-          
-      </div>
-      <CardBox v-else loading/>
-      
+              
     </SectionMain>
     
   </LayoutAuthenticated>
@@ -303,7 +315,14 @@ export default {
       rawMilkSort : [],
       expense : {},
       income : {},
-      loading : false
+      loading : {
+        cow : false,
+        milks : false,
+        events : false,
+        expense : false,
+        income : false,
+        rawMilkSort : false
+      }
     }
   },
   components : {
@@ -330,32 +349,71 @@ export default {
     }
   },
   created(){
-    this.getDashboard()
+    this.getCow()
+    this.getMilks()
+    this.getEvents()
+    this.getExpense()
+    this.getIncome()
+    this.getRawMilkSort()
   },
   methods : {
-    async getDashboard(){
-      this.loading = true;
-      const resp = await DashboardService.get(this.user.farm._id)
+    async getCow(){
+      this.loading.cow = true;
+      const resp = await DashboardService.getCow()
+      if(resp){
+        this.cow = resp.data
+      }
+      this.loading.cow = false;
+    },
+    async getMilks(){
+      this.loading.milks = true;
+      const resp = await DashboardService.getMilks()
       if(resp){
         this.milk.sum = 0;
-        this.events = _.orderBy(resp.data.events,'date')
-        for(let event of this.events){
-          event.date = moment(event.date).format('DD/MM/YYYY')
-        }
-        for(let milk of resp.data.milks){
+        for(let milk of resp.data){
           milk.date = moment(milk.date,'DD-MM-YYYY').format('MMM')
           let sum  = milk.milkDetails.reduce((prev,cur) => prev + cur.qty,0)
           this.milk.sum += sum
         }
-        this.milks = _.groupBy(resp.data.milks,'date')
-        this.cow = resp.data.cow
-        this.expense = resp.data.expense
-        this.income = resp.data.income
-        this.rawMilkSort = resp.data.rawMilkSort
-        this.chartData = this.createChart()
-        this.loading = false;
-
+        this.milks = _.groupBy(resp.data,'date')
       }
+      this.chartData = this.createChart()
+      this.loading.milks = false;
+    },
+    async getEvents(){
+      this.loading.events = true;
+      const resp = await DashboardService.getEvents()
+      if(resp){
+        this.events = _.orderBy(resp.data,'date')
+        for(let event of this.events){
+          event.date = moment(event.date).format('DD/MM/YYYY')
+        }
+      }
+      this.loading.events = false;
+    },
+    async getExpense(){
+      this.loading.expense = true;
+      const resp = await DashboardService.getExpense()
+      if(resp){
+        this.expense = resp.data
+      }
+      this.loading.expense = false;
+    },
+    async getIncome(){
+      this.loading.income = true;
+      const resp = await DashboardService.getIncome()
+      if(resp){
+        this.income = resp.data
+      }
+      this.loading.income = false;
+    },
+    async getRawMilkSort(){
+      this.loading.rawMilkSort = true;
+      const resp = await DashboardService.getRawMilkSort()
+      if(resp){
+        this.rawMilkSort = resp.data
+      }
+      this.loading.rawMilkSort = false;
     },
     getChartData(type){
       const datas = []
@@ -407,24 +465,31 @@ export default {
     },
     sumExpense(){
       let sumFluctuate = 0,sumCost = 0,sumCare = 0
-      for(let key of Object.keys(this.expense.fluctuate)){
-        const amount = this.expense.fluctuate[key]
-        if(amount){
-          sumFluctuate += amount
+      if(this.expense?.fluctuate){
+        for(let key of Object.keys(this.expense?.fluctuate)){
+          const amount = this.expense.fluctuate[key]
+          if(amount){
+            sumFluctuate += amount
+          }
         }
       }
-      for(let key of Object.keys(this.expense.care)){
-        const amount = this.expense.care[key]
-        if(amount){
-          sumCare += amount
+      if(this.expense?.care){
+        for(let key of Object.keys(this.expense?.care)){
+          const amount = this.expense.care[key]
+          if(amount){
+            sumCare += amount
+          }
         }
       }
-      for(let key of Object.keys(this.expense.cost)){
-        const amount = this.expense.cost[key]
-        if(amount){
-          sumCost += amount
+      if(this.expense?.cost){
+        for(let key of Object.keys(this.expense?.cost)){
+          const amount = this.expense.cost[key]
+          if(amount){
+            sumCost += amount
+          }
         }
       }
+      
       return {sumFluctuate,sumCare,sumCost}
     },
     formatDate(date){
