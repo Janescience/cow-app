@@ -69,7 +69,7 @@
         <div
           v-for="day in daysInCurrentMonth"
           :key="day"
-          class="h-26 md:h-36 w-full border-t border-gray-600 align-top "
+          class="h-24 md:h-36 w-full border-t border-gray-600 align-top "
         >
           <div
             class="w-full h-full text-xs md:text-sm lg:text-base text-center transition-colors  p-2"
@@ -163,31 +163,7 @@
           />
       </BaseLevel>
 
-      <BaseDivider/>
-
-        <div class="md:hidden" v-if="cardBoxShow">
-          รายการรีดนม  {{ cardBoxDay }}/{{calendarStore.getMonth+1}}/{{calendarStore.getYear+543}}
-          <div
-            v-show="cardBoxData.length > 0"
-            v-for="evt in cardBoxData"
-            :key="evt.date"
-          >
-            <div
-              class="w-full text-left flex overflow-hidden p-2 mt-2 border border-gray-800 shadow cursor-pointer rounded-md"
-              @click="openModal(cardBoxDay, allTodaysEvent(cardBoxDay, events,false,evt.time),evt.time,evt.id)"
-            >
-              
-                <p class="text-sm  text-clip overflow-hidden">
-                  รอบ {{ evt.time == 'M' ? 'เช้า' : 'บ่าย' }} 
-                
-                  น้ำนมดิบ {{ evt.sumQty }} กก.
-                
-                  รีดแล้ว {{ evt.count }} ตัว
-                </p>
-
-            </div>
-          </div>
-        </div>
+      
 
     </div>
 

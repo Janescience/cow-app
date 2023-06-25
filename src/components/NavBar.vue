@@ -63,7 +63,7 @@ const logout = () => {
 <template>
   <nav
     class="lg:top-0 bottom-0 left-0 right-0 fixed flex bg-white h-14 border-b shadow-lg border-gray-100 z-30 w-screen
-    transition-position xl:pl-64 lg:w-auto lg:items-stretch dark:bg-gray-900 dark:border-gray-800"
+    transition-position xl:pl-64 lg:w-auto lg:items-stretch dark:bg-zinc-900 dark:border-gray-800"
     :class="{'ml-64 lg:ml-0':isAsideMobileExpanded}"
   >
     <div class="flex-1 items-stretch flex h-14">
@@ -101,8 +101,8 @@ const logout = () => {
       </NavBarItem>
     </div>
     <div
-      class="absolute w-screen top-14 left-0 bg-white shadow
-        lg:w-auto lg:items-stretch lg:flex lg:grow lg:static lg:border-b-0 lg:overflow-visible lg:shadow-none dark:bg-gray-900"
+      class="absolute w-screen lg:top-14 bottom-14 left-0 bg-white shadow
+        lg:w-auto lg:items-stretch lg:flex lg:grow lg:static lg:border-b-0 lg:overflow-visible lg:shadow-none dark:bg-zinc-900"
       :class="[isMenuNavBarActive ? 'block' : 'hidden']"
     >
       <div
