@@ -10,12 +10,9 @@ import NavBarMenu from '@/components/NavBarMenu.vue'
 import BaseDivider from '@/components/BaseDivider.vue'
 import UserAvatarCurrentUser from '@/components/UserAvatarCurrentUser.vue'
 import BaseIcon from '@/components/BaseIcon.vue'
-import NavBarSearch from '@/components/NavBarSearch.vue'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 
-import AuthService from '@/services/auth'
 import TokenService from '@/services/token'
-import moment from 'moment'
 
 const router = useRouter()
 const store = useStore()
@@ -62,8 +59,8 @@ const logout = () => {
 
 <template>
   <nav
-    class="lg:top-0 bottom-0 left-0 right-0 fixed flex bg-white h-14 border-b shadow-lg border-gray-100 z-30 w-screen
-    transition-position xl:pl-64 lg:w-auto lg:items-stretch dark:bg-zinc-900 dark:border-gray-800"
+    class="lg:top-0 bottom-0 left-0 right-0 fixed flex bg-white text-black h-14 border-b shadow-lg border-gray-100 z-30 w-screen
+    transition-position xl:pl-64 lg:w-auto lg:items-stretch dark:bg-gray-900 dark:border-gray-800"
     :class="{'ml-64 lg:ml-0':isAsideMobileExpanded}"
   >
     <div class="flex-1 items-stretch flex h-14">
@@ -102,7 +99,7 @@ const logout = () => {
     </div>
     <div
       class="absolute w-screen lg:top-14 bottom-14 left-0 bg-white shadow
-        lg:w-auto lg:items-stretch lg:flex lg:grow lg:static lg:border-b-0 lg:overflow-visible lg:shadow-none dark:bg-zinc-900"
+        lg:w-auto lg:items-stretch lg:flex lg:grow lg:static lg:border-b-0 lg:overflow-visible lg:shadow-none dark:bg-gray-900"
       :class="[isMenuNavBarActive ? 'block' : 'hidden']"
     >
       <div
@@ -189,7 +186,7 @@ const logout = () => {
             </NavBarItem>
           </template>
         </NavBarMenu>
-        <!-- <NavBarItem
+        <NavBarItem
           has-divider
           is-desktop-icon-only
           @click.prevent="toggleLightDark"
@@ -199,7 +196,7 @@ const logout = () => {
             label="Light/Dark"
             is-desktop-icon-only
           />
-        </NavBarItem> -->
+        </NavBarItem>
         <!-- <NavBarItem
           href="https://github.com/justboil/admin-one-vue-tailwind"
           has-divider

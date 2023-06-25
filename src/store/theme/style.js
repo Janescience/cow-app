@@ -21,7 +21,7 @@ export const useStyleStore = defineStore('style', {
     overlayStyle: '',
 
     /* Dark mode */
-    darkMode: true,
+    darkMode: false,
   }),
   actions: {
     setStyle (payload) {
@@ -41,11 +41,18 @@ export const useStyleStore = defineStore('style', {
     },
 
     setDarkMode (payload = null) {
-      this.darkMode = payload !== null ? payload : !this.darkMode
+
+      this.darkMode = (payload !== null ? payload : !this.darkMode)
+      console.log('setDarkMode : ',this.darkMod)
+
+      
 
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem(darkModeKey, this.darkMode ? '1' : '0')
       }
+
+      const currentMode = localStorage.getItem(darkModeKey)
+      this.setStyle(currentMode == '1' ? 'basic' : 'white')
 
       if (typeof document !== 'undefined') {
         document.documentElement.classList[this.darkMode ? 'add' : 'remove']('dark-scrollbars')

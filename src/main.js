@@ -63,6 +63,7 @@ const layoutStore = useLayoutStore(pinia)
 
 
 /* App style */
+console.log('localStorage styleKey : ',localStorage[styleKey])
 styleStore.setStyle(localStorage[styleKey] ?? 'basic')
 
 /* Dark mode */
