@@ -23,7 +23,7 @@ const overlayClick = () => {
   <div :class="{ 'dark': styleStore.darkMode, 'overflow-hidden lg:overflow-visible': layoutStore.isAsideMobileExpanded }">
     <div
       :class="[styleStore.appStyle, { 'ml-64 lg:ml-0': layoutStore.isAsideMobileExpanded }]"
-      class="pt-14 xl:pl-64 w-screen transition-position lg:w-auto "
+      class="lg:pt-14 pb-14 xl:pl-64 w-screen transition-position lg:w-auto "
     >
       <NavBar />
       <AsideMenu :menu="menu" />
