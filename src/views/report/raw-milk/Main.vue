@@ -15,7 +15,7 @@
         :search="search"
         btnSubmitLabel="ออกรายงาน"
         :btnLoading="loading"
-        :collapse="false"
+        :collapse="true"
       />
     </SectionMain>
   </LayoutAuthenticated>
@@ -29,6 +29,7 @@ import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 import Criteria from "@/components/Criteria.vue";
 
 import ReportService from '@/services/report'
+import { months,years } from '@/constants/date'
 
 import { Toast } from "@/utils/alert";
 import moment from "moment";
@@ -40,26 +41,26 @@ export default {
         {
           label : 'ปี',
           value : 'year',
-          type : 'number',
+          options : years(),
           required : true
         },
         {
-          label : 'เดือน ตั้งแต่',
+          label : 'ตั้งแต่เดือน',
           value : 'monthFrom',
-          type : 'number',
+          options : months(),
           required : true
         },
         {
-          label : 'เดือน ถึง',
+          label : 'ถึงเดือน',
           value : 'monthTo',
-          type : 'number',
+          options : months(),
           required : true
         },  
       ],
       search : {
-        year : moment().format('YYYY'),
-        monthFrom : moment().subtract(1,'months').format('MM'),
-        monthTo : moment().format('MM'),
+        year : new Date().getFullYear(),
+        monthFrom : new Date().getMonth() + 1,
+        monthTo : new Date().getMonth() + 1,
       },
       loading : false,
     }
@@ -84,7 +85,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([resp.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'ผลลิตน้ำนมดิบ ปี '+this.search.year+' '+moment().format('DDMMYYYYHHmm')+'.xlsx');
+        link.setAttribute('download', 'ผลผลิตน้ำนมดิบ ปี '+this.search.year+' '+moment().format('DDMMYYYYHHmm')+'.xlsx');
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -92,8 +93,9 @@ export default {
       this.loading = false
     },
     reset(){
-      this.search.cow = null
-      this.search.date = null
+      this.search.year = new Date().getFullYear()
+      this.search.monthForm = new Date().getMonth() + 1
+      this.search.monthTo = new Date().getMonth() + 1
     },
   }
 }
