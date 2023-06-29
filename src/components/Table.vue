@@ -12,8 +12,8 @@
         <CardBox
             v-if="itemsPaginated.length > 0"
             :title="title + ' ' + countChecked()"
-            class="shadow-lg mb-5"
             has-table
+            :rounded="rounded"
             :icon="icon"
             header-icon=""
         >
@@ -76,7 +76,7 @@
                         v-if="row.type === 'image'"
                         :avatar="getValue(obj,row)"
                         username="profile"
-                        class="w-36 mx-auto lg:h-20 lg:w-20"
+                        :class="'mx-auto h-'+row.size+' w-'+row.size"
                     />
                     <BaseIcon
                         v-else-if="row.type === 'icon'"
@@ -104,10 +104,9 @@
                   </tr>
               </tbody>
               </table>
-            </div>
-            
+            </div>           
             <div
-              class="p-3 lg:px-6 border-t border-gray-100 dark:border-gray-800"
+              class="p-2 lg:px-6 static border-t border-gray-100 dark:border-gray-800"
             >
               <BaseLevel >
                   <BaseButtons>
@@ -128,10 +127,12 @@
         <CardBox 
             :title="title + ' ' + countChecked()"
             header-icon=""
+            class="shadow-lg mb-5"
             v-else-if="loading" loading/>
         <CardBox 
             :title="title + ' ' + countChecked()"
             header-icon=""
+            class="shadow-lg mb-5"
             v-else empty/>
 </template>
 
@@ -190,7 +191,11 @@ export default {
             type : String ,
             default : ""
         },
-        loading : Boolean
+        loading : Boolean,
+        rounded: {
+            type: String,
+            default: 'md:rounded-2xl'
+        },
     },
     computed : {
         itemsPaginated() {
@@ -236,6 +241,8 @@ export default {
 
             switch (row.type) {
                 case 'number':
+                    return this.formatNumber(value)
+                case 'currency':
                     return this.formatCurrency(value)
                 case 'date':
                     return this.formatDate(value)
@@ -323,8 +330,11 @@ export default {
             }
             return moment(new Date(date)).format('DD/MM/YYYY');
         },
+        formatNumber(amt){
+            return this.$filters.number(amt)
+        },
         formatCurrency(amt){
-            return numeral(amt).format(0,0);
+            return this.$filters.currency(amt);
         }
     }
 }

@@ -192,6 +192,7 @@ export default {
       event.date = moment(milk.date,'YYYY-MM-DD').format('DDMMYYYY');
       event.time = milk.time
       event.id = milk._id
+      event.sumQty = event.sumQty.toFixed(2)
       this.events.push(event)
     },
     addMilk(data){

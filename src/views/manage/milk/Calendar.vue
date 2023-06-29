@@ -72,7 +72,7 @@
           class="h-24 md:h-36 w-full border-t border-gray-600 align-top "
         >
           <div
-            class="w-full h-full text-xs md:text-sm lg:text-base text-center transition-colors  p-2"
+            class="w-full h-full text-xs md:text-sm lg:text-base text-center transition-colors  p-1"
             :class="{
               'bg-gray-600 text-gray-900 font-medium  ': isToday(day),
               'hover:bg-gray-100 hover:text-gray-700': !isToday(day),
@@ -93,10 +93,11 @@
                   
                     <p class="text-sm  text-clip overflow-hidden items-center ">
                       <BaseIcon 
+                        size="14"
                         :path="evt.time === 'M' ? 'clockTimeSevenOutline' : 'clockTimeThreeOutline'"
                         :class="evt.time === 'M' ? 'text-yellow-400' : 'text-orange-500'"
                         />
-                      {{ evt.time == 'M' ? 'เช้า' : 'บ่าย' }} - {{ evt.sumQty }} กก.
+                      {{ evt.time == 'M' ? 'เช้า' : 'บ่าย' }} ({{ evt.sumQty }})
                     </p>
 
                 </div>
@@ -127,7 +128,7 @@
               @click="openModal(day, allTodaysEvent(day, events,false,evt.time),evt.time,evt.id)"
             >
               <div
-                class="h-6 w-6 flex justify-center items-center text-xs rounded shadow-sm"
+                class="h-6 w-full flex justify-center items-center text-xs rounded shadow-sm"
                 :class="[evt.time === 'M'?'bg-yellow-400':'bg-orange-500']"
               >
                 <h3 class="font-medium text-black">

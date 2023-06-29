@@ -103,7 +103,6 @@
             class="md:col-span-2 lg:col-span-4 col-span-2 md:mt-5"
           >
             <BaseButton
-              :disabled="!canRemove"
               label="ลบ"
               color="danger"
               @click="remove()"
@@ -117,250 +116,234 @@
         </div>
       </CardBox>
 
-      <div class="grid gap-5 grid-cols-1 lg:grid-cols-2 md:grid-cols-2 ">
-        <CardBox 
+      <CardBox 
           icon="cupWater"
           :loading="loading.milk"
-          title="ข้อมูลน้ำนม"
+          title="ข้อมูลน้ำนมดิบ"
+          class="mb-5"
           header-icon=""
         >
-          <div class="grid gap-5 grid-cols-4 ">
-            <p class="col-span-2 ">
-               น้ำนมดิบ เฉลี่ย/วัน 
-            </p>
-            <p class=" underline decoration-orange-700 decoration-4 ">
-              {{ milk.avg }}
-            </p>
-            <p>
-              กิโลกรัม
-            </p>
-            <p class="col-span-2">
-               น้ำนมดิบ ทั้งหมด
-            </p>
-            <p class=" underline decoration-orange-700 decoration-4 ">
-              {{ milk.all }}
-            </p>
-            <p>
-              กิโลกรัม
-            </p>
-          </div>
+          <table >
+            <thead>
+              <th class="whitespace-nowrap">เฉลี่ย/วัน</th>
+              <th class="whitespace-nowrap">เฉลี่ยเช้า/วัน</th>
+              <th class="whitespace-nowrap">เฉลี่ยบ่าย/วัน</th>
+              <th class="whitespace-nowrap">รวมทั้งหมด</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="whitespace-nowrap">{{ milk.avgTotal }}</td>
+                <td>{{ milk.avgMorning }}</td>
+                <td>{{ milk.avgAfternoon }}</td>
+                <td>{{ milk.all }}</td>
+              </tr>
+            </tbody>
+          </table> 
+          
   
         </CardBox>
-        <CardBox 
-          icon="reproduction"
-          class="row-span-2"
-          :loading="loading.reproduct"
-          title="ข้อมูลการสืบพันธุ์/ผสมพันธุ์"
+
+      <!-- <div class="grid gap-5 grid-cols-1 "> -->
+        <CardBoxCollapse 
+          icon="calendarClock"
+          class="transition-position mb-5"
+          has-table
+          :loading="loading.milk"
+          title="ข้อมูลอื่นๆล่าสุด"
           header-icon=""
         >
-          <div class="grid gap-5 lg:grid-cols-3 grid-cols-2">
-            <p class="lg:row-span-3 col-span-2 lg:col-span-1">
-               การเข้าระบบสืบพันธุ์
-            </p>
-            <p class="ml-5 ">
-              จำนวนครั้ง
-            </p>
-            <p class="ml-5 ">
-              {{ reproduct().login.count }}
-            </p>
-            <p class="ml-5 ">
-              เข้าระบบครั้งล่าสุด
-            </p>
-            <p class="ml-5 ">
-              {{ reproduct().login.lastDate }}
-            </p>
-            <p class="ml-5 ">
-              ผลครั้งล่าสุด
-            </p>
-            <p class="ml-5 ">
-              {{ reproduct().login.result }}
-            </p>
-            <!-- ================================ -->
-            <p class="lg:row-span-2 col-span-2 lg:col-span-1 font-bold ">
-               การเป็นสัด
-            </p>
-            <p class="ml-5">
-              จำนวนครั้ง
-            </p>
-            <p class="ml-5 ">
-              {{ reproduct().estrus.count }}
-            </p>
-            <p class="ml-5">
-              เป็นสัดครั้งล่าสุด
-            </p>
-            <p class="ml-5 ">
-              {{ reproduct().estrus.lastDate }}
-            </p>
-            <!-- //================================ -->
-            <p class="lg:row-span-2 col-span-2 lg:col-span-1 font-bold ">
-               การผสม
-            </p>
-            <p class="ml-5">
-              จำนวนครั้ง
-            </p>
-            <p class="ml-5 ">
-              {{ reproduct().mating.count }}
-            </p>
-            <p class="ml-5">
-              ผสมครั้งล่าสุด
-            </p>
-            <p class="ml-5 ">
-              {{ reproduct().mating.lastDate }}
-            </p>
-            <!-- //================================ -->
-            <p class="lg:row-span-2 col-span-2 lg:col-span-1 font-bold ">
-               การตรวจท้อง
-            </p>
-            <p class="ml-5">
-              จำนวนครั้ง
-            </p>
-            <p class="ml-5 ">
-              {{ reproduct().check.count }}
-            </p>
-            <p class="ml-5">
-              ตรวจท้องครั้งล่าสุด
-            </p>
-            <p class="ml-5 ">
-              {{ reproduct().check.lastDate }}
-            </p>
-            <!-- //================================ -->
-          </div>
-  
-        </CardBox>
-        <div class="grid gap-5 grid-cols-1 lg:grid-cols-2">
+        <div class="grid lg:grid-cols-3 grid-cols-1 gap-5 lg:p-4">
           <CardBox 
-          icon="babyFace"
-          :loading="loading.birth"
-          title="การคลอดลูก"
-          header-icon=""
-        >
-          <div class="grid gap-5 grid-cols-2 ">
-
-            <p>
-              จำนวนครั้ง
-            </p>
-            <p >
-              {{ birth().count }}
-            </p>
-            <p >
-              คลอดลูกล่าสุด
-            </p>
-            <p >
-              {{ birth().lastDate }}
-            </p>
-            <p>
-              จำนวนเพศผู้
-            </p>
-            <p >
-              {{ birth().countMale }}
-            </p>
-            <p>
-              จำนวนเพศเมีย
-            </p>
-            <p >
-              {{ birth().countFemale }}
-            </p>
+            icon=""
+            class="lg:col-span-2 dark:border-gray-600 border-gray-900"
+            :loading="loading.reproduct"
+            title="การสืบพันธุ์/ผสมพันธุ์"
+            header-icon=""
+          >
+          <div class="overflow-x-auto">
+            <table >
+              <thead>
+                <th class="whitespace-nowrap">รายการ</th>
+                <th class="whitespace-nowrap">จำนวนครั้ง</th>
+                <th class="whitespace-nowrap">วันที่ล่าสุด</th>
+                <th class="whitespace-nowrap">ผลล่าสุด</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="whitespace-nowrap">เข้าระบบสืบพันธุ์</td>
+                  <td>{{ reproduct().login.count }}</td>
+                  <td>{{ reproduct().login.lastDate }}</td>
+                  <td>{{ reproduct().login.result }}</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">เป็นสัด</td>
+                  <td>{{ reproduct().estrus.count }}</td>
+                  <td>{{ reproduct().estrus.lastDate }}</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">ผสม</td>
+                  <td>{{ reproduct().mating.count }}</td>
+                  <td>{{ reproduct().mating.lastDate  }}</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">ตรวจท้อง</td>
+                  <td>{{ reproduct().check.count }}</td>
+                  <td>{{ reproduct().check.lastDate }}</td>
+                  <td/>
+                </tr>
+              </tbody>
+            </table>  
           </div>
-  
+          
+        </CardBox>
+
+          
+        
+          
+          <CardBox 
+            icon="babyFace"
+            class="dark:border-gray-600 border-gray-900"
+            :loading="loading.birth"
+            title="การคลอดลูก"
+            header-icon=""
+          >
+            <table>
+              <tbody>
+                <tr>
+                  <td>จำนวนครั้ง</td>
+                  <td>{{ birth().count }}</td>
+                </tr>
+                <tr>
+                  <td>วันที่</td>
+                  <td>{{ birth().lastDate }}</td>
+                </tr>
+                <tr>
+                  <td>จำนวนเพศผู้</td>
+                  <td>{{ birth().countMale }}</td>
+                </tr>
+                <tr>
+                  <td>จำนวนเพศเมีย</td>
+                  <td>{{ birth().countFemale }}</td>
+                </tr>
+              </tbody>
+            </table>
         </CardBox>
         <CardBox 
-          icon="doctor"
-          :loading="loading.heal"
-          title="การรักษา"
+            icon="doctor"
+            :loading="loading.heal"
+            class="dark:border-gray-600 border-gray-900 "
+            title="การรักษา"
+            header-icon=""
+          >
+            <table>
+              <tbody>
+                <tr>
+                  <td class="whitespace-nowrap">จำนวนครั้ง</td>
+                  <td>{{ heal().count }}</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">วันที่</td>
+                  <td class="whitespace-nowrap">{{ heal().lastDate }}</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">อาการ/โรค</td>
+                  <td class="whitespace-nowrap">{{ heal().lastDisease }}</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">วิธีการรักษา</td>
+                  <td class="whitespace-nowrap">{{ heal().lastMethod }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </CardBox>
+        <div 
+            class="lg:col-span-2"
+          >
+            <Table
+              title="การป้องกัน/บำรุง" 
+              :items="protections" 
+              :datas="protectionDatas"
+              :loading="loading.protection"
+              perPage="5"
+              icon="pillMultiple"
+            />
+            
+          </div>
+          
+        </div>
+      </CardBoxCollapse>
+      <!-- </div> -->
+      
+      <CardBoxCollapse 
+          icon="messageBadgeOutline"
+          class="transition-position mb-5"
+          :loading="loading.milk"
+          v-if="!loading.notification && notifications.length > 0"
+
+          title="การแจ้งเตือน"
           header-icon=""
         >
-          <div class="grid gap-5 grid-cols-2 ">
-            <p >
-              จำนวนครั้ง
-            </p>
-            <p >
-              {{ heal().count }}
-            </p>
-            <p >
-              รักษาล่าสุด
-            </p>
-            <p >
-              {{ heal().lastDate }}
-            </p>
-            <p > 
-              อาการ/โรคล่าสุด
-            </p>
-            <p >
-              {{ heal().lastDisease }}
-            </p>
-            <p >
-              วิธีการรักษาล่าสุด
-            </p>
-            <p >
-              {{ heal().lastMethod }}
-            </p>
-          </div>
-  
-        </CardBox>
-        </div>
-
-        <Table
-          v-if="protections.length > 0"
-          title="การป้องกัน/วัคซีน" 
-          :items="protections" 
-          :datas="protectionDatas"
-          :loading="loading.protection"
-          perPage="5"
-          icon="pillMultiple"
-        />
-
-        <Table
-          v-if="notifications.length > 0"
-          title="การแจ้งเตือน" 
-          :items="notifications" 
-          :datas="notificationDatas"
-          :loading="loading.protection"
-          perPage="5"
-          icon="messageBadgeOutline"
-        />
-      </div>
-
-      <Table
-          v-if="foods.length > 0"
-          title="การให้อาหาร" 
-          :items="foods" 
-          :datas="foodDatas"
-          :loading="loading.food"
-          perPage="5"
+          <Table
+            title="" 
+            :items="notifications" 
+            :datas="notificationDatas"
+            :loading="loading.notification"
+            perPage="5"
+          />
+        </CardBoxCollapse>
+        <CardBoxCollapse 
           icon="foodDrumstickOutline"
-        />
+          class="transition-position mb-5"
+          v-if="!loading.food && foods.length > 0"
+          :loading="loading.food"
+          :title="'การกินอาหาร (คอก '+cow.corral+')'" 
+          header-icon=""
+        >
+          <Table
+
+              :items="foods" 
+              :datas="foodDatas"
+              :loading="loading.food"
+              perPage="5"
+            />
+        </CardBoxCollapse>
 
       <Table
-        v-if="historyMilks.length > 0"
         title="ประวัติการรีดนม" 
         :items="historyMilks" 
         :datas="milkDatas"
         :loading="loading.milk"
         icon="waterCheck"
+        perPage="5"
       />
 
       <Table
-        v-if="reproducts.length > 0"
+        v-if="!loading.reproduct && reproducts.length > 0"
         title="ประวัติการสืบพันธ์ุ/ผสมพันธ์ุ" 
         :items="reproducts" 
         :datas="reproductDatas" 
         :loading="loading.reproduct"
+        perPage="5"
       />
 
       <Table
-        v-if="births.length > 0"
+        v-if="!loading.birth && births.length > 0"
         title="ประวัติการคลอดลูก" 
         :items="births" 
         :datas="birthDatas" 
         :loading="loading.birth"
+        perPage="5"
       />
 
       <Table
-        v-if="heals.length > 0"
+        v-if="!loading.heal && heals.length > 0"
         title="ประวัติการรักษา" 
         :items="heals" 
         :datas="healDatas" 
         :loading="loading.heal"
+        perPage="5"
       />
           
     </SectionMain>
@@ -376,6 +359,7 @@ import BaseIcon from "@/components/BaseIcon.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import CardBox from "@/components/CardBox.vue";
+import CardBoxCollapse from "@/components/CardBoxCollapse.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import ImageUpload from '@/components/ImageUpload.vue'
@@ -414,14 +398,14 @@ export default {
       foods : [],
       notifications : [],
       loading : {
-        cow : false,
-        milk : false,
-        reproduct : false,
-        birth : false,
-        heal : false,
-        protection : false,
-        food : false,
-        notification : false
+        cow : true,
+        milk : true,
+        reproduct : true,
+        birth : true,
+        heal : true,
+        protection : true,
+        food : true,
+        notification : true
       },
       alert : "",
       newCow : false,
@@ -435,26 +419,26 @@ export default {
           value : 'date',
         },
         {
-          label : "ปริมาณน้ำนมดิบ/เช้า (กก.)",
+          label : "เช้า (กก.)",
           class : 'text-center',
           value : 'mQty',
         },
         {
-          label : "ปริมาณน้ำนมดิบ/บ่าย (กก.)",
+          label : "บ่าย (กก.)",
           class : 'text-center',
           value : 'aQty',
         },
         {
-          label : "ปริมาณน้ำนมดิบรวม (กก.)",
+          label : "รวม (กก.)",
           class : 'text-center',
           func : (obj) => {
             return obj.mQty + obj.aQty
           },
         },
         {
-          label : "จำนวนเงินรวม",
+          label : "คิดเป็นเงิน",
           class : 'text-right',
-          type : 'number',
+          type : 'currency',
           value : 'amount',
         },
       ],
@@ -570,7 +554,7 @@ export default {
       ],
       protectionDatas : [
       {
-          label : "วัคซีน",
+          label : "ยา/วัคซีน",
           value : 'vaccine.name',
         },
         {
@@ -583,6 +567,12 @@ export default {
           class : 'text-center',
           value : 'vaccine.currentDate',
           type : 'date'
+        },
+        {
+          label : "จำนวนเงิน",
+          class : 'text-right',
+          value : 'amount',
+          type : 'currency'
         },
         {
           label : "ให้ยาครั้งต่อไป",
@@ -657,30 +647,20 @@ export default {
           value : 'recipe.name',
         },
         {
-          label : "จำนวน/วัน (กก.)",
+          label : "เฉลี่ยกิน/วัน (กก.)",
           class : 'text-center',
-          value : 'qty'
+          value : 'qty',
+          func : (obj) => {
+            return (obj.qty/obj.numCow).toFixed(2)
+          }
         },
         {
           label : "คิดเป็นเงิน/วัน",
           class : 'text-right',
           value : 'amount',
           func : (obj) => {
-            return obj.amount.toFixed(2)
-          }
-        },
-        {
-          label : "คิดเป็นเงิน/ตัว",
-          class : 'text-right',
-          value : 'amountAvg',
-          func : (obj) => {
             return obj.amountAvg.toFixed(2)
           }
-        },
-        {
-          label : "จำนวนโค",
-          class : 'text-center',
-          value : 'numCow'
         }
       ]
     }
@@ -698,7 +678,8 @@ export default {
     UserAvatar,
     BaseLevel,
     ImageUpload,
-    Table
+    Table,
+    CardBoxCollapse
   },
   computed : {
     canRemove(){
@@ -752,10 +733,14 @@ export default {
           this.historyMilks.push(historyMilk)
         }
       })
-
-      let avg = (totalM+totalA)/count;
+      this.historyMilks = _.orderBy(this.historyMilks,'date','desc')
+      let avgTotal = (totalM+totalA)/count;
+      let avgMorning = totalM/count;
+      let avgAfternoon = totalA/count;
       return { 
-        avg : (count > 0 ? avg : 0).toFixed(2) , 
+        avgTotal : (count > 0 ? avgTotal : 0).toFixed(2) , 
+        avgMorning : (count > 0 ? avgMorning : 0).toFixed(2) , 
+        avgAfternoon : (count > 0 ? avgAfternoon : 0).toFixed(2) , 
         all : (totalM+totalA).toFixed(2)
       };
     }

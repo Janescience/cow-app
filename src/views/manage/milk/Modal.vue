@@ -111,17 +111,17 @@
                   v-for="obj in milkDetails"
                   :key="obj.cow._id"
                 >
-                  <td data-label="รหัสโค" >
+                  <td data-label="รหัสโค" class="whitespace-nowrap">
                     {{ obj.cow.code }}
                   </td>
-                  <td data-label="ชื่อโค" >
+                  <td data-label="ชื่อโค" class="whitespace-nowrap">
                     {{ obj.cow.name }}
                   </td>
-                  <td data-label="น้ำนมดิบ/กก." class="text-center">
+                  <td data-label="น้ำนมดิบ/กก." class="text-center whitespace-nowrap">
                     {{ obj.qty.toFixed(2) }}
                   </td>
-                  <td data-label="จำนวนเงิน" class="text-right">
-                    {{ obj.amount }}
+                  <td data-label="จำนวนเงิน" class="text-right whitespace-nowrap">
+                    {{ obj.amount.toFixed(2) }}
                   </td>
                   <td class="lg:w-6 whitespace-nowrap">
                       <BaseButtons
@@ -209,7 +209,7 @@
     computed:{
         calAmount(){
             this.milkDetail.amount = this.milkDetail.qty * this.priceRawMilk
-            return this.milkDetail.amount
+            return this.milkDetail.amount.toFixed(2)
         },
         user() {
           return this.$store.state.auth.user;

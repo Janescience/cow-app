@@ -61,7 +61,13 @@
               v-else loading/>
           </div>
         
-
+          <Table
+                title="คอก" 
+                :items="corrals" 
+                :datas="corralColumns" 
+                perPage="5"
+                :loading="loading.corral"
+              />
 
             
             <CardBox
@@ -89,40 +95,14 @@
               title="กำหนดการ"
               header-icon=""
               v-else loading/>
-
-            <CardBox
-                v-if="!loading.rawMilkSort"
-                icon="sort"
-                title="5 อันดับน้ำนมดิบมากที่สุด"
-                class="text-center text-sm"
-                header-icon=""
-              >
-                <table class="text-sm ">
-                  <tbody >
-                      <tr
-                      v-for="rawMilk in rawMilkSort"
-                        :key="rawMilk.cow.code"
-                      >
-                        <td data-label="">
-                          <UserAvatar
-                            :avatar="rawMilk.cow.image"
-                            username="profile"
-                            class="w-10 mx-auto lg:h-12 lg:w-12"
-                          />
-                        </td>
-                        <!-- <td data-label="รหัส">{{ rawMilk.cow.code }}
-                        </td> -->
-                        <td data-label="ชื่อ">{{ rawMilk.cow.name }}</td>
-                        <td class="text-orange-600 text-right text-xl font-extrabold" data-label="น้ำนมดิบ">{{ rawMilk.sumMilk }}</td>
-                      </tr>
-                  </tbody>
-                </table>               
-            </CardBox>
-            <CardBox 
-              icon="sort"
-              title="5 อันดับน้ำนมดิบมากที่สุด"
-              header-icon=""
-              v-else loading/>
+              <Table
+                title="อันดับน้ำนมดิบ" 
+                :items="rawMilkSort" 
+                :datas="rawMilkSortColumns" 
+                perPage="5"
+                :loading="loading.rawMilkSort"
+              />
+            
           </div>
           <div class="grid grid-cols-1 gap-5 mt-5">
           <CardBox
@@ -268,7 +248,7 @@
               header-icon=""
             >
               <h1 class="text-4xl">น้ำนมดิบทั้งหมด</h1>
-              <h1 class="text-5xl mt-4 text-green-600">{{ milk.sum }}</h1>
+              <h1 class="text-5xl mt-4 text-green-600">{{ $filters.number(milk.sum) }}</h1>
               <h1 class="text-4xl mt-4">กิโลกรัม</h1>
             </CardBox>
           </div>
@@ -296,6 +276,7 @@ import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import FormControl from '@/components/FormControl.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import BaseDivider from '@/components/BaseDivider.vue'
+import Table from '@/components/Table.vue'
 
 import DashboardService from '@/services/dashboard'
 import moment from "moment";
@@ -310,18 +291,51 @@ export default {
       chartColors : {primary: '#00D1B2',danger: '#FF3860'},
       milks : [],
       events : [],
+      corrals : [],
       milk : {},
       cow : {},
       rawMilkSort : [],
+      rawMilkSortColumns : [
+        {
+          label : "รูปโค",
+          value : 'cow.image',
+          class : 'text-center',
+          type : 'image',
+          size : 12
+        },
+        {
+          label : "ชื่อโค",
+          value : 'cow.name'
+        },
+        {
+          label : "น้ำนมดิบ (กก.)",
+          class : 'text-right',
+          value : 'sumMilk',
+          type : 'number'
+        },
+      ],
+      corralColumns : [
+      {
+          label : "คอก",
+          value : 'corral',
+          class : 'text-center',
+        },
+        {
+          label : "จำนวนโค",
+          value : 'numCows',
+          class : 'text-center',
+        },
+      ],
       expense : {},
       income : {},
       loading : {
-        cow : false,
-        milks : false,
-        events : false,
-        expense : false,
-        income : false,
-        rawMilkSort : false
+        cow : true,
+        milks : true,
+        events : true,
+        expense : true,
+        income : true,
+        rawMilkSort : true,
+        corral : true,
       }
     }
   },
@@ -341,7 +355,8 @@ export default {
     FormControl,
     BaseIcon,
     UserAvatar,
-    BaseDivider
+    BaseDivider,
+    Table
 },
   computed : {
     user() {
@@ -355,6 +370,7 @@ export default {
     this.getExpense()
     this.getIncome()
     this.getRawMilkSort()
+    this.getCorrals()
   },
   methods : {
     async getCow(){
@@ -414,6 +430,14 @@ export default {
         this.rawMilkSort = resp.data
       }
       this.loading.rawMilkSort = false;
+    },
+    async getCorrals(){
+      this.loading.corral = true;
+      const resp = await DashboardService.getCorrals()
+      if(resp){
+        this.corrals = resp.data
+      }
+      this.loading.corral = false;
     },
     getChartData(type){
       const datas = []

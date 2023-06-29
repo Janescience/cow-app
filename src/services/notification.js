@@ -5,6 +5,9 @@ async function getSearchQuery (opts = {}) {
   if (opts.status) {
       query = query + `status=${opts.status}&`;
   } 
+  if (opts.cow) {
+    query = query + `cow=${opts.cow}&`;
+} 
   if (opts.createdAt) {
       const dateNoTime = moment(new Date(opts.createdAt)).format('YYYY-MM-DD') 
       query = query + `createdAt=${dateNoTime}&`;

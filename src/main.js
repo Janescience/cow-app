@@ -35,6 +35,16 @@ const filter = {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2, 
     });
+    return '฿'+formatter.format(value);
+  },
+  number(value) {
+    if (typeof value !== "number") {
+      return value;
+    }
+    var formatter = new Intl.NumberFormat('en-US', { 
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2, 
+    });
     return formatter.format(value);
   }
 }

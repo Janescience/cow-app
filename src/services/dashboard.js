@@ -19,6 +19,9 @@ class DashboardService{
     getRawMilkSort(){
         return http.get('/dashboard/rawMilkSort');
     }
+    getCorrals(){
+        return http.get('/dashboard/corrals');
+    }
 }
 
 export default new DashboardService();
