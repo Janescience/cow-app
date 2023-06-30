@@ -16,7 +16,7 @@
             :multiple="multiple"
         >
             <template v-slot:no-options>
-                <mdicon name="alertCircleOutline" width="16" height="16" class="inline-block"/> 
+                <mdicon name="alertCircleOutline" width="12" height="12" class="inline-block"/> 
                 ไม่พบข้อมูล
             </template>
         </v-select>
@@ -39,7 +39,7 @@ export default {
     computed:{
         value:{
             get(){
-                if(this.valueType === 'object' && Object.keys(this.modelValue).length > 0){
+                if(this.valueType === 'object' && this.modelValue && Object.keys(this.modelValue).length > 0){
                     this.modelValue.cow_data = this.modelValue?.code + " : " + this.modelValue?.name
                 }
                 return this.modelValue

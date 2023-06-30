@@ -5,16 +5,17 @@
       <CardBox
         v-show="value"
         :title="mode === 'create' ? 'การรีดนม' : 'การรีดนม (' + ((milk.time == 'M' ? 'เช้า':'บ่าย') + ' - ' + formatDate(milk.date)) + ')'"
-        class="shadow-lg w-full  lg:w-1/2 z-50"
+        class="shadow-lg w-full  lg:p-4 lg:w-2/3 z-50"
         header-icon="close"
         modal
         form
+        has-table
         has-scroll
         @submit.prevent="submit"
         @header-icon-click="cancel"
       >
       
-        <div class="grid lg:grid-cols-4 grid-cols-2 gap-5" v-if="mode != 'edit'">
+        <div class="grid lg:grid-cols-4 grid-cols-2 gap-5 p-4" v-if="mode != 'edit'">
           <FormField label="วันที่รีดนม" help="* ห้ามว่าง" >
             <FormControl
               v-model="milk.date"
@@ -34,8 +35,7 @@
             />
           </FormField>
         </div>
-        <BaseDivider v-if="mode != 'edit'"/>
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 p-4">
             <FormField label="โค" help="* ห้ามว่าง">
                 <DDLCow v-model="milkDetail.cow" valueType="object"/>
             </FormField>
@@ -70,83 +70,30 @@
             </BaseButtons>
           </div>
 
-        <NotificationBar 
-          v-if="alert?.text" 
-          :color="alert.color" 
-          outline
-          icon="alertCircleOutline">
-            {{ alert.text }}
-        </NotificationBar>
-  
-        <header
-          class="flex items-stretch border-b border-gray-100 dark:border-gray-800"
-        >
-          <p
-            class="flex items-center py-3 grow font-bold"
-          >
-            รายการรีดนม
-          </p>
-        </header>
-          <div class="overflow-x-auto" v-if="milkDetails.length > 0">
-            <table>
-              <thead>
-                  <tr >
-                      <th class="whitespace-nowrap text-center">
-                        รหัสโค
-                      </th>
-                      <th class="whitespace-nowrap text-center">
-                        ชื่อโค
-                      </th>
-                      <th class="whitespace-nowrap text-center">
-                        น้ำนมดิบ (กก.)
-                      </th>
-                      <th class="whitespace-nowrap text-center">
-                        จำนวนเงิน
-                      </th>
-                      <th />
-                  </tr>
-              </thead>
-            <tbody >
-                <tr
-                  v-for="obj in milkDetails"
-                  :key="obj.cow._id"
-                >
-                  <td data-label="รหัสโค" class="whitespace-nowrap">
-                    {{ obj.cow.code }}
-                  </td>
-                  <td data-label="ชื่อโค" class="whitespace-nowrap">
-                    {{ obj.cow.name }}
-                  </td>
-                  <td data-label="น้ำนมดิบ/กก." class="text-center whitespace-nowrap">
-                    {{ obj.qty.toFixed(2) }}
-                  </td>
-                  <td data-label="จำนวนเงิน" class="text-right whitespace-nowrap">
-                    {{ obj.amount.toFixed(2) }}
-                  </td>
-                  <td class="lg:w-6 whitespace-nowrap">
-                      <BaseButtons
-                        type="justify-end lg:justify-start"
-                        no-wrap
-                      >
-                        <BaseButton
-                            color="danger"
-                            
-                            icon="trashCanOutline"
-                            small
-                            @click="removeDetail(obj)"
-                        />
-                      </BaseButtons>
-                  </td>
-                </tr>
-            </tbody>
-            
-            </table>
-          </div>
-          <div v-else
-              class="text-center py-10 text-gray-500 dark:text-gray-400"
-            >
-              <p>ไม่มีรายการ...</p>
-          </div>  
+          <NotificationBar 
+            v-if="alert?.text" 
+            :color="alert.color" 
+            outline
+            icon="alertCircleOutline">
+              {{ alert.text }}
+          </NotificationBar>
+
+          <BaseLevel class="pb-1 pt-1 pl-4 pr-4" v-if="milkDetails.length > 0" type="justify-end dark:bg-gray-800">
+            รวมน้ำนมดิบ <p class="underline decoration-2 p-2 decoration-orange-600">{{ $filters.number(sum().qty) }}</p>  กก. 
+            คิดเป็นเงิน <p class="underline decoration-2 p-2 decoration-orange-600">{{ $filters.currency(sum().amount) }}</p> บาท
+          </BaseLevel>
+          
+          <Table
+            :title="'รายการรีดนม ('+milkDetails.length+' รายการ)'"
+            icon="cupWater"
+            :items="milkDetails"
+            :datas="milkDetailColumns"
+            @delete="removeDetail"
+            :buttons="buttons"
+            perPage="10"
+            :loading="loading"
+          />
+
         <BaseButtons
           type="justify-center mt-3"
         >
@@ -180,6 +127,7 @@
   import NotificationBar from '@/components/NotificationBar.vue'
   import BaseLevel from '@/components/BaseLevel.vue'
   import BaseIcon from '@/components/BaseIcon.vue'
+  import Table from '@/components/Table.vue'
   import DDLCow from '@/components/DDL/Cow.vue'
 
   import MilkingService from '@/services/milking'
@@ -201,6 +149,33 @@
         },
         priceRawMilk : null,
         milkDetails : [],
+        milkDetailColumns : [
+          {
+            label:'รหัสโค',
+            value:'cow.code'
+          },
+          {
+            label:'ชื่อโค',
+            value:'cow.name'
+          },
+          {
+            label:'น้ำนมดิบ (กก.)',
+            value:'qty',
+            type:'number'
+          },
+          {
+            label:'จำนวนเงิน',
+            value:'amount',
+            type : 'currency'
+          },
+        ],
+        buttons : [
+          {
+            label : 'ลบ',
+            type : 'delete',
+            color : 'danger',
+          },
+        ],
         loading : false,
         alert : {}
       }
@@ -272,6 +247,7 @@
             this.confirmCancel('cancel')
         },
         removeDetail(milk){
+          console.log(milk)
           let index = this.milkDetails.indexOf(milk);
           if (index !== -1) {
             this.milkDetails.splice(index, 1);
@@ -346,6 +322,11 @@
             }
           }
         },
+        sum(){
+          const qty = this.milkDetails.reduce((sum, item) => sum + item.qty, 0);
+          const amount = this.milkDetails.reduce((sum, item) => sum + item.amount, 0);
+          return {qty,amount}
+        },
         formatDate(date){
           return moment(date).format('DD/MM/YYYY')
         }
@@ -363,6 +344,7 @@
       DDLCow,
       FormCheckRadioPicker,
       BaseIcon,
+      Table
     },
     props : {
         modelValue: {

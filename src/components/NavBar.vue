@@ -60,7 +60,7 @@ const logout = () => {
 <template>
   <nav
     class="lg:top-0 bottom-0 left-0 right-0 fixed flex bg-white text-black h-12 border-b shadow-lg border-gray-100 z-30 w-screen
-    transition-position xl:pl-64 lg:opacity-75 lg:w-auto lg:items-stretch lg:dark:bg-gray-900 lg:dark:border-gray-800"
+    transition-position xl:pl-64 lg:w-auto lg:items-stretch lg:dark:bg-gray-900 lg:dark:border-gray-800"
     :class="{'ml-64 lg:ml-0':isAsideMobileExpanded}"
   >
     <div class="flex-1 items-stretch flex">

@@ -276,15 +276,15 @@ export default {
                     this.edit(data.data);
                     break;
                 case 'delete':
-                    this.confirm('ยืนยันลบรายการนี้ ใช่หรือไม่ ?',data.id,null,this.removeData)
+                    this.confirm('ยืนยันลบรายการนี้ ใช่หรือไม่ ?',data.id,null,this.removeData(data.data))
                     break;
                 case 'detail':
                     this.detail(data.path + '/' + data.id);
                     break;
             }
         },
-        removeData(){
-            this.$emit('delete',this.idConfirm);
+        removeData(data){
+            this.$emit('delete',this.idConfirm ? this.idConfirm : data);
         },
         removeSelected(){
             this.$emit('deleteSelected',this.dataSelectedConfirm);
