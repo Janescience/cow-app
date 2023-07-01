@@ -146,7 +146,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     },
     created(){
       this.getWorker()
-      this.getSalaries()
     },
     methods: {
       async getWorker(){
@@ -154,6 +153,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         const resp = await WorkerService.get(this.$route.params.id);
         if(resp.data){
           this.worker = resp.data.worker
+          this.getSalaries()
         }
         this.loading = false
       },

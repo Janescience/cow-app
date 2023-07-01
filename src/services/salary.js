@@ -11,7 +11,7 @@ async function getSearchQuery (opts = {}) {
 class SalaryService{
     async all(search){
         const query = await getSearchQuery(search);
-        return http.get(`/salary`)
+        return http.get(`/salary`+query)
             .then(response => {
                 return response;
             });
