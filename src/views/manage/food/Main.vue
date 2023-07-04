@@ -18,6 +18,8 @@
         @cancel="resetData"
       />
 
+      
+
       <Criteria
         grid="grid-cols-2 lg:grid-cols-4"
         @search="getDatas" 
@@ -27,18 +29,40 @@
         :btnLoading="loading"
       />
 
-      <Table
-        title="รายการให้อาหาร" 
-        has-checkbox
-        :checked-data="checked" 
-        :items="items" 
-        :datas="datas" 
-        :buttons="buttons" 
-        @edit="edit" 
-        @delete="remove" 
-        @deleteSelected="removeSelected"
-        :loading="loading"
-      />
+      <div
+        v-if="!loading"
+        class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-3 lg:grid-cols-5 md:grid-cols-4"
+      >
+        <CardBox
+          v-for="item in itemsPaginated"
+          :key="item.corral"
+          hoverable
+        >
+          <BaseLevel type="justify-center mt-3">
+            <BaseIcon
+              path="barn"
+              size="58"
+              class="dark:text-gray-600"
+            />
+          </BaseLevel>
+          <div class="text-center mt-2">
+            <h4 class="lg:text-2xl text-xl ">
+               คอก {{ item.corral }} 
+            </h4>
+          </div>
+        </CardBox>
+      </div>
+      <div
+          v-else
+          class="text-center py-10 text-gray-500 dark:text-gray-400 "
+        >
+          <BaseIcon
+            path="dotsCircle"
+            size="22"
+            class="animate-spin"
+          />
+          <p> กำลังโหลดข้อมูล...</p>
+      </div>
 
     </SectionMain>
   </LayoutAuthenticated>
@@ -51,6 +75,10 @@ import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 
 import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
+import UserAvatar from "@/components/UserAvatar.vue";
+import BaseLevel from "@/components/BaseLevel.vue";
+import BaseIcon from "@/components/BaseIcon.vue";
+import CardBox from "@/components/CardBox.vue";
 
 import Modal from './Modal.vue'
 import FoodService from '@/services/food'
@@ -63,6 +91,8 @@ import { Toast } from "@/utils/alert";
 export default {
   data (){
     return {
+      perPage :10,
+      currentPage : 0,
       openModal : false,
       modalData : null,
       items : [],
@@ -154,7 +184,11 @@ export default {
     SectionTitleBarSub,
     Table,
     Modal,
-    Criteria
+    Criteria,
+    BaseLevel,
+    UserAvatar,
+    CardBox,
+    BaseIcon
   },
   computed : {
     getDataCopy() {
@@ -162,7 +196,25 @@ export default {
     },
     corral(){
       return this.ddlCorral;
-    }
+    },
+    itemsPaginated() {
+        return this.items ? this.items.slice(this.perPage * this.currentPage, this.perPage * (this.currentPage + 1)) : []
+    },
+    numPages(){
+        return Math.ceil((this.items ? this.items.length : 0) / this.perPage);
+    },
+    currentPageHuman() {
+        return this.currentPage + 1
+    },
+    pagesList() {
+        const pagesList = []
+
+        for (let i = 0; i < this.numPages; i++) {
+            pagesList.push(i)
+        }
+
+        return pagesList
+    },
   },
   created() {
     this.getDatas();
@@ -174,7 +226,12 @@ export default {
       const resp = await FoodService.all(search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.foods
+        const foods = resp.data.foods;
+        const groupCorrals = _.groupBy(foods,'corral')
+        for(let key of Object.keys(groupCorrals)){
+          this.items.push({corral:key})
+        }
+        // this.items = resp.data.foods
       }
       this.loading = false
     },

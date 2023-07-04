@@ -14,10 +14,16 @@
       >
       
         <div class="grid lg:grid-cols-3 grid-cols-2 gap-5">
-          <FormField label="สูตรอาหาร" help="* ห้ามว่าง" class="lg:col-span-1 col-span-2">
-            <DDLRecipe
-              v-model="food.recipe"
-              valueType="object"
+          <FormField label="ปี พ.ศ." help="* ห้ามว่าง" >
+            <FormControl
+              v-model="food.year"
+              :options="years"
+            />
+          </FormField>
+          <FormField label="เดือน" help="* ห้ามว่าง" >
+            <FormControl
+              v-model="food.month"
+              :options="months"
             />
           </FormField>
           <FormField label="คอก" help="* ห้ามว่าง" >
@@ -27,31 +33,68 @@
               required
             />
           </FormField>
-         
-          <FormField label="จำนวนที่ให้/วัน (กก.)" help="* ห้ามว่าง" >
-            <FormControl
-              v-model="food.qty"
-              icon="shaker"
-              type="number"
-              required
-            />
-          </FormField>
-
-          <FormField class="lg:col-span-3 col-span-2">
-            <BaseLevel type="justify-end">
-              ราคาสูตรอาหาร/กก. <p class="text-red-700 font-bold p-2">{{ food?.recipe?.amount > 0 ? food.recipe.amount.toFixed(2) : '-' }}</p> บาท <br/> 
-            </BaseLevel>
-            <BaseLevel type="justify-end">
-              จำนวนโค <p class="text-red-700 font-bold p-2">{{ numCowCorral > 0 && numCowCorral ? numCowCorral : '-' }}</p> ตัว <br/> 
-            </BaseLevel>
-            <BaseLevel type="justify-end">
-              รวมเป็นเงิน/วัน <p class="text-red-700 font-bold p-2">{{ food.qty && food?.recipe?.amount > 0 ? food.amount.toFixed(2) : '-' }}</p> บาท
-            </BaseLevel>
-            <BaseLevel type="justify-end">
-              คิดเป็นเงิน/ตัว <p class="text-red-700 font-bold p-2">{{ food.qty && food.amount && numCowCorral ? (food.amount / numCowCorral).toFixed(2) : '-' }}</p> บาท
-            </BaseLevel>
-          </FormField>
         </div>
+        <CardBox 
+          title="รายละเอียดสูตรอาหาร"
+          header-icon=""
+          class="dark:bg-slate-700">
+          <div class="grid lg:grid-cols-3 grid-cols-2 gap-5">
+            <FormField label="สูตรอาหาร" help="* ห้ามว่าง" class="lg:col-span-1 col-span-2">
+              <DDLRecipe
+                v-model="foodDetail.recipe"
+                valueType="object"
+              />
+            </FormField>
+            <FormField label="จำนวนที่ให้/วัน (กก.)" help="* ห้ามว่าง" >
+              <FormControl
+                v-model="foodDetail.qty"
+                icon="shaker"
+                type="number"
+                required
+              />
+            </FormField>
+            <BaseButtons
+              type="justify-start"
+            >
+              <BaseButton
+                label="ล้าง"
+                color="danger"
+                @click="reset()"
+              />
+              <BaseButton
+                label="เพิ่ม"
+                color="info"
+                @click="add()"
+              />
+            </BaseButtons>
+
+            
+
+            
+          </div>
+          <Table
+              :title="'รายการสูตรอาหาร ('+foodDetails.length + ' รายการ)'"
+              :items="foodDetails"
+              :datas="foodDetailColumns"
+              :buttons="buttons" 
+              @delete="remove" 
+            />
+            <FormField class="lg:col-span-3 col-span-2">
+              <BaseLevel type="justify-end">
+                ราคาสูตรอาหาร/กก. <p class="text-red-700 font-bold p-2">{{ food?.recipe?.amount > 0 ? food.recipe.amount.toFixed(2) : '-' }}</p> บาท <br/> 
+              </BaseLevel>
+              <BaseLevel type="justify-end">
+                จำนวนโค <p class="text-red-700 font-bold p-2">{{ numCowCorral > 0 && numCowCorral ? numCowCorral : '-' }}</p> ตัว <br/> 
+              </BaseLevel>
+              <BaseLevel type="justify-end">
+                รวมเป็นเงิน/วัน <p class="text-red-700 font-bold p-2">{{ food.qty && food?.recipe?.amount > 0 ? food.amount.toFixed(2) : '-' }}</p> บาท
+              </BaseLevel>
+              <BaseLevel type="justify-end">
+                คิดเป็นเงิน/ตัว <p class="text-red-700 font-bold p-2">{{ food.qty && food.amount && numCowCorral ? (food.amount / numCowCorral).toFixed(2) : '-' }}</p> บาท
+              </BaseLevel>
+            </FormField>
+        </CardBox>
+          
 
         <NotificationBar 
           v-if="alert" 
@@ -93,6 +136,7 @@ import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
+import Table from '@/components/Table.vue'
 import DDLRecipe from '@/components/DDL/Recipe.vue'
 
 import { Toast } from "@/utils/alert";
@@ -100,6 +144,7 @@ import _ from "lodash"
 
 import FoodService from '@/services/food'
 import CowService from '@/services/cow'
+import {months,years} from '@/constants/date'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
   
   export default {
@@ -107,17 +152,52 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       return {
         food : {
           corral : '',
-          recipe : {},
-          qty : null,
           amount : 0,
           amountAvg : 0,
           numCow : 0,
+          year : new Date().getFullYear(),
+          month : new Date().getMonth() + 1
         },
+        foodDetail : {
+          recipe : {},
+          qty : null
+        },
+        foodDetails : [],
         loading : false,
         alert : "",
         ddlCorral : [],
         numCowCorral : null,
-        corrals : []
+        corrals : [],
+        months : months(),
+        years : years(),
+        foodDetailColumns : [
+          {
+            label : 'สูตรอาหาร',
+            value : 'recipe.name'
+          },
+          {
+            label : 'ราคา/กก.',
+            value : 'amount',
+            type : 'currency'
+          },
+          {
+            label : 'จำนวนที่ให้/วัน (กก.)',
+            value : 'qty',
+            type : 'number'
+          },
+          {
+            label : 'รวมเป็นเงิน',
+            value : 'sumAmount',
+            type : 'currency'
+          },
+        ],
+        buttons : [
+          {
+            label : 'ลบ',
+            type : 'delete',
+            color : 'danger',
+          }
+        ]
       }
     },
     emits:['update:modelValue', 'cancel', 'confirm'],
@@ -179,6 +259,20 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             this.clear()
             this.confirmCancel('cancel')
         },
+        add(){
+          const recipe = this.foodDetail.recipe;
+          const qty = this.foodDetail.qty;
+          const amount = recipe.amount
+          const sumAmount = qty * amount
+          this.foodDetails.push({recipe,qty,amount,sumAmount})
+          this.foodDetail = {}
+        },
+        remove(obj){
+          let index = this.cows.indexOf(obj);
+          if (index !== -1) {
+            this.foodDetails.splice(index, 1);
+          }
+        },
         async submit(){
             this.loading = true
             this.alert = ""
@@ -235,7 +329,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     BaseLevel,
     DDLRecipe,
     FormCheckRadioPicker,
-    BaseIcon
+    BaseIcon,
+    Table
 },
     props : {
         modelValue: {
