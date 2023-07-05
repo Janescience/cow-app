@@ -214,6 +214,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'รายละเอียดการให้อาหาร',
+      loginRequired : true
+    },
+    path: '/manage/food/detail/:corral',
+    name: 'foodDetail',
+    component: () => import('@/views/manage/food/Detail.vue')
+  },
+  {
+    meta: {
       title: 'สูตรอาหาร',
       loginRequired : true
     },

@@ -31,11 +31,13 @@
               v-model="food.corral"
               :options="ddlCorral"
               required
+              :disabled="mode === 'edit'"
             />
           </FormField>
         </div>
         <CardBox 
           title="รายละเอียดสูตรอาหาร"
+          v-if="food.corral"
           header-icon=""
           class="dark:bg-slate-700">
           <div class="grid lg:grid-cols-3 grid-cols-2 gap-5">
@@ -50,7 +52,6 @@
                 v-model="foodDetail.qty"
                 icon="shaker"
                 type="number"
-                required
               />
             </FormField>
             <BaseButtons
@@ -62,6 +63,7 @@
                 @click="reset()"
               />
               <BaseButton
+                :disabled="!foodDetail.recipe || !foodDetail.qty"
                 label="เพิ่ม"
                 color="info"
                 @click="add()"
@@ -76,23 +78,37 @@
               :title="'รายการสูตรอาหาร ('+foodDetails.length + ' รายการ)'"
               :items="foodDetails"
               :datas="foodDetailColumns"
-              :buttons="buttons" 
+              :buttons="buttons"
+              perPage="5" 
               @delete="remove" 
             />
-            <FormField class="lg:col-span-3 col-span-2">
-              <BaseLevel type="justify-end">
-                ราคาสูตรอาหาร/กก. <p class="text-red-700 font-bold p-2">{{ food?.recipe?.amount > 0 ? food.recipe.amount.toFixed(2) : '-' }}</p> บาท <br/> 
-              </BaseLevel>
-              <BaseLevel type="justify-end">
-                จำนวนโค <p class="text-red-700 font-bold p-2">{{ numCowCorral > 0 && numCowCorral ? numCowCorral : '-' }}</p> ตัว <br/> 
-              </BaseLevel>
-              <BaseLevel type="justify-end">
-                รวมเป็นเงิน/วัน <p class="text-red-700 font-bold p-2">{{ food.qty && food?.recipe?.amount > 0 ? food.amount.toFixed(2) : '-' }}</p> บาท
-              </BaseLevel>
-              <BaseLevel type="justify-end">
-                คิดเป็นเงิน/ตัว <p class="text-red-700 font-bold p-2">{{ food.qty && food.amount && numCowCorral ? (food.amount / numCowCorral).toFixed(2) : '-' }}</p> บาท
-              </BaseLevel>
-            </FormField>
+            <div class="grid grid-cols-3 gap-5">
+              <FormField >
+                <BaseLevel >
+                  จำนวนโค <p class="text-red-700 font-bold ">{{ numCowCorral > 0 && numCowCorral ? numCowCorral : '-' }}</p> ตัว 
+                </BaseLevel>
+                <BaseLevel >
+                  คิดเป็นเงิน/ตัว <p class="text-red-700 font-bold ">{{   $filters.currency(sum().perCow) }}</p> บาท
+                </BaseLevel>
+              </FormField>
+              <FormField>
+                <BaseLevel >
+                  รวมจำนวนที่ให้/วัน <p class="text-red-700 font-bold">{{ $filters.number(sum().qty) }}</p> กก. 
+                </BaseLevel>
+                <BaseLevel>
+                  รวมเป็นเงิน/วัน <p class="text-red-700 font-bold">{{ $filters.currency(sum().amount) }}</p> บาท
+                </BaseLevel>
+              </FormField>
+              <FormField>
+                <BaseLevel >
+                  รวมจำนวนที่ให้/เดือน <p class="text-red-700 font-bold">{{ $filters.number(sum().qty) }}</p> กก. 
+                </BaseLevel>
+                <BaseLevel>
+                  รวมเป็นเงิน/เดือน <p class="text-red-700 font-bold">{{ $filters.currency(sum().amount) }}</p> บาท
+                </BaseLevel>
+              </FormField>
+            </div>
+            
         </CardBox>
           
 
@@ -113,6 +129,7 @@
             label="บันทึก"
             color="success"
             type="submit"
+            :disabled="foodDetails.length === 0"
             :loading="loading"
           />
           <BaseButton
@@ -152,8 +169,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       return {
         food : {
           corral : '',
-          amount : 0,
-          amountAvg : 0,
           numCow : 0,
           year : new Date().getFullYear(),
           month : new Date().getMonth() + 1
@@ -177,7 +192,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           },
           {
             label : 'ราคา/กก.',
-            value : 'amount',
+            value : 'recipe.amount',
             type : 'currency'
           },
           {
@@ -186,10 +201,10 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             type : 'number'
           },
           {
-            label : 'รวมเป็นเงิน',
-            value : 'sumAmount',
+            label : 'รวมเป็นเงิน/วัน',
+            value : 'amount',
             type : 'currency'
-          },
+          }
         ],
         buttons : [
           {
@@ -213,24 +228,12 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     },
     watch:{
       data(n){
-        if(n){
-          this.food = n;
-        }
-      },
-      'food.recipe'(n){
-        if(n){
-          const qty = this.food.qty ? this.food.qty : 0
-          this.food.amount = qty * n.amount;
-        }else{
-          this.food.amount = null;
-        }
-      },
-      'food.qty'(n){
-        if(n){
-          const amount = this.food?.recipe?.amount ? this.food?.recipe?.amount : 0
-          this.food.amount = n * amount;
-        }else{
-          this.food.amount = null;
+        this.food = n;
+        this.food.year = n?.year ? n.year :  new Date().getFullYear()
+        this.food.month = n?.month ? n.month : new Date().getMonth() + 1
+        this.foodDetails = n?.foodDetails ?  n.foodDetails : []
+        for(let foodDetail of this.foodDetails){
+          foodDetail.recipe = foodDetail.relate
         }
       },
       'food.corral'(n){
@@ -245,7 +248,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     methods: {
         clear(){
           this.food = {}
-          this.numCowCorral = null
+          this.foodDetails = []
         },
         confirmCancel(mode){
             this.value = false
@@ -262,10 +265,23 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         add(){
           const recipe = this.foodDetail.recipe;
           const qty = this.foodDetail.qty;
-          const amount = recipe.amount
-          const sumAmount = qty * amount
-          this.foodDetails.push({recipe,qty,amount,sumAmount})
+          const amount = qty * recipe.amount
+          this.foodDetails.push({recipe,qty,amount})
           this.foodDetail = {}
+        },
+        sum(){
+          const sumAmount = this.foodDetails.reduce((sum, item) => sum + item.amount, 0);
+          const sumQty = this.foodDetails.reduce((sum, item) => sum + item.qty, 0);
+          const sumPerCow = sumAmount/(this.numCowCorral?this.numCowCorral:0)
+          return {
+            qty : sumQty,
+            amount : sumAmount,
+            perCow : sumPerCow
+          }
+        },
+        daysOfMonth(){
+          const days = new Date(this.food.year,this.food.month, 0).getDate()
+          return days
         },
         remove(obj){
           let index = this.cows.indexOf(obj);
@@ -276,6 +292,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         async submit(){
             this.loading = true
             this.alert = ""
+            this.food.foodDetails = this.foodDetails
+            this.food.numCow = this.numCowCorral
             try {
               if(this.mode === 'create'){
                 const resp = await FoodService.create(this.food);

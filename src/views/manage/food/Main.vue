@@ -5,20 +5,7 @@
       <SectionTitleBarSub 
         icon="foodDrumstickOutline" 
         title="การให้อาหาร"
-        has-btn-add
-        @openModal="mode='create';openModal = true;this.modalData = null;"
-        btnText="เพิ่มการให้อาหาร"
       />
-
-      <Modal
-        v-model="openModal"
-        :data="getDataCopy"
-        :mode="mode"
-        @confirm="getDatas"
-        @cancel="resetData"
-      />
-
-      
 
       <Criteria
         grid="grid-cols-2 lg:grid-cols-4"
@@ -36,6 +23,7 @@
         <CardBox
           v-for="item in itemsPaginated"
           :key="item.corral"
+          @click="detail(item)"
           hoverable
         >
           <BaseLevel type="justify-center mt-3">
@@ -46,9 +34,18 @@
             />
           </BaseLevel>
           <div class="text-center mt-2">
-            <h4 class="lg:text-2xl text-xl ">
+            <h4 class="lg:text-3xl text-xl ">
                คอก {{ item.corral }} 
             </h4>
+            <p v-if="item.qty" class="lg:text-md dark:text-gray-600 text-sm ">
+               จำนวนรวม {{ item.qty }} กก. 
+            </p>
+            <p v-if="item.amount" class="lg:text-md dark:text-gray-600 text-sm ">
+               ราคารวม {{ item.amount }} บาท 
+            </p>
+            <p v-if="!item.qty" class="lg:text-md dark:text-gray-600 text-sm ">
+               ไม่ได้บันทึกการให้อาหาร
+            </p>
           </div>
         </CardBox>
       </div>
@@ -80,7 +77,6 @@ import BaseLevel from "@/components/BaseLevel.vue";
 import BaseIcon from "@/components/BaseIcon.vue";
 import CardBox from "@/components/CardBox.vue";
 
-import Modal from './Modal.vue'
 import FoodService from '@/services/food'
 import CowService from '@/services/cow'
 
@@ -91,7 +87,7 @@ import { Toast } from "@/utils/alert";
 export default {
   data (){
     return {
-      perPage :10,
+      perPage :12,
       currentPage : 0,
       openModal : false,
       modalData : null,
@@ -183,7 +179,6 @@ export default {
     LayoutAuthenticated,
     SectionTitleBarSub,
     Table,
-    Modal,
     Criteria,
     BaseLevel,
     UserAvatar,
@@ -218,7 +213,6 @@ export default {
   },
   created() {
     this.getDatas();
-    this.getCorrals();
   },
   methods : {
     async getDatas(search){
@@ -229,11 +223,22 @@ export default {
         const foods = resp.data.foods;
         const groupCorrals = _.groupBy(foods,'corral')
         for(let key of Object.keys(groupCorrals)){
-          this.items.push({corral:key})
+          const foods = groupCorrals[key];
+          let sumQty = null;
+          let sumAmount = null;
+          let count = null
+          if(foods.length > 0){
+            const foodLasted = foods[0]
+            if(foodLasted &&  foodLasted.foodDetails.length > 0){
+              sumQty = foodLasted.foodDetails.reduce((sum, item) => sum + item.qty, 0);
+              sumAmount = foodLasted.foodDetails.reduce((sum, item) => sum + item.amount, 0);
+              count = foodLasted?.foodDetails.length
+            }
+          }
+          this.items.push({corral:key,amount:sumAmount,qty:sumQty,count:count,foods})
         }
-        // this.items = resp.data.foods
       }
-      this.loading = false
+      this.getCorrals();
     },
     async remove(id){
       this.loading = true
@@ -270,13 +275,22 @@ export default {
         const corrals = _.groupBy(cows,'corral')
         for(let key of Object.keys(corrals)){
           this.ddlCorral.push({id:key,label:key})
+          const index = this.items.map(item => item.corral).indexOf(key);
+          if(index < 0){
+            this.items.push({corral:key})
+          }
         }
+
       }
+      this.loading = false
     },
-    edit(obj){
-      this.modalData = obj;
-      this.mode = 'edit';
-      this.openModal = true;
+    detail(obj){
+      this.$router.push({
+          name: "foodDetail",
+          params: {
+            corral: obj.corral ,
+          }
+      });
     },
     reset(){
       this.search.recipe = null
