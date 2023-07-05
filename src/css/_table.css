@@ -12,7 +12,7 @@ tr {
 }
 
 tr:last-child {
-  /* @apply border-b-0; */
+  @apply border-b-0;
 }
 
 td:not(:first-child) {

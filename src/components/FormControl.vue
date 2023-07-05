@@ -73,12 +73,16 @@ const inputElClass = computed(() => {
     'dark:placeholder-gray-400',
     'dark:border-gray-700',
     computedType.value === 'textarea' ? 'h-24' : 'h-10',
-    // props.borderless ? 'border-0' : '',
+    props.borderless ? 'border-0' : '',
     props.transparent ? 'bg-transparent' : 'bg-white dark:bg-gray-800'
   ]
 
   if (props.icon) {
     base.push('pl-10')
+  }
+
+  if (props.disabled) {
+    base.push('cursor-not-allowed', props.outline ? 'opacity-60' : 'opacity-50')
   }
 
   return base

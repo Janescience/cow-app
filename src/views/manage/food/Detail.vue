@@ -2,13 +2,32 @@
   <LayoutAuthenticated>
     <SectionMain>
 
-      <SectionTitleBarSub 
-        icon="foodDrumstickOutline" 
-        title="รายละเอียดการให้อาหาร"
-        has-btn-add
-        @openModal="mode='create';openModal = true;"
-        btnText="เพิ่มการให้อาหาร"
-      />
+      <section class="px-4 sm:px-0 mb-4 flex items-center justify-between">
+        <div class="flex items-center justify-start">
+          <BaseIcon
+            path="foodDrumstickOutline"
+            size="30"
+            class="mr-3"
+          />
+          <h1 class="text-base lg:text-2xl">
+            รายละเอียดการให้อาหาร - คอก {{ this.$route.params.corral }}
+          </h1>
+        </div>
+        <BaseButtons class="text-sm lg:text-base " type="justify-end">
+          <BaseButton
+            class="lg:p-2 p-1"
+            label="ย้อนกลับ"
+            color="light"
+            @click="this.$router.push('/manage/food')"
+          />
+          <BaseButton
+            class="lg:p-2 p-1"
+            label="เพิ่มการให้อาหาร"
+            color="success"
+            @click="mode='create';openModal = true;modalData = {corral:this.$route.params.corral}"
+          />
+         </BaseButtons>
+      </section>
 
       <Criteria
         grid="grid-cols-2 lg:grid-cols-4"
@@ -93,10 +112,10 @@ import {months,years} from '@/constants/date'
         ],
         foodColumns : [
           {
-            label : 'ปี พ.ศ.',
+            label : 'ปี',
             value : 'year',
             func : (obj) => {
-              return years()[obj.year]
+              return obj.year
             }
           },
           {
@@ -126,6 +145,18 @@ import {months,years} from '@/constants/date'
             label : 'รวมเป็นเงิน/วัน',
             func : (obj) => {
               return this.$filters.currency(obj.foodDetails.reduce((sum, item) => sum + item.amount, 0));
+            }
+          },
+          {
+            label : 'รวมจำนวนที่ให้/เดือน (กก.)',
+            func : (obj) => {
+              return this.$filters.number(obj.foodDetails.reduce((sum, item) => sum + item.qty, 0) * new Date(obj.year,obj.month,0).getDate());
+            }
+          },
+          {
+            label : 'รวมเป็นเงิน/เดือน',
+            func : (obj) => {
+              return this.$filters.currency(obj.foodDetails.reduce((sum, item) => sum + item.amount, 0) * new Date(obj.year,obj.month,0).getDate())
             }
           }
         ],
@@ -198,8 +229,8 @@ import {months,years} from '@/constants/date'
           this.mode = 'edit'
           this.openModal = true
         },
-        daysOfMonth(){
-
+        daysOfMonth(month,year){
+          return new Date(year,month,0).getDate()
         },
         resetData(){
           this.modalData = null

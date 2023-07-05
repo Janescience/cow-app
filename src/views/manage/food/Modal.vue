@@ -9,6 +9,7 @@
         header-icon="close"
         modal
         form
+        has-scroll
         @submit.prevent="submit"
         @header-icon-click="cancel"
       >
@@ -26,12 +27,11 @@
               :options="months"
             />
           </FormField>
-          <FormField label="คอก" help="* ห้ามว่าง" >
-            <FormControl
+          <FormField label="คอก"  >
+            <FormControl 
               v-model="food.corral"
-              :options="ddlCorral"
               required
-              :disabled="mode === 'edit'"
+              disabled
             />
           </FormField>
         </div>
@@ -39,7 +39,7 @@
           title="รายละเอียดสูตรอาหาร"
           v-if="food.corral"
           header-icon=""
-          class="dark:bg-slate-700">
+          class="dark:bg-slate-700 lg:mt-0 mt-3">
           <div class="grid lg:grid-cols-3 grid-cols-2 gap-5">
             <FormField label="สูตรอาหาร" help="* ห้ามว่าง" class="lg:col-span-1 col-span-2">
               <DDLRecipe
@@ -47,7 +47,7 @@
                 valueType="object"
               />
             </FormField>
-            <FormField label="จำนวนที่ให้/วัน (กก.)" help="* ห้ามว่าง" >
+            <FormField label="จำนวน/วัน (กก.)" help="* ห้ามว่าง" >
               <FormControl
                 v-model="foodDetail.qty"
                 icon="shaker"
@@ -74,7 +74,7 @@
 
             
           </div>
-          <Table
+            <Table
               :title="'รายการสูตรอาหาร ('+foodDetails.length + ' รายการ)'"
               :items="foodDetails"
               :datas="foodDetailColumns"
@@ -82,32 +82,45 @@
               perPage="5" 
               @delete="remove" 
             />
-            <div class="grid grid-cols-3 gap-5">
-              <FormField >
-                <BaseLevel >
-                  จำนวนโค <p class="text-red-700 font-bold ">{{ numCowCorral > 0 && numCowCorral ? numCowCorral : '-' }}</p> ตัว 
-                </BaseLevel>
-                <BaseLevel >
-                  คิดเป็นเงิน/ตัว <p class="text-red-700 font-bold ">{{   $filters.currency(sum().perCow) }}</p> บาท
-                </BaseLevel>
-              </FormField>
-              <FormField>
-                <BaseLevel >
-                  รวมจำนวนที่ให้/วัน <p class="text-red-700 font-bold">{{ $filters.number(sum().qty) }}</p> กก. 
-                </BaseLevel>
-                <BaseLevel>
-                  รวมเป็นเงิน/วัน <p class="text-red-700 font-bold">{{ $filters.currency(sum().amount) }}</p> บาท
-                </BaseLevel>
-              </FormField>
-              <FormField>
-                <BaseLevel >
-                  รวมจำนวนที่ให้/เดือน <p class="text-red-700 font-bold">{{ $filters.number(sum().qty) }}</p> กก. 
-                </BaseLevel>
-                <BaseLevel>
-                  รวมเป็นเงิน/เดือน <p class="text-red-700 font-bold">{{ $filters.currency(sum().amount) }}</p> บาท
-                </BaseLevel>
-              </FormField>
-            </div>
+            <CardBox 
+              title="สรุป"
+              v-if="food.corral"
+              header-icon=""
+              has-table
+              class="dark:bg-slate-800 mt-3">
+              <div class="overflow-x-auto">
+                <table>
+                  <thead>
+                    <tr>
+                      <th/>
+                      <th class=" whitespace-nowrap ">จำนวน/วัน </th>
+                      <th class=" whitespace-nowrap">ราคา/วัน </th>
+                      <th class=" whitespace-nowrap">จำนวน/เดือน</th>
+                      <th class=" whitespace-nowrap">ราคา/เดือน</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class=" whitespace-nowrap ">เฉลี่ยโค 1 ตัว</td>
+                      <td>{{   $filters.currency(sum().qtyPerCow) }}</td>
+                      <td>{{   $filters.currency(sum().amountPerCow) }}</td>
+                      <td>{{   $filters.currency(sum().qtyPerCow * daysOfMonth()) }}</td>
+                      <td>{{   $filters.currency(sum().amountPerCow * daysOfMonth()) }}</td>
+                    </tr>
+                    <tr>
+                      <td>โคทั้งคอก</td>
+                      <td>{{ $filters.number(sum().qty) }}</td>
+                      <td>{{ $filters.currency(sum().amount) }}</td>
+                      <td>{{ $filters.number(sum().qty * daysOfMonth()) }}</td>
+                      <td>{{ $filters.currency(sum().amount * daysOfMonth()) }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </CardBox>
+            
+            
+            
             
         </CardBox>
           
@@ -196,7 +209,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             type : 'currency'
           },
           {
-            label : 'จำนวนที่ให้/วัน (กก.)',
+            label : 'จำนวน/วัน (กก.)',
             value : 'qty',
             type : 'number'
           },
@@ -233,7 +246,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         this.food.month = n?.month ? n.month : new Date().getMonth() + 1
         this.foodDetails = n?.foodDetails ?  n.foodDetails : []
         for(let foodDetail of this.foodDetails){
-          foodDetail.recipe = foodDetail.relate
+          foodDetail.recipe = foodDetail.relate?.recipe
         }
       },
       'food.corral'(n){
@@ -272,11 +285,13 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         sum(){
           const sumAmount = this.foodDetails.reduce((sum, item) => sum + item.amount, 0);
           const sumQty = this.foodDetails.reduce((sum, item) => sum + item.qty, 0);
-          const sumPerCow = sumAmount/(this.numCowCorral?this.numCowCorral:0)
+          const sumAmountPerCow = sumAmount/(this.numCowCorral?this.numCowCorral:0)
+          const sumQtyPerCow = sumQty/(this.numCowCorral?this.numCowCorral:0)
           return {
             qty : sumQty,
             amount : sumAmount,
-            perCow : sumPerCow
+            amountPerCow : sumAmountPerCow,
+            qtyPerCow : sumQtyPerCow
           }
         },
         daysOfMonth(){
