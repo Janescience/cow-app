@@ -1,5 +1,5 @@
 <template>
-    <div ref="calendarContainer" class="min-h-full min-w-full text-gray-300 ">
+    <div ref="calendarContainer" class="min-h-full min-w-full dark:text-gray-300 text-gray-800">
       <div class="w-full grid grid-cols-7 ">
         <Top />
 
@@ -38,36 +38,36 @@
                 class="w-full px-2 py-1 flex space-x-1 items-center whitespace-nowrap overflow-hidden hover:border hover:border-gray-200 cursor-pointer rounded-lg"
                 @click="togglePopover($event, evt)"
               >
-              <div class="w-1/12">
-                  <div v-if="evt.type == 'VACCINE' " class="w-6">
+              <div class="w-1/12 mr-2">
+                  <div v-if="evt.type == 'VACCINE' " >
                     <BaseIcon 
                         path="needle" 
                         size="18" 
                         class="text-green-600" 
                     />
                   </div>
-                  <div v-if="evt.type == 'BIRTH' " class="mr-2">
+                  <div v-if="evt.type == 'BIRTH' " >
                     <BaseIcon 
                         path="cow" 
                         size="18" 
                         class="text-amber-600"
                     />
                   </div>
-                  <div v-if="evt.code == 'REPRO_MATING' " class="w-6">
+                  <div v-if="evt.code == 'REPRO_MATING' " >
                     <BaseIcon 
                         path="reproduction" 
                         size="18"
                         class="text-yellow-500" 
                     />
                   </div>
-                  <div v-if="evt.code == 'REPRO_ESTRUST' " class="mr-2">
+                  <div v-if="evt.code == 'REPRO_ESTRUST' " >
                     <BaseIcon 
                         path="heart" 
                         size="14"
                         class="text-red-400" 
                     />
                   </div>
-                  <div v-if="evt.code == 'REPRO_CHECK' " class="mr-2">
+                  <div v-if="evt.code == 'REPRO_CHECK' " >
                     <BaseIcon 
                         path="stethoscope" 
                         size="14"
@@ -141,36 +141,36 @@
                 class="w-full px-2 py-1 flex space-x-1 items-center whitespace-nowrap overflow-hidden hover:border hover:border-gray-200 cursor-pointer rounded-lg"
                 @click="openModal(day, allTodaysEvent(day, events))"
               >
-                <div class="w-1/12">
-                  <div v-if="evt.type == 'VACCINE' " class="w-6">
+                <div class="w-1/12 mr-2">
+                  <div v-if="evt.type == 'VACCINE' " >
                     <BaseIcon 
                         path="needle" 
                         size="18" 
                         class="text-green-600" 
                     />
                   </div>
-                  <div v-if="evt.type == 'BIRTH' " class="mr-2">
+                  <div v-if="evt.type == 'BIRTH' ">
                     <BaseIcon 
                         path="cow" 
                         size="18" 
                         class="text-amber-600"
                     />
                   </div>
-                  <div v-if="evt.code == 'REPRO_MATING' " class="w-6">
+                  <div v-if="evt.code == 'REPRO_MATING' " >
                     <BaseIcon 
                         path="reproduction" 
                         size="18"
                         class="text-yellow-500" 
                     />
                   </div>
-                  <div v-if="evt.code == 'REPRO_ESTRUST' " class="mr-2">
+                  <div v-if="evt.code == 'REPRO_ESTRUST' " >
                     <BaseIcon 
                         path="heart" 
                         size="14"
                         class="text-red-400" 
                     />
                   </div>
-                  <div v-if="evt.code == 'REPRO_CHECK' " class="mr-2">
+                  <div v-if="evt.code == 'REPRO_CHECK' " >
                     <BaseIcon 
                         path="stethoscope" 
                         size="14"

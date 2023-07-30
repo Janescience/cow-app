@@ -28,7 +28,7 @@
               :key="event._id"
             >
               <td data-label="วันที่ครบกำหนด" class="whitespace-nowrap">
-                {{ formatDate(event.date,'dddd DD MMMM yyyy') }}
+                วัน{{ formatDate(event.date,'dddd DD MMMM yyyy') }}
               </td>
               <td data-label="หัวข้อ" class="whitespace-nowrap">
                 {{ event.title }}

@@ -1,5 +1,5 @@
 <template>
-    <div ref="calendarContainer" class="min-h-full min-w-full text-gray-300 ">
+    <div ref="calendarContainer" class="min-h-full min-w-full dark:text-gray-300 text-gray-800">
       <div class="w-full grid grid-cols-7 ">
         <Top @month="getMonth" @year="getYear"/>
 
