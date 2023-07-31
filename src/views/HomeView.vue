@@ -96,8 +96,8 @@
               header-icon=""
               v-else loading/>
               <Table
-                title="อันดับน้ำนมดิบ" 
-                :items="rawMilkSort" 
+                title="น้ำนมดิบมากที่สุด 10 อันดับ" 
+                :items="rawMilkDescSort" 
                 :datas="rawMilkSortColumns" 
                 perPage="5"
                 :loading="loading.rawMilkSort"
@@ -294,7 +294,8 @@ export default {
       corrals : [],
       milk : {},
       cow : {},
-      rawMilkSort : [],
+      rawMilkDescSort : [],
+      rawMilkAscSort : [],
       rawMilkSortColumns : [
         {
           label : "รูปโค",
@@ -425,9 +426,13 @@ export default {
     },
     async getRawMilkSort(){
       this.loading.rawMilkSort = true;
-      const resp = await DashboardService.getRawMilkSort()
-      if(resp){
-        this.rawMilkSort = resp.data
+      const respDesc = await DashboardService.getRawMilkDescSort()
+      if(respDesc){
+        this.rawMilkDescSort = respDesc.data.desc
+      }
+      const respAsc = await DashboardService.getRawMilkAscSort()
+      if(respAsc){
+        this.rawMilkAscSort = respAsc.data.asc
       }
       this.loading.rawMilkSort = false;
     },

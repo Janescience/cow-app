@@ -2,13 +2,32 @@
     <LayoutAuthenticated>
     <SectionMain>
 
-      <SectionTitleBarSub 
-        icon="cashMultiple" 
-        title="จัดการเงินเดือน"
-        has-btn-add
-        @openModal="mode='create';openModal = true;"
-        btnText="เพิ่มเงินเดือน"
-      />
+      <section class="px-4 sm:px-0 mb-4 flex items-center justify-between">
+        <div class="flex items-center justify-start">
+          <BaseIcon
+            path="cashMultiple"
+            size="30"
+            class="mr-3"
+          />
+          <h1 class="text-base lg:text-2xl">
+            จัดการเงินเดือน
+          </h1>
+        </div>
+        <BaseButtons class="text-sm lg:text-base " type="justify-end">
+          <BaseButton
+            class="lg:p-2 p-1"
+            label="ย้อนกลับ"
+            color="light"
+            @click="this.$router.push('/manage/worker')"
+          />
+          <BaseButton
+            class="lg:p-2 p-1"
+            label="เพิ่มเงินเดือน"
+            color="success"
+            @click="mode='create';openModal = true;"
+          />
+         </BaseButtons>
+      </section>
 
       <Modal
         v-model="openModal"
@@ -32,15 +51,19 @@
           <FormField label="อายุ"  >
             {{ worker?.age }}
           </FormField>
+          <FormField label="วันที่เริ่มงาน"  >
+            {{ formatDate(worker?.startDate) }}
+          </FormField>
+          <FormField label="วันที่สิ้นสุดงาน"  >
+            {{ worker?.endDate ? worker?.endDate : 'ถึงปัจจุบัน' }}
+          </FormField>
           <FormField label="อายุงาน"   >
-            {{ worker?.age }}
-
+            {{ calAge(worker?.startDate,worker?.status === 'L' ? worker?.endDate : null) }}
           </FormField>
           <FormField label="หน้าที่"  >
             {{ worker?.duty }}
-
           </FormField>
-          <FormField label="เงินเดือนปัจจุบัน"  >
+          <FormField label="ฐานเงินเดือนล่าสุด"  >
             {{ worker?.salary }}
           </FormField>
 
@@ -84,6 +107,8 @@ import SectionMain from '@/components/SectionMain.vue'
 import SectionTitleBarSub from '@/components/SectionTitleBarSub.vue'
 
 import { Toast } from "@/utils/alert";
+import getAge from "@/utils/age-calculate";
+import moment from 'moment'
 
 import Modal from './Modal.vue'
 
@@ -200,6 +225,15 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       },
       resetData(){
         this.modalData = null
+      },
+      formatDate(date){
+        if(!date){
+            return ""
+        }
+        return moment(new Date(date)).format('DD/MM/YYYY');
+      },
+      calAge(date){
+        return getAge(date);
       },
     },
     components : {

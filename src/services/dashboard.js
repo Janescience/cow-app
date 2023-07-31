@@ -16,8 +16,11 @@ class DashboardService{
     getIncome(){
         return http.get('/dashboard/income');
     }
-    getRawMilkSort(){
-        return http.get('/dashboard/rawMilkSort');
+    getRawMilkDescSort(){
+        return http.get('/dashboard/rawMilkDescSort');
+    }
+    getRawMilkAscSort(){
+        return http.get('/dashboard/rawMilkAscSort');
     }
     getCorrals(){
         return http.get('/dashboard/corrals');
