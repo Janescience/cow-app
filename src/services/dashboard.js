@@ -25,6 +25,10 @@ class DashboardService{
     getCorrals(){
         return http.get('/dashboard/corrals');
     }
+
+    getStatistics(){
+        return http.get('/dashboard/statistics');
+    }
 }
 
 export default new DashboardService();

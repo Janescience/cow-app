@@ -107,6 +107,7 @@
             </div>           
             <div
               class="p-2 lg:px-6 static border-t border-gray-100 dark:border-gray-800"
+              v-if="!noPaging"
             >
               <BaseLevel >
                   <BaseButtons>
@@ -190,6 +191,10 @@ export default {
         icon : {
             type : String ,
             default : ""
+        },
+        noPaging : {
+            type : Boolean,
+            default : false,
         },
         loading : Boolean,
         rounded: {
