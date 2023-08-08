@@ -27,7 +27,7 @@
 
         <div
           v-if="!loading"
-          class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-3 lg:grid-cols-7 md:grid-cols-4"
+          class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-3 lg:grid-cols-5 md:grid-cols-4"
         >
           <CardBoxClient
             v-for="item in itemsPaginated"

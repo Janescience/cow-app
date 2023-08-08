@@ -66,12 +66,12 @@
           <CardBox title="สถิติการรักษา" header-icon="">
               <div class="grid grid-cols-3 gap-5">
                 <p class="mt-1">รักษาทั้งหมด</p>
-                <h1 class="lg:text-xl text-lg text-yellow-600 text-center">{{ statistics.heal.count | '-' }}</h1>
+                <h1 class="lg:text-xl text-lg text-yellow-600 text-center">{{ statistics?.heal?.count | '-' }}</h1>
                 <p class="mt-1">ครั้ง</p>
               </div>
               <div class="grid grid-cols-5 gap-5">
-                <p class="mt-1 col-span-3">โค{{ statistics.heal.max.cow.name}} รักษามากที่สุด</p>
-                <h1 class="lg:text-xl text-lg text-yellow-600 text-center">{{ statistics.heal.max.count }}</h1>
+                <p class="mt-1 col-span-3">โค{{ statistics?.heal?.max?.cow?.name}} รักษามากที่สุด</p>
+                <h1 class="lg:text-xl text-lg text-yellow-600 text-center">{{ statistics?.heal?.max?.count }}</h1>
                 <p class="mt-1">ครั้ง</p>
               </div>
           </CardBox>
