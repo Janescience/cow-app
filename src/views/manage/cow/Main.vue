@@ -29,17 +29,65 @@
           v-if="!loading"
           class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-3 lg:grid-cols-5 md:grid-cols-4"
         >
-          <CardBoxClient
+          <CardBox
             v-for="item in itemsPaginated"
             :key="item.name"
-            :img="item.image"
-            :name="item.name"
-            :sub-text="'คอก '+(item.corral ? item.corral:'-')"
-            :date="item.birthDate"
-            :status="item.status"
             @click="detail(item)"
-            :quality="item.quality"
-          />
+            hoverable
+          >
+              
+              <BaseLevel type="justify-center">
+                <UserAvatar
+                  username="profile-card"
+                  class="lg:w-24 lg:h-24 w-20 h-20"
+                  :avatar="item.image"
+                />
+              </BaseLevel>
+            <div class="text-center mt-2">
+              <h4 class="lg:text-xl text-md ">
+                <BaseIcon
+                  v-if="item.quality === 2"
+                  class="text-amber-400"
+                  path="crownCircleOutline"
+                  size="20"
+                />
+                
+                {{ item.name }} 
+              </h4>
+              <div class="grid grid-cols-5 gap-1 mt-2">
+                <p :class="filter(item)?.grade?.style+'  font-extrabold  text-sm text-center dark:bg-zinc-900 rounded-lg p-1 h-6 min-w-4 shadow-lg'">
+                {{ item.grade }}
+              </p>
+              <p class="text-gray-500 col-span-3 font-extrabold dark:text-gray-400 text-sm text-center dark:bg-zinc-900 rounded-lg p-1 h-6 min-w-4 shadow-lg">
+                {{ item.corral }}
+              </p>
+              <p class=" font-extrabold  text-center dark:bg-zinc-900 rounded-lg h-6 min-w-4 shadow-lg">
+                <BaseIcon
+                  v-if="item.status"
+                  :class="filter(item)?.status?.style"
+                  :path="filter(item)?.status?.icon"
+                  size="18"
+                />
+              </p>
+              <p class="text-left dark:bg-zinc-700 text-gray-300 rounded-lg p-1 h-6 min-w-4 text-xs col-span-2 shadow-lg">
+                {{ calAge(item.birthDate) }}
+              </p>
+              <p class="text-left dark:bg-gray-700 text-black font-bold rounded-lg h-6 min-w-4 text-xs col-span-3 shadow-lg">
+                <BaseLevel
+                  type="justify-between"
+                >
+                <BaseIcon
+                  path="cupWater"
+                  size="16"
+                />
+                <div class="mr-2 ">{{ $filters.number(item.sum?.rawmilk) }}</div>
+                </BaseLevel>
+               
+              </p>
+              </div>
+              
+            </div>
+          </CardBox>
         </div>
         <div
             v-else
@@ -90,6 +138,7 @@ import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
+import UserAvatar from "@/components/UserAvatar.vue";
 import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 import CreateCowModal from './Modal.vue'
 
@@ -185,7 +234,7 @@ export default {
     Table,
     SectionTitleBarSub,
     Criteria,
-    CardBoxClient,
+    UserAvatar,
     BaseLevel,
 },
   created() {
@@ -222,6 +271,38 @@ export default {
       this.search.status = ""
       this.search.quality = ""
       this.search.corral = ""
+    },
+    filter(item){
+      const status = {}
+      const grade = {}
+
+      if (item.status == 1) {
+        status.icon ='humanPregnant'
+        status.style = 'warning'
+      }else if (item.status == 2) {
+        status.icon ='waterOff'
+        status.style = 'danger'
+      }else if (item.status == 3) {
+        status.icon ='water'
+        status.style = 'success'
+      }else if (item.status == 4) {
+        status.icon ='babyFaceOutline'
+        status.style = 'light'
+      }
+
+      if(item.grade === 'A+'){
+        grade.style = 'text-lime-500'
+      }else if(item.grade === 'A'){
+        grade.style = 'text-green-500'
+      }else if(item.grade === 'B'){
+        grade.style = ''
+      }else if(item.grade === 'C'){
+        grade.style = 'text-orange-500'
+      }else if(item.grade === 'D'){
+        grade.style = 'text-red-500'
+      }
+
+      return {status,grade}
     },
     calAge(bdDate){
       return getAge(bdDate);

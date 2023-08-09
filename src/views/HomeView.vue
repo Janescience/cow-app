@@ -200,7 +200,6 @@ import NotificationBar from '@/components/NotificationBar.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseIcon from '@/components/BaseIcon.vue'
 import CardBoxTransaction from '@/components/CardBoxTransaction.vue'
-import CardBoxClient from '@/components/CardBoxClient.vue'
 import SectionTitleBarSub from '@/components/SectionTitleBarSub.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import FormControl from '@/components/FormControl.vue'
@@ -282,7 +281,6 @@ export default {
     NotificationBar,
     BaseButton,
     CardBoxTransaction,
-    CardBoxClient,
     SectionTitleBarSub,
     LayoutAuthenticated,
     FormControl,

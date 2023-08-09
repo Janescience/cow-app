@@ -52,7 +52,8 @@ export default (dob,n) => {
     var  ageString = "";
        
     if ( (age.years > 0) && (age.months > 0) && (age.days > 0) )  
-       ageString = age.years + " ปี " + age.months + " เดือน " + age.days + " วัน";  
+       ageString = age.years + " ปี " + age.months + " เดือน " 
+      //  + age.days + " วัน";  
     else if ( (age.years == 0) && (age.months == 0) && (age.days > 0) )  
        ageString = age.days + " วัน";  
     else if ( (age.years > 0) && (age.months == 0) && (age.days == 0) )  
@@ -62,7 +63,8 @@ export default (dob,n) => {
     else if ( (age.years == 0) && (age.months > 0) && (age.days > 0) )  
       ageString = age.months + " เดือน " + age.days + " วัน";  
     else if ( (age.years > 0) && (age.months == 0) && (age.days > 0) )  
-      ageString = age.years + " ปี " + age.days + " วัน";  
+      ageString = age.years + " ปี " 
+      // + age.days + " วัน";  
     else if ( (age.years == 0) && (age.months > 0) && (age.days == 0) )  
       ageString = age.months + " เดือน";  
 

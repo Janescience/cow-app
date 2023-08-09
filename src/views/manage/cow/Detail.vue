@@ -88,9 +88,11 @@
           header-icon=""
         > 
           <div class="grid grid-cols-3 gap-5">
-            <p :class="filterColor()?.grade+' shadow-lg text-7xl font-extrabold text-center  bg-gradient-to-r from-gray-800 to-zinc-900 rounded-full '">{{ quality?.grade }}</p>
+            <p :class="filterColor()?.grade+'  text-7xl font-extrabold text-center  '">
+              {{ quality?.grade }}
+            </p>
             <div class="row-span-2 col-span-2">
-              <p >ระดับอยู่ในเกณฑ์ {{  quality?.description }} </p>
+              <p >ผลผลิตอยู่ในเกณฑ์ {{  quality?.description }} </p>
             <p class="text-gray-500 text-xs">{{  filterText()?.percent }} </p>
             </div>  
             
@@ -1003,15 +1005,15 @@ export default {
     filterColor(){
       const grade = this.quality?.grade
       if(grade === 'A+'){
-        return { grade : 'text-lime-500 h-28 w-28',profit : 'text-lime-500'}
+        return { grade : 'text-lime-500 ',profit : 'text-lime-500'}
       }else if(grade === 'A'){
-        return { grade : 'text-green-500 h-20 w-20',profit : 'text-green-500'}
+        return { grade : 'text-green-500 ',profit : 'text-green-500'}
       }else if(grade === 'B'){
-        return { grade : ' h-20 w-20',profit : ''}
+        return { grade : '',profit : ''}
       }else if(grade === 'C'){
-        return { grade : 'text-orange-500 h-20 w-20',profit : 'text-orange-500'}
+        return { grade : 'text-orange-500 ',profit : 'text-orange-500'}
       }else if(grade === 'D'){
-        return { grade : 'text-red-500 h-20 w-20',profit : 'text-red-500 '}
+        return { grade : 'text-red-500',profit : 'text-red-500 '}
       }
     },
     filterText(){
