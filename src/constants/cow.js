@@ -3,18 +3,18 @@
 export const status = (mode) => {
     if(mode === 'create'){
         return [
-            { id: 1, label: 'ท้อง' },
-            { id: 2, label: 'นมแห้ง' },
-            { id: 3, label: 'ให้ผลผลิต' },
-            { id: 4, label: 'วัวเด็ก' }
+            { id: 1, label: 'โคท้อง' },
+            { id: 2, label: 'โคดราย' },
+            { id: 3, label: 'โครีดนม' },
+            { id: 4, label: 'โคเด็ก' }
         ]
     }else{
         return [
             { id: "", label: 'ทั้งหมด' },
-            { id: 1, label: 'ท้อง' },
-            { id: 2, label: 'นมแห้ง' },
-            { id: 3, label: 'ให้ผลผลิต' },
-            { id: 4, label: 'วัวเด็ก' }
+            { id: 1, label: 'โคท้อง' },
+            { id: 2, label: 'โคดราย' },
+            { id: 3, label: 'โครีดนม' },
+            { id: 4, label: 'โคเด็ก' }
         ]
     }
 }

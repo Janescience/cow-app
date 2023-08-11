@@ -33,57 +33,83 @@
             v-for="item in itemsPaginated"
             :key="item.name"
             @click="detail(item)"
+            has-table
             hoverable
           >
               
               <BaseLevel type="justify-center">
                 <UserAvatar
                   username="profile-card"
-                  class="lg:w-24 lg:h-24 w-20 h-20"
+                  class="lg:w-24 lg:h-24 w-20 h-20 mt-2"
                   :avatar="item.image"
                 />
               </BaseLevel>
             <div class="text-center mt-2">
-              <h4 class="lg:text-xl text-md ">
-                <BaseIcon
+              <h4 class="lg:text-xl text-md flex justify-center">
+                <p :class="filter(item)?.grade?.style+'  font-extrabold  lg:text-base text-sm text-center dark:bg-black rounded-full lg:h-6 h-5 w-6 shadow-xl mr-1'">
+                  {{ item.grade }}
+                </p>
+                <!-- <BaseIcon
                   v-if="item.quality === 2"
                   class="text-amber-400"
                   path="crownCircleOutline"
                   size="20"
-                />
+                /> -->
                 
                 {{ item.name }} 
               </h4>
-              <div class="grid grid-cols-5 gap-1 mt-2">
-                <p :class="filter(item)?.grade?.style+'  font-extrabold  text-sm text-center dark:bg-zinc-900 rounded-lg p-1 h-6 min-w-4 shadow-lg'">
-                {{ item.grade }}
-              </p>
-              <p class="text-gray-500 col-span-3 font-extrabold dark:text-gray-400 text-sm text-center dark:bg-zinc-900 rounded-lg p-1 h-6 min-w-4 shadow-lg">
-                {{ item.corral }}
-              </p>
-              <p class=" font-extrabold  text-center dark:bg-zinc-900 rounded-lg h-6 min-w-4 shadow-lg">
-                <BaseIcon
-                  v-if="item.status"
-                  :class="filter(item)?.status?.style"
-                  :path="filter(item)?.status?.icon"
-                  size="18"
-                />
-              </p>
-              <p class="text-left dark:bg-zinc-700 text-gray-300 rounded-lg p-1 h-6 min-w-4 text-xs col-span-2 shadow-lg">
-                {{ calAge(item.birthDate) }}
-              </p>
-              <p class="text-left dark:bg-gray-700 text-black font-bold rounded-lg h-6 min-w-4 text-xs col-span-3 shadow-lg">
-                <BaseLevel
-                  type="justify-between"
-                >
-                <BaseIcon
-                  path="cupWater"
-                  size="16"
-                />
-                <div class="mr-2 ">{{ $filters.number(item.sum?.rawmilk) }}</div>
-                </BaseLevel>
-               
-              </p>
+              <div class="grid lg:grid-cols-5 grid-cols-2 gap-1 mt-2 lg:p-2">
+                
+                <p class="text-gray-900 col-span-2 font-bold  text-sm text-center dark:bg-zinc-500 lg:rounded  h-6 min-w-4 shadow-lg">
+                  <BaseLevel
+                    type="justify-between"
+                  >
+                  <BaseIcon
+                    path="barn"
+                    size="16"
+                  />
+                  <div class="mr-2 ">{{ item.corral }}</div>
+
+                  </BaseLevel>
+                </p>
+                <p class=" font-bold  dark:bg-zinc-900 lg:rounded h-6 text-sm min-full lg:col-span-3 col-span-2 shadow-lg">
+                  <BaseLevel
+                    type="justify-between"
+                  >
+                  <BaseIcon
+                    v-if="item.status"
+                    :class="filter(item)?.status?.style"
+                    :path="filter(item)?.status?.icon"
+                    size="16"
+                  />
+                  <div class="mr-2 ">{{ filter(item)?.status?.desc }}</div>
+                  </BaseLevel>
+                </p>
+                <p class="text-left dark:bg-zinc-700 text-gray-300 lg:rounded h-6 min-w-4 text-xs lg:col-span-3 col-span-2 shadow-lg">
+                  <BaseLevel
+                    type="justify-between"
+                  >
+                  <BaseIcon
+                    path="timelapse"
+                    size="16"
+                  />
+                  <div class="mr-2 ">{{ calAge(item.birthDate) }}</div>
+
+                  </BaseLevel>
+                  
+                </p>
+                <p class="text-left dark:bg-gray-700 text-black font-bold lg:rounded h-6 min-w-4 text-xs  col-span-2 shadow-lg">
+                  <BaseLevel
+                    type="justify-between"
+                  >
+                  <BaseIcon
+                    path="cupWater"
+                    size="16"
+                  />
+                  <div class="mr-2 ">{{ $filters.number(item.sum?.rawmilk) }}</div>
+                  </BaseLevel>
+                
+                </p>
               </div>
               
             </div>
@@ -151,9 +177,10 @@ import { status,quality } from '@/constants/cow'
 export default {
   data (){
     return {
-      perPage :28,
+      perPage :20,
       currentPage : 0,
       modalCow : false,
+      cowStatus : status(),
       items : [],
       forms : [
         {
@@ -289,6 +316,8 @@ export default {
         status.icon ='babyFaceOutline'
         status.style = 'light'
       }
+
+      status.desc = this.cowStatus[item.status].label
 
       if(item.grade === 'A+'){
         grade.style = 'text-lime-500'
