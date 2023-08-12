@@ -46,7 +46,7 @@ export default defineConfig((command,mode) =>{
           ]
         },
         devOptions: {
-          enabled: true
+          enabled: false
         }
       })
     ],
