@@ -49,7 +49,7 @@ export default defineConfig((command,mode) =>{
     //       enabled: false
     //     }
     //   })
-    // ],
+    ],
     // build: {
     //   chunkSizeWarningLimit: 8000,
     // },
