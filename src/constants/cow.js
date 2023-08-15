@@ -22,16 +22,18 @@ export const status = (mode) => {
 export const quality = (mode) => {
     if(mode === 'create'){
         return [
-            { id: 1, label: 'ปกติ' },
-            { id: 2, label: 'คุณภาพดี' },
-            { id: 3, label: 'ยังไม่ได้ตรวจ' },
+            { id: 1, label: 'คุณภาพดี' },
+            { id: 2, label: 'ปกติ' },
+            { id: 3, label: 'แย่' },
+            { id: 4, label: 'ไม่ได้ตรวจ' },
         ]
     }else{
         return [
             { id: "", label: 'ทั้งหมด' },
-            { id: 1, label: 'ปกติ' },
-            { id: 2, label: 'คุณภาพดี' },
-            { id: 3, label: 'ยังไม่ได้ตรวจ' },
+            { id: 1, label: 'คุณภาพดี' },
+            { id: 2, label: 'ปกติ' },
+            { id: 3, label: 'แย่' },
+            { id: 4, label: 'ไม่ได้ตรวจ' },
         ]
     }
 }

@@ -46,8 +46,15 @@
               </BaseLevel>
             <div class="text-center mt-2">
               <h4 class="lg:text-xl text-md flex justify-center">
-                <p :class="filter(item)?.grade?.style+'  font-extrabold  lg:text-base text-sm text-center dark:bg-black rounded-full lg:h-6 h-5 w-6 shadow-xl mr-1'">
-                  {{ item.grade }}
+                <p  :class="filter(item)?.grade?.style+'  font-extrabold  lg:text-base text-sm text-center dark:bg-black rounded-full lg:h-6 h-5 w-6 shadow-xl mr-1'">
+                  <div v-if="item.grade">{{ item.grade }}</div>
+                  <div v-else>
+                    <BaseIcon
+                      path="dotsCircle"
+                      size="16"
+                      class="animate-spin text-gray-500"
+                    />
+                  </div>
                 </p>
                 <!-- <BaseIcon
                   v-if="item.quality === 2"
@@ -106,7 +113,13 @@
                     path="cupWater"
                     size="16"
                   />
-                  <div class="mr-2 ">{{ $filters.number(item.sum?.rawmilk) }}</div>
+                  <div v-if="item.sum" class="mr-2 ">{{ $filters.number(item.sum?.rawmilk) }}</div>
+                    <BaseIcon
+                        v-else
+                        path="dotsCircle"
+                        size="16"
+                        class="animate-spin text-gray-500 mr-2"
+                      />
                   </BaseLevel>
                 
                 </p>
@@ -274,8 +287,17 @@ export default {
       this.items = []
       if(resp.data){
         this.items = resp.data.cows
+        this.loading = false
+
+        for(let item of this.items){
+          const resp  = await CowService.getDetails(item._id);
+          if(resp.data){
+            item.grade = resp.data?.quality?.grade
+            item.sum = resp.data.sum
+          }
+          
+        }
       }
-      this.loading = false
     },
     async removeCow(id){
       this.loading = true

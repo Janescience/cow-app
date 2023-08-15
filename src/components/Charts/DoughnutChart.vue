@@ -2,7 +2,6 @@
 import { ref, watch, computed, onMounted } from 'vue'
 import { Chart, registerables} from 'chart.js';
 
-
 const props = defineProps({
   data: {
     type: Object,
@@ -19,19 +18,11 @@ Chart.register(...registerables);
 
 onMounted(() => {
   chart = new Chart(root.value, {
-    type: 'line',
+    type: 'doughnut',
     data: props.data,
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      scales: {
-        y: {
-          display: true
-        },
-        x: {
-          display: true
-        }
-      },
       plugins: {
         legend: {
           display: true

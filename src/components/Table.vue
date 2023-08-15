@@ -106,7 +106,7 @@
               </table>
             </div>           
             <div
-              class="p-2 lg:px-6 static border-t border-gray-100 dark:border-gray-800"
+              class="p-2  static border-t border-gray-100 dark:border-gray-800"
               v-if="!noPaging"
             >
               <BaseLevel >
@@ -117,7 +117,7 @@
                         :active="page === currentPage"
                         :label="page + 1"
                         small
-                        class="p-0 text-sm"
+                        class="p-0 text-xs"
                         @click="currentPage = page"
                     />
                   </BaseButtons>
