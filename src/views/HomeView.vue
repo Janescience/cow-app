@@ -12,35 +12,44 @@
           header-icon=""
         >
           <div class="grid grid-cols-3 gap-5">
-            <p class="text-left mt-2 col-span-2"><BaseIcon
-                     class=" bg-teal-900 rounded-full p-1 mr-2"
-                    path="water"
-                    size="16"
-                  /> โครีดนม</p>
+            <p class="text-left mt-2 col-span-2">
+              <BaseIcon
+                class="bg-teal-900 rounded-full p-1 mr-2"
+                path="water"
+                size="16"
+              />
+              โครีดนม
+            </p>
             <h1 class="lg:text-3xl text-2xl text-yellow-600">
               {{ cow.milk }}
             </h1>
-            <p class="text-left mt-2 col-span-2"><BaseIcon
-                    class="text-blue-500 bg-indigo-900 rounded-full p-1 mr-2"
-                    path="humanPregnant"
-                    size="16"
-                  />โคท้อง</p>
+            <p class="text-left mt-2 col-span-2">
+              <BaseIcon
+                class="text-blue-500 bg-indigo-900 rounded-full p-1 mr-2"
+                path="humanPregnant"
+                size="16"
+              />โคท้อง
+            </p>
             <h1 class="lg:text-3xl text-2xl text-yellow-600">
               {{ cow.pregnant }}
             </h1>
-            <p class="text-left mt-2 col-span-2"><BaseIcon
-                    class="text-yellow-500 bg-amber-900 rounded-full p-1 mr-2"
-                    path="babyFaceOutline"
-                    size="16"
-                  />โคเด็ก</p>
+            <p class="text-left mt-2 col-span-2">
+              <BaseIcon
+                class="text-yellow-500 bg-amber-900 rounded-full p-1 mr-2"
+                path="babyFaceOutline"
+                size="16"
+              />โคเด็ก
+            </p>
             <h1 class="lg:text-3xl text-2xl text-yellow-600">
               {{ cow.baby }}
             </h1>
-            <p class="text-left mt-2 col-span-2"><BaseIcon
-                    class="text-rose-500 bg-red-900 rounded-full p-1 mr-2"
-                    path="waterOff"
-                    size="16"
-                  />โคดราย</p>
+            <p class="text-left mt-2 col-span-2">
+              <BaseIcon
+                class="text-rose-500 bg-red-900 rounded-full p-1 mr-2"
+                path="waterOff"
+                size="16"
+              />โคดราย
+            </p>
             <h1 class="lg:text-3xl text-2xl text-yellow-600">
               {{ cow.dry }}
             </h1>
@@ -54,27 +63,50 @@
           class="text-center grid grid-cols-1"
           header-icon=""
         >
-        <div v-if="doughnutChartData" class="lg:h-56">
-          <doughnut-chart :data="doughnutChartData" />
-        </div>
-          <!-- <div class="grid grid-cols-2 gap-5">
-            <p class="text-left mt-2">คุณภาพดี</p>
-            <h1 class="lg:text-3xl text-2xl text-yellow-600">
-              {{ cow.rawmilkQuality.good }}
+          <div v-if="doughnutChartData" class="lg:h-56">
+            <doughnut-chart :data="doughnutChartData" />
+          </div>
+        </CardBox>
+
+        <CardBox
+          :loading="loading.quality"
+          icon="cow"
+          title="คุณภาพโค"
+          class="text-center"
+          header-icon=""
+        >
+          <div class="grid grid-cols-2 gap-2">
+            <p class="bg-black text-2xl grid grid-cols-3 gap-5 rounded-full flex text-lime-500 ">
+              A+ <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร > 80%)</p>
+            </p>
+            <h1 class="lg:text-3xl text-xl ">
+              {{ quality.aplus }}
             </h1>
-            <p class="text-left mt-2">ปกติ</p>
-            <h1 class="lg:text-3xl text-2xl text-yellow-600">
-              {{ cow.rawmilkQuality.normal }}
+            <p class="bg-black text-2xl grid grid-cols-3 gap-5 rounded-full flex text-green-500 ">
+              A <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 51% ~ 80%)</p>
+            </p>
+            <h1 class="lg:text-3xl text-xl ">
+              {{ quality.a }}
             </h1>
-            <p class="text-left mt-2">แย่</p>
-            <h1 class="lg:text-3xl text-2xl text-yellow-600">
-              {{ cow.rawmilkQuality.bad }}
+            <p class="bg-black text-2xl grid grid-cols-3 gap-5 rounded-full flex ">
+              B <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 31% ~ 50%)</p>
+            </p>
+            <h1 class="lg:text-3xl text-xl ">
+              {{ quality.b }}
             </h1>
-            <p class="text-left mt-2">ไม่ได้ตรวจ</p>
-            <h1 class="lg:text-3xl text-2xl text-yellow-600">
-              {{ cow.rawmilkQuality.unchecked }}
+            <p class="bg-black text-2xl grid grid-cols-3 gap-5 rounded-full flex text-orange-500">
+              C <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 1% ~ 30%)</p>
+            </p>
+            <h1 class="lg:text-3xl text-xl">
+              {{ quality.c }}
             </h1>
-          </div> -->
+            <p class="bg-black text-2xl grid grid-cols-3 gap-5 rounded-full flex text-red-500">
+              D <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร &lt;= 0%)</p>
+            </p>
+            <h1 class="lg:text-3xl text-xl ">
+              {{ quality.d }}
+            </h1>
+          </div>
         </CardBox>
       </div>
 
@@ -87,7 +119,9 @@
         >
           <div class="text-center">
             <h1 class="">รีดนมแล้ว</h1>
-            <h1 class="mt-4 bg-indigo-900 p-1 rounded-lg text-blue-500 text-xl lg:text-3xl">
+            <h1
+              class="mt-4 bg-indigo-900 p-1 rounded-lg text-blue-500 text-xl lg:text-3xl"
+            >
               {{ milk.count }}
             </h1>
             <h1 class="mt-4">วัน</h1>
@@ -99,7 +133,9 @@
         >
           <div class="text-center">
             <h1 class="">น้ำนมดิบทั้งหมด</h1>
-            <h1 class="mt-4 bg-teal-900 text-green-500 p-1 rounded-lg text-xl lg:text-3xl">
+            <h1
+              class="mt-4 bg-teal-900 text-green-500 p-1 rounded-lg text-xl lg:text-3xl"
+            >
               {{ $filters.number(milk.sum) }}
             </h1>
             <h1 class="mt-4">กิโลกรัม</h1>
@@ -111,7 +147,9 @@
         >
           <div class="text-center">
             <h1 class="">น้ำนมดิบเฉลี่ย/วัน</h1>
-            <h1 class="mt-4 bg-amber-900 text-yellow-500 p-1 rounded-lg text-xl lg:text-3xl">
+            <h1
+              class="mt-4 bg-amber-900 text-yellow-500 p-1 rounded-lg text-xl lg:text-3xl"
+            >
               {{ $filters.number(milk.avg) }}
             </h1>
             <h1 class="mt-4">กิโลกรัม</h1>
@@ -131,17 +169,13 @@
         <div v-else>ไม่มีรายการรีดนม...</div>
       </CardBox>
 
-      
-
-      
-
       <CardBox
         icon="cashRegister"
         class="lg:col-span-3 mb-1 lg:mb-5"
         title="ผลประกอบการ"
         header-icon=""
       >
-        <div class="grid lg:grid-cols-4 grid-cols-1 gap-5 ">
+        <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
           <CardBox
             icon="accountCashOutline"
             class="border-gray-400 border-2 shadow-xl"
@@ -254,11 +288,15 @@
           >
             <div class="grid grid-cols-2 gap-5 grid-flow-row-dense">
               <p>รายได้</p>
-              <p class="text-right font-extrabold bg-teal-900 rounded p-1 text-green-500 ">
+              <p
+                class="text-right font-extrabold bg-teal-900 rounded p-1 text-green-500"
+              >
                 {{ $filters.currency(income.rawMilk) }}
               </p>
               <p>ค่าใช้จ่าย</p>
-              <p class="text-right font-extrabold bg-rose-300 rounded p-1 text-red-700 ">
+              <p
+                class="text-right font-extrabold bg-rose-300 rounded p-1 text-red-700"
+              >
                 {{
                   $filters.currency(sumExpense().sumCost + sumExpense().sumCare)
                 }}
@@ -275,9 +313,7 @@
             <div class="grid grid-cols-1 text-center">
               <p class="text-black text-xs">รวมต้นทุน</p>
 
-              <div
-                class="text-red-500 text-center text-2xl font-extrabold"
-              >
+              <div class="text-red-500 text-center text-2xl font-extrabold">
                 {{
                   sumExpense() ? $filters.currency(sumExpense().sumCost) : "-"
                 }}
@@ -320,17 +356,14 @@
             :class="
               (sumExpense().profit < 0
                 ? 'dark:bg-red-900 text-rose-500'
-                : 'dark:bg-teal-900 text-green-500') +
-              ' shadow-xl'
+                : 'dark:bg-teal-900 text-green-500') + ' shadow-xl'
             "
             title=""
             header-icon=""
           >
             <div class="grid grid-cols-1 text-center">
-               <p class="text-black text-xs">กำไร/ขาดทุน</p>
-              <div
-                class="text-center font-extrabold text-2xl"
-              >
+              <p class="text-black text-xs">กำไร/ขาดทุน</p>
+              <div class="text-center font-extrabold text-2xl">
                 {{
                   $filters.currency(
                     income.rawMilk -
@@ -475,7 +508,7 @@ export default {
   data() {
     return {
       lineChartData: null,
-      doughnutChartData : null,
+      doughnutChartData: null,
       lineChartColors: { primary: "#00D1B2", danger: "#FF3860" },
       milks: [],
       statistics: {},
@@ -483,6 +516,7 @@ export default {
       corrals: [],
       milk: {},
       cow: {},
+      quality : {},
       rawMilkDescSort: [],
       rawMilkAscSort: [],
       rawMilkSortColumns: [
@@ -536,6 +570,7 @@ export default {
       income: {},
       loading: {
         cow: true,
+        quality : true,
         milks: true,
         events: true,
         expense: true,
@@ -573,6 +608,7 @@ export default {
   created() {
     this.getIncome();
     this.getCow();
+    this.getQuality();
     this.getMilks();
     this.getEvents();
     this.getExpense();
@@ -590,6 +626,14 @@ export default {
       this.doughnutChartData = this.createDoughnutChart();
 
       this.loading.cow = false;
+    },
+    async getQuality() {
+      this.loading.quality = true;
+      const resp = await DashboardService.getQuality();
+      if (resp) {
+        this.quality = resp.data;
+      }
+      this.loading.quality = false;
     },
     async getMilks() {
       this.loading.milks = true;
@@ -719,15 +763,15 @@ export default {
       return {
         label: "คุณภาพน้ำนมดิบ",
         fill: true,
-        borderColor: '#000000',
+        borderColor: "#000000",
         borderWidth: 2,
         data: this.getDoughnutChartData(),
-        weight : 4,
-        backgroundColor : [
-          'rgb(16 185 129)',
-          'rgb(59 130 246)',
-          'rgb(244 63 94)',
-          'rgb(245 158 11)',
+        weight: 4,
+        backgroundColor: [
+          "rgb(16 185 129)",
+          "rgb(59 130 246)",
+          "rgb(244 63 94)",
+          "rgb(245 158 11)",
         ],
         hoverOffset: 4,
       };
@@ -747,7 +791,7 @@ export default {
     createDoughnutChart() {
       const labels = [];
 
-      quality('create').forEach((item) => {
+      quality("create").forEach((item) => {
         labels.push(`${item.label}`);
       });
 
