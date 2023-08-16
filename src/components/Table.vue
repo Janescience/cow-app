@@ -333,7 +333,7 @@ export default {
             if(!date){
                 return null
             }
-            return moment(new Date(date)).format('DD/MM/YYYY');
+            return moment(date).format('DD/MM/YYYY');
         },
         formatNumber(amt){
             return this.$filters.number(amt)

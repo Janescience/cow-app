@@ -32,6 +32,10 @@ class DashboardService{
     getStatistics(){
         return http.get('/dashboard/statistics');
     }
+
+    getTodoList(){
+        return http.get('/dashboard/todolist');
+    }
 }
 
 export default new DashboardService();
