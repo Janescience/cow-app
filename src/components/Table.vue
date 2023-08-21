@@ -128,11 +128,13 @@
         <CardBox 
             :title="title + ' ' + countChecked()"
             header-icon=""
+            :icon="icon"
             class="shadow-lg"
             v-else-if="loading" loading/>
         <CardBox 
             :title="title + ' ' + countChecked()"
             header-icon=""
+            :icon="icon"
             class="shadow-lg"
             v-else empty/>
 </template>
@@ -333,7 +335,7 @@ export default {
             if(!date){
                 return null
             }
-            return moment(new Date(date)).format('DD/MM/YYYY');
+            return moment(date).format('DD/MM/YYYY');
         },
         formatNumber(amt){
             return this.$filters.number(amt)

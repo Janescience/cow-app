@@ -4,51 +4,30 @@
       <SectionTitleBarSub icon="chartPie" title="ภาพรวมฟาร์ม" />
 
       <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-5 gap-1 mb-1 lg:mb-5">
-        <CardBox
-          :loading="loading.cow"
-          icon="cow"
-          title="สถานะโค"
-          class="text-center"
-          header-icon=""
-        >
+        <CardBox :loading="loading.cow" icon="cow" title="สถานะโค" class="text-center" header-icon="">
           <div class="grid grid-cols-3 gap-5">
             <p class="text-left mt-2 col-span-2">
-              <BaseIcon
-                class="bg-teal-900 rounded-full p-1 mr-2"
-                path="water"
-                size="16"
-              />
+              <BaseIcon class="bg-teal-900 rounded-full p-1 mr-2" path="water" size="16" />
               โครีดนม
             </p>
             <h1 class="lg:text-3xl text-2xl text-yellow-600">
               {{ cow.milk }}
             </h1>
             <p class="text-left mt-2 col-span-2">
-              <BaseIcon
-                class="text-blue-500 bg-indigo-900 rounded-full p-1 mr-2"
-                path="humanPregnant"
-                size="16"
-              />โคท้อง
+              <BaseIcon class="text-blue-500 bg-indigo-900 rounded-full p-1 mr-2" path="humanPregnant" size="16" />โคท้อง
             </p>
             <h1 class="lg:text-3xl text-2xl text-yellow-600">
               {{ cow.pregnant }}
             </h1>
             <p class="text-left mt-2 col-span-2">
-              <BaseIcon
-                class="text-yellow-500 bg-amber-900 rounded-full p-1 mr-2"
-                path="babyFaceOutline"
-                size="16"
-              />โคเด็ก
+              <BaseIcon class="text-yellow-500 bg-amber-900 rounded-full p-1 mr-2" path="babyFaceOutline" size="16" />
+              โคเด็ก
             </p>
             <h1 class="lg:text-3xl text-2xl text-yellow-600">
               {{ cow.baby }}
             </h1>
             <p class="text-left mt-2 col-span-2">
-              <BaseIcon
-                class="text-rose-500 bg-red-900 rounded-full p-1 mr-2"
-                path="waterOff"
-                size="16"
-              />โคดราย
+              <BaseIcon class="text-rose-500 bg-red-900 rounded-full p-1 mr-2" path="waterOff" size="16" />โคดราย
             </p>
             <h1 class="lg:text-3xl text-2xl text-yellow-600">
               {{ cow.dry }}
@@ -60,7 +39,7 @@
           :loading="loading.cow"
           icon="thermometerWater"
           title="คุณภาพนม"
-          class="text-center "
+          class="text-center"
           header-icon=""
         >
           <div v-if="doughnutChartData?.datasets[0]?.data[0] > 0" class="lg:h-56">
@@ -69,41 +48,45 @@
           <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
         </CardBox>
 
-        <CardBox
-          :loading="loading.quality"
-          icon="cow"
-          title="คุณภาพโค"
-          class="text-center"
-          header-icon=""
-        >
-          <div class="grid grid-cols-2 gap-2">
-            <p class="bg-black text-2xl grid grid-cols-3 gap-5 rounded-full flex text-lime-500 ">
-              A+ <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร > 80%)</p>
+        <CardBox :loading="loading.quality" icon="counter" title="คุณภาพโค" class="text-center" header-icon="">
+          <div class="grid grid-cols-4 gap-2 ">
+            <p class="bg-black text-2xl rounded-full text-lime-500 w-8 h-8">
+              A+
             </p>
+            <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร > 80%)</p>
+
             <h1 class="lg:text-3xl text-xl ">
               {{ quality.aplus }}
             </h1>
-            <p class="bg-black text-2xl grid grid-cols-3 gap-5 rounded-full flex text-green-500 ">
-              A <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 51% ~ 80%)</p>
+            <p class="bg-black text-2xl rounded-full  text-green-500 w-8 h-8">
+              A
             </p>
+            <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 51% ~ 80%)</p>
+
             <h1 class="lg:text-3xl text-xl ">
               {{ quality.a }}
             </h1>
-            <p class="bg-black text-2xl grid grid-cols-3 gap-5 rounded-full flex ">
-              B <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 31% ~ 50%)</p>
+            <p class="bg-black text-2xl w-8 h-8 rounded-full  ">
+              B
             </p>
+            <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 31% ~ 50%)</p>
+
             <h1 class="lg:text-3xl text-xl ">
               {{ quality.b }}
             </h1>
-            <p class="bg-black text-2xl grid grid-cols-3 gap-5 rounded-full flex text-orange-500">
-              C <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 1% ~ 30%)</p>
+            <p class="bg-black text-2xl w-8 h-8 rounded-full  text-orange-500">
+              C
             </p>
+            <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 1% ~ 30%)</p>
+
             <h1 class="lg:text-3xl text-xl">
               {{ quality.c }}
             </h1>
-            <p class="bg-black text-2xl grid grid-cols-3 gap-5 rounded-full flex text-red-500">
-              D <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร &lt;= 0%)</p>
+            <p class="bg-black text-2xl w-8 h-8 rounded-full  text-red-500">
+              D
             </p>
+            <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร &lt;= 0%)</p>
+
             <h1 class="lg:text-3xl text-xl ">
               {{ quality.d }}
             </h1>
@@ -111,46 +94,41 @@
         </CardBox>
       </div>
 
-      <div
-        class="grid grid-cols-3 gap-1 lg:gap-5 lg:text-3xl text-lg mb-1 lg:mb-5"
-      >
-        <CardBox
-          class="justify-center flex h-full w-full items-center"
-          header-icon=""
-        >
+      <div class="grid grid-cols-3 gap-1 lg:gap-5 lg:text-3xl text-lg mb-1 lg:mb-5">
+        <CardBox class="justify-center flex h-full w-full items-center" header-icon="">
           <div class="text-center">
             <h1 class="">รีดนมแล้ว</h1>
-            <h1
-              class="mt-4 bg-indigo-900 p-1 rounded-lg text-blue-500 text-xl lg:text-3xl"
-            >
-              {{ milk.count }}
+            <h1 class="mt-4 bg-indigo-900 p-1 rounded-lg text-blue-500 text-xl lg:text-3xl">
+              <div v-if="milk?.count >= 0">{{ milk.count }}</div>
+              <BaseIcon
+                v-else
+                path="dotsCircle"
+                size="22"
+                class="animate-spin"
+              />
             </h1>
             <h1 class="mt-4">วัน</h1>
           </div>
         </CardBox>
-        <CardBox
-          class="justify-center flex h-full w-full items-center"
-          header-icon=""
-        >
+        <CardBox class="justify-center flex h-full w-full items-center" header-icon="">
           <div class="text-center">
             <h1 class="">น้ำนมดิบทั้งหมด</h1>
-            <h1
-              class="mt-4 bg-teal-900 text-green-500 p-1 rounded-lg text-xl lg:text-3xl"
-            >
-              {{ $filters.number(milk.sum) }}
+            <h1 class="mt-4 bg-teal-900 text-green-500 p-1 rounded-lg text-xl lg:text-3xl">
+              <div v-if="milk.sum >= 0">{{ $filters.number(milk.sum) }}</div>
+              <BaseIcon
+                v-else
+                path="dotsCircle"
+                size="22"
+                class="animate-spin"
+              />
             </h1>
             <h1 class="mt-4">กิโลกรัม</h1>
           </div>
         </CardBox>
-        <CardBox
-          class="justify-center flex h-full w-full items-center"
-          header-icon=""
-        >
+        <CardBox class="justify-center flex h-full w-full items-center" header-icon="">
           <div class="text-center">
             <h1 class="">น้ำนมดิบเฉลี่ย/วัน</h1>
-            <h1
-              class="mt-4 bg-amber-900 text-yellow-500 p-1 rounded-lg text-xl lg:text-3xl"
-            >
+            <h1 class="mt-4 bg-amber-900 text-yellow-500 p-1 rounded-lg text-xl lg:text-3xl">
               {{ $filters.number(milk.avg) }}
             </h1>
             <h1 class="mt-4">กิโลกรัม</h1>
@@ -170,134 +148,89 @@
         <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
       </CardBox>
 
-      <CardBox
-        icon="cashRegister"
-        class="lg:col-span-3 mb-1 lg:mb-5"
-        title="ผลประกอบการ"
-        header-icon=""
-      >
+      <CardBox icon="cashRegister" class="lg:col-span-3 mb-1 lg:mb-5" title="ผลประกอบการ" header-icon="">
         <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
-          <CardBox
-            icon="accountCashOutline"
-            class="border-gray-400 border-2 shadow-xl"
-            title="ต้นทุน"
-            header-icon=""
-          >
+          <CardBox icon="accountCashOutline" class="border-gray-400 border-2 shadow-xl" title="ต้นทุน" header-icon="">
             <div class="grid grid-cols-2 gap-5">
               <p>อุปกรณ์</p>
               <p class="text-right">
                 {{
-                  expense.cost?.equipment
-                    ? $filters.currency(expense.cost.equipment)
-                    : "-"
+                  $filters.currency(expense?.cost?.equipment)
                 }}
               </p>
               <p>สิ่งปลูกสร้าง</p>
               <p class="text-right">
                 {{
-                  expense.cost?.building
-                    ? $filters.currency(expense.cost.building)
-                    : "-"
+                  $filters.currency(expense?.cost?.building)
                 }}
               </p>
               <p>การซ่อมบำรุง</p>
               <p class="text-right">
                 {{
-                  expense.cost?.maintenance
-                    ? $filters.currency(expense.cost.maintenance)
-                    : "-"
+                  $filters.currency(expense?.cost?.maintenance)
                 }}
               </p>
               <p>ค่าใช้จ่ายเพิ่มเติม</p>
               <p class="text-right">
                 {{
-                  expense.cost?.bill
-                    ? $filters.currency(expense.cost.bill)
-                    : "-"
+                  $filters.currency(expense?.cost?.bill)
                 }}
               </p>
             </div>
           </CardBox>
-          <CardBox
-            class="border-gray-400 border-2 shadow-xl"
-            icon="doctor"
-            title="ค่าดูแล"
-            header-icon=""
-          >
+          <CardBox class="border-gray-400 border-2 shadow-xl" icon="doctor" title="ค่าดูแล" header-icon="">
             <div class="grid grid-cols-2 gap-5 grid-flow-row-dense">
               <p>รักษา</p>
               <p class="text-right">
                 {{
-                  expense?.care?.heal
-                    ? $filters.currency(expense.care.heal)
-                    : "-"
+                  $filters.currency(expense?.care?.heal)
                 }}
               </p>
               <p>ป้องกัน/บำรุง</p>
               <p class="text-right">
                 {{
-                  expense?.care?.protection
-                    ? $filters.currency(expense.care.protection)
-                    : "-"
+                  $filters.currency(expense?.care?.protection)
                 }}
               </p>
               <p>อาหาร</p>
               <p class="text-right">
                 {{
-                  expense?.care?.food
-                    ? $filters.currency(expense.care.food)
-                    : "-"
+                  $filters.currency(expense?.care?.food)
                 }}
               </p>
               <p>จ้างคนงาน</p>
               <p class="text-right">
                 {{
-                  expense?.care?.worker
-                    ? $filters.currency(expense.care.worker)
-                    : "-"
+                  $filters.currency(expense?.care?.worker)
                 }}
               </p>
             </div>
           </CardBox>
-          <CardBox
-            icon="cashMultiple"
-            class="border-gray-400 border-2 shadow-xl"
-            title="ผลผลิต"
-            header-icon=""
-          >
+          <CardBox icon="cashMultiple" class="border-gray-400 border-2 shadow-xl" title="ผลผลิต" header-icon="">
             <div class="grid grid-cols-2 gap-5">
               <p>น้ำนมดิบ</p>
               <p class="text-right">
-                {{ income?.rawMilk ? $filters.currency(income.rawMilk) : "-" }}
+                {{ $filters.currency(income.rawMilk) }}
               </p>
               <p>นมพาสเจอร์ไรส์</p>
-              <p class="text-right">-</p>
+              <p class="text-right">{{ $filters.currency(0) }}</p>
               <p>มูลสัตว์</p>
-              <p class="text-right">-</p>
+              <p class="text-right">{{ $filters.currency(0) }}</p>
               <p>จำหน่ายโค</p>
-              <p class="text-right">-</p>
+              <p class="text-right">{{ $filters.currency(0) }}</p>
               <p>จำหน่ายเนื้อโค</p>
-              <p class="text-right">-</p>
+              <p class="text-right">{{ $filters.currency(0) }}</p>
             </div>
           </CardBox>
 
-          <CardBox
-            class="border-gray-300 border-4 shadow-xl"
-            icon="homeAnalytics"
-            title="สรุป"
-            header-icon=""
-          >
+          <CardBox class="border-gray-300 border-4 shadow-xl" icon="homeAnalytics" title="สรุป" header-icon="">
             <div class="grid grid-cols-2 gap-5 grid-flow-row-dense">
               <p>รายได้</p>
-              <p
-                class="text-right font-extrabold bg-teal-900 rounded p-1 text-green-500"
-              >
+              <p class="text-right font-extrabold bg-teal-900 rounded p-1 text-green-500">
                 {{ $filters.currency(income.rawMilk) }}
               </p>
               <p>ค่าใช้จ่าย</p>
-              <p
-                class="text-right font-extrabold bg-rose-300 rounded p-1 text-red-700"
-              >
+              <p class="text-right font-extrabold bg-rose-300 rounded p-1 text-red-700">
                 {{
                   $filters.currency(sumExpense().sumCost + sumExpense().sumCare)
                 }}
@@ -305,70 +238,49 @@
             </div>
           </CardBox>
 
-          <CardBox
-            icon=""
-            class="dark:bg-red-300 shadow-xl"
-            title=""
-            header-icon=""
-          >
+          <CardBox icon="" class="dark:bg-red-300 shadow-xl" title="" header-icon="">
             <div class="grid grid-cols-1 text-center">
               <p class="text-black text-xs">รวมต้นทุน</p>
 
               <div class="text-red-500 text-center text-2xl font-extrabold">
                 {{
-                  sumExpense() ? $filters.currency(sumExpense().sumCost) : "-"
+                  $filters.currency(sumExpense().sumCost) 
                 }}
               </div>
             </div>
           </CardBox>
-          <CardBox
-            class="dark:bg-red-300 shadow-xl"
-            icon=""
-            title=""
-            header-icon=""
-          >
+          <CardBox class="dark:bg-red-300 shadow-xl" icon="" title="" header-icon="">
             <div class="grid grid-cols-1 text-center">
               <p class="text-black text-xs">รวมค่าดูแล</p>
 
               <div class="text-red-500 text-center text-2xl font-extrabold">
                 {{
-                  sumExpense() ? $filters.currency(sumExpense().sumCare) : "-"
+                  $filters.currency(sumExpense().sumCare) 
                 }}
               </div>
             </div>
           </CardBox>
 
-          <CardBox
-            icon=""
-            class="dark:bg-teal-900 shadow-xl"
-            title=""
-            header-icon=""
-          >
+          <CardBox icon="" class="dark:bg-teal-900 shadow-xl" title="" header-icon="">
             <div class="grid grid-cols-1 text-center">
               <p class="text-black text-xs">รวมผลผลิต</p>
 
               <div class="text-green-500 text-center text-2xl font-extrabold">
-                {{ income.rawMilk ? $filters.currency(income.rawMilk) : "-" }}
+                {{ $filters.currency(income.rawMilk)  }}
               </div>
             </div>
           </CardBox>
-          <CardBox
-            icon=""
-            :class="
-              (sumExpense().profit < 0
-                ? 'dark:bg-red-900 text-rose-500'
-                : 'dark:bg-teal-900 text-green-500') + ' shadow-xl'
-            "
-            title=""
-            header-icon=""
-          >
+          <CardBox icon="" :class="(sumExpense().profit < 0
+              ? 'dark:bg-red-900 text-rose-500'
+              : 'dark:bg-teal-900 text-green-500') + ' shadow-xl'
+            " title="" header-icon="">
             <div class="grid grid-cols-1 text-center">
               <p class="text-black text-xs">กำไร/ขาดทุน</p>
               <div class="text-center font-extrabold text-2xl">
                 {{
                   $filters.currency(
                     income.rawMilk -
-                      (sumExpense().sumCost + sumExpense().sumCare)
+                    (sumExpense().sumCost + sumExpense().sumCare)
                   )
                 }}
               </div>
@@ -377,103 +289,86 @@
         </div>
       </CardBox>
 
-      <div class="grid grid-cols-2 lg:grid-cols-3 lg:gap-5 gap-1 mb-1 lg:mb-5">
-        <Table
-          title="คอก"
-          icon="barn"
-          :items="corrals"
-          :datas="corralColumns"
-          perPage="5"
-          :loading="loading.corral"
-        />
+      <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-5 gap-1 mb-1 lg:mb-5">
+        <CardBox icon="formatListChecks" title="รายการที่ต้องทำวันนี้" header-icon="" class=" row-span-2">
 
-        <Table
-          title="กำหนดการ"
-          icon="calendarBadgeOutline"
-          :items="events"
-          :datas="eventColumns"
-          perPage="5"
-          :loading="loading.events"
-        />
+        </CardBox>
+
+        <Table title="คอก" icon="barn" :items="corrals" :datas="corralColumns" perPage="5" :loading="loading.corral" />
+
+        <Table title="กำหนดการ" icon="calendarBadgeOutline" :items="events" :datas="eventColumns" perPage="5"
+          :loading="loading.events" />
+
+          <CardBox icon="sort" title="อันดับน้ำนมดิบ" header-icon="" class="lg:col-span-2">
+          <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
+            <Table title="มากที่สุด 5 อันดับ" :items="rawMilkDescSort" :datas="rawMilkSortColumns" no-paging
+              :loading="loading.rawMilkSort" />
+            <Table title="น้อยที่สุด 5 อันดับ" :items="rawMilkAscSort" :datas="rawMilkSortColumns" no-paging
+              :loading="loading.rawMilkSort" />
+          </div>
+        </CardBox>
+          
       </div>
 
-      <CardBox
-        icon="sort"
-        title="อันดับน้ำนมดิบ"
-        header-icon=""
-        class="lg:col-span-2 mb-1 lg:mb-5"
-      >
-        <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
-          <Table
-            title="มากที่สุด 5 อันดับ"
-            :items="rawMilkDescSort"
-            :datas="rawMilkSortColumns"
-            no-paging
-            :loading="loading.rawMilkSort"
-          />
-          <Table
-            title="น้อยที่สุด 5 อันดับ"
-            :items="rawMilkAscSort"
-            :datas="rawMilkSortColumns"
-            no-paging
-            :loading="loading.rawMilkSort"
-          />
+      <CardBox icon="" title="สถิติ" header-icon="" class=" mb-1 lg:mb-5">
+        <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
+          <CardBox title="การรักษา" header-icon="" class="dark:border-gray-800 border-4">
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1"><BaseIcon class="bg-red-900 text-rose-400 rounded-full p-1 mr-2" path="plusThick" size="16" />ทั้งหมด</p>
+              <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
+                {{ statistics?.heal?.count }}
+              </h1>            
+            </div>
+            <div class="grid grid-cols-5 gap-5" v-if="statistics?.heal?.max?.cow?.name">
+              <p class="mt-1 col-span-3">
+                โค{{ statistics?.heal?.max?.cow?.name }} รักษามากที่สุด
+              </p>
+              <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
+                {{ statistics?.heal?.max?.count }}
+              </h1>
+              <p class="mt-1">ครั้ง</p>
+            </div>
+          </CardBox>
+          <CardBox title="การสืบพันธุ์/ผสมพันธุ์" header-icon="" class="dark:border-gray-800 border-4">
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1"><BaseIcon class="bg-teal-900 text-green-500 rounded-full p-1 mr-2" path="check" size="16" />สำเร็จ</p>
+              <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
+                {{ statistics?.reproduction?.success }}
+              </h1>
+              <p class="mt-1"><BaseIcon class="bg-red-900 text-rose-500 rounded-full p-1 mr-2" path="close" size="16" />ล้มเหลว</p>
+              <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
+                {{ statistics?.reproduction?.fail }}
+              </h1>
+            </div>
+          </CardBox>
+          <CardBox title="การตั้งครรภ์" header-icon="" class="dark:border-gray-800 border-4">
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1"><BaseIcon class="bg-black text-gray-300 rounded-full p-1 mr-2" path="emoticonCryOutline" size="16" />แท้ง</p>
+              <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
+                {{ statistics?.pregnant?.count }}
+              </h1>
+              <p class="mt-1"><BaseIcon class="bg-orange-900 text-yellow-500 rounded-full p-1 mr-2" path="calendarClock" size="16" />ใกล้คลอด <div class="text-xs text-gray-500">(มากกว่า 8 เดือน)</div></p>
+              <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
+                {{ statistics?.pregnant?.nearBirth }}
+              </h1>
+            </div>
+          </CardBox>
+          <CardBox title="การคลอด" header-icon="" class="dark:border-gray-800 border-4">
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1"><BaseIcon class="bg-indigo-900 rounded-full p-1 mr-2" path="genderMale" size="16" />เพศผู้</p>
+              <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
+                {{ statistics?.born?.male }}
+              </h1>
+              <p class="mt-1"><BaseIcon class="bg-rose-900 rounded-full p-1 mr-2" path="genderFemale" size="16" />เพศเมีย</p>
+              <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
+                {{ statistics?.born?.female }}
+              </h1>
+            </div>
+          </CardBox>
+          
         </div>
       </CardBox>
-      <div class="grid lg:grid-cols-3 grid-cols-1 gap-5">
-        <CardBox title="สถิติการรักษา" header-icon="">
-          <div class="grid grid-cols-3 gap-5">
-            <p class="mt-1">รักษาทั้งหมด</p>
-            <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
-              {{ statistics?.heal?.count }}
-            </h1>
-            <p class="mt-1">ครั้ง</p>
-          </div>
-          <div class="grid grid-cols-5 gap-5">
-            <p class="mt-1 col-span-3">
-              โค{{ statistics?.heal?.max?.cow?.name }} รักษามากที่สุด
-            </p>
-            <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
-              {{ statistics?.heal?.max?.count }}
-            </h1>
-            <p class="mt-1">ครั้ง</p>
-          </div>
-        </CardBox>
 
-        <CardBox title="สถิติการคลอด" header-icon="">
-          <div class="grid grid-cols-3 gap-5">
-            <p class="mt-1">คลอดทั้งหมด</p>
-            <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
-              {{ statistics?.born?.count }}
-            </h1>
-            <p class="mt-1">ครั้ง</p>
-            <p class="mt-1">เพศผู้</p>
-            <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
-              {{ statistics?.born?.male }}
-            </h1>
-            <p class="mt-1">ตัว</p>
-            <p class="mt-1">เพศเมีย</p>
-            <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
-              {{ statistics?.born?.female }}
-            </h1>
-            <p class="mt-1">ตัว</p>
-          </div>
-        </CardBox>
-        <CardBox title="การตั้งครรภ์" header-icon="">
-          <div class="grid grid-cols-3 gap-5">
-            <p class="mt-1">กำลังตั้งครรภ์</p>
-            <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
-              {{ statistics?.pregnant?.count }}
-            </h1>
-            <p class="mt-1">ตัว</p>
-            <p class="mt-1">ใกล้คลอด (8 เดือน+)</p>
-            <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
-              {{ statistics?.pregnant?.nearBirth }}
-            </h1>
-            <p class="mt-1">ตัว</p>
-          </div>
-        </CardBox>
-      </div>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
@@ -515,9 +410,10 @@ export default {
       statistics: {},
       events: [],
       corrals: [],
+      todolist: {},
       milk: {},
       cow: {},
-      quality : {},
+      quality: {},
       rawMilkDescSort: [],
       rawMilkAscSort: [],
       rawMilkSortColumns: [
@@ -571,7 +467,7 @@ export default {
       income: {},
       loading: {
         cow: true,
-        quality : true,
+        quality: true,
         milks: true,
         events: true,
         expense: true,
@@ -579,6 +475,7 @@ export default {
         rawMilkSort: true,
         corral: true,
         statistic: true,
+        todolist: true,
       },
     };
   },
@@ -607,15 +504,16 @@ export default {
     },
   },
   created() {
-    this.getIncome();
     this.getCow();
-    this.getQuality();
+    this.getIncome();
     this.getMilks();
-    this.getEvents();
     this.getExpense();
     this.getRawMilkSort();
     this.getCorrals();
     this.getStatistics();
+    this.getTodoList();
+    this.getEvents();
+    this.getQuality();
   },
   methods: {
     async getCow() {
@@ -636,6 +534,14 @@ export default {
       }
       this.loading.quality = false;
     },
+    async getTodoList() {
+      this.loading.todolist = true;
+      const resp = await DashboardService.getTodoList();
+      if (resp) {
+        this.todolist = resp.data;
+      }
+      this.loading.todolist = false;
+    },
     async getMilks() {
       this.loading.milks = true;
       const resp = await DashboardService.getMilks();
@@ -647,7 +553,10 @@ export default {
           this.milk.sum += sum;
         }
         const milkGroupDate = _.groupBy(resp.data, "date");
-        this.milk.avg = this.milk.sum > 0 ? (this.milk.sum / Object.keys(milkGroupDate).length) : 0;
+        this.milk.avg =
+          this.milk.sum > 0
+            ? this.milk.sum / Object.keys(milkGroupDate).length
+            : 0;
         this.milk.count = Object.keys(milkGroupDate).length;
         this.milks = _.groupBy(resp.data, "month");
 
@@ -669,9 +578,14 @@ export default {
       const resp = await DashboardService.getEvents();
       if (resp) {
         this.events = _.orderBy(resp.data, "date");
+        const today = moment().format("DD/MM/YYYY");
+        let events = [];
         for (let event of this.events) {
-          event.date = moment(event.date).format("DD/MM/YYYY");
+          if (today === moment(event.date).format("DD/MM/YYYY")) {
+            events.push("โคครบกำหนดวันนี้");
+          }
         }
+        this.todolist.event = events;
       }
       this.loading.events = false;
     },
