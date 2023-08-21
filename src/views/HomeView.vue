@@ -60,12 +60,13 @@
           :loading="loading.cow"
           icon="thermometerWater"
           title="คุณภาพนม"
-          class="text-center grid grid-cols-1"
+          class="text-center "
           header-icon=""
         >
-          <div v-if="doughnutChartData" class="lg:h-56">
+          <div v-if="doughnutChartData?.datasets[0]?.data[0] > 0" class="lg:h-56">
             <doughnut-chart :data="doughnutChartData" />
           </div>
+          <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
         </CardBox>
 
         <CardBox
@@ -163,10 +164,10 @@
         class="lg:col-span-3 mb-1 lg:mb-5"
         header-icon=""
       >
-        <div v-if="lineChartData">
+        <div v-if="lineChartData?.datasets[0]?.data[0] > 0">
           <line-chart :data="lineChartData" />
         </div>
-        <div v-else>ไม่มีรายการรีดนม...</div>
+        <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
       </CardBox>
 
       <CardBox
@@ -646,7 +647,7 @@ export default {
           this.milk.sum += sum;
         }
         const milkGroupDate = _.groupBy(resp.data, "date");
-        this.milk.avg = this.milk.sum / Object.keys(milkGroupDate).length;
+        this.milk.avg = this.milk.sum > 0 ? (this.milk.sum / Object.keys(milkGroupDate).length) : 0;
         this.milk.count = Object.keys(milkGroupDate).length;
         this.milks = _.groupBy(resp.data, "month");
 

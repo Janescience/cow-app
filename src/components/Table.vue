@@ -128,12 +128,12 @@
         <CardBox 
             :title="title + ' ' + countChecked()"
             header-icon=""
-            class="shadow-lg mb-5"
+            class="shadow-lg"
             v-else-if="loading" loading/>
         <CardBox 
             :title="title + ' ' + countChecked()"
             header-icon=""
-            class="shadow-lg mb-5"
+            class="shadow-lg"
             v-else empty/>
 </template>
 
