@@ -23,7 +23,7 @@
       </section>
       <div class="grid lg:grid-cols-3 grid-cols-1 gap-5">
         <CardBox
-          class="lg:col-span-2 mb-5"
+          class="lg:col-span-2 lg:mb-5"
           :loading="loading.cow"
           title="ข้อมูลโค"
           header-icon=""
@@ -88,29 +88,31 @@
           header-icon=""
         > 
           <div class="grid grid-cols-3 gap-5">
-            <p :class="filterColor()?.grade+'  text-7xl font-extrabold text-center  '">
+            <p :class="filterColor()?.grade+'  text-center text-8xl font-extrabold bg-black rounded-full w-28 h-28 '">
               {{ quality?.grade }}
             </p>
-            <div class="row-span-2 col-span-2">
-              <p >ผลผลิตอยู่ในเกณฑ์ {{  quality?.description }} </p>
-            <p class="text-gray-500 text-xs">{{  filterText()?.percent }} </p>
+            <div class="row-span-3 col-span-2 text-center p-2">
+              <p :class="filterColor()?.grade + ' text-2xl font-extrabold'">{{ $filters.number(quality?.profit?.percent) }}%</p>
+              <p class="p-2">ผลผลิตอยู่ในเกณฑ์ {{  quality?.description }} </p>
+              <p class="text-gray-500 text-xs">{{  filterText()?.percent }} </p>
             </div>  
             
           </div>
-          <table class="shadow-lg dark:bg-gray-900 rounded-xl">
-            <tr>
-              <td>รายได้ทั้งหมด</td>
-              <td class="underline decoration-4 decoration-green-500">{{ $filters.currency(quality?.income?.sum) }}</td>
-            </tr>
-            <tr>
-              <td>ค่าใช้จ่ายทั้งหมด</td>
-              <td class="underline decoration-4 decoration-red-500">{{ $filters.currency(quality?.expense?.sum) }}</td>
-            </tr>
-            <tr>
-              <td>กำไร ({{ $filters.number(quality?.profit?.percent) }}%)</td>
-              <td :class="filterColor()?.profit">{{ $filters.currency(quality?.profit?.amount) }}</td>
-            </tr>
-          </table>
+          <div class="grid grid-cols-1 gap-5">
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1">รายได้ทั้งหมด</p>
+              <p class="bg-teal-900 p-1 text-lg text-center rounded-lg text-green-500">{{ $filters.currency(quality?.income?.sum) }}</p>
+            </div>
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1">ค่าใช้จ่ายทั้งหมด</p>
+              <p class="bg-red-900 p-1 text-lg text-center rounded-lg text-rose-400">{{ $filters.currency(quality?.expense?.sum) }}</p>
+            </div>
+            <hr class="border-t border-gray-100 dark:border-gray-600"/>
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1">กำไร </p>
+              <p :class="filterColor()?.profit + ' p-1 text-lg text-center rounded-lg'">{{ $filters.currency(quality?.profit?.amount) }}</p>
+            </div>
+          </div>
         </CardBox>
       </div>
       
@@ -288,7 +290,7 @@
         icon="messageBadgeOutline"
         class="transition-position mb-5"
         :loading="loading.notification"
-        v-if="!loading.notification && notifications.length > 0"
+        v-if="notifications.length > 0"
         title="การแจ้งเตือน"
         header-icon=""
       >
@@ -360,6 +362,7 @@ import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseIcon from "@/components/BaseIcon.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
+import BaseDivider from "@/components/BaseDivider.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import CardBox from "@/components/CardBox.vue";
 import CardBoxCollapse from "@/components/CardBoxCollapse.vue";
@@ -708,6 +711,7 @@ export default {
     ImageUpload,
     Table,
     CardBoxCollapse,
+    BaseDivider
   },
   computed: {
     canRemove() {
@@ -853,6 +857,7 @@ export default {
         }
         this.loading.milk = false;
 
+        this.loading.notification = true
         const notiResp = await NotificationService.getCalendar({ cow: id });
         if (notiResp.data) {
           const groupCode = _.groupBy(notiResp.data.events, "code");
@@ -891,6 +896,7 @@ export default {
           }
           this.notifications = _.orderBy(notifications, "dueDate", "desc");
         }
+        this.loading.notification = false
       }
     },
     async update() {
@@ -1005,21 +1011,21 @@ export default {
     filterColor(){
       const grade = this.quality?.grade
       if(grade === 'A+'){
-        return { grade : 'text-lime-500 ',profit : 'text-lime-500'}
+        return { grade : 'text-lime-500 p-1 ',profit : 'bg-green-900 text-lime-500'}
       }else if(grade === 'A'){
-        return { grade : 'text-green-500 ',profit : 'text-green-500'}
+        return { grade : 'text-green-500 ',profit : 'bg-teal-900 text-green-500'}
       }else if(grade === 'B'){
-        return { grade : '',profit : ''}
+        return { grade : 'p-1 ',profit : 'bg-gray-600 text-white'}
       }else if(grade === 'C'){
-        return { grade : 'text-orange-500 ',profit : 'text-orange-500'}
+        return { grade : 'text-orange-500 p-1',profit : 'bg-orange-900 text-yellow-500'}
       }else if(grade === 'D'){
-        return { grade : 'text-red-500',profit : 'text-red-500 '}
+        return { grade : 'text-red-500 p-1 ',profit : 'bg-red-900 text-rose-400 '}
       }
     },
     filterText(){
       const grade = this.quality?.grade
       if(grade === 'A+'){
-        return { percent : '(กำไรมากกว่า 80%)'}
+        return { percent : '(กำไร > 80%)'}
       }else if(grade === 'A'){
         return { percent : '(กำไร 51% - 80%)'}
       }else if(grade === 'B'){
@@ -1027,7 +1033,7 @@ export default {
       }else if(grade === 'C'){
         return { percent : '(กำไร 0% - 30%)'}
       }else if(grade === 'D'){
-        return { percent : '(กำไรน้อยกว่า 0%)'}
+        return { percent : '(กำไร <= 0%)'}
       }
     },
     formatDate(date) {

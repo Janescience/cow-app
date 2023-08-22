@@ -46,6 +46,12 @@
               </BaseLevel>
             <div class="text-center mt-2">
               <h4 class="lg:text-xl text-md flex justify-center">
+                <BaseIcon
+                  v-if="filter(item)?.quality?.icon"
+                  :path="filter(item)?.quality?.icon"
+                  size="16"
+                  :class="filter(item)?.quality?.style"
+                />
                 <p  :class="filter(item)?.grade?.style+'  font-extrabold  lg:text-base text-sm text-center dark:bg-black rounded-full lg:h-6 h-5 w-6 shadow-xl mr-1'">
                   <div v-if="item.grade">{{ item.grade }}</div>
                   <div v-else>
@@ -324,19 +330,20 @@ export default {
     filter(item){
       const status = {}
       const grade = {}
+      const quality = {}
 
       if (item.status == 1) {
         status.icon ='humanPregnant'
-        status.style = 'warning'
+        status.style = 'text-blue-500 bg-indigo-900 rounded-full p-1 mr-2'
       }else if (item.status == 2) {
         status.icon ='waterOff'
-        status.style = 'danger'
+        status.style = 'text-rose-500 bg-red-900 rounded-full p-1 mr-2'
       }else if (item.status == 3) {
         status.icon ='water'
-        status.style = 'success'
+        status.style = 'bg-teal-900 rounded-full p-1 mr-2'
       }else if (item.status == 4) {
         status.icon ='babyFaceOutline'
-        status.style = 'light'
+        status.style = 'text-yellow-500 bg-amber-900 rounded-full p-1 mr-2'
       }
 
       status.desc = this.cowStatus[item.status].label
@@ -353,7 +360,20 @@ export default {
         grade.style = 'text-red-500'
       }
 
-      return {status,grade}
+      if (item.quality == 1) {
+        quality.icon = 'thumbUp'
+        quality.style = 'text-blue-500 '
+      }else if (item.quality == 2) {
+        quality.style = ''
+      }else if (item.quality == 3) {
+        quality.icon = 'thumbDown'
+        quality.style = 'text-red-500 '
+      }else if (item.quality == 4) {
+        quality.icon = 'testTubeOff'
+        quality.style = 'text-yellow-500 '
+      }
+
+      return {status,grade,quality}
     },
     calAge(bdDate){
       return getAge(bdDate);

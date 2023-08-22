@@ -48,48 +48,78 @@
           <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
         </CardBox>
 
-        <CardBox :loading="loading.quality" icon="counter" title="คุณภาพโค" class="text-center" header-icon="">
+        <CardBox  icon="counter" title="คุณภาพโค" class="text-center" header-icon="">
           <div class="grid grid-cols-4 gap-2 ">
             <p class="bg-black text-2xl rounded-full text-lime-500 w-8 h-8">
               A+
             </p>
             <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร > 80%)</p>
 
-            <h1 class="lg:text-3xl text-xl ">
+            <h1 class="lg:text-3xl text-xl " v-if="!loading.quality">
               {{ quality.aplus }}
             </h1>
+            <BaseIcon
+                v-else
+                path="dotsCircle"
+                size="22"
+                class="animate-spin text-gray-500"
+              />
             <p class="bg-black text-2xl rounded-full  text-green-500 w-8 h-8">
               A
             </p>
             <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 51% ~ 80%)</p>
 
-            <h1 class="lg:text-3xl text-xl ">
+            <h1 class="lg:text-3xl text-xl " v-if="!loading.quality">
               {{ quality.a }}
             </h1>
+            <BaseIcon
+                v-else
+                path="dotsCircle"
+                size="22"
+                class="animate-spin text-gray-500"
+              />
             <p class="bg-black text-2xl w-8 h-8 rounded-full  ">
               B
             </p>
             <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 31% ~ 50%)</p>
 
-            <h1 class="lg:text-3xl text-xl ">
+            <h1 class="lg:text-3xl text-xl " v-if="!loading.quality">
               {{ quality.b }}
             </h1>
+            <BaseIcon
+                v-else
+                path="dotsCircle"
+                size="22"
+                class="animate-spin text-gray-500"
+              />
             <p class="bg-black text-2xl w-8 h-8 rounded-full  text-orange-500">
               C
             </p>
             <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 1% ~ 30%)</p>
 
-            <h1 class="lg:text-3xl text-xl">
+            <h1 class="lg:text-3xl text-xl" v-if="!loading.quality">
               {{ quality.c }}
             </h1>
+            <BaseIcon
+                v-else
+                path="dotsCircle"
+                size="22"
+                class="animate-spin text-gray-500"
+              />
             <p class="bg-black text-2xl w-8 h-8 rounded-full  text-red-500">
               D
             </p>
             <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร &lt;= 0%)</p>
 
-            <h1 class="lg:text-3xl text-xl ">
+            <h1 class="lg:text-3xl text-xl " v-if="!loading.quality">
               {{ quality.d }}
             </h1>
+            <BaseIcon
+                v-else
+                path="dotsCircle"
+                size="22"
+                class="animate-spin text-gray-500"
+              />
           </div>
         </CardBox>
       </div>
@@ -290,8 +320,34 @@
       </CardBox>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-5 gap-1 mb-1 lg:mb-5">
-        <CardBox icon="formatListChecks" title="รายการที่ต้องทำวันนี้" header-icon="" class=" row-span-2">
+        <CardBox icon="formatListChecks" title="รายการที่ต้องทำ" header-icon="" class=" row-span-2">
+          รายวัน
+            <div class="grid grid-cols-1 gap-3 mt-5 mb-5">
+              <FormCheckRadioPicker
+                  v-for="todo in todolist.milk" :key="todo"
+                  name="does"
+                  :options="{ remember: todo }"
+                />
+            </div>
 
+          รายเดือน
+          <div class="grid grid-cols-1 gap-3 mt-5 mb-5" >
+              <FormCheckRadioPicker
+                  v-for="todo in todolist.food" :key="todo"
+                  name="does"
+                  :options="{ remember: todo }"
+                />
+                <FormCheckRadioPicker
+                  v-for="todo in todolist.salary" :key="todo"
+                  name="does"
+                  :options="{ remember: todo }"
+                />
+          </div>
+
+            ครบกำหนด
+            <div class="grid grid-cols-1 gap-3 mt-5 mb-5">
+              -
+            </div>
         </CardBox>
 
         <Table title="คอก" icon="barn" :items="corrals" :datas="corralColumns" perPage="5" :loading="loading.corral" />
@@ -319,14 +375,14 @@
                 {{ statistics?.heal?.count }}
               </h1>            
             </div>
-            <div class="grid grid-cols-5 gap-5" v-if="statistics?.heal?.max?.cow?.name">
-              <p class="mt-1 col-span-3">
-                โค{{ statistics?.heal?.max?.cow?.name }} รักษามากที่สุด
+            <div class="grid grid-cols-2 gap-5 mt-5" v-if="statistics?.heal?.max?.cow?.name">
+              <p class="mt-1">
+                <BaseIcon class="bg-gray-700 text-white rounded-full p-1 mr-2" path="cow" size="16" />โค{{ statistics?.heal?.max?.cow?.name }} 
+                <div class="text-xs text-gray-500">(รักษามากที่สุด)</div>
               </p>
               <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
                 {{ statistics?.heal?.max?.count }}
               </h1>
-              <p class="mt-1">ครั้ง</p>
             </div>
           </CardBox>
           <CardBox title="การสืบพันธุ์/ผสมพันธุ์" header-icon="" class="dark:border-gray-800 border-4">
@@ -392,6 +448,7 @@ import FormControl from "@/components/FormControl.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import Table from "@/components/Table.vue";
+import FormCheckRadioPicker from "@/components/FormCheckRadioPicker.vue";
 
 import DashboardService from "@/services/dashboard";
 import moment from "moment";
@@ -497,6 +554,7 @@ export default {
     UserAvatar,
     BaseDivider,
     Table,
+    FormCheckRadioPicker
   },
   computed: {
     user() {
