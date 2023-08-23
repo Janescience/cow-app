@@ -27,24 +27,27 @@
           hoverable
         >
           <BaseLevel type="justify-center mt-3">
-            <BaseIcon
-              path="barn"
-              size="58"
-              class="dark:text-gray-600"
-            />
+            <div class="bg-orange-900 rounded-full w-20 h-20 justify-center flex items-center">
+              <BaseIcon
+                  path="barn"
+                  size="50"
+                  class="dark:text-orange-500 "
+                />
+            </div>
+            
           </BaseLevel>
           <div class="text-center mt-2">
             <h4 class="lg:text-3xl text-xl ">
                คอก {{ item.corral }} 
             </h4>
-            <p v-if="item.qty" class="lg:text-md dark:text-gray-600 text-sm ">
-               จำนวนรวม {{ item.qty }} กก. 
+            <p v-if="item.qty" class="lg:text-md dark:text-gray-400 text-sm ">
+               จำนวนรวม {{ $filters.number(item.qty) }} กก. 
             </p>
-            <p v-if="item.amount" class="lg:text-md dark:text-gray-600 text-sm ">
-               ราคารวม {{ item.amount }} บาท 
+            <p v-if="item.amount" class="lg:text-md dark:text-gray-400 text-sm ">
+               ราคารวม {{ $filters.currency(item.amount) }}  
             </p>
-            <p v-if="!item.qty" class="lg:text-md dark:text-gray-600 text-sm ">
-               ไม่ได้บันทึกการให้อาหาร
+            <p v-if="!item.qty" class="lg:text-md dark:text-gray-600 text-xs ">
+               (ไม่ได้บันทึกการให้อาหาร)
             </p>
           </div>
         </CardBox>

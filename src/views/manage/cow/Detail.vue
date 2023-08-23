@@ -32,11 +32,18 @@
           <div
             class="grid gap-5 grid-cols-2 lg:grid-cols-4 md:grid-cols-6"
           >
-            <div class="row-span-2">
-              <ImageUpload v-model="cow.image" class="mt-12 mr-2" />
+            <div class="lg:row-span-3 col-span-2 lg:col-span-1">
+              <ImageUpload v-model="cow.image" class="lg:mt-12 mr-2" />
               <BaseLevel type="justify-center text-xs font-thin text-slate-500">
                 อัพโหลดรูปภาพ (คลิกที่รูป)
               </BaseLevel>
+              <BaseButtons
+              type="justify-center"
+              class="mt-5"
+            >
+              <BaseButton label="ลบ" color="danger" @click="remove()" />
+              <BaseButton label="บันทึก" color="success" @click="update()" />
+            </BaseButtons>
             </div>
             <FormField label="รหัสโค" help="* ห้ามว่าง">
               <FormControl v-model="cow.code" icon="barcode" required />
@@ -52,6 +59,9 @@
                 required
               />
             </FormField>
+            <FormField label="น้ำหนัก (กก.)">
+              <FormControl v-model="cow.weight" icon="weight" />
+            </FormField>
             <FormField label="สถานะ" help="* ห้ามว่าง">
               <FormControl
                 v-model="cow.status"
@@ -66,13 +76,7 @@
             <FormField label="คอก">
               <FormControl v-model="cow.corral" icon="barn" />
             </FormField>
-            <BaseButtons
-              type="justify-center"
-              class=""
-            >
-              <BaseButton label="ลบ" color="danger" @click="remove()" />
-              <BaseButton label="บันทึก" color="success" @click="update()" />
-            </BaseButtons>
+            
             <FormField label="พ่อพันธุ์">
               <FormControl v-model="cow.dad" icon="genderMale" />
             </FormField>
@@ -146,22 +150,31 @@
         </div>
       </CardBox>
 
-      <CardBoxCollapse
+      <CardBox
         icon="foodDrumstickOutline"
         class="transition-position mb-5"
         title="การกินอาหาร"
+        has-table
         header-icon=""
       >
-        <Table
-          :items="foods"
-          :datas="foodDatas"
-          :loading="loading.food"
-          perPage="5"
-        />
-      </CardBoxCollapse>
+        <div class="grid grid-cols-1 gap-5 lg:p-4">
+          <Table
+            title="รายการกินอาหาร"
+            :items="foods"
+            :datas="foodDatas"
+            :loading="loading.food"
+            perPage="5"
+          />
+          <di class="flex justify-end lg:mb-0 mb-5">
+              รวมกินทั้งหมด <p class="ml-1 mr-1 underline decoration-2 font-extrabold">{{ $filters.number(food()?.sum?.qty) }}</p> กก. 
+               คิดเป็นเงิน <p class="ml-1 mr-1 underline decoration-2 font-extrabold">{{ $filters.currency(food()?.sum?.amount) }}</p>
+          </di>
+        </div>
+        
+      </CardBox>
 
       <!-- <div class="grid gap-5 grid-cols-1 "> -->
-      <CardBoxCollapse
+      <CardBox
         icon="calendarClock"
         class="transition-position mb-5"
         has-table
@@ -171,7 +184,7 @@
         <div class="grid lg:grid-cols-3 grid-cols-1 gap-5 lg:p-4">
           <CardBox
             icon="reproduction"
-            class="lg:col-span-2 dark:border-gray-600 border-gray-900"
+            class="lg:col-span-2 dark:border-gray-800 border-4"
             :loading="loading.reproduct"
             title="การสืบพันธุ์/ผสมพันธุ์"
             header-icon=""
@@ -216,7 +229,7 @@
 
           <CardBox
             icon="babyFace"
-            class="dark:border-gray-600 border-gray-900"
+            class="dark:border-gray-800 border-4"
             :loading="loading.birth"
             title="การคลอดลูก"
             header-icon=""
@@ -228,7 +241,7 @@
                   <td>{{ birth().count }}</td>
                 </tr>
                 <tr>
-                  <td>วันที่</td>
+                  <td>วันที่ล่าสุด</td>
                   <td>{{ birth().lastDate }}</td>
                 </tr>
                 <tr>
@@ -245,7 +258,7 @@
           <CardBox
             icon="doctor"
             :loading="loading.heal"
-            class="dark:border-gray-600 border-gray-900"
+            class="dark:border-gray-800 border-4"
             title="การรักษา"
             header-icon=""
           >
@@ -281,35 +294,40 @@
             />
           </div>
         </div>
-      </CardBoxCollapse>
+      </CardBox>
 
       
       <!-- </div> -->
 
-      <CardBoxCollapse
+      <CardBox
         icon="messageBadgeOutline"
         class="transition-position mb-5"
         :loading="loading.notification"
         v-if="notifications.length > 0"
         title="การแจ้งเตือน"
         header-icon=""
+        has-table
       >
-        <Table
-          title=""
-          :items="notifications"
-          :datas="notificationDatas"
-          :loading="loading.notification"
-          perPage="5"
-        />
-      </CardBoxCollapse>
+        <div class="grid grid-cols-1 gap-5 lg:p-4">
+          <Table
+            title=""
+            :items="notifications"
+            :datas="notificationDatas"
+            :loading="loading.notification"
+            perPage="5"
+          />
+        </div>
+        
+      </CardBox>
       
-      <CardBoxCollapse
+      <CardBox
         icon="history"
         class="transition-position mb-5"
         title="ประวัติต่างๆ"
         header-icon=""
+        has-table
       >
-        <div class="grid grid-cols-1 gap-5">
+        <div class="grid grid-cols-1 gap-5 lg:p-4">
           <Table
             title="ประวัติการรีดนม"
             :items="historyMilks"
@@ -349,7 +367,7 @@
             perPage="5"
           />
         </div>
-      </CardBoxCollapse>
+      </CardBox>
       
     </SectionMain>
   </LayoutAuthenticated>
@@ -609,6 +627,7 @@ export default {
         {
           label: "แจ้งเตือน",
           class: "text-center",
+          style : 'classIcon',
           value: "alert",
           type: "icon",
         },
@@ -889,6 +908,9 @@ export default {
               dueDate: dueDate,
               before: before,
               after: after,
+              classIcon : today.isAfter(dueDate)
+                ? "bg-teal-900 text-green-500 rounded-full p-1"
+                : "bg-red-900 text-rose-400 rounded-full p-1",
               alert: today.isAfter(dueDate)
                 ? "bellCheckOutline"
                 : "bellAlertOutline",
@@ -1007,6 +1029,15 @@ export default {
           : "-";
 
       return { count, lastDate, lastDisease, lastMethod };
+    },
+    food() {
+      const sum = {qty:0,amount:0}
+      for(let food of this.foods){
+        const days = new Date(food.year,food.month,0).getDate()
+        sum.qty += ((food.foodDetails.reduce((sum, item) => sum + item.qty, 0) * days)/food.numCow)
+        sum.amount += ((food.foodDetails.reduce((sum, item) => sum + item.amount, 0) * days)/food.numCow)
+      }
+      return {sum};
     },
     filterColor(){
       const grade = this.quality?.grade

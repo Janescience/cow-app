@@ -82,7 +82,8 @@
                     <BaseIcon
                         v-else-if="row.type === 'icon'"
                         :path="getValue(obj,row)"
-                        size="22"
+                        :class="getStyle(obj,row)"
+                        size="18"
                     />
                     <span v-else >{{ getValue(obj,row) }}</span>
                   </td>
@@ -256,6 +257,14 @@ export default {
                     return this.formatDate(value)
                 case 'image':
                     return value
+                case 'icon':
+                    return value
+            }
+        },
+        getStyle(obj,row){
+            const value =  this.getPropByString(obj,row.style);
+
+            switch (row.type) {
                 case 'icon':
                     return value
             }
