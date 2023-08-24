@@ -15,7 +15,7 @@
         :search="search"
         btnSubmitLabel="ออกรายงาน"
         :btnLoading="loading"
-        :collapse="true"
+        :collapse="false"
       />
     </SectionMain>
   </LayoutAuthenticated>

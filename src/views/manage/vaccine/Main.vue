@@ -113,7 +113,8 @@ export default {
         {
           label : "ราคาวัคซีน/ขวด",
           class : 'text-center',
-          value : 'price'
+          value : 'price',
+          type : 'currency'
         },
         {
           label : "ใช้ได้ (ตัว)",
@@ -123,7 +124,14 @@ export default {
         {
           label : "คิดเป็นเงิน/ตัว",
           class : 'text-center',
-          value : 'amount'
+          value : 'amount',
+          type : 'currency'
+        },
+        {
+          label : "เริ่มฉีดวัคซีน",
+          class : 'text-center',
+          value : 'startDate',
+          type : 'date'
         },
         {
           label : "ฉีดวัคซีนล่าสุด",
