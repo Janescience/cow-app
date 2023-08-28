@@ -114,23 +114,21 @@ export default {
         },
         {
           label : "อาการ/โรค",
-          class : 'text-center',
           value : 'disease',
         },
         {
           label : "วิธีการรักษา",
-          class : 'text-center',
           value : 'method',
         },
         {
           label : "คนรักษา",
-          class : 'text-center',
           value : 'healer',
         },
         {
           label : "ค่ารักษา",
-          class : 'text-center',
+          class : 'text-right',
           value : 'amount',
+          type : 'currency'
         },
       ],
       buttons : [

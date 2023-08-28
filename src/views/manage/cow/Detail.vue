@@ -92,17 +92,17 @@
           header-icon=""
         > 
           <div class="grid grid-cols-3 gap-5">
-            <p :class="filterColor()?.grade+'  text-center text-8xl font-extrabold bg-black rounded-full w-28 h-28 '">
+            <p :class="filterColor()?.grade+'  text-center text-7xl font-extrabold mt-3'">
               {{ quality?.grade }}
             </p>
             <div class="row-span-3 col-span-2 text-center p-2">
-              <p :class="filterColor()?.grade + ' text-2xl font-extrabold'">{{ $filters.number(quality?.profit?.percent) }}%</p>
-              <p class="p-2">ผลผลิตอยู่ในเกณฑ์ {{  quality?.description }} </p>
+              <p :class="filterColor()?.grade + ' text-xl font-extrabold'">{{ $filters.number(quality?.profit?.percent) }}%</p>
+              <p class="p-2">ผลผลิตอยู่ในเกณฑ์ <p :class="filterColor()?.grade">{{  quality?.description }} </p></p>
               <p class="text-gray-500 text-xs">{{  filterText()?.percent }} </p>
             </div>  
             
           </div>
-          <div class="grid grid-cols-1 gap-5">
+          <div class="grid grid-cols-1 gap-5 mt-5">
             <div class="grid grid-cols-2 gap-5">
               <p class="mt-1">รายได้ทั้งหมด</p>
               <p class="bg-teal-900 p-1 text-lg text-center rounded-lg text-green-500">{{ $filters.currency(quality?.income?.sum) }}</p>
@@ -134,16 +134,31 @@
               <th class="whitespace-nowrap text-center">เฉลี่ย/วัน (กก.)</th>
               <th class="whitespace-nowrap text-center">เฉลี่ยเช้า/วัน (กก.)</th>
               <th class="whitespace-nowrap text-center">เฉลี่ยบ่าย/วัน (กก.)</th>
-              <th class="whitespace-nowrap text-center">รวมทั้งหมด (กก.)</th>
+              <th class="whitespace-nowrap text-center">รวมน้ำนมทั้งหมด (กก.)</th>
+              <th class="whitespace-nowrap text-center">รวมเป็นเงินทั้งหมด</th>
             </thead>
             <tbody>
               <tr>
-                <td class="whitespace-nowrap text-right">
-                  {{ milk.avgTotal }}
+                <td class="whitespace-nowrap text-center font-extrabold ">
+                  <BaseIcon path="water" size="16"  class="text-white bg-green-900 rounded-full   mr-1"/>
+                  ~ {{ $filters.number(milk.avgTotal) }}
                 </td>
-                <td class="text-right">{{ milk.avgMorning }}</td>
-                <td class="text-right">{{ milk.avgAfternoon }}</td>
-                <td class="text-right">{{ milk.all }}</td>
+                <td class="whitespace-nowrap  text-center font-extrabold ">          
+                    <BaseIcon path="clockTimeEightOutline" size="16"  class="text-yellow-500 bg-orange-900 rounded-full  mr-1"/>
+                    ~ {{ $filters.number(milk.avgMorning) }}
+                  </td>
+                <td class="whitespace-nowrap  text-center font-extrabold ">
+                  <BaseIcon path="clockTimeThreeOutline" size="16" class="text-orange-500 bg-red-900 rounded-full  mr-1" />
+                  ~ {{ $filters.number(milk.avgAfternoon) }}
+                </td>
+                <td class="whitespace-nowrap  text-center font-extrabold ">
+                  <BaseIcon path="cupWater" size="16" class="text-white bg-black rounded-full  mr-1" />
+                  {{ $filters.number(milk.all) }}
+                </td>
+                <td class="whitespace-nowrap  text-center font-extrabold ">
+                  <BaseIcon path="cash" size="16" class="text-teal-500 bg-green-900 rounded-full mr-1" />
+                  {{ $filters.currency(milk.amount) }}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -154,6 +169,7 @@
         icon="foodDrumstickOutline"
         class="transition-position mb-5"
         title="การกินอาหาร"
+        v-if="foods.length > 0"
         has-table
         header-icon=""
       >
@@ -181,11 +197,90 @@
         title="ข้อมูลล่าสุด"
         header-icon=""
       >
-        <div class="grid lg:grid-cols-3 grid-cols-1 gap-5 lg:p-4">
+        <div class="grid lg:grid-cols-2 grid-cols-1 gap-5 lg:p-4">
+          
+
+          <CardBox
+            icon="babyFace"
+            class="dark:border-gray-800 border-4"
+            :loading="loading.birth"
+            title="การคลอดลูก"
+            v-if="birth().count > 0"
+            header-icon=""
+          >
+            <table>
+              <tbody>
+                <tr>
+                  <td>จำนวนครั้ง</td>
+                  <td>{{ birth().count }}</td>
+                </tr>
+                <tr>
+                  <td>วันที่ล่าสุด</td>
+                  <td>{{ birth().lastDate }}</td>
+                </tr>
+                <tr>
+                  <td>จำนวนเพศผู้</td>
+                  <td>{{ birth().countMale }}</td>
+                </tr>
+                <tr>
+                  <td>จำนวนเพศเมีย</td>
+                  <td>{{ birth().countFemale }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </CardBox>
+          <CardBox
+            title="การคลอดลูก"
+            header-icon=""
+            icon="babyFace"
+            class="dark:border-gray-800 border-4 text-center h-28"
+            v-else
+          >
+            <p class="text-gray-500 text-sm">ไม่เคยคลอดลูก</p>
+          </CardBox>
+          <CardBox
+            icon="doctor"
+            :loading="loading.heal"
+            v-if="heal().count > 0"
+            class="dark:border-gray-800 border-4"
+            title="การรักษา"
+            header-icon=""
+          >
+            <table>
+              <tbody>
+                <tr>
+                  <td class="whitespace-nowrap">จำนวนครั้ง</td>
+                  <td>{{ heal().count }}</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">วันที่ล่าสุด</td>
+                  <td class="whitespace-nowrap">{{ heal().lastDate }}</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">อาการ/โรค</td>
+                  <td class="whitespace-nowrap">{{ heal().lastDisease }}</td>
+                </tr>
+                <tr>
+                  <td class="whitespace-nowrap">วิธีการรักษา</td>
+                  <td class="whitespace-nowrap">{{ heal().lastMethod }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </CardBox>
+          <CardBox
+            title="การรักษา"
+            header-icon=""
+            icon="babyFace"
+            class="dark:border-gray-800 border-4 text-center h-28"
+            v-else
+          >
+            <p class="text-gray-500 text-sm">ไม่เคยรักษา</p>
+          </CardBox>
           <CardBox
             icon="reproduction"
             class="lg:col-span-2 dark:border-gray-800 border-4"
             :loading="loading.reproduct"
+            v-if="reproduct().login.count > 0"
             title="การสืบพันธุ์/ผสมพันธุ์"
             header-icon=""
           >
@@ -226,62 +321,14 @@
               </table>
             </div>
           </CardBox>
-
           <CardBox
+            title="การสืบพันธุ์/ผสมพันธุ์"
+            header-icon=""
             icon="babyFace"
-            class="dark:border-gray-800 border-4"
-            :loading="loading.birth"
-            title="การคลอดลูก"
-            header-icon=""
+            class="dark:border-gray-800 border-4 text-center h-28"
+            v-else
           >
-            <table>
-              <tbody>
-                <tr>
-                  <td>จำนวนครั้ง</td>
-                  <td>{{ birth().count }}</td>
-                </tr>
-                <tr>
-                  <td>วันที่ล่าสุด</td>
-                  <td>{{ birth().lastDate }}</td>
-                </tr>
-                <tr>
-                  <td>จำนวนเพศผู้</td>
-                  <td>{{ birth().countMale }}</td>
-                </tr>
-                <tr>
-                  <td>จำนวนเพศเมีย</td>
-                  <td>{{ birth().countFemale }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </CardBox>
-          <CardBox
-            icon="doctor"
-            :loading="loading.heal"
-            class="dark:border-gray-800 border-4"
-            title="การรักษา"
-            header-icon=""
-          >
-            <table>
-              <tbody>
-                <tr>
-                  <td class="whitespace-nowrap">จำนวนครั้ง</td>
-                  <td>{{ heal().count }}</td>
-                </tr>
-                <tr>
-                  <td class="whitespace-nowrap">วันที่</td>
-                  <td class="whitespace-nowrap">{{ heal().lastDate }}</td>
-                </tr>
-                <tr>
-                  <td class="whitespace-nowrap">อาการ/โรค</td>
-                  <td class="whitespace-nowrap">{{ heal().lastDisease }}</td>
-                </tr>
-                <tr>
-                  <td class="whitespace-nowrap">วิธีการรักษา</td>
-                  <td class="whitespace-nowrap">{{ heal().lastMethod }}</td>
-                </tr>
-              </tbody>
-            </table>
+            <p class="text-gray-500 text-sm">ไม่เคยสืบพันธุ์/ผสมพันธุ์</p>
           </CardBox>
           <div class="lg:col-span-2">
             <Table
@@ -751,6 +798,7 @@ export default {
       let count = 0;
       let totalM = 0;
       let totalA = 0;
+      let totalAmount = 0;
       this.historyMilks = [];
       Object.keys(this.milks).forEach((key) => {
         let milks = this.milks[key];
@@ -769,6 +817,7 @@ export default {
               aQty += d.qty;
             }
             amount += d.amount;
+            totalAmount += d.amount;
           });
 
           if (m.milkDetails.length > 0) {
@@ -789,10 +838,11 @@ export default {
       let avgMorning = totalM / count;
       let avgAfternoon = totalA / count;
       return {
-        avgTotal: (count > 0 ? avgTotal : 0).toFixed(2),
-        avgMorning: (count > 0 ? avgMorning : 0).toFixed(2),
-        avgAfternoon: (count > 0 ? avgAfternoon : 0).toFixed(2),
-        all: (totalM + totalA).toFixed(2),
+        avgTotal: (count > 0 ? avgTotal : 0),
+        avgMorning: (count > 0 ? avgMorning : 0),
+        avgAfternoon: (count > 0 ? avgAfternoon : 0),
+        all: totalM + totalA,
+        amount : totalAmount
       };
     },
   },

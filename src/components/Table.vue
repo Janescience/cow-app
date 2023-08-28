@@ -53,8 +53,7 @@
                         <th 
                             v-for="header in datas" 
                             :key="header.label" 
-                            class="whitespace-nowrap" 
-                            :class="[header.class]">
+                            class="whitespace-nowrap text-center">
                             {{ header.label }}
                         </th>
                         <th v-if="buttons.length > 0"/>

@@ -14,15 +14,10 @@
       >
       
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-1">
-          <FormField label="โค" help="* ห้ามว่าง">
+          <FormField label="โค" help="* ห้ามว่าง" class="lg:col-span-1 col-span-2">
             <DDLCow v-model="reproduct.cow" valueType="object" />
           </FormField>
-          <FormField label="พ่อพันธุ์" help="">
-            <FormControl
-              v-model="reproduct.dad"
-              icon="genderMale"
-            />
-          </FormField>
+          
           
           <FormField label="วันที่เข้าระบบสืบพันธุ์" help="* ห้ามว่าง">
             <FormControl
@@ -75,6 +70,12 @@
             <FormControl
               v-model="reproduct.status"
               :options="status"
+            />
+          </FormField>
+          <FormField label="พ่อพันธุ์" help="">
+            <FormControl
+              v-model="reproduct.dad"
+              icon="genderMale"
             />
           </FormField>
         </div>
