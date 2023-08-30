@@ -40,11 +40,11 @@
             <h4 class="lg:text-3xl text-xl ">
                คอก {{ item.corral }} 
             </h4>
-            <p v-if="item.qty" class="lg:text-md dark:text-gray-400 text-sm ">
-               จำนวนรวม {{ $filters.number(item.qty) }} กก. 
+            <p v-if="item.qty" class="lg:text-md dark:text-gray-400 text-sm flex justify-center">
+               จำนวนรวม <div class="underline decoration-2 ml-1 mr-1">{{ $filters.number(item.qty) }}</div> กก. 
             </p>
-            <p v-if="item.amount" class="lg:text-md dark:text-gray-400 text-sm ">
-               ราคารวม {{ $filters.currency(item.amount) }}  
+            <p v-if="item.amount" class="lg:text-md dark:text-gray-400 flex text-sm justify-center ">
+               ราคารวม <div class="underline decoration-2 ml-1 mr-1">{{ $filters.currency(item.amount) }}  </div>
             </p>
             <p v-if="!item.qty" class="lg:text-md dark:text-gray-600 text-xs ">
                (ไม่ได้บันทึกการให้อาหาร)

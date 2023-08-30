@@ -9,7 +9,6 @@ import { RouterView } from 'vue-router'
 import TokenService from '@/services/token'
 import 'moment/dist/locale/th';
 
-
 export default {
   components : {
     RouterView

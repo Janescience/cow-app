@@ -127,34 +127,40 @@ import {months,years} from '@/constants/date'
           },
           {
             label : 'จำนวนวัว',
+            class : 'text-right',
             value : 'numCow',
           },
           {
             label : 'จำนวนสูตร',
+            class : 'text-right',
             func : (obj) => {
               return obj.foodDetails.length;
             }
           },
           {
             label : 'รวมจำนวนที่ให้/วัน (กก.)',
+            class : 'text-right',
             func : (obj) => {
-              return obj.foodDetails.reduce((sum, item) => sum + item.qty, 0);
+              return this.$filters.number(obj.foodDetails.reduce((sum, item) => sum + item.qty, 0));
             }
           },
           {
             label : 'รวมเป็นเงิน/วัน',
+            class : 'text-right',
             func : (obj) => {
               return this.$filters.currency(obj.foodDetails.reduce((sum, item) => sum + item.amount, 0));
             }
           },
           {
             label : 'รวมจำนวนที่ให้/เดือน (กก.)',
+            class : 'text-right',
             func : (obj) => {
               return this.$filters.number(obj.foodDetails.reduce((sum, item) => sum + item.qty, 0) * new Date(obj.year,obj.month,0).getDate());
             }
           },
           {
             label : 'รวมเป็นเงิน/เดือน',
+            class : 'text-right',
             func : (obj) => {
               return this.$filters.currency(obj.foodDetails.reduce((sum, item) => sum + item.amount, 0) * new Date(obj.year,obj.month,0).getDate())
             }
