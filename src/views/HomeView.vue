@@ -7,7 +7,7 @@
         <CardBox :loading="loading.cow" icon="cow" title="สถานะโค" class="text-center" header-icon="">
           <div class="grid grid-cols-3 gap-5">
             <p class="text-left mt-2 col-span-2">
-              <BaseIcon class="bg-teal-900 rounded-full p-1 mr-2" path="water" size="16" />
+              <BaseIcon class="text-white bg-teal-900 rounded-full p-1 mr-2" path="water" size="16" />
               โครีดนม
             </p>
             <h1 class="lg:text-3xl text-2xl text-yellow-600">
@@ -78,7 +78,7 @@
                 size="22"
                 class="animate-spin text-gray-500"
               />
-            <p class="bg-black text-2xl w-8 h-8 rounded-full  ">
+            <p class="bg-black text-white text-2xl w-8 h-8 rounded-full  ">
               B
             </p>
             <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 31% ~ 50%)</p>
@@ -268,7 +268,7 @@
             </div>
           </CardBox>
 
-          <CardBox icon="" class="dark:bg-red-300 shadow-xl" title="" header-icon="">
+          <CardBox icon="" class="dark:bg-red-300 bg-red-300 shadow-xl" title="" header-icon="">
             <div class="grid grid-cols-1 text-center">
               <p class="text-black text-xs">รวมต้นทุน</p>
 
@@ -279,7 +279,7 @@
               </div>
             </div>
           </CardBox>
-          <CardBox class="dark:bg-red-300 shadow-xl" icon="" title="" header-icon="">
+          <CardBox class="dark:bg-red-300 bg-red-300 shadow-xl" icon="" title="" header-icon="">
             <div class="grid grid-cols-1 text-center">
               <p class="text-black text-xs">รวมค่าดูแล</p>
 
@@ -291,7 +291,7 @@
             </div>
           </CardBox>
 
-          <CardBox icon="" class="dark:bg-teal-900 shadow-xl" title="" header-icon="">
+          <CardBox icon="" class="dark:bg-teal-900 bg-teal-900 shadow-xl" title="" header-icon="">
             <div class="grid grid-cols-1 text-center">
               <p class="text-black text-xs">รวมผลผลิต</p>
 
@@ -301,8 +301,8 @@
             </div>
           </CardBox>
           <CardBox icon="" :class="(sumExpense().profit < 0
-              ? 'dark:bg-red-900 text-rose-500'
-              : 'dark:bg-teal-900 text-green-500') + ' shadow-xl'
+              ? 'dark:bg-red-900 bg-red-900 text-rose-500'
+              : 'dark:bg-teal-900 bg-teal-900 text-green-500') + ' shadow-xl'
             " title="" header-icon="">
             <div class="grid grid-cols-1 text-center">
               <p class="text-black text-xs">กำไร/ขาดทุน</p>
@@ -411,11 +411,11 @@
           </CardBox>
           <CardBox title="การคลอด" header-icon="" class="dark:border-gray-800 border-4">
             <div class="grid grid-cols-2 gap-5">
-              <p class="mt-1"><BaseIcon class="bg-indigo-900 rounded-full p-1 mr-2" path="genderMale" size="16" />เพศผู้</p>
+              <p class="mt-1"><BaseIcon class="bg-indigo-900 text-white rounded-full p-1 mr-2" path="genderMale" size="16" />เพศผู้</p>
               <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
                 {{ statistics?.born?.male }}
               </h1>
-              <p class="mt-1"><BaseIcon class="bg-rose-900 rounded-full p-1 mr-2" path="genderFemale" size="16" />เพศเมีย</p>
+              <p class="mt-1"><BaseIcon class="bg-rose-900 text-white rounded-full p-1 mr-2" path="genderFemale" size="16" />เพศเมีย</p>
               <h1 class="lg:text-xl text-lg text-yellow-600 text-center">
                 {{ statistics?.born?.female }}
               </h1>

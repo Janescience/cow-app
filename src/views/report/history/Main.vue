@@ -3,8 +3,8 @@
     <SectionMain>
 
       <SectionTitleBarSub 
-        icon="doctor" 
-        title="ประวัติและคุณลักษณะของวัว"
+        icon="cow" 
+        title="ข้อมูลโค"
       />
 
       <Criteria
@@ -14,9 +14,9 @@
         :forms="forms" 
         :search="search"
         btnSubmitLabel="ออกรายงาน"
+        :btnLoading="loading"
       />
 
-      <div v-html="excelHtml"></div>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
@@ -29,15 +29,11 @@ import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 import Criteria from "@/components/Criteria.vue";
 
 import ReportService from '@/services/report'
-
-import { Toast } from "@/utils/alert";
-
-import * as XLSX from 'xlsx';
+import moment from 'moment'
 
 export default {
   data (){
     return {
-      excelHtml : "",
       forms : [
         {
           label : 'โค',
@@ -73,7 +69,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([resp.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'cows.xlsx');
+        link.setAttribute('download', 'ข้อมูลโค '+moment().format('DDMMYYYYHHmm')+'.xlsx');
         document.body.appendChild(link);
         link.click();
         link.remove();

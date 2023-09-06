@@ -33,6 +33,7 @@
             v-for="item in itemsPaginated"
             :key="item.name"
             @click="detail(item)"
+            class="bg-gray-200"
             has-table
             hoverable
           >
@@ -46,13 +47,8 @@
               </BaseLevel>
             <div class="text-center mt-2">
               <h4 class="lg:text-xl text-md flex justify-center">
-                <BaseIcon
-                  v-if="filter(item)?.quality?.icon"
-                  :path="filter(item)?.quality?.icon"
-                  size="16"
-                  :class="filter(item)?.quality?.style"
-                />
-                <p  :class="filter(item)?.grade?.style+'  font-extrabold  lg:text-base text-sm text-center dark:bg-black rounded-full lg:h-6 h-5 w-6 shadow-xl mr-1'">
+                
+                <p  :class="filter(item)?.grade?.style+'  font-extrabold  lg:text-base text-sm text-center bg-black rounded-full lg:h-6 h-5 w-6 shadow-xl mr-1'">
                   <div v-if="item.grade">{{ item.grade }}</div>
                   <div v-else>
                     <BaseIcon
@@ -71,9 +67,9 @@
                 
                 {{ item.name }} 
               </h4>
-              <div class="grid lg:grid-cols-5 grid-cols-2 gap-1 mt-2 lg:p-2">
+              <div class="grid lg:grid-cols-6 grid-cols-2 gap-1 mt-2 lg:p-2">
                 
-                <p class="text-gray-900 col-span-2 font-bold  text-sm text-center dark:bg-zinc-500 lg:rounded  h-6 min-w-4 shadow-lg">
+                <p class="text-gray-900 col-span-2 font-bold  text-sm text-center dark:bg-zinc-500 bg-white lg:rounded  h-6 min-w-4 shadow">
                   <BaseLevel
                     type="justify-between"
                   >
@@ -85,7 +81,7 @@
 
                   </BaseLevel>
                 </p>
-                <p class=" font-bold  dark:bg-zinc-900 lg:rounded h-6 text-sm min-full lg:col-span-3 col-span-2 shadow-lg">
+                <p class=" font-bold  dark:bg-zinc-900 lg:rounded h-6 text-sm min-full lg:col-span-3 bg-white col-span-2 shadow">
                   <BaseLevel
                     type="justify-between"
                   >
@@ -98,7 +94,21 @@
                   <div class="mr-2 ">{{ filter(item)?.status?.desc }}</div>
                   </BaseLevel>
                 </p>
-                <p class="text-left dark:bg-zinc-700 text-gray-300 lg:rounded h-6 min-w-4 text-xs lg:col-span-3 col-span-2 shadow-lg">
+                <p class="text-left dark:bg-zinc-700 text-black font-bold lg:rounded bg-white h-6 min-w-4 text-sm shadow">
+                  <BaseLevel
+                    type="justify-center"
+                  >
+                  <BaseIcon
+                  v-if="filter(item)?.quality?.icon"
+                  :path="filter(item)?.quality?.icon"
+                  size="16"
+                  :class="filter(item)?.quality?.style"
+                />
+
+                  </BaseLevel>
+                  
+                </p>
+                <p class="text-left dark:bg-zinc-700 text-black font-bold lg:rounded bg-white h-6 min-w-4 text-sm col-span-3 shadow">
                   <BaseLevel
                     type="justify-between"
                   >
@@ -111,7 +121,7 @@
                   </BaseLevel>
                   
                 </p>
-                <p class="text-left dark:bg-gray-700 text-black font-bold lg:rounded h-6 min-w-4 text-xs  col-span-2 shadow-lg">
+                <p class="text-left dark:bg-gray-700 text-black font-bold lg:rounded bg-white h-6 min-w-4 text-sm  lg:col-span-3 col-span-2 shadow">
                   <BaseLevel
                     type="justify-between"
                   >
@@ -334,16 +344,16 @@ export default {
 
       if (item.status == 1) {
         status.icon ='humanPregnant'
-        status.style = 'text-blue-500 bg-indigo-900 rounded-full p-1 mr-2'
+        status.style = 'text-blue-500 bg-indigo-900 rounded-l  p-1 mr-2'
       }else if (item.status == 2) {
         status.icon ='waterOff'
-        status.style = 'text-rose-500 bg-red-900 rounded-full p-1 mr-2'
+        status.style = 'text-rose-500 bg-red-900 rounded-l p-1 mr-2'
       }else if (item.status == 3) {
         status.icon ='water'
-        status.style = 'bg-teal-900 rounded-full p-1 mr-2'
+        status.style = 'text-white bg-teal-900 rounded-l p-1 mr-2'
       }else if (item.status == 4) {
         status.icon ='babyFaceOutline'
-        status.style = 'text-yellow-500 bg-amber-900 rounded-full p-1 mr-2'
+        status.style = 'text-yellow-500 bg-amber-900 rounded-l p-1 mr-2'
       }
 
       status.desc = this.cowStatus[item.status].label
@@ -353,7 +363,7 @@ export default {
       }else if(item.grade === 'A'){
         grade.style = 'text-green-500'
       }else if(item.grade === 'B'){
-        grade.style = ''
+        grade.style = 'text-white'
       }else if(item.grade === 'C'){
         grade.style = 'text-orange-500'
       }else if(item.grade === 'D'){
