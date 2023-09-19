@@ -69,7 +69,7 @@
               </h4>
               <div class="grid lg:grid-cols-6 grid-cols-2 gap-1 mt-2 lg:p-2">
                 
-                <p class="text-gray-900 col-span-2 font-bold  text-sm text-center dark:bg-zinc-500 bg-white lg:rounded  h-6 min-w-4 shadow">
+                <p class="dark:text-gray-300 col-span-2 font-bold  text-sm text-center dark:bg-gray-800 bg-white lg:rounded  h-6 min-w-4 shadow">
                   <BaseLevel
                     type="justify-between"
                   >
@@ -81,7 +81,7 @@
 
                   </BaseLevel>
                 </p>
-                <p class=" font-bold  dark:bg-zinc-900 lg:rounded h-6 text-sm min-full lg:col-span-3 bg-white col-span-2 shadow">
+                <p class="dark:text-gray-300 font-bold  dark:bg-gray-800 lg:rounded h-6 text-sm min-full lg:col-span-3 bg-white col-span-2 shadow">
                   <BaseLevel
                     type="justify-between"
                   >
@@ -94,7 +94,7 @@
                   <div class="mr-2 ">{{ filter(item)?.status?.desc }}</div>
                   </BaseLevel>
                 </p>
-                <p class="text-left dark:bg-zinc-700 text-black font-bold lg:rounded bg-white h-6 min-w-4 text-sm shadow">
+                <p class="dark:text-gray-300 text-left dark:bg-gray-800 font-bold lg:rounded bg-white h-6 min-w-4 text-sm shadow">
                   <BaseLevel
                     type="justify-center"
                   >
@@ -108,7 +108,7 @@
                   </BaseLevel>
                   
                 </p>
-                <p class="text-left dark:bg-zinc-700 text-black font-bold lg:rounded bg-white h-6 min-w-4 text-sm col-span-3 shadow">
+                <p class="dark:text-gray-300 text-left dark:bg-gray-800 font-bold lg:rounded bg-white h-6 min-w-4 text-sm col-span-3 shadow">
                   <BaseLevel
                     type="justify-between"
                   >
@@ -121,7 +121,7 @@
                   </BaseLevel>
                   
                 </p>
-                <p class="text-left dark:bg-gray-700 text-black font-bold lg:rounded bg-white h-6 min-w-4 text-sm  lg:col-span-3 col-span-2 shadow">
+                <p class="dark:text-gray-300 text-left dark:bg-gray-800  font-bold lg:rounded bg-white h-6 min-w-4 text-sm  lg:col-span-3 col-span-2 shadow">
                   <BaseLevel
                     type="justify-between"
                   >
@@ -372,15 +372,17 @@ export default {
 
       if (item.quality == 1) {
         quality.icon = 'thumbUp'
-        quality.style = 'text-blue-500 '
+        quality.style = 'text-blue-600 '
       }else if (item.quality == 2) {
+        quality.icon = 'thumbsUpDown'
+
         quality.style = ''
       }else if (item.quality == 3) {
         quality.icon = 'thumbDown'
-        quality.style = 'text-red-500 '
+        quality.style = 'text-red-600 '
       }else if (item.quality == 4) {
-        quality.icon = 'testTubeOff'
-        quality.style = 'text-yellow-500 '
+        quality.icon = 'flaskEmptyOffOutline'
+        quality.style = 'text-orange-500 '
       }
 
       return {status,grade,quality}

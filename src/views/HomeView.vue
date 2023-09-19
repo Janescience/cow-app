@@ -48,12 +48,14 @@
           <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
         </CardBox>
 
-        <CardBox  icon="counter" title="คุณภาพโค" class="text-center" header-icon="">
-          <div class="grid grid-cols-4 gap-2 ">
-            <p class="bg-black text-2xl rounded-full text-lime-500 w-8 h-8">
+        <CardBox  icon="counter" title="คุณภาพโค" header-icon="">
+          <div class="grid grid-cols-5 gap-2 ml-3 ">
+            <p class="text-2xl text-lime-500 font-extrabold">
               A+
             </p>
-            <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร > 80%)</p>
+            <p class=" mt-2 col-span-3 flex">ดีมาก<p class="text-xs text-gray-500  mt-1 ml-2 ">(กำไร > 80%)</p></p>
+
+            
 
             <h1 class="lg:text-3xl text-xl " v-if="!loading.quality">
               {{ quality.aplus }}
@@ -64,10 +66,12 @@
                 size="22"
                 class="animate-spin text-gray-500"
               />
-            <p class="bg-black text-2xl rounded-full  text-green-500 w-8 h-8">
+            <p class="text-2xl  text-green-500  font-extrabold">
               A
             </p>
-            <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 51% ~ 80%)</p>
+            <p class="mt-2 col-span-3 flex ">ดี<p class="text-xs text-gray-500 mt-1 ml-2 ">(กำไร 51% ~ 80%)</p></p>
+
+            
 
             <h1 class="lg:text-3xl text-xl " v-if="!loading.quality">
               {{ quality.a }}
@@ -78,10 +82,12 @@
                 size="22"
                 class="animate-spin text-gray-500"
               />
-            <p class="bg-black text-white text-2xl w-8 h-8 rounded-full  ">
+            <p class="dark:text-white text-black text-2xl   font-extrabold">
               B
             </p>
-            <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 31% ~ 50%)</p>
+            <p class="text-sm  mt-2 col-span-3 flex">ปกติ<p class="text-xs text-gray-500  mt-1 ml-2 ">(กำไร 31% ~ 50%)</p></p>
+
+            
 
             <h1 class="lg:text-3xl text-xl " v-if="!loading.quality">
               {{ quality.b }}
@@ -92,10 +98,12 @@
                 size="22"
                 class="animate-spin text-gray-500"
               />
-            <p class="bg-black text-2xl w-8 h-8 rounded-full  text-orange-500">
+            <p class="text-2xl   text-orange-500 font-extrabold">
               C
             </p>
-            <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร 1% ~ 30%)</p>
+            <p class="text-left mt-2 col-span-3 flex">แย่<p class="text-xs text-gray-500 mt-1 ml-2">(กำไร 1% ~ 30%)</p></p>
+
+            
 
             <h1 class="lg:text-3xl text-xl" v-if="!loading.quality">
               {{ quality.c }}
@@ -106,10 +114,11 @@
                 size="22"
                 class="animate-spin text-gray-500"
               />
-            <p class="bg-black text-2xl w-8 h-8 rounded-full  text-red-500">
+            <p class="text-2xl   text-red-500 font-extrabold">
               D
             </p>
-            <p class="text-xs text-gray-500 text-left mt-2 col-span-2">(กำไร &lt;= 0%)</p>
+            <p class="text-left mt-2 col-span-3 flex">แย่มาก<p class="text-xs text-gray-500 text-left mt-1 ml-2">(กำไร &lt;= 0%)</p></p>
+
 
             <h1 class="lg:text-3xl text-xl " v-if="!loading.quality">
               {{ quality.d }}
@@ -159,7 +168,13 @@
           <div class="text-center">
             <h1 class="">น้ำนมดิบเฉลี่ย/วัน</h1>
             <h1 class="mt-4 bg-amber-900 text-yellow-500 p-1 rounded-lg text-xl lg:text-3xl">
-              {{ $filters.number(milk.avg) }}
+              <div v-if="milk.avg >= 0">{{ $filters.number(milk.avg) }}</div>
+              <BaseIcon
+                v-else
+                path="dotsCircle"
+                size="22"
+                class="animate-spin"
+              />
             </h1>
             <h1 class="mt-4">กิโลกรัม</h1>
           </div>
