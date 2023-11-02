@@ -8,7 +8,10 @@ To install Dairy Farm, clone the repository and run `npm install` to install all
 
 ## Usage
 
-To run the development server, run `npm run dev`. To build the project for production, run `npm run build`. To preview the production build, run `npm run preview`. To lint the codebase, run `npm run lint`. 
+- Run the development server, run `npm run dev`. 
+- Build the project for production, run `npm run build`. 
+- Preview the production build, run `npm run preview`.
+- Lint the codebase, run `npm run lint`. 
 
 ## Dependencies 
 - @mdi/js: ^7.0.96 
