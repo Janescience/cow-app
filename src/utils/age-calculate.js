@@ -52,16 +52,16 @@ export default (dob,n) => {
     var  ageString = "";
        
     if ( (age.years > 0) && (age.months > 0) && (age.days > 0) )  
-       ageString = age.years + " ปี " + age.months + " เดือน " 
+       ageString = age.years + "." + age.months + " ปี " 
       //  + age.days + " วัน";  
     else if ( (age.years == 0) && (age.months == 0) && (age.days > 0) )  
        ageString = age.days + " วัน";  
     else if ( (age.years > 0) && (age.months == 0) && (age.days == 0) )  
       ageString = age.years +  " ปี (วันเกิด)";  
     else if ( (age.years > 0) && (age.months > 0) && (age.days == 0) )  
-      ageString = age.years + " ปี " + age.months + " เดือน";  
+      ageString = age.years + "." + age.months + " ปี ";  
     else if ( (age.years == 0) && (age.months > 0) && (age.days > 0) )  
-      ageString = age.months + " เดือน " + age.days + " วัน";  
+      ageString = age.months + "." + age.days + " เดือน ";  
     else if ( (age.years > 0) && (age.months == 0) && (age.days > 0) )  
       ageString = age.years + " ปี " 
       // + age.days + " วัน";  

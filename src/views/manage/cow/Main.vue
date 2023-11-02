@@ -58,16 +58,10 @@
                     />
                   </div>
                 </p>
-                <!-- <BaseIcon
-                  v-if="item.quality === 2"
-                  class="text-amber-400"
-                  path="crownCircleOutline"
-                  size="20"
-                /> -->
                 
                 {{ item.name }} 
               </h4>
-              <div class="grid lg:grid-cols-6 grid-cols-2 gap-1 mt-2 lg:p-2">
+              <div class="grid lg:grid-cols-6  grid-cols-2 gap-1 mt-2 lg:p-2">
                 
                 <p class="dark:text-gray-300 col-span-2 font-bold  text-sm text-center dark:bg-gray-800 bg-white lg:rounded  h-6 min-w-4 shadow">
                   <BaseLevel
@@ -112,10 +106,7 @@
                   <BaseLevel
                     type="justify-between"
                   >
-                  <BaseIcon
-                    path="timelapse"
-                    size="16"
-                  />
+                  <div class="ml-1 ">อายุ</div>
                   <div class="mr-2 ">{{ calAge(item.birthDate) }}</div>
 
                   </BaseLevel>
@@ -129,7 +120,7 @@
                     path="cupWater"
                     size="16"
                   />
-                  <div v-if="item.sum" class="mr-2 ">{{ $filters.number(item.sum?.rawmilk) }}</div>
+                  <div v-if="item.sum" class="mr-2 ">~ {{ $filters.number(item.sum?.rawmilk) }}</div>
                     <BaseIcon
                         v-else
                         path="dotsCircle"

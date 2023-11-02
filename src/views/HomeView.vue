@@ -133,11 +133,19 @@
         </CardBox>
       </div>
 
-      <div class="grid grid-cols-3 gap-1 lg:gap-5 lg:text-3xl text-lg mb-1 lg:mb-5">
-        <CardBox class="justify-center flex h-full w-full items-center" header-icon="">
+      
+
+      <CardBox
+        :title="'น้ำนมดิบ ปี ' + new Date().getFullYear()"
+        icon="chartBellCurveCumulative"
+        class="lg:col-span-3 mb-1 lg:mb-5"
+        header-icon=""
+      >
+      <div class="grid grid-cols-3 gap-1 lg:gap-5 lg:text-xl  mb-1 lg:mb-5">
+        <CardBox class="justify-center flex h-full w-full items-center dark:border-gray-800 border-4" header-icon="">
           <div class="text-center">
             <h1 class="">รีดนมแล้ว</h1>
-            <h1 class="mt-4 bg-indigo-900 p-1 rounded-lg text-blue-500 text-xl lg:text-3xl">
+            <h1 class="mt-4 bg-indigo-900 p-1 rounded-lg text-blue-500 ">
               <div v-if="milk?.count >= 0">{{ milk.count }}</div>
               <BaseIcon
                 v-else
@@ -149,10 +157,10 @@
             <h1 class="mt-4">วัน</h1>
           </div>
         </CardBox>
-        <CardBox class="justify-center flex h-full w-full items-center" header-icon="">
+        <CardBox class="justify-center flex h-full w-full items-center dark:border-gray-800 border-4" header-icon="">
           <div class="text-center">
             <h1 class="">น้ำนมดิบทั้งหมด</h1>
-            <h1 class="mt-4 bg-teal-900 text-green-500 p-1 rounded-lg text-xl lg:text-3xl">
+            <h1 class="mt-4 bg-teal-900 text-green-500 p-1 rounded-lg ">
               <div v-if="milk.sum >= 0">{{ $filters.number(milk.sum) }}</div>
               <BaseIcon
                 v-else
@@ -164,10 +172,10 @@
             <h1 class="mt-4">กิโลกรัม</h1>
           </div>
         </CardBox>
-        <CardBox class="justify-center flex h-full w-full items-center" header-icon="">
+        <CardBox class="justify-center flex h-full w-full items-center dark:border-gray-800 border-4" header-icon="">
           <div class="text-center">
             <h1 class="">น้ำนมดิบเฉลี่ย/วัน</h1>
-            <h1 class="mt-4 bg-amber-900 text-yellow-500 p-1 rounded-lg text-xl lg:text-3xl">
+            <h1 class="mt-4 bg-amber-900 text-yellow-500 p-1 rounded-lg ">
               <div v-if="milk.avg >= 0">{{ $filters.number(milk.avg) }}</div>
               <BaseIcon
                 v-else
@@ -180,20 +188,13 @@
           </div>
         </CardBox>
       </div>
-
-      <CardBox
-        :title="'น้ำนมดิบ ปี ' + new Date().getFullYear()"
-        icon="chartBellCurveCumulative"
-        class="lg:col-span-3 mb-1 lg:mb-5"
-        header-icon=""
-      >
         <div v-if="lineChartData?.datasets[0]?.data[0] > 0">
           <line-chart :data="lineChartData" />
         </div>
         <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
       </CardBox>
 
-      <CardBox icon="cashRegister" class="lg:col-span-3 mb-1 lg:mb-5" title="ผลประกอบการ" header-icon="">
+      <CardBox icon="cashRegister" class="lg:col-span-3 mb-1 lg:text-base text-sm lg:mb-5" title="ผลประกอบการ" header-icon="">
         <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
           <CardBox icon="accountCashOutline" class="border-gray-400 border-2 shadow-xl" title="ต้นทุน" header-icon="">
             <div class="grid grid-cols-2 gap-5">
