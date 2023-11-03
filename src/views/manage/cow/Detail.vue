@@ -501,15 +501,18 @@ export default {
           label: "เช้า (กก.)",
           class: "text-center",
           value: "mQty",
+          type : "number"
         },
         {
           label: "บ่าย (กก.)",
           class: "text-center",
           value: "aQty",
+          type : "number"
         },
         {
           label: "รวม (กก.)",
           class: "text-center",
+          type : "number",
           func: (obj) => {
             return obj.mQty + obj.aQty;
           },
