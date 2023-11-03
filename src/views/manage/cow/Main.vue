@@ -37,8 +37,11 @@
             has-table
             hoverable
           >
-              
+              <div class="text-center font-extrabold">
+                {{item.corral}}
+              </div>
               <BaseLevel type="justify-center">
+
                 <UserAvatar
                   username="profile-card"
                   class="lg:w-24 lg:h-24 w-20 h-20 mt-2"
@@ -46,9 +49,11 @@
                 />
               </BaseLevel>
             <div class="text-center mt-2">
-              <h4 class="lg:text-xl text-md flex justify-center">
-                
-                <p  :class="filter(item)?.grade?.style+'  font-extrabold  lg:text-base text-sm text-center bg-black rounded-full lg:h-6 h-5 w-6 shadow-xl mr-1'">
+              <h4 class="lg:text-lg text-md flex justify-center">
+                <p class="text-gray-400 mr-1">{{ item.code }}</p> - {{ item.name }} 
+              </h4>
+              <div class="justify-center flex mt-1 lg:p-2">
+                <p  :class="filter(item)?.grade?.style+'  font-extrabold  lg:text-base text-sm text-center bg-gray-800 rounded-full h-6 w-6 shadow-xl mr-1'">
                   <div v-if="item.grade">{{ item.grade }}</div>
                   <div v-else>
                     <BaseIcon
@@ -58,51 +63,25 @@
                     />
                   </div>
                 </p>
-                
-                {{ item.name }} 
-              </h4>
-              <div class="grid lg:grid-cols-6  grid-cols-2 gap-1 mt-2 lg:p-2">
-                
-                <p class="dark:text-gray-300 col-span-2 font-bold  text-sm text-center dark:bg-gray-800 bg-white lg:rounded  h-6 min-w-4 shadow">
-                  <BaseLevel
-                    type="justify-between"
-                  >
-                  <BaseIcon
-                    path="barn"
-                    size="16"
-                  />
-                  <div class="mr-2 ">{{ item.corral }}</div>
 
-                  </BaseLevel>
-                </p>
-                <p class="dark:text-gray-300 font-bold  dark:bg-gray-800 lg:rounded h-6 text-sm min-full lg:col-span-3 bg-white col-span-2 shadow">
-                  <BaseLevel
-                    type="justify-between"
-                  >
+                 
                   <BaseIcon
                     v-if="item.status"
                     :class="filter(item)?.status?.style"
                     :path="filter(item)?.status?.icon"
-                    size="16"
+                    size="14"
                   />
-                  <div class="mr-2 ">{{ filter(item)?.status?.desc }}</div>
-                  </BaseLevel>
-                </p>
-                <p class="dark:text-gray-300 text-left dark:bg-gray-800 font-bold lg:rounded bg-white h-6 min-w-4 text-sm shadow">
-                  <BaseLevel
-                    type="justify-center"
-                  >
+                
+              
                   <BaseIcon
                   v-if="filter(item)?.quality?.icon"
                   :path="filter(item)?.quality?.icon"
-                  size="16"
+                  size="22"
                   :class="filter(item)?.quality?.style"
                 />
 
-                  </BaseLevel>
-                  
-                </p>
-                <p class="dark:text-gray-300 text-left dark:bg-gray-800 font-bold lg:rounded bg-white h-6 min-w-4 text-sm col-span-3 shadow">
+         
+                <!-- <p class="dark:text-gray-300 text-left dark:bg-gray-800 font-bold lg:rounded bg-white h-6 min-w-4 text-sm col-span-3 shadow">
                   <BaseLevel
                     type="justify-between"
                   >
@@ -111,8 +90,8 @@
 
                   </BaseLevel>
                   
-                </p>
-                <p class="dark:text-gray-300 text-left dark:bg-gray-800  font-bold lg:rounded bg-white h-6 min-w-4 text-sm  lg:col-span-3 col-span-2 shadow">
+                </p> -->
+                <!-- <p class="dark:text-gray-300 text-left dark:bg-gray-800  font-bold lg:rounded bg-white h-6 min-w-4 text-sm  lg:col-span-3 col-span-2 shadow">
                   <BaseLevel
                     type="justify-between"
                   >
@@ -129,7 +108,7 @@
                       />
                   </BaseLevel>
                 
-                </p>
+                </p> -->
               </div>
               
             </div>
@@ -335,16 +314,16 @@ export default {
 
       if (item.status == 1) {
         status.icon ='humanPregnant'
-        status.style = 'text-blue-500 bg-indigo-900 rounded-l  p-1 mr-2'
+        status.style = 'text-blue-500 bg-indigo-900 rounded-full  p-1 mr-1'
       }else if (item.status == 2) {
         status.icon ='waterOff'
-        status.style = 'text-rose-500 bg-red-900 rounded-l p-1 mr-2'
+        status.style = 'text-rose-500 bg-red-900 rounded-full p-1 mr-1'
       }else if (item.status == 3) {
         status.icon ='water'
-        status.style = 'text-white bg-teal-900 rounded-l p-1 mr-2'
+        status.style = 'text-white bg-teal-900 rounded-full mr-1'
       }else if (item.status == 4) {
         status.icon ='babyFaceOutline'
-        status.style = 'text-yellow-500 bg-amber-900 rounded-l p-1 mr-2'
+        status.style = 'text-yellow-500 bg-amber-900 rounded-full mr-1'
       }
 
       status.desc = this.cowStatus[item.status].label
@@ -361,19 +340,15 @@ export default {
         grade.style = 'text-red-500'
       }
 
-      if (item.quality == 1) {
-        quality.icon = 'thumbUp'
-        quality.style = 'text-blue-600 '
-      }else if (item.quality == 2) {
-        quality.icon = 'thumbsUpDown'
-
-        quality.style = ''
-      }else if (item.quality == 3) {
-        quality.icon = 'thumbDown'
+      if (item.quality == 1) { // good
+        quality.icon = 'emoticonHappyOutline'
+        quality.style = 'text-green-600 '
+      }else if (item.quality == 3) { // bad
+        quality.icon = 'emoticonSadOutline'
         quality.style = 'text-red-600 '
-      }else if (item.quality == 4) {
-        quality.icon = 'flaskEmptyOffOutline'
-        quality.style = 'text-orange-500 '
+      }else if (item.quality == 2) { // normal
+        quality.icon = 'emoticonNeutralOutline'
+        quality.style = 'text-gray-400'
       }
 
       return {status,grade,quality}
