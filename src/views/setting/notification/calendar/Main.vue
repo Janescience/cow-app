@@ -1,7 +1,7 @@
 <template>
     <LayoutAuthenticated>
       <SectionMain>
-        <div v-if="!user?.farm?.lineToken">
+        <div v-if="!user?.farm?.lineToken && !loading">
             <SectionTitle class="text-2xl">
                 เชื่อมต่อ LINE Notify เพื่อรับการแจ้งเตือน
             </SectionTitle>

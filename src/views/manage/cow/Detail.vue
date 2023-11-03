@@ -11,14 +11,15 @@
             class="lg:p-2 p-1"
             label="ย้อนกลับ"
             color="light"
+            small
             @click="this.$router.push('/manage/cow')"
           />
-          <BaseButton
+          <!-- <BaseButton
             class="lg:p-2 p-1"
             label="ออกรายงาน"
             color="info"
             @click="exportReport()"
-          />
+          /> -->
         </BaseButtons>
       </section>
       <div class="grid lg:grid-cols-3 grid-cols-1 gap-5">
@@ -41,8 +42,8 @@
               type="justify-center"
               class="mt-5"
             >
-              <BaseButton label="ลบ" color="danger" @click="remove()" />
-              <BaseButton label="บันทึก" color="success" @click="update()" />
+              <BaseButton label="ลบ" color="danger" @click="remove()" small/>
+              <BaseButton label="บันทึก" color="success" @click="update()" small/>
             </BaseButtons>
             </div>
             <FormField label="รหัสโค" help="* ห้ามว่าง">
@@ -59,10 +60,18 @@
                 required
               />
             </FormField>
+            <FormField label="วันที่นำเข้าฟาร์ม" help="* ห้ามว่าง">
+              <FormControl
+                v-model="cow.adopDate"
+                icon="calendar"
+                type="date"
+                required
+              />
+            </FormField>
             <FormField label="น้ำหนัก (กก.)">
               <FormControl v-model="cow.weight" icon="weight" />
             </FormField>
-            <FormField label="สถานะ" help="* ห้ามว่าง">
+            <FormField label="สถานะ" >
               <FormControl
                 v-model="cow.status"
                 :options="status"
@@ -70,7 +79,7 @@
                 required
               />
             </FormField>
-            <FormField label="คุณภาพน้ำนม" help="* ห้ามว่าง">
+            <FormField label="คุณภาพน้ำนม" >
               <FormControl v-model="cow.quality" :options="qualityMilk" icon="" />
             </FormField>
             <FormField label="คอก">
@@ -857,6 +866,7 @@ export default {
       if (resp.data) {
         this.cow = resp.data.cow;
         this.cow.birthDate = new Date(this.cow.birthDate);
+        this.cow.adopDate = new Date(this.cow.adopDate);
         this.loading.cow = false;
       }
     },

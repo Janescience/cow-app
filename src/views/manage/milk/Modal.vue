@@ -78,7 +78,7 @@
               {{ alert.text }}
           </NotificationBar>
 
-          <BaseLevel class="pb-1 pt-1 pl-4 pr-4" v-if="milkDetails.length > 0" type="justify-end dark:bg-gray-800">
+          <BaseLevel class="p-1 mb-2" v-if="milkDetails.length > 0" type="justify-end dark:bg-gray-800">
             รวมน้ำนมดิบ <p class="underline decoration-2 p-2 decoration-orange-600">{{ $filters.number(sum().qty) }}</p>  กก. 
             คิดเป็นเงิน <p class="underline decoration-2 p-2 decoration-orange-600">{{ $filters.currency(sum().amount) }}</p> บาท
           </BaseLevel>
