@@ -40,6 +40,14 @@
               required
             />
           </FormField>
+          <FormField label="วันที่นำเข้าฟาร์ม" help="* ห้ามว่าง">
+            <FormControl
+              v-model="cow.adopDate"
+              icon="calendar"
+              type="date"
+              required
+            />
+          </FormField>
           
           <FormField label="สถานะ" help="* ห้ามว่าง">
             <FormControl
@@ -131,6 +139,7 @@
           name : "",
           status : 1,
           birthDate : null,
+          adopDate : null,
           corral : "",
           dad : "",
           mom : "",
@@ -174,6 +183,7 @@
           this.cow.code = ""
           this.cow.name = ""
           this.cow.birthDate = null
+          this.cow.adopDate = null
           this.cow.status = 1
           this.cow.corral = ""
           this.cow.dad = ""

@@ -49,7 +49,7 @@ const hasRightSlot = computed(() => slots.right)
           size="20"
           class="md:mr-2"
         />
-        <span class="text-center md:text-left text-sm"><slot /></span>
+        <span class="text-center md:text-left text-xs"><slot /></span>
       </div>
 
         <slot
