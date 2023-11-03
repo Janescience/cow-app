@@ -8,7 +8,6 @@
         </div>
         <BaseButtons class="text-sm lg:text-base" type="justify-end">
           <BaseButton
-            class="lg:p-2 p-1"
             label="ย้อนกลับ"
             color="light"
             small
@@ -33,7 +32,7 @@
           <div
             class="grid gap-5 grid-cols-2 lg:grid-cols-4 md:grid-cols-6"
           >
-            <div class="lg:row-span-3 col-span-2 lg:col-span-1">
+            <div class="lg:row-span-4 col-span-2 lg:col-span-1">
               <ImageUpload v-model="cow.image" class="lg:mt-12 mr-2" />
               <BaseLevel type="justify-center text-xs font-thin text-slate-500">
                 อัพโหลดรูปภาพ (คลิกที่รูป)

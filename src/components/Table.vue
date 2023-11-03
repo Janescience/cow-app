@@ -107,7 +107,7 @@
               </table>
             </div>           
             <div
-              class="p-2  static border-t border-gray-100 dark:border-gray-800"
+              class="p-2  static border-t border-gray-100 dark:border-gray-800 "
               v-if="!noPaging"
             >
               <BaseLevel >

@@ -127,18 +127,18 @@
         </div>
 
         <div
-          class="p-2 mt-2 border-t border-gray-100 dark:border-gray-800"
+          class="p-3 mt-2 border-t border-gray-100 dark:border-gray-800 dark:bg-gray-900 rounded-lg"
         >
           <BaseLevel>
               <BaseButtons>
-              <BaseButton
-                  v-for="page in pagesList"
-                  :key="page"
-                  :active="page === currentPage"
-                  :label="page + 1"
-                  small
-                  @click="currentPage = page"
-              />
+                <BaseButton
+                    v-for="page in pagesList"
+                    :key="page"
+                    :active="page === currentPage"
+                    :label="page + 1"
+                    small
+                    @click="currentPage = page"
+                />
               </BaseButtons>
               <small>หน้า {{ currentPageHuman }} จาก {{ numPages }}</small>
           </BaseLevel>
