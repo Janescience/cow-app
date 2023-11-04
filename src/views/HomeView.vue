@@ -25,17 +25,12 @@
             </div>
 
             <p class="underline decoration-4 font-extrabold mt-3">รายวัน</p>
-
-            <div class="grid grid-cols-1 gap-3 mt-5 mb-5" v-if="todolist.milk?.length > 0">
-              <FormCheckRadioPicker
-                  v-for="todo in todolist.milk" :key="todo"
-                  name="does"
-                  :options="{ remember: todo }"
-                />
+            <div v-if="todolist.milk?.length > 0" class="p-2">
+              - <a v-for="todo in todolist.milk" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
             </div>
-            <p v-else class="p-2 text-gray-400 text-sm">- ไม่มีรายการที่ต้องทำ</p>
+            
 
-          
+            
           <p class="underline decoration-4 font-extrabold mt-3">รายเดือน</p>
 
           <div v-if="todolist.food?.length > 0" class="p-2">
