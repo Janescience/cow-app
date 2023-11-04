@@ -66,7 +66,7 @@ const submit = e => {
   >
     <header
       v-if="title"
-      class="flex items-stretch border-b border-gray-100 dark:border-gray-800"
+      class="flex lg:text-lg text-base items-stretch border-b border-gray-100 dark:border-gray-800"
     >
       <p
         class="flex items-center py-3 grow font-bold"

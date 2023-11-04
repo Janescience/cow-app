@@ -7,13 +7,13 @@
             </SectionTitle>
             <div class="text-lg"> 
                 <div class="py-2 px-5">
-                    1. เพิ่มเพื่อน <span class="text-green-500 font-bold">LINE Notify</span>
+                    1. เพิ่มเพื่อน <span class="text-green-500 font-bold">LINE Notify</span> ใน <span class="text-green-300 font-bold">LINE</span> 
                 </div>
                 <div class="py-2 px-5">
                     2. กดปุ่ม <u class="text-blue-400">เชื่อมต่อ LINE</u> ด้านล่าง เพื่อเชื่อมต่อการแจ้งเตือนเข้า LINE
                 </div>
                 <div class="py-2 px-5">   
-                    3. เลือกกลุ่มหรือเลือกส่งหาตัวเองใน <span class="text-green-300 font-bold">LINE</span> 
+                    3. เลือกกลุ่มที่มีอยู่แล้วหรือสร้างกลุ่มใหม่หรือเลือกส่งหาตัวเองใน <span class="text-green-300 font-bold">LINE</span> 
                 </div>
                 <div class="py-2 px-5">
                     4. เชิญ <span class="text-green-500 font-bold">LINE Notify</span> เข้ากลุ่มที่ได้เลือกไว้
@@ -66,7 +66,8 @@ export default {
         return {
             loading : false,
             events : [],
-            user : {}
+            user : {},
+            urlAuth : 'https://notify-bot.line.me/oauth/authorize?response_type=code&client_id='+import.meta.env.VITE_LINE_CLIENT_ID+'&redirect_uri='+import.meta.env.VITE_API_ENGINE_URL+'/line/redirect&scope=notify&state='
         }
     },
     components : {
@@ -97,6 +98,7 @@ export default {
             const resp = await AuthService.user();
             if(resp.data){
                 this.user = resp.data.user
+                this.urlAuth += this.user.username
             }
         }
     }

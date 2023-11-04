@@ -95,6 +95,7 @@
           </div>
         </CardBox>
         <CardBox
+        icon="trophyVariantOutline"
          title="คุณภาพ/ความคุ้มค่า"
           class="mb-5"
           header-icon=""
@@ -109,6 +110,9 @@
               <p class="text-gray-500 text-xs">{{  filterText()?.percent }} </p>
             </div>  
             
+          </div>
+          <div>
+            อายุ
           </div>
           <div class="grid grid-cols-1 gap-5 mt-5">
             <div class="grid grid-cols-2 gap-5">
@@ -512,9 +516,8 @@ export default {
         {
           label: "รวม (กก.)",
           class: "text-center",
-          type : "number",
           func: (obj) => {
-            return obj.mQty + obj.aQty;
+            return (obj.mQty + obj.aQty).toFixed(2);
           },
         },
         {
@@ -880,6 +883,7 @@ export default {
         this.cow = resp.data.cow;
         this.quality = resp.data.quality;
         this.cow.birthDate = new Date(this.cow.birthDate);
+        this.cow.adopDate = new Date(this.cow.adopDate);
         this.loading.cow = false;
 
         this.loading.reproduct = true;

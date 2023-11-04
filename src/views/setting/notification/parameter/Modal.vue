@@ -5,7 +5,7 @@
     <CardBox
       v-show="value"
       title="แก้ไขพารามิเตอร์ (การแจ้งเตือน)"
-      class="shadow-lg w-full  lg:w-1/2 z-50"
+      class="shadow-lg w-full  lg:w-3/5 z-50"
       header-icon="close"
       modal
       form
@@ -14,15 +14,15 @@
       @header-icon-click="cancel"
     >
     
-      <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-1">
-        <FormField label="ชื่อ" help="* ห้ามว่าง" >
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        <FormField label="ชื่อพารามิเตอร์" help="* ห้ามว่าง" class="col-span-2">
           <FormControl
             v-model="notiParam.name"
             icon="formTextbox"
             required
           />
         </FormField>
-        <FormField label="แจ้งเตือนวันมีผล" help="* ห้ามว่าง">
+        <FormField label="แจ้งเตือนวันมีผล" help="* ห้ามว่าง" class="col-span-2">
           <FormCheckRadioPicker
               v-model="notiParam.dueDate"
               type="radio"
@@ -33,7 +33,7 @@
           <FormControl
             v-model="notiParam.before"
             type="number"
-            icon="formNumber"
+            icon="calendarClock"
           />
         </FormField>
         <FormField label="ประเภทระยะเวลา(ก่อน)" >
@@ -46,7 +46,7 @@
         <FormField label="แจ้งเตือน(หลัง)" >
           <FormControl
             v-model="notiParam.after"
-            icon="formNumber"
+            icon="calendarClock"
             type="number"
           />
         </FormField>

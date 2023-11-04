@@ -36,7 +36,7 @@
           </FormField>
         </div>
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 p-4">
-            <FormField label="โค" help="* ห้ามว่าง">
+            <FormField label="โค" help="* ห้ามว่าง" class="col-span-2">
                 <DDLCow v-model="milkDetail.cow" valueType="object"/>
             </FormField>
             <FormField label="น้ำนมดิบ (กก.)" help="* ห้ามว่าง">
@@ -54,7 +54,8 @@
               />
             </FormField>
             <BaseButtons
-            type="justify-start"
+            class="lg:col-span-4 col-span-2"
+            type="justify-center"
             >
               
               <BaseButton
@@ -161,10 +162,12 @@
           {
             label:'น้ำนมดิบ (กก.)',
             value:'qty',
+            class: 'text-center',
             type:'number'
           },
           {
             label:'จำนวนเงิน',
+            class: 'text-right',
             value:'amount',
             type : 'currency'
           },

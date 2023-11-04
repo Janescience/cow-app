@@ -128,7 +128,7 @@ export default [
         {
           to: '/report/history',
           icon: 'cow',
-          label: 'ประวัติและคุณลักษณะของวัว'
+          label: 'ข้อมูลโค'
         },
         // {
         //   to: '/report/parameter',

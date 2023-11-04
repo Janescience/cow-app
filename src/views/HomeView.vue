@@ -2,8 +2,76 @@
   <LayoutAuthenticated>
     <SectionMain>
       <SectionTitleBarSub icon="chartPie" title="ภาพรวมฟาร์ม" />
-
       <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-5 gap-1 mb-1 lg:mb-5">
+        <CardBox icon="formatListChecks" title="รายการที่ต้องทำ" header-icon="" class=" row-span-2">
+          <p class="underline decoration-4 font-extrabold ">ข้อมูลที่ควรบันทึก</p>
+            <div v-if="todolist.vaccine?.length > 0" class="p-2">
+              - <a v-for="todo in todolist.vaccine" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':''">{{  todo.text }}</a>
+            </div>
+            <div v-if="todolist.equipment?.length > 0" class="p-2">
+              - <a v-for="todo in todolist.equipment" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
+            </div>
+            <div v-if="todolist.building?.length > 0" class="p-2">
+              - <a v-for="todo in todolist.building" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
+            </div>
+            <div v-if="todolist.worker?.length > 0" class="p-2">
+              - <a v-for="todo in todolist.worker" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
+            </div>
+            <div v-if="todolist.recipe?.length > 0" class="p-2">
+              - <a v-for="todo in todolist.recipe" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
+            </div>
+            <div v-if="todolist.bill?.length > 0" class="p-2">
+              - <a v-for="todo in todolist.bill" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
+            </div>
+
+            <p class="underline decoration-4 font-extrabold mt-3">รายวัน</p>
+
+            <div class="grid grid-cols-1 gap-3 mt-5 mb-5" v-if="todolist.milk?.length > 0">
+              <FormCheckRadioPicker
+                  v-for="todo in todolist.milk" :key="todo"
+                  name="does"
+                  :options="{ remember: todo }"
+                />
+            </div>
+            <p v-else class="p-2 text-gray-400 text-sm">- ไม่มีรายการที่ต้องทำ</p>
+
+          
+          <p class="underline decoration-4 font-extrabold mt-3">รายเดือน</p>
+
+          <div v-if="todolist.food?.length > 0" class="p-2">
+            - <a v-for="todo in todolist.food" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
+          </div>
+          <div v-if="todolist.salary?.length > 0" class="p-2">
+            - <a v-for="todo in todolist.salary" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
+          </div>
+
+          <div v-if="todolist.billPrevMonth?.length > 0" class="p-2">
+            - <a v-for="todo in todolist.billPrevMonth" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
+          </div>
+
+          <p class="underline decoration-4 font-extrabold ">ครบกำหนด</p>
+            <div class="grid grid-cols-1 gap-3 mt-5 mb-5">
+              -
+            </div>
+        </CardBox>
+
+        <Table title="คอก" icon="barn" :items="corrals" :datas="corralColumns" perPage="5" :loading="loading.corral" />
+
+        <Table title="กำหนดการ" icon="calendarBadgeOutline" :items="events" :datas="eventColumns" perPage="5"
+          :loading="loading.events" />
+
+          <CardBox icon="sort" title="อันดับน้ำนมดิบ" header-icon="" class="lg:col-span-2">
+          <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
+            <Table title="มากที่สุด 5 อันดับ" :items="rawMilkDescSort" :datas="rawMilkSortColumns" no-paging
+              :loading="loading.rawMilkSort" />
+            <Table title="น้อยที่สุด 5 อันดับ" :items="rawMilkAscSort" :datas="rawMilkSortColumns" no-paging
+              :loading="loading.rawMilkSort" />
+          </div>
+        </CardBox>
+          
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-5 gap-1 mb-1 lg:mb-5">
+        
         <CardBox :loading="loading.cow" icon="cow" title="สถานะโค" class="text-center" header-icon="">
           <div class="grid grid-cols-3 gap-5">
             <p class="text-left mt-2 col-span-2">
@@ -335,57 +403,9 @@
         </div>
       </CardBox>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-5 gap-1 mb-1 lg:mb-5">
-        <CardBox icon="formatListChecks" title="รายการที่ต้องทำ" header-icon="" class=" row-span-2">
-          รายวัน
-            <div class="grid grid-cols-1 gap-3 mt-5 mb-5" v-if="todolist.milk?.length > 0">
-              <FormCheckRadioPicker
-                  v-for="todo in todolist.milk" :key="todo"
-                  name="does"
-                  :options="{ remember: todo }"
-                />
-            </div>
-            <p v-else >-</p>
+      
 
-          รายเดือน
-          <div class="grid grid-cols-1 gap-3 mt-5 mb-5" v-if="todolist.food?.length > 0">
-              <FormCheckRadioPicker
-                  v-for="todo in todolist.food" :key="todo"
-                  name="does"
-                  :options="{ remember: todo }"
-                />
-                <FormCheckRadioPicker
-                  v-for="todo in todolist.salary" :key="todo"
-                  name="does"
-                  :options="{ remember: todo }"
-                />
-          </div>
-          <p v-else >-</p>
-
-
-            ครบกำหนด
-            <div class="grid grid-cols-1 gap-3 mt-5 mb-5">
-              -
-            </div>
-        </CardBox>
-
-        <Table title="คอก" icon="barn" :items="corrals" :datas="corralColumns" perPage="5" :loading="loading.corral" />
-
-        <Table title="กำหนดการ" icon="calendarBadgeOutline" :items="events" :datas="eventColumns" perPage="5"
-          :loading="loading.events" />
-
-          <CardBox icon="sort" title="อันดับน้ำนมดิบ" header-icon="" class="lg:col-span-2">
-          <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
-            <Table title="มากที่สุด 5 อันดับ" :items="rawMilkDescSort" :datas="rawMilkSortColumns" no-paging
-              :loading="loading.rawMilkSort" />
-            <Table title="น้อยที่สุด 5 อันดับ" :items="rawMilkAscSort" :datas="rawMilkSortColumns" no-paging
-              :loading="loading.rawMilkSort" />
-          </div>
-        </CardBox>
-          
-      </div>
-
-      <CardBox icon="" title="สถิติ" header-icon="" class=" mb-1 lg:mb-5">
+      <CardBox icon="poll" title="สถิติ" header-icon="" class=" mb-1 lg:mb-5">
         <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
           <CardBox title="การรักษา" header-icon="" class="dark:border-gray-800 border-4">
             <div class="grid grid-cols-2 gap-5">
