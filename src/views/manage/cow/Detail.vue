@@ -51,6 +51,9 @@
             <FormField label="ชื่อโค" help="* ห้ามว่าง">
               <FormControl v-model="cow.name" icon="cow" required />
             </FormField>
+            <FormField label="น้ำหนัก (กก.)">
+              <FormControl v-model="cow.weight" icon="weight" />
+            </FormField>
             <FormField label="วันเกิด" help="* ห้ามว่าง">
               <FormControl
                 v-model="cow.birthDate"
@@ -66,9 +69,6 @@
                 type="date"
                 required
               />
-            </FormField>
-            <FormField label="น้ำหนัก (กก.)">
-              <FormControl v-model="cow.weight" icon="weight" />
             </FormField>
             <FormField label="สถานะ" >
               <FormControl

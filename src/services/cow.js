@@ -47,8 +47,13 @@ class CowService{
     }
     create(payload){
         if (payload.birthDate) {
-            payload.birthDate = moment(new Date(payload.birthDate)).format('YYYY-MM-DD') 
+            payload.birthDate = moment(new Date(payload.birthDate)).format('YYYY-MM-DD')
         }
+        if (payload.adopDate) {
+            payload.adopDate = moment(new Date(payload.adopDate)).format('YYYY-MM-DD')
+        }
+        console.log('before create ')
+
         return http.post(`/cow`,payload);
     }
     delete(id){

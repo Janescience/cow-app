@@ -338,7 +338,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-5 gap-1 mb-1 lg:mb-5">
         <CardBox icon="formatListChecks" title="รายการที่ต้องทำ" header-icon="" class=" row-span-2">
           รายวัน
-            <div class="grid grid-cols-1 gap-3 mt-5 mb-5" v-if="todolist.milk.length > 0">
+            <div class="grid grid-cols-1 gap-3 mt-5 mb-5" v-if="todolist.milk?.length > 0">
               <FormCheckRadioPicker
                   v-for="todo in todolist.milk" :key="todo"
                   name="does"
@@ -348,7 +348,7 @@
             <p v-else >-</p>
 
           รายเดือน
-          <div class="grid grid-cols-1 gap-3 mt-5 mb-5" v-if="todolist.food.length > 0">
+          <div class="grid grid-cols-1 gap-3 mt-5 mb-5" v-if="todolist.food?.length > 0">
               <FormCheckRadioPicker
                   v-for="todo in todolist.food" :key="todo"
                   name="does"

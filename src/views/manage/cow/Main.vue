@@ -27,7 +27,7 @@
 
         <div
           v-if="!loading"
-          class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-3 lg:grid-cols-5 md:grid-cols-4"
+          class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-3 lg:grid-cols-6 md:grid-cols-4"
         >
           <CardBox
             v-for="item in itemsPaginated"
@@ -44,21 +44,22 @@
 
                 <UserAvatar
                   username="profile-card"
-                  class="lg:w-24 lg:h-24 w-20 h-20 mt-2"
+                  class="lg:w-24 lg:h-24 w-16 h-16 mt-2"
                   :avatar="item.image"
                 />
               </BaseLevel>
             <div class="text-center mt-2">
-              <h4 class="lg:text-lg text-md flex justify-center">
+              <h4 class="lg:text-lg text-xs flex justify-center">
                 <p class="text-gray-400 mr-1">{{ item.code }}</p> - {{ item.name }} 
               </h4>
-              <div class="justify-center flex mt-1 lg:p-2">
-                <p  :class="filter(item)?.grade?.style+'  font-extrabold  lg:text-base text-sm text-center bg-gray-800 rounded-full h-6 w-6 shadow-xl mr-1'">
+              <div class="justify-center flex mt-1 lg:p-2 p-1">
+                <p  :class="filter(item)?.grade?.style+' flex items-center justify-center font-extrabold  lg:text-base text-sm text-center bg-gray-800 rounded-full lg:h-6 lg:w-6 w-4 h-4 shadow-xl mr-1'">
                   <div v-if="item.grade">{{ item.grade }}</div>
                   <div v-else>
                     <BaseIcon
                       path="dotsCircle"
-                      size="16"
+                      w="w-4 lg:w-6"
+                      h="h-4 lg:h-6"
                       class="animate-spin text-gray-500"
                     />
                   </div>
@@ -69,14 +70,17 @@
                     v-if="item.status"
                     :class="filter(item)?.status?.style"
                     :path="filter(item)?.status?.icon"
-                    size="14"
+                    w="w-4 lg:w-6"
+                    h="h-4 lg:h-6"
+
                   />
                 
               
                   <BaseIcon
                   v-if="filter(item)?.quality?.icon"
                   :path="filter(item)?.quality?.icon"
-                  size="22"
+                  w="w-4 lg:w-6"
+                  h="h-4 lg:h-6"
                   :class="filter(item)?.quality?.style"
                 />
 
@@ -127,7 +131,7 @@
         </div>
 
         <div
-          class="p-3 mt-2 border-t border-gray-100 dark:border-gray-800 dark:bg-gray-900 rounded-lg"
+          class="p-3 mt-2 border-t border-gray-100 dark:border-gray-800 dark:bg-gray-900 lg:rounded-lg shadow-lg "
         >
           <BaseLevel>
               <BaseButtons>
@@ -136,7 +140,7 @@
                     :key="page"
                     :active="page === currentPage"
                     :label="page + 1"
-                    small
+                    teeny
                     @click="currentPage = page"
                 />
               </BaseButtons>
@@ -176,7 +180,7 @@ import { status,quality } from '@/constants/cow'
 export default {
   data (){
     return {
-      perPage :20,
+      perPage :18,
       currentPage : 0,
       modalCow : false,
       cowStatus : status(),
@@ -320,7 +324,7 @@ export default {
         status.style = 'text-rose-500 bg-red-900 rounded-full p-1 mr-1'
       }else if (item.status == 3) {
         status.icon ='water'
-        status.style = 'text-white bg-teal-900 rounded-full mr-1'
+        status.style = 'text-white bg-teal-900 rounded-full p-1 mr-1'
       }else if (item.status == 4) {
         status.icon ='babyFaceOutline'
         status.style = 'text-yellow-500 bg-amber-900 rounded-full mr-1'
@@ -341,13 +345,13 @@ export default {
       }
 
       if (item.quality == 1) { // good
-        quality.icon = 'emoticonHappyOutline'
-        quality.style = 'text-green-600 '
+        quality.icon = 'medalOutline'
+        quality.style = 'text-green-600'
       }else if (item.quality == 3) { // bad
-        quality.icon = 'emoticonSadOutline'
+        quality.icon = 'medalOutline'
         quality.style = 'text-red-600 '
       }else if (item.quality == 2) { // normal
-        quality.icon = 'emoticonNeutralOutline'
+        quality.icon = 'medalOutline'
         quality.style = 'text-gray-400'
       }
 

@@ -32,6 +32,13 @@
               required
             />
           </FormField>
+          <FormField label="น้ำหนัก(กก.)" >
+            <FormControl
+              v-model="cow.weight"
+              icon="scale"
+              type="number"
+            />
+          </FormField>
           <FormField label="วันเกิด" help="* ห้ามว่าง">
             <FormControl
               v-model="cow.birthDate"
@@ -144,6 +151,7 @@
           dad : "",
           mom : "",
           quality : 1,
+          weight : null
         },
         status : status('create'),
         quality : quality('create'),
@@ -178,16 +186,18 @@
     },
     methods: {
         clear(){
+          console.log('clear')
           this.$emit('update:dataEdit',null);
           this.cow.image = '/image/img-mockup.png'
           this.cow.code = ""
           this.cow.name = ""
-          this.cow.birthDate = null
-          this.cow.adopDate = null
+          this.cow.birthDate = ""
+          this.cow.adopDate = ""
           this.cow.status = 1
           this.cow.corral = ""
           this.cow.dad = ""
           this.cow.mom = ""
+          this.cow.weight = null
           delete this.cow._id
         },
         confirmCancel(mode){
