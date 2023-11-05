@@ -36,7 +36,7 @@
               required
             />
           </FormField>
-          <FormField label="ราคาวัคซีน/ขวด" help="* ห้ามว่าง" >
+          <FormField label="ราคาวัคซีน" help="* ห้ามว่าง" >
             <FormControl
               v-model="vaccine.price"
               icon="cashMultiple"
@@ -44,7 +44,15 @@
               required
             />
           </FormField>
-          <FormField label="จำนวนโค" help="* ห้ามว่าง (1 ขวดใช้ได้กี่ตัว)" >
+          <FormField label="ปริมาณ (ลิตร)" help="* ห้ามว่าง" >
+            <FormControl
+              v-model="vaccine.quantity"
+              icon="quantity"
+              type="number"
+              required
+            />
+          </FormField>
+          <FormField label="จำนวนโค" help="* ห้ามว่าง " >
             <FormControl
               v-model="vaccine.use"
               icon="cashMultiple"
@@ -126,6 +134,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           dateNext : null,
           code : '',
           name : '',
+          price : null,
+          quantity : null,
           amount : null,
           frequency : null,
           remark : '',

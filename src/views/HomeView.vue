@@ -4,7 +4,13 @@
       <SectionTitleBarSub icon="chartPie" title="ภาพรวมฟาร์ม" />
       <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-5 gap-1 mb-1 lg:mb-5">
         <CardBox icon="formatListChecks" title="รายการที่ต้องทำ" header-icon="" class=" row-span-2">
-          <p class="underline decoration-4 font-extrabold ">ข้อมูลที่ควรบันทึก</p>
+          <p class="underline decoration-4 font-extrabold ">ตั้งค่าเริ่มต้น</p>
+          <div v-if="todolist.setting?.length > 0" class="p-2">
+            - <a v-for="todo in todolist.setting" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':''">{{  todo.text }}</a>
+          </div>
+          <hr class="border-t border-gray-100 dark:border-gray-600"/>
+
+          <p class="underline decoration-4 font-extrabold mt-3">ข้อมูลที่ควรบันทึก</p>
             <div v-if="todolist.vaccine?.length > 0" class="p-2">
               - <a v-for="todo in todolist.vaccine" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':''">{{  todo.text }}</a>
             </div>
@@ -23,6 +29,7 @@
             <div v-if="todolist.bill?.length > 0" class="p-2">
               - <a v-for="todo in todolist.bill" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
             </div>
+            <hr class="border-t border-gray-100 dark:border-gray-600"/>
 
             <p class="underline decoration-4 font-extrabold mt-3">รายวัน</p>
             <div v-if="todolist.milk?.length > 0" class="p-2">
@@ -30,7 +37,8 @@
             </div>
             
 
-            
+            <hr class="border-t border-gray-100 dark:border-gray-600"/>
+
           <p class="underline decoration-4 font-extrabold mt-3">รายเดือน</p>
 
           <div v-if="todolist.food?.length > 0" class="p-2">
@@ -43,8 +51,9 @@
           <div v-if="todolist.billPrevMonth?.length > 0" class="p-2">
             - <a v-for="todo in todolist.billPrevMonth" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':todo.remark?'text-gray-500 text-xs':''">{{  todo.text }}</a>
           </div>
+          <hr class="border-t border-gray-100 dark:border-gray-600"/>
 
-          <p class="underline decoration-4 font-extrabold ">ครบกำหนด</p>
+          <p class="underline decoration-4 font-extrabold mt-3">ครบกำหนด</p>
             <div class="grid grid-cols-1 gap-3 mt-5 mb-5">
               -
             </div>
