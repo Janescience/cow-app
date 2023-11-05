@@ -5,39 +5,39 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-5 gap-1 mb-1 lg:mb-5">
         <CardBox icon="formatListChecks" title="รายการที่ต้องทำ" header-icon="" class=" row-span-2" :loading="loading.todolist">
           
-          <div v-if="Object.keys(todolist?.setting).length > 0">
+          <div v-if="Object.keys(todolist?.setting).length > 0" class="mb-5">
             <p class="underline decoration-4 font-extrabold " >ตั้งค่าเริ่มต้น</p>
             <div class="p-2" v-for="key in Object.keys(todolist?.setting)" :key="todolist.setting[key]">
               - <a v-for="todo in todolist.setting[key]" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':''">{{  todo.text }}</a>
             </div>
           </div>
 
-          <div v-if="Object.keys(todolist?.important).length > 0">
-            <hr class="border-t border-gray-100 dark:border-gray-600 mb-5 mt-3"/>
+          <div v-if="Object.keys(todolist?.important).length > 0" class="mb-5">
+            <!-- <hr class="border-t border-gray-100 dark:border-gray-600 mb-5 mt-3"/> -->
             <p class="underline decoration-4 font-extrabold " >ข้อมูลที่ควรบันทึก</p>
             <div class="p-2" v-for="key in Object.keys(todolist?.important)" :key="todolist.important[key]">
               - <a v-for="todo in todolist.important[key]" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':(todo.remark?'text-gray-500 text-xs':'')">{{  todo.text }}</a>
             </div>
           </div>
           
-          <div v-if="Object.keys(todolist.dairy).length > 0">
-            <hr class="border-t border-gray-100 dark:border-gray-600 mb-5 mt-3"/>
+          <div v-if="Object.keys(todolist.dairy).length > 0" class="mb-5">
+            <!-- <hr class="border-t border-gray-100 dark:border-gray-600 mb-5 mt-3"/> -->
             <p class="underline decoration-4 font-extrabold " >รายวัน</p>
             <div class="p-2" v-for="key in Object.keys(todolist?.dairy)" :key="todolist.dairy[key]">
               - <a v-for="todo in todolist.dairy[key]" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':''">{{  todo.text }}</a>
             </div>
           </div>
 
-          <div v-if="Object.keys(todolist.monthly).length > 0">
-            <hr class="border-t border-gray-100 dark:border-gray-600 mb-5 mt-3"/>
+          <div v-if="Object.keys(todolist.monthly).length > 0" class="mb-5">
+            <!-- <hr class="border-t border-gray-100 dark:border-gray-600 mb-5 mt-3"/> -->
             <p class="underline decoration-4 font-extrabold " >รายเดือน</p>
             <div class="p-2" v-for="key in Object.keys(todolist?.monthly)" :key="todolist.monthly[key]">
               - <a v-for="todo in todolist.monthly[key]" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':''">{{  todo.text }}</a>
             </div>
           </div>
 
-          <div v-if="Object.keys(todolist.notification).length > 0">
-            <hr class="border-t border-gray-100 dark:border-gray-600 mb-5 mt-3"/>
+          <div v-if="Object.keys(todolist.notification).length > 0" class="mb-5">
+            <!-- <hr class="border-t border-gray-100 dark:border-gray-600 mb-5 mt-3"/> -->
             <p class="underline decoration-4 font-extrabold " >ครบกำหนด</p>
             <div class="p-2" v-for="key in Object.keys(todolist?.notification)" :key="todolist.notification[key]">
               - <a v-for="todo in todolist.notification[key]" :key="todo" :href="todo.href" :class="todo.href?'text-blue-500 underline':''">{{  todo.text }}</a>
