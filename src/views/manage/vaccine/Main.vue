@@ -111,10 +111,16 @@ export default {
           value : 'frequency'
         },
         {
-          label : "ราคาวัคซีน/ขวด",
-          class : 'text-center',
+          label : "ราคาวัคซีน",
+          class : 'text-right',
           value : 'price',
           type : 'currency'
+        },
+        {
+          label : "ปริมาณ (ลิตร)",
+          class : 'text-center',
+          value : 'quantity',
+          type : 'number'
         },
         {
           label : "ใช้ได้ (ตัว)",
@@ -123,7 +129,7 @@ export default {
         },
         {
           label : "คิดเป็นเงิน/ตัว",
-          class : 'text-center',
+          class : 'text-right',
           value : 'amount',
           type : 'currency'
         },

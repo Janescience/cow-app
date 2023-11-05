@@ -101,9 +101,9 @@ const submit = e => {
     >
       <BaseIcon
         v-if="loading"
-        path="dotsCircle"
-        size="22"
-        class="animate-spin"
+        path="cow"
+        size="20"
+        class="animate-ping"
       />
       <p> กำลังโหลดข้อมูล...</p>
     </div>
