@@ -24,7 +24,7 @@
     import UserAvatar from '@/components/UserAvatar.vue';
     export default {
         computed:{
-            value:{
+            value : {
                 get(){
                     return !this.modelValue ? '/image/img-mockup.png' : this.modelValue
                 },
@@ -55,8 +55,9 @@
             },
             createBase64(fileObj) {
                 const reader = new FileReader();
+                this.$emit('file',fileObj)
                 reader.onload = (e) => {
-                    this.value = e.target.result;
+                    this.value = e.target.result
                 };
                 reader.readAsDataURL(fileObj);
             },
@@ -69,6 +70,10 @@
             modelValue: {
                 type: String,
                 default: ''
+            },
+            file : {
+                type : Object,
+                default : null
             },
         }
     }

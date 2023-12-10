@@ -33,7 +33,7 @@
             class="grid gap-5 grid-cols-2 lg:grid-cols-4 md:grid-cols-6"
           >
             <div class="lg:row-span-4 col-span-2 lg:col-span-1">
-              <ImageUpload v-model="cow.image" class="lg:mt-12 mr-2" />
+              <ImageUpload v-model="cow.image" class="lg:mt-12 mr-2" @file="getFile"/>
               <BaseLevel type="justify-center text-xs font-thin text-slate-500">
                 อัพโหลดรูปภาพ (คลิกที่รูป)
               </BaseLevel>
@@ -987,12 +987,16 @@ export default {
         this.loading.notification = false
       }
     },
+    getFile(file){
+      this.cow.file = file
+    },
     async update() {
       this.loading.cow = true;
       this.alert = "";
       try {
         const resp = await CowService.update(this.cow._id, this.cow);
         if (resp) {
+          await CowService.upload(this.cow);
           this.getCow(this.$route.params.id);
           Toast.fire({
             icon: "success",

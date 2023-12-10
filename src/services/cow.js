@@ -60,7 +60,14 @@ class CowService{
         return http.delete(`/cow/${id}`);
     }
     update(id,payload){
-        return http.put(`/cow/${id}`,payload);
+        return http.post(`/cow/${id}`,payload);
+    }
+    upload(payload){
+        if(payload.file){
+            const formData = new FormData();
+            formData.append("file", payload.file);
+            return http.post(`/cow/upload/${payload._id}`,formData);
+        }
     }
 }
 

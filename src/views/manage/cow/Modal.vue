@@ -13,7 +13,7 @@
         @header-icon-click="cancel"
       >
         
-        <ImageUpload v-model="cow.image" />
+        <ImageUpload v-model="cow.image" @file="getFile"/>
         <BaseLevel type="justify-center mb-6 text-sm">
           อัพโหลดรูปภาพ (คลิกที่รูป)
         </BaseLevel>
@@ -141,7 +141,8 @@
     data () {
       return {
         cow : {
-          image : '/image/img-mockup.png',
+          image : null,
+          file : null,
           code : "",  
           name : "",
           status : 1,
@@ -188,7 +189,8 @@
         clear(){
           console.log('clear')
           this.$emit('update:dataEdit',null);
-          this.cow.image = '/image/img-mockup.png'
+          this.cow.image = null
+          this.cow.file = null
           this.cow.code = ""
           this.cow.name = ""
           this.cow.birthDate = ""
@@ -216,29 +218,19 @@
             this.loading = true
             this.alert = ""
             try {
-                if(this.mode === 'create'){
-                  const resp = await CowService.create(this.cow);
-                  if(resp){
-                      this.loading = false  
-                      this.value = false
-                      this.confirm()
-                      Toast.fire({
-                        icon: 'success',
-                        title: 'บันทึกข้อมูลสำเร็จ'
-                      })
-                  }
-                }else{
-                  const resp = await CowService.update(this.cow._id,this.cow);
-                  if(resp){
-                      this.loading = false  
-                      this.value = false
-                      this.confirm();
-                      Toast.fire({
-                        icon: 'success',
-                        title: 'บันทึกข้อมูลสำเร็จ'
-                      })
-                  }
-                }
+              const resp = await CowService.create(this.cow);
+              if(resp){
+                const newCow = resp.data.newCow;
+                newCow.file = this.cow.file
+                await CowService.upload(newCow);
+                this.loading = false  
+                this.value = false
+                this.confirm()
+                Toast.fire({
+                  icon: 'success',
+                  title: 'บันทึกข้อมูลสำเร็จ'
+                })
+              }
             } catch (error) {
               console.error('Error : ',error)
                 this.loading = false  
@@ -249,6 +241,9 @@
                 })
             }
             
+        },
+        getFile(file){
+          this.cow.file = file
         },
     },
     components : {
