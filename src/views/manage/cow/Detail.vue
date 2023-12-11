@@ -111,10 +111,15 @@
             </div>  
             
           </div>
-          <div>
-            อายุ
-          </div>
           <div class="grid grid-cols-1 gap-5 mt-5">
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1">อายุ</p>
+              <p class=" text-center rounded-lg ">{{ calAge(cow?.birthDate) }}</p>
+              <p class="mt-1">อยู่ฟาร์ม</p>
+              <p class="  text-center rounded-lg ">{{ calAge(cow?.adopDate) }}</p>
+            </div>
+            <hr class="border-t border-gray-100 dark:border-gray-600"/>
+
             <div class="grid grid-cols-2 gap-5">
               <p class="mt-1">รายได้ทั้งหมด</p>
               <p class="bg-teal-900 p-1 text-lg text-center rounded-lg text-green-500">{{ $filters.currency(quality?.income?.sum) }}</p>

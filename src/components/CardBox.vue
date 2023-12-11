@@ -91,9 +91,9 @@ const submit = e => {
     </header>
     <div
       v-if="empty"
-      class="text-center py-10 text-gray-500 dark:text-gray-400 "
+      class="text-center py-5 text-gray-500 dark:text-gray-400 "
     >
-      <p>ไม่มีรายการ...</p>
+      <p class="text-gray-500 text-sm">ไม่มีรายการ...</p>
     </div>
     <div
       v-else-if="loading"
@@ -105,7 +105,7 @@ const submit = e => {
         size="20"
         class="animate-ping"
       />
-      <p> กำลังโหลดข้อมูล...</p>
+      <p class="text-gray-500 text-sm"> กำลังโหลดข้อมูล...</p>
     </div>
     <div
       v-else
