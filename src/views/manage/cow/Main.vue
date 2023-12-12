@@ -278,15 +278,14 @@ export default {
       if(resp.data){
         this.items = resp.data.cows
         this.loading = false
-
-        for(let item of this.items){
-          const resp  = await CowService.getDetails(item._id);
-          if(resp.data){
-            item.grade = resp.data?.quality?.grade
-            item.sum = resp.data.sum
-          }
+        // for(let item of this.items){
+        //   const resp  = await CowService.getDetails(item._id);
+        //   if(resp.data){
+        //     item.grade = resp.data?.quality?.grade
+        //     item.sum = resp.data.sum
+        //   }
           
-        }
+        // }
       }
     },
     async removeCow(id){
