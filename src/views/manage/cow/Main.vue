@@ -54,15 +54,7 @@
               </h4>
               <div class="justify-center flex mt-1 lg:p-2 p-1">
                 <p  :class="filter(item)?.grade?.style+' flex items-center justify-center font-extrabold  lg:text-base text-sm text-center bg-gray-800 rounded-full lg:h-6 lg:w-6 w-4 h-4 shadow-xl mr-1'">
-                  <div v-if="item.grade">{{ item.grade }}</div>
-                  <div v-else>
-                    <BaseIcon
-                      path="dotsCircle"
-                      w="w-4 lg:w-6"
-                      h="h-4 lg:h-6"
-                      class="animate-spin text-gray-500"
-                    />
-                  </div>
+                  <div >{{ item.grade }}</div>
                 </p>
 
                  
