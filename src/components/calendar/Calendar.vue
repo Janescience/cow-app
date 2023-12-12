@@ -351,8 +351,11 @@
    */
   const lastCalendarCells = () => {
     let totalGrid = firstDayOfCurrentMonth.value <= 5 ? 35 : 42;
+    console.log('totalGrid ' +totalGrid)
+    console.log('daysInCurrentMonth.value ' +daysInCurrentMonth.value)
+    console.log('firstDayOfCurrentMonth.value ' +firstDayOfCurrentMonth.value)
     lastEmptyCells.value =
-      totalGrid - daysInCurrentMonth.value - firstDayOfCurrentMonth.value;
+      (totalGrid - daysInCurrentMonth.value - firstDayOfCurrentMonth.value) < 0 ? 0 : (totalGrid - daysInCurrentMonth.value - firstDayOfCurrentMonth.value);
   };
   /**
    * Validates a day to check if it's today or not
