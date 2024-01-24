@@ -127,7 +127,7 @@ export default {
         {
           label : 'อายุครรภ์',
           func : (obj) => {
-            return this.calAge(obj?.pregnantDate)
+            return obj?.sex ? getAge(obj?.pregnantDate,obj?.birthDate).ageString : this.calAge(obj?.pregnantDate)
           },
         },
         {
@@ -258,7 +258,7 @@ export default {
       this.getDatas();
     },
     calAge(date){
-      return getAge(date);
+      return getAge(date).ageString;
     }
   }
 }

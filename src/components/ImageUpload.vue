@@ -43,14 +43,12 @@
             },
             handleFile (e) {
                 const files = e.target.files || e.dataTransfer.files;
-                console.log('files : ',files)
                 if (!files.length)
                     return;
                 if(files[0].size <= 1000000){
                     this.createBase64(files[0]);
                 }else{
-                    window.alert('ขนาดไฟล์รูปภาพต้องน้อยกว่าหรือเท่ากับ 1 MB.')
-                    return;
+                    window.alert('ขนาดไฟล์รูปภาพต้องน้อยกว่าหรือเท่ากับ 1 MB.');
                 }
             },
             createBase64(fileObj) {

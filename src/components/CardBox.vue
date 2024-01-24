@@ -2,6 +2,8 @@
 import { mdiCog } from '@mdi/js'
 import { computed } from 'vue'
 import BaseIcon from '@/components/BaseIcon.vue'
+import BaseButton from '@/components/BaseButton.vue'
+import BaseButtons from '@/components/BaseButtons.vue'
 
 const props = defineProps({
   title: {
@@ -26,7 +28,9 @@ const props = defineProps({
   form: Boolean,
   hoverable: Boolean,
   modal: Boolean,
-  hasScroll : Boolean
+  hasScroll : Boolean,
+  btnLabel : String,
+  btnColor : String
 })
 
 const emit = defineEmits(['header-icon-click', 'submit'])

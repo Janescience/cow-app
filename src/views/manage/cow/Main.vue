@@ -53,7 +53,7 @@
                 <p class="text-gray-400 mr-1">{{ item.code }}</p> - {{ item.name }} 
               </h4>
               <div class="justify-center flex mt-1 lg:p-2 p-1">
-                <p  :class="filter(item)?.grade?.style+' flex items-center justify-center font-extrabold  lg:text-base text-sm text-center bg-gray-800 rounded-full lg:h-6 lg:w-6 w-4 h-4 shadow-xl mr-1'">
+                <p  v-if="item.grade" :class="filter(item)?.grade?.style+' flex items-center justify-center font-extrabold  lg:text-base text-sm text-center bg-gray-800 rounded-full lg:h-6 lg:w-6 w-4 h-4 shadow-xl mr-1'">
                   <div >{{ item.grade }}</div>
                 </p>
 
@@ -349,7 +349,7 @@ export default {
       return {status,grade,quality}
     },
     calAge(bdDate){
-      return getAge(bdDate);
+      return getAge(bdDate).ageString;
     },
   }
 }

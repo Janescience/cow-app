@@ -50,6 +50,7 @@ export default (dob,n) => {
     };  
         
     var  ageString = "";
+    let ageNumber = 0;
        
     if ( (age.years > 0) && (age.months > 0) && (age.days > 0) )  
        ageString = age.years + "." + age.months + " ปี " 
@@ -68,5 +69,7 @@ export default (dob,n) => {
     else if ( (age.years == 0) && (age.months > 0) && (age.days == 0) )  
       ageString = age.months + " เดือน";  
 
-    return ageString; 
+    ageNumber = age.years + "." + age.months + "." + age.days;
+
+    return {ageString,ageNumber}; 
 }

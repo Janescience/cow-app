@@ -31,6 +31,9 @@ import Criteria from "@/components/Criteria.vue";
 import ReportService from '@/services/report'
 import moment from 'moment'
 
+import { status,quality,flag } from '@/constants/cow'
+
+
 export default {
   data (){
     return {
@@ -42,15 +45,32 @@ export default {
           module : 'cow'
         },
         {
-          label : 'วันที่รักษา',
-          value : 'date',
-          icon : 'calendar',
-          type : 'date'
+          label : 'สถานะ',
+          value : 'status',
+          options : status()
+        },
+        {
+          label : 'คุณภาพน้ำนม',
+          value : 'quality',
+          options : quality()
+        },
+        {
+          label : 'คอก',
+          value : 'corral',
+          icon : 'barn',
+        },
+        {
+          label : 'Flag',
+          value : 'flag',
+          options : flag()
         },  
       ],
       search : {
         cow : null,
-        date : null,
+        status : '',
+        quality : '',
+        corral : null,
+        flag : ''
       },
       loading : false,
     }

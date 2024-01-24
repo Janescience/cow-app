@@ -233,7 +233,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         return moment(new Date(date)).format('DD/MM/YYYY');
       },
       calAge(date){
-        return getAge(date);
+        return getAge(date).ageString;
       },
     },
     components : {

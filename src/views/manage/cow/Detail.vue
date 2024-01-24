@@ -1149,7 +1149,7 @@ export default {
       return moment(new Date(date)).format("DD/MM/YYYY");
     },
     calAge(bdDate) {
-      return getAge(bdDate);
+      return getAge(bdDate).ageString;
     },
   },
 };

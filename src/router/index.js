@@ -250,6 +250,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'รายงานการสืบพันธุ์',
+      loginRequired : true
+    },
+    path: '/report/reproduct',
+    name: 'report-reproduct',
+    component: () => import('@/views/report/reproduct/Main.vue')
+  },
+  {
+    meta: {
       title: 'Tables',
       loginRequired : true
     },

@@ -48,12 +48,15 @@
               :options="{ M: 'เพศผู้', F: 'เพศเมีย' }"
             />
           </FormField>
-          <FormField label="ชื่อลูก" v-if="birth.status == 'B' && birth.sex == 'F'" help="* ห้ามว่าง">
+          <FormField label="ชื่อลูก" v-if="birth.status == 'B' && birth.sex == 'F' && !birth.calf?._id" help="* ห้ามว่าง">
             <FormControl
-              v-model="birth.newCow.name"
+              v-model="birth.calf.name"
               icon="babyFaceOutline"
               required
             />
+          </FormField>
+          <FormField label="ลูก" v-else-if="birth.status == 'B' && birth.sex == 'F' && birth.calf?._id" >
+            <a :href="'/manage/cow/detail/'+birth.calf._id" class="underline">{{ birth.calf.code +' : '+birth.calf.name }}</a>
           </FormField>
           <FormField v-if="birth.status == 'B'" label="รก" help="* ห้ามว่าง" >
             <FormCheckRadioPicker
@@ -142,12 +145,12 @@ import { handleError } from 'vue'
           birthDate : new Date(),
           drugDate : addDays(new Date(),15),
           washDate : addDays(new Date(),29),
-          newCow : {
+          calf : {
             name : "",
-            mom : "",
           },
           status : "",
-          reproduction : ""
+          reproduction : "",
+          gestAge : null
         },
         show : {
           cow : null,
@@ -176,8 +179,8 @@ import { handleError } from 'vue'
         handler(n,o){
           if(n){
             this.birth = n
-            if(!this.birth.newCow){
-              this.birth.newCow = {}
+            if(!this.birth.calf){
+              this.birth.calf = {}
             }
             // this.birth.newCow.name = n.calf?.name
             // this.birth.reproduction = n.reproduction?._id
@@ -224,43 +227,35 @@ import { handleError } from 'vue'
             this.loading = true
             this.alert = ""
             try {
+              this.birth.gestAge = getAge(this.birth?.pregnantDate,this.birth.birthDate).ageNumber
               if(this.birth.overgrown === "N"){
                 this.birth.drugDate = null
                 this.birth.washDate = null
               }
-              if(this.mode === 'create'){
-                const resp = await BirthService.create(this.birth._id,this.birth);
-                if(resp){
-                    this.loading = false
-                    this.value = false 
-                    this.confirmCancel('confirm') 
-                }
-              }else{
-                if(this.birth.status == 'P'){
-                  this.birth.sex = ""
-                  this.birth.drugDate = null
-                  this.birth.washDate = null
-                }
-                const resp = await BirthService.update(this.birth._id,this.birth);
-                if(resp){
-                    this.loading = false
-                    this.value = false
-                    this.confirmCancel('confirm')  
-                    Toast.fire({
-                      icon: 'success',
-                      title: 'บันทึกข้อมูลสำเร็จ'
-                    })
-                }
+              if(this.birth.status == 'P'){
+                this.birth.sex = ""
+                this.birth.drugDate = null
+                this.birth.washDate = null
+              }
+              const resp = await BirthService.create(this.birth._id,this.birth);
+              if(resp){
+                  this.loading = false
+                  this.value = false 
+                  this.confirmCancel('confirm') 
+                  Toast.fire({
+                    icon: 'success',
+                    title: 'บันทึกข้อมูลสำเร็จ'
+                  })
               }
             } catch (error) {
               console.error('Error : ',error)
-                this.loading = false  
-                this.alert = error.response.data.message
+              this.loading = false  
+              this.alert = error.response.data.message
             }
             
         },
         calAge(checkDate){
-          return getAge(checkDate);
+          return getAge(checkDate).ageString;
         },
         formatDate(date){
           return moment(date).format('DD/MM/YYYY')

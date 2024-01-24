@@ -37,3 +37,11 @@ export const quality = (mode) => {
         ]
     }
 }
+
+export const flag = () => {
+    return [
+        { id: '', label: 'ทั้งหมด' },
+        { id: 'Y', label: 'ใช้งาน' },
+        { id: 'N', label: 'ไม่ใช้งาน' },
+    ]
+}

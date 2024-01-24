@@ -93,17 +93,22 @@ export default [
   ],
   'รายงาน',
   [
-    {
-      label: 'ผลผลิต',
-      icon: 'chartBoxOutline',
-      menu: [
         {
           to: '/report/raw-milk',
           icon: 'water',
-          label: 'น้ำนมดิบ'
+          label: 'ผลผลิตน้ำนมดิบ'
+        },
+        {
+          to: '/report/history',
+          icon: 'cow',
+          label: 'ข้อมูลโค'
+        },
+        {
+          to: '/report/reproduct',
+          icon: 'reproduction',
+          label: 'ข้อมูลการสืบพันธุ์'
         }
-      ]
-    },
+    
     // {
     //   label: 'รายรับ-รายจ่าย',
     //   icon: 'cashRegister',
@@ -121,27 +126,6 @@ export default [
     //     },
     //   ]
     // },
-    {
-      label: 'ประวัติต่างๆ',
-      icon: 'textBoxSearchOutline',
-      menu: [
-        {
-          to: '/report/history',
-          icon: 'cow',
-          label: 'ข้อมูลโค'
-        },
-        // {
-        //   to: '/report/parameter',
-        //   icon: 'chartLine',
-        //   label: 'ประวัติการรักษา ป้องกัน และฟื้นฟู'
-        // },
-        // {
-        //   to: '/report/parameter',
-        //   icon: 'chartLine',
-        //   label: 'ประวัติการสืบพันธุ์ และการคลอดลูก'
-        // },
-      ]
-    },
     // {
     //   label: 'วิเคราะห์',
     //   icon: 'calculator',
