@@ -26,8 +26,12 @@ const props = defineProps({
   form: Boolean,
   hoverable: Boolean,
   modal: Boolean,
+  collapse : {
+    type : Boolean,
+    default : false
+  }
 })
-var collapse = ref(false);
+var collapse = ref(props.collapse);
 const emit = defineEmits(['header-icon-click', 'submit'])
 
 const is = computed(() => props.form ? 'form' : 'div')

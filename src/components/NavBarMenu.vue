@@ -49,7 +49,7 @@ onBeforeUnmount(() => {
     @click="toggle"
   >
     <a
-      class="flex items-center py-2 px-3 dark:bg-zinc-800 lg:bg-transparent lg:dark:bg-transparent"
+      class="flex items-center py-2 px-3 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent"
       :class="styleStore.navBarMenuListUpperLabelStyle"
     >
       <slot />
@@ -60,7 +60,7 @@ onBeforeUnmount(() => {
     </a>
     <div
       class="text-sm  border-b border-gray-100 lg:border-b-0 lg:border-gray-200 lg:border-t lg:bg-white lg:absolute
-          lg:top-full lg:left-0 lg:min-w-full lg:z-20 lg:shadow-md lg:rounded-b lg:dark:bg-zinc-800
+          lg:top-full lg:left-0 lg:min-w-full lg:z-20 lg:shadow-md lg:rounded-b lg:dark:bg-gray-900
           dark:border-gray-700 "
       :class="{'lg:hidden':!isDropdownActive}"
     >

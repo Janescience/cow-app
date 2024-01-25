@@ -98,7 +98,7 @@ const logout = () => {
       </NavBarItem>
     </div>
     <div
-      class="absolute w-screen lg:top-14 bottom-14 left-0 
+      class="absolute w-screen lg:top-14 bottom-12 left-0 
         lg:w-auto lg:items-stretch lg:flex lg:grow lg:static lg:border-b-0 lg:overflow-visible dark:bg-gray-900"
       :class="[isMenuNavBarActive ? 'block' : 'hidden']"
     >

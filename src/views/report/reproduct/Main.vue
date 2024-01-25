@@ -16,6 +16,7 @@
         :search="search"
         :btnSubmitLoading="loading"
         :btnViewLoading="viewLoading"
+        collapse
       />
 
       <Table

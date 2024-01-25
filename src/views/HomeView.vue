@@ -253,82 +253,115 @@
         <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
       </CardBox>
 
-      <CardBox icon="cashRegister" class="lg:col-span-3 mb-1 lg:text-base text-sm lg:mb-5" title="ผลประกอบการ" header-icon="">
-        <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
-          <CardBox icon="accountCashOutline" class="border-gray-400 border-2 shadow-xl" title="ต้นทุน" header-icon="">
-            <div class="grid grid-cols-2 gap-5">
+      <CardBox icon="cashRegister" class="lg:col-span-3 mb-1 lg:text-base text-sm lg:mb-5" title="ภาพรวมผลประกอบการทั้งหมด" header-icon="">
+        <div class="grid lg:grid-cols-3 grid-cols-1 gap-5">
+          <CardBox icon="accountCashOutline" class="border-gray-400 border-2 shadow" title="ต้นทุน" header-icon="">
+            <div class="grid grid-cols-1">
               <p>อุปกรณ์</p>
               <p class="text-right">
                 {{
                   $filters.currency(expense?.cost?.equipment)
                 }}
               </p>
+              <hr class="dark:border-gray-700"/>
               <p>สิ่งปลูกสร้าง</p>
               <p class="text-right">
                 {{
                   $filters.currency(expense?.cost?.building)
                 }}
               </p>
+              <hr class="dark:border-gray-700"/>
               <p>การซ่อมบำรุง</p>
               <p class="text-right">
                 {{
                   $filters.currency(expense?.cost?.maintenance)
                 }}
               </p>
+              <hr class="dark:border-gray-700"/>
               <p>ค่าใช้จ่ายเพิ่มเติม</p>
               <p class="text-right">
                 {{
                   $filters.currency(expense?.cost?.bill)
                 }}
               </p>
+              <hr class="dark:border-gray-700"/>
+              <p>รวมต้นทุน</p>
+
+              <div class="text-red-500 text-right text-xl font-bold">
+                {{
+                  $filters.currency(sumExpense().sumCost) 
+                }}
+              </div>
             </div>
+
           </CardBox>
-          <CardBox class="border-gray-400 border-2 shadow-xl" icon="doctor" title="ค่าดูแล" header-icon="">
-            <div class="grid grid-cols-2 gap-5 grid-flow-row-dense">
-              <p>รักษา</p>
+          <CardBox class="border-gray-400 border-2 shadow-xl" icon="doctor" title="การดูแล" header-icon="">
+            <div class="grid grid-cols-1 ">
+              <p >ค่ารักษา</p>
               <p class="text-right">
                 {{
                   $filters.currency(expense?.care?.heal)
                 }}
               </p>
-              <p>ป้องกัน/บำรุง</p>
-              <p class="text-right">
+              <hr/>
+              <p>ค่าป้องกัน/บำรุง</p>
+              <p  class="text-right">
                 {{
                   $filters.currency(expense?.care?.protection)
                 }}
               </p>
-              <p>อาหาร</p>
-              <p class="text-right">
+              <hr/>
+              <p>ค่าอาหาร</p>
+              <p  class="text-right">
                 {{
                   $filters.currency(expense?.care?.food)
                 }}
               </p>
-              <p>จ้างคนงาน</p>
-              <p class="text-right">
+              <hr/>
+              <p>ค่าจ้างคนงาน</p>
+              <p  class="text-right" >
                 {{
                   $filters.currency(expense?.care?.worker)
                 }}
               </p>
+              <hr/>
+                  <p >รวมค่าดูแล</p>
+
+                  <div class="text-red-500 text-right text-xl font-bold">
+                    {{
+                      $filters.currency(sumExpense().sumCare) 
+                    }}
+                  </div>
             </div>
           </CardBox>
           <CardBox icon="cashMultiple" class="border-gray-400 border-2 shadow-xl" title="ผลผลิต" header-icon="">
-            <div class="grid grid-cols-2 gap-5">
+            <div class="grid grid-cols-1">
               <p>น้ำนมดิบ</p>
               <p class="text-right">
                 {{ $filters.currency(income.rawMilk) }}
               </p>
+              <hr/>
               <p>นมพาสเจอร์ไรส์</p>
               <p class="text-right">{{ $filters.currency(0) }}</p>
+              <hr/>
               <p>มูลสัตว์</p>
               <p class="text-right">{{ $filters.currency(0) }}</p>
+              <hr/>
               <p>จำหน่ายโค</p>
               <p class="text-right">{{ $filters.currency(0) }}</p>
+              <hr/>
               <p>จำหน่ายเนื้อโค</p>
               <p class="text-right">{{ $filters.currency(0) }}</p>
+              <hr/>
+              <p>รวมผลผลิต</p>
+
+              <div class="text-green-500 text-right text-xl font-bold">
+                {{ $filters.currency(income.rawMilk)  }}
+              </div>
             </div>
           </CardBox>
 
-          <CardBox class="border-gray-300 border-4 shadow-xl" icon="homeAnalytics" title="สรุป" header-icon="">
+          <!-- <CardBox class="border-gray-300 border-4 shadow-xl" icon="homeAnalytics" title="สรุป" header-icon="">
             <div class="grid grid-cols-2 gap-5 grid-flow-row-dense">
               <p>รายได้</p>
               <p class="text-right font-extrabold bg-teal-900 rounded p-1 text-green-500">
@@ -343,38 +376,6 @@
             </div>
           </CardBox>
 
-          <CardBox icon="" class="dark:bg-red-300 bg-red-300 shadow-xl" title="" header-icon="">
-            <div class="grid grid-cols-1 text-center">
-              <p class="text-black text-xs">รวมต้นทุน</p>
-
-              <div class="text-red-500 text-center text-2xl font-extrabold">
-                {{
-                  $filters.currency(sumExpense().sumCost) 
-                }}
-              </div>
-            </div>
-          </CardBox>
-          <CardBox class="dark:bg-red-300 bg-red-300 shadow-xl" icon="" title="" header-icon="">
-            <div class="grid grid-cols-1 text-center">
-              <p class="text-black text-xs">รวมค่าดูแล</p>
-
-              <div class="text-red-500 text-center text-2xl font-extrabold">
-                {{
-                  $filters.currency(sumExpense().sumCare) 
-                }}
-              </div>
-            </div>
-          </CardBox>
-
-          <CardBox icon="" class="dark:bg-teal-900 bg-teal-900 shadow-xl" title="" header-icon="">
-            <div class="grid grid-cols-1 text-center">
-              <p class="text-black text-xs">รวมผลผลิต</p>
-
-              <div class="text-green-500 text-center text-2xl font-extrabold">
-                {{ $filters.currency(income.rawMilk)  }}
-              </div>
-            </div>
-          </CardBox>
           <CardBox icon="" :class="(sumExpense().profit < 0
               ? 'dark:bg-red-900 bg-red-900 text-rose-500'
               : 'dark:bg-teal-900 bg-teal-900 text-green-500') + ' shadow-xl'
@@ -390,7 +391,7 @@
                 }}
               </div>
             </div>
-          </CardBox>
+          </CardBox> -->
         </div>
       </CardBox>
 

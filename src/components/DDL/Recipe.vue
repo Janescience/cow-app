@@ -111,7 +111,7 @@ export default {
 <style scpoed>
        
     
-    .ddl {
+    /* .ddl {
         --vs-dropdown-bg: #1f2937;
         --vs-dropdown-option-color: #ffffff;
         --vs-border-color: #1f2937;
@@ -135,5 +135,5 @@ export default {
         border-width: 1px;
         box-shadow:  0 0 #0000,  0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
-    }
+    } */
 </style>

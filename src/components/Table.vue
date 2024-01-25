@@ -12,7 +12,7 @@
         <CardBox
             v-if="itemsPaginated.length > 0"
             :title="title + ' ' + countChecked()"
-            class="shadow-lg dark:border-gray-800 border-4"
+            class="shadow-lg dark:border-gray-800 border"
             has-table
             :rounded="rounded"
             :icon="icon"
@@ -118,7 +118,7 @@
                         :active="page === currentPage"
                         :label="page + 1"
                         teeny
-                        class="p-0 text-sm"
+                        class="p-0 text-sm "
                         @click="currentPage = page"
                     />
                   </BaseButtons>
@@ -130,13 +130,13 @@
             :title="title + ' ' + countChecked()"
             header-icon=""
             :icon="icon"
-            class="shadow-lg dark:border-gray-800 border-4"
+            class="shadow-lg dark:border-gray-800 border"
             v-else-if="loading" loading/>
         <CardBox 
             :title="title + ' ' + countChecked()"
             header-icon=""
             :icon="icon"
-            class="shadow-lg dark:border-gray-800 border-4"
+            class="shadow-lg dark:border-gray-800 border"
             v-else empty/>
 </template>
 
