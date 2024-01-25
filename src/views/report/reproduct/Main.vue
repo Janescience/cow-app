@@ -9,7 +9,7 @@
 
       <Criteria
         grid="grid-cols-2 lg:grid-cols-4"
-        @search="exportExcel"
+        @search="print"
         @view="view" 
         @reset="reset" 
         :forms="forms" 
@@ -118,15 +118,11 @@ export default {
         },
         {
           label : 'ผล',
-          func : (obj) => {
-            return reproductResult()[obj.result].label
-          },
+          value : 'result',
         },
         {
           label : 'สถานะ',
-          func : (obj) => {
-            return reproductStatus()[obj.status].label
-          },
+          value : 'status',
         },
         {
           label : "การรักษา",
@@ -149,6 +145,55 @@ export default {
           class : 'text-center',
           value : 'checkDate',
           type : 'date',
+        },
+        {
+          label : "วันที่ตั้งครรภ์",
+          class : 'text-center',
+          value : 'pregnantDate',
+          type : 'date',
+        },
+        {
+          label : "เพศ",
+          class : 'text-center',
+          value : 'sex',
+        },
+        {
+          label : "วันที่คลอด",
+          class : 'text-center',
+          value : 'birthDate',
+          type : 'date',
+        },
+        {
+          label : "รกค้าง",
+          class : 'text-center',
+          value : 'overgrown',
+        },
+        {
+          label : "วันที่ใช้ยาขับ",
+          class : 'text-center',
+          value : 'drugDate',
+          type : 'date',
+        },
+        {
+          label : "วันที่ล้างมดลูก",
+          class : 'text-center',
+          value : 'washDate',
+          type : 'date',
+        },
+        {
+          label : "อายุครรภ์",
+          class : 'text-center',
+          value : 'gestAge',
+        },
+        {
+          label : "รหัสลูกวัว",
+          class : 'text-center',
+          value : 'calfCode',
+        },
+        {
+          label : "ชื่อลูกวัว",
+          class : 'text-center',
+          value : 'calfName',
         },
       ],
       search : {
@@ -174,16 +219,16 @@ export default {
   methods : {
     async view(search){
       this.viewLoading = true
-      const resp = await ReproductionService.all(search);
+      const resp = await ReportService.reproductView(search);
       this.items = []
       if(resp.data){
         this.items = resp.data.reproducts
       }
       this.viewLoading = false
     },
-    async exportExcel(){
+    async print(){
       this.loading = true
-      const resp = await ReportService.reproduction(this.search);
+      const resp = await ReportService.reproductExport(this.search);
       if(resp.data){
         const url = window.URL.createObjectURL(new Blob([resp.data]));
         const link = document.createElement('a');

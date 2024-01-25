@@ -68,9 +68,17 @@ class ReportService{
             });
     }
 
-    async reproduction(search){
+    async reproductExport(search){
         const query = await getSearchQuery(search);
-        return http.get(`/report/reproduction`+query,{responseType : 'blob'})
+        return http.get(`/report/reproduct`+query,{responseType : 'blob'})
+            .then(response => {
+                return response;
+            });
+    }
+
+    async reproductView(search){
+        const query = await getSearchQuery(search);
+        return http.get(`/report/view/reproduct`+query)
             .then(response => {
                 return response;
             });
