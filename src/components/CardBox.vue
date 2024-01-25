@@ -40,7 +40,7 @@ const is = computed(() => props.form ? 'form' : 'div')
 const componentClass = computed(() => {
   const base = [
     props.rounded,
-    props.modal ? 'dark:bg-gray-900' : 'dark:bg-gray-900'
+    props.modal ? 'dark:bg-gray-900 bg-white' : 'dark:bg-gray-900 dark:border-gray-800 border-gray-300 border' 
   ]
 
   if (props.hoverable) {

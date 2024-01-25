@@ -19,7 +19,7 @@ export const basic = {
 
 export const white = {
   app: `bg-white ${appBase}`,
-  aside: 'bg-white border-r border-gray-100 aside-scrollbars-light',
+  aside: 'bg-gray-100 border-r border-gray-200 aside-scrollbars-light',
   asideBrand: '',
   asideMenuCloseLg: '',
   asideMenuLabel: 'font-extrabold text-gray-700',

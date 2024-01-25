@@ -113,28 +113,25 @@ export default {
        
     
     .ddl {
-        --vs-dropdown-bg: #1f2937;
-        --vs-dropdown-option-color: #ffffff;
-        --vs-border-color: #1f2937;
-        --vs-selected-color: #ffffff;
-        --vs-selected-bg: #6b7280;
-        --vs-controls-color: #6b7280;
-        --vs-search-input-bg: #1f2937;
-        --vs-line-height: 1.6;
-        --vs-font-size: 1rem;
-        --vs-dropdown-min-width: 100%;
-        --vs-dropdown-option--active-bg: #111827;
-        --vs-search-input-placeholder-color: #6b7280;
-        --vs-controls-size: 0.8;
-        --vs-disabled-bg: #1f2937;
-        --vs-disabled-color: #ffffff;
-        --vs-disabled-controls-color: #6b7280;
+        /* --vs-dropdown-option-color: #ffffff; */
+        /* --vs-border-color: #1f2937; */
+        /* --vs-selected-color: #ffffff; */
+        /* --vs-selected-bg: #6b7280; */
+        /* --vs-controls-color: #6b7280; */
+        /* --vs-line-height: 1.6; */
+        /* --vs-font-size: 1rem; */
+        /* --vs-dropdown-min-width: 100%; */
+        /* --vs-dropdown-option--active-bg: #111827; */
+        /* --vs-search-input-placeholder-color: #6b7280; */
+        /* --vs-controls-size: 0.8; */
+        /* --vs-disabled-bg: #1f2937; */
+        /* --vs-disabled-color: #ffffff; */
+        /* --vs-disabled-controls-color: #6b7280; */
 
-        border-color: #374151;
-        background: #1f2937;
-        border-radius: 0.375rem;
-        border-width: 1px;
-        box-shadow:  0 0 #0000,  0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        /* border-color: #374151; */
+        /* border-radius: 0.375rem; */
+        /* border-width: 1px; */
+        /* box-shadow:  0 0 #0000,  0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); */
 
     }
 </style>
