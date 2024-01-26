@@ -14,6 +14,14 @@ async function getSearchQuery (opts = {}) {
     }
     if (opts.monthTo) {
         query = query + `monthTo=${opts.monthTo}&`;
+    }
+    if (opts.dateFrom) {
+        const dateNoTime = moment(new Date(opts.dateFrom)).format('YYYY-MM-DD') 
+        query = query + `dateFrom=${dateNoTime}&`;
+    }
+    if (opts.dateTo) {
+        const dateNoTime = moment(new Date(opts.dateTo)).format('YYYY-MM-DD') 
+        query = query + `dateTo=${dateNoTime}&`;
     } 
     if (opts.date) {
         const dateNoTime = moment(new Date(opts.date)).format('YYYY-MM-DD') 
@@ -53,9 +61,17 @@ async function getSearchQuery (opts = {}) {
     return opts ? query.replace(/&*$/, "") : "";
 }
 class ReportService{
-    async cow(search){
+    async cowExport(search){
         const query = await getSearchQuery(search);
         return http.get(`/report/cow`+query,{responseType : 'blob'})
+            .then(response => {
+                return response;
+            });
+    }
+
+    async cowView(search){
+        const query = await getSearchQuery(search);
+        return http.get(`/report/view/cow`+query)
             .then(response => {
                 return response;
             });
@@ -79,6 +95,22 @@ class ReportService{
     async reproductView(search){
         const query = await getSearchQuery(search);
         return http.get(`/report/view/reproduct`+query)
+            .then(response => {
+                return response;
+            });
+    }
+
+    async healExport(search){
+        const query = await getSearchQuery(search);
+        return http.get(`/report/heal`+query,{responseType : 'blob'})
+            .then(response => {
+                return response;
+            });
+    }
+
+    async healView(search){
+        const query = await getSearchQuery(search);
+        return http.get(`/report/view/heal`+query)
             .then(response => {
                 return response;
             });

@@ -4,7 +4,7 @@
 
       <SectionTitleBarSub 
         icon="reproduction" 
-        title="การสืบพันธุ์"
+        title="รายงานการสืบพันธุ์"
       />
 
       <Criteria
@@ -95,10 +95,12 @@ export default {
       ],
       datas : [
         {
-          label : "วันที่เข้าระบบสืบพันธุ์",
-          class : 'text-center',
-          value : 'loginDate',
-          type : 'date',
+          label : "รหัสโค",
+          value : 'cow.code',
+        },
+        {
+          label : "ชื่อโค",
+          value : 'cow.name',
         },
         {
           label : "ครั้งที่",
@@ -106,12 +108,10 @@ export default {
           value : 'seq',
         },
         {
-          label : "รหัสโค",
-          value : 'cow.code',
-        },
-        {
-          label : "ชื่อโค",
-          value : 'cow.name',
+          label : "วันที่เข้าระบบสืบพันธุ์",
+          class : 'text-center',
+          value : 'loginDate',
+          type : 'date',
         },
         {
           label : "พ่อพันธุ์",

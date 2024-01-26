@@ -232,12 +232,12 @@ const routes = [
   },
   {
     meta: {
-      title: 'รายงานประวัติต่างๆ',
+      title: 'รายงานข้อมูลโค',
       loginRequired : true
     },
-    path: '/report/history',
-    name: 'report-history',
-    component: () => import('@/views/report/history/Main.vue')
+    path: '/report/cow',
+    name: 'report-cow',
+    component: () => import('@/views/report/cow/Main.vue')
   },
   {
     meta: {
@@ -256,6 +256,15 @@ const routes = [
     path: '/report/reproduct',
     name: 'report-reproduct',
     component: () => import('@/views/report/reproduct/Main.vue')
+  },
+  {
+    meta: {
+      title: 'รายงานการรักษา',
+      loginRequired : true
+    },
+    path: '/report/heal',
+    name: 'report-heal',
+    component: () => import('@/views/report/heal/Main.vue')
   },
   {
     meta: {

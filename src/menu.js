@@ -93,21 +93,26 @@ export default [
   ],
   'รายงาน',
   [
-        {
-          to: '/report/raw-milk',
-          icon: 'water',
-          label: 'ผลผลิตน้ำนมดิบ'
-        },
-        {
-          to: '/report/history',
-          icon: 'cow',
-          label: 'ข้อมูลโค'
-        },
-        {
-          to: '/report/reproduct',
-          icon: 'reproduction',
-          label: 'ข้อมูลการสืบพันธุ์'
-        }
+    {
+      to: '/report/raw-milk',
+      icon: 'water',
+      label: 'ผลผลิตน้ำนมดิบ'
+    },
+    {
+      to: '/report/cow',
+      icon: 'cow',
+      label: 'ข้อมูลโค'
+    },
+    {
+      to: '/report/reproduct',
+      icon: 'reproduction',
+      label: 'ข้อมูลการสืบพันธุ์'
+    },
+    {
+      to: '/report/heal',
+      icon: 'doctor',
+      label: 'ข้อมูลการรักษา'
+    }
     
     // {
     //   label: 'รายรับ-รายจ่าย',
