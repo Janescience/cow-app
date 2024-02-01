@@ -32,6 +32,13 @@ class ProtectionService{
         }
         return http.post(`/protection`,payload);
     }
+
+    confirm(payload){
+        if (payload.date) {
+            payload.date = moment(new Date(payload.date)).format('YYYY-MM-DD') 
+        }
+        return http.post(`/protection/confirm`,payload);
+    }
     delete(id){
         return http.delete(`/protection/${id}`);
     }

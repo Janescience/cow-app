@@ -16,6 +16,8 @@ defineProps({
     type: String,
     default: ''
   },
+  pathBack : String,
+  hasBtnBack : Boolean,
   hasBtnAdd : Boolean,
   hasBtnSearch : Boolean
 })
@@ -43,13 +45,24 @@ const openModal = () => confirmOpenModal('openModal')
         {{ title }}
       </h1>
     </div>
-    <BaseButton
-      class="text-right"
-      v-if="hasBtnAdd"
-      :label="btnText"
-      color="success"
-      @click="openModal"
-      small
-    />
+    <div>
+      <BaseButton
+        v-if="pathBack"
+        class="lg:visible invisible"
+        label="ย้อนกลับ"
+        color="light"
+        @click="this.$router.push(pathBack)"
+        small
+      />
+      <BaseButton
+        class="text-right"
+        v-if="hasBtnAdd"
+        :label="btnText"
+        color="success"
+        @click="openModal"
+        small
+      />
+    </div>
+    
   </section>
 </template>

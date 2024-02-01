@@ -196,6 +196,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'ประวัติการป้องกัน/บำรุง',
+      loginRequired : true
+    },
+    path: '/manage/protection/history/:vaccine',
+    name: 'protectionHistory',
+    component: () => import('@/views/manage/protection/History.vue')
+  },
+  {
+    meta: {
       title: 'รายละเอียดการป้องกัน/บำรุง',
       loginRequired : true
     },

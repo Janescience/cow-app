@@ -19,18 +19,55 @@
         :btnLoading="loading"
       />
 
-      <Table
-        title="รายการป้องกัน/บำรุง" 
-        has-checkbox
-        :checked-data="checked" 
-        :items="items" 
-        :datas="datas" 
-        :buttons="buttons" 
-        @edit="edit" 
-        @delete="remove" 
-        @deleteSelected="removeSelected"
-        :loading="loading"
-      />
+      <div
+        v-if="!loading"
+        class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-1 lg:grid-cols-4 md:grid-cols-3"
+      >
+        <CardBox
+          v-for="item in itemsPaginated"
+          :key="item.name"
+          @click="history(item)"
+          hoverable
+        >
+          <BaseLevel type="justify-center mt-3">
+            <div class="bg-blue-900 rounded-full w-20 h-20 justify-center flex text-2xl items-center">
+              {{ item.vaccine?.code.split('_')[1] }}
+              <!-- <BaseIcon
+                  path="needle"
+                  size="50"
+                  class="text-sky-500 "
+                /> -->
+            </div>
+            
+          </BaseLevel>
+          <div class="text-center mt-2">
+            <h4 class="lg:text-2xl text-xl">
+               {{ item.vaccine?.name }} 
+            </h4>
+            <p v-if="item.count" class="lg:text-md dark:text-gray-400 text-sm flex justify-center">
+               จำนวนรวม <div class="underline decoration-2 ml-1 mr-1">{{ item.count }}</div> ครั้ง
+            </p>
+            <p v-if="item.amount" class="lg:text-md dark:text-gray-400 flex text-sm justify-center ">
+               ราคารวม <div class="underline decoration-2 ml-1 mr-1">{{ $filters.currency(item.amount) }}  </div>
+            </p>
+            <p class="lg:text-md dark:text-gray-400 flex text-sm justify-center ">
+               ล่าสุด <div class="underline decoration-2 ml-1 mr-1">{{ formatDate(item.vaccine?.currentDate) }}  </div> |
+               ต่อไป <div class="underline decoration-2 ml-1 mr-1">{{ formatDate(item.vaccine?.nextDate) }}  </div>
+            </p>
+          </div>
+        </CardBox>
+      </div>
+      <div
+          v-else
+          class="text-center py-10 text-gray-500 dark:text-gray-400 "
+        >
+          <BaseIcon
+            path="dotsCircle"
+            size="22"
+            class="animate-spin"
+          />
+          <p> กำลังโหลดข้อมูล...</p>
+      </div>
 
     </SectionMain>
   </LayoutAuthenticated>
@@ -43,18 +80,24 @@ import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 
 import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
+import UserAvatar from "@/components/UserAvatar.vue";
+import BaseLevel from "@/components/BaseLevel.vue";
+import BaseIcon from "@/components/BaseIcon.vue";
+import CardBox from "@/components/CardBox.vue";
 
 import ProtectionService from '@/services/protection'
 
-import { Toast } from "@/utils/alert";
-import _ from "lodash";
 
+import _ from 'lodash'
+import moment from 'moment'
+
+import { Toast } from "@/utils/alert";
 
 export default {
   data (){
     return {
-      openModal : false,
-      modalData : null,
+      perPage :12,
+      currentPage : 0,
       items : [],
       forms : [
         {
@@ -64,85 +107,12 @@ export default {
           type : 'ddl',
           module : 'vaccine',
           valueType : '_id'
-        }, 
-        {
-          label : 'วันที่ฉีดวัคซีน',
-          value : 'date',
-          icon : 'calendar',
-          type : 'date'
         },
       ],
       search : {
-        date : null,
         vaccine : null,
       },
       loading : false,
-      mode : "create",
-      dataEdit : null,
-      checked : {
-        label : {
-          value : 'vaccine.name'
-        },
-        code : {
-          value : 'vaccine.seq'
-        }
-      },
-      datas : [
-        {
-          label : "ครั้งที่",
-          value : 'seq'
-        },
-        {
-          label : "วัคซีน",
-          value : 'vaccine.name'
-        },
-        {
-          label : "จำนวนที่ฉีด (ตัว)",
-          class : 'text-center',
-          value : 'qty'
-        },
-        {
-          label : "รวมเป็นเงิน (บาท)",
-          class : 'text-center',
-          value : 'amount'
-        },
-        {
-          label : "วันที่ฉีดวัคซีน",
-          class : 'text-center',
-          value : 'date',
-          type : 'date',
-        },
-        {
-          label : "หมายเหตุ",
-          class : 'text-center',
-          value : 'remark',
-        },
-      ],
-      buttons : [
-        {
-          label : 'ลบ',
-          type : 'delete',
-          color : 'danger',
-        },
-        {
-          label : 'แก้ไข',
-          type : 'edit',
-          color : 'warning',
-          condition : (obj) => {
-            const groupVacs = _.groupBy(this.items,'vaccine._id');
-            for(let vac of Object.keys(groupVacs)){
-              const vacs = groupVacs[vac];
-              const sortedVacs = _.orderBy(vacs,'seq','desc');
-              if(sortedVacs.length > 0){
-                if(obj._id == sortedVacs[0]._id){
-                  return true
-                }
-              }
-            }
-            return false
-          }
-        },
-      ]
     }
   },
   components : {
@@ -150,11 +120,34 @@ export default {
     LayoutAuthenticated,
     SectionTitleBarSub,
     Table,
-    Criteria
+    Criteria,
+    BaseLevel,
+    UserAvatar,
+    CardBox,
+    BaseIcon
+  },
+  computed : {
+    itemsPaginated() {
+        return this.items ? this.items.slice(this.perPage * this.currentPage, this.perPage * (this.currentPage + 1)) : []
+    },
+    numPages(){
+        return Math.ceil((this.items ? this.items.length : 0) / this.perPage);
+    },
+    currentPageHuman() {
+        return this.currentPage + 1
+    },
+    pagesList() {
+        const pagesList = []
+
+        for (let i = 0; i < this.numPages; i++) {
+            pagesList.push(i)
+        }
+
+        return pagesList
+    },
   },
   created() {
-    this.search.vaccine = this.$route.params.vaccine
-    this.getDatas(this.search);
+    this.getDatas();
   },
   methods : {
     async getDatas(search){
@@ -162,21 +155,25 @@ export default {
       const resp = await ProtectionService.all(search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.protections
+        const datas = resp.data.protections;
+        const groupVaccines = _.groupBy(datas,'vaccine._id')
+        const today = new Date().setUTCHours(0, 0, 0, 0)
+        for(let key of Object.keys(groupVaccines)){
+          const protections = groupVaccines[key];
+          let sumAmount = null;
+          let count = 0
+          for(let protection of protections){
+            const dateVac = new Date(protection.date).setUTCHours(0,0,0,0)
+            if(today >= dateVac){
+              sumAmount += protection.amount;
+              count++
+            }
+          }
+          this.items.push({vaccine:protections[0].vaccine,amount:sumAmount,count:count,protections})
+        }
       }
       this.loading = false
-    },
-    async remove(id){
-      this.loading = true
-      const resp = await ProtectionService.delete(id);
-      if(resp.data){
-        this.getDatas()
-      }
-      this.loading = false
-      Toast.fire({
-        icon: 'success',
-        title: 'ลบข้อมูลสำเร็จ'
-      })
+
     },
     add(){
       this.$router.push({
@@ -186,16 +183,21 @@ export default {
           }
       });
     },
-    edit(obj){
+    history(obj){
       this.$router.push({
-          name: "protectionDetail",
+          name: "protectionHistory",
           params: {
-              id: obj._id ,
+            vaccine: obj.vaccine._id ,
           }
       });
     },
+    formatDate(date){
+        if(!date){
+            return null
+        }
+        return moment(date).format('DD/MM/YYYY');
+    },
     reset(){
-      this.search.date = null
       this.search.vaccine = null
       this.getDatas()
     },
