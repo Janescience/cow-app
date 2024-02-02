@@ -3,8 +3,8 @@
     <SectionMain>
 
       <SectionTitleBarSub 
-        icon="foodDrumstickOutline" 
-        title="การให้อาหาร"
+        icon="corn" 
+        title="การให้อาหาร (แยกตามคอก)"
       />
 
       <Criteria
@@ -18,7 +18,7 @@
 
       <div
         v-if="!loading"
-        class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-3 lg:grid-cols-5 md:grid-cols-4"
+        class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-2 lg:grid-cols-5 md:grid-cols-4"
       >
         <CardBox
           v-for="item in itemsPaginated"
@@ -26,27 +26,42 @@
           @click="detail(item)"
           hoverable
         >
-          <BaseLevel type="justify-center mt-3">
-            <div class="bg-orange-900 rounded-full w-20 h-20 justify-center flex items-center">
-              <BaseIcon
-                  path="barn"
-                  size="50"
-                  class="dark:text-orange-500 "
-                />
+          <BaseLevel type="justify-center mt-1">
+            <div class="bg-orange-800 rounded-full text-orange-400 lg:text-3xl text-xl lg:w-16 lg:h-16 w-12 h-12 justify-center flex items-center font-extrabold">
+              {{ item.corral }} 
             </div>
             
           </BaseLevel>
-          <div class="text-center mt-2">
-            <h4 class="lg:text-3xl text-xl ">
-               คอก {{ item.corral }} 
-            </h4>
-            <p v-if="item.qty" class="lg:text-md dark:text-gray-400 text-sm flex justify-center">
-               จำนวนรวม <div class="underline decoration-2 ml-1 mr-1">{{ $filters.number(item.qty) }}</div> กก. 
+          <div class="mt-2 h-12 lg:text-sm text-xs mb-1">
+            <div v-if="item.qty" class=" dark:text-gray-400  grid grid-cols-2 ">
+              <div>
+                จำนวนรวม
+              </div>
+              <div class="flex justify-end">
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ $filters.number(item.qty) }}</div>  
+                กก.
+              </div>
+            </div>
+            <p v-if="item.amount" class="dark:text-gray-400 grid grid-cols-2">
+               <div>
+                ราคารวม
+               </div> 
+               <div class="flex justify-end">
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ $filters.currency(item.amount) }}  </div> 
+                บาท
+               </div>
             </p>
-            <p v-if="item.amount" class="lg:text-md dark:text-gray-400 flex text-sm justify-center ">
-               ราคารวม <div class="underline decoration-2 ml-1 mr-1">{{ $filters.currency(item.amount) }}  </div>
+            <p v-if="item?.foods?.length > 0" class="dark:text-gray-400 grid grid-cols-2">
+               <div>
+                บันทึกแล้ว
+               </div> 
+               <div class="flex justify-end">
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ item?.foods?.length }} </div> 
+
+                เดือน
+               </div>
             </p>
-            <p v-if="!item.qty" class="lg:text-md dark:text-gray-600 text-xs ">
+            <p v-if="!item.qty" class="dark:text-gray-600 text-center pt-5">
                (ไม่ได้บันทึกการให้อาหาร)
             </p>
           </div>
@@ -97,12 +112,12 @@ export default {
       items : [],
       ddlCorral : [],
       forms : [
-        {
-          label : 'สูตรอาหาร',
-          value : 'recipe',
-          type : 'ddl',
-          module : 'recipe'
-        },
+        // {
+        //   label : 'สูตรอาหาร',
+        //   value : 'recipe',
+        //   type : 'ddl',
+        //   module : 'recipe'
+        // },
         {
           label : 'คอก',
           value : 'corral',
@@ -111,7 +126,6 @@ export default {
         }, 
       ],
       search : {
-        recipe : {},
         corral : '',
       },
       loading : false,
@@ -226,19 +240,19 @@ export default {
         const foods = resp.data.foods;
         const groupCorrals = _.groupBy(foods,'corral')
         for(let key of Object.keys(groupCorrals)){
-          const foods = groupCorrals[key];
-          let sumQty = null;
-          let sumAmount = null;
-          let count = null
-          if(foods.length > 0){
-            const foodLasted = foods[0]
-            if(foodLasted &&  foodLasted.foodDetails.length > 0){
-              sumQty = foodLasted.foodDetails.reduce((sum, item) => sum + item.qty, 0);
-              sumAmount = foodLasted.foodDetails.reduce((sum, item) => sum + item.amount, 0);
-              count = foodLasted?.foodDetails.length
+            const foods = groupCorrals[key];
+            let sumQty = null;
+            let sumAmount = null;
+            let count = null
+            if(foods.length > 0){
+              const foodLasted = foods[0]
+              if(foodLasted &&  foodLasted.foodDetails.length > 0){
+                sumQty = foodLasted.foodDetails.reduce((sum, item) => sum + item.qty, 0);
+                sumAmount = foodLasted.foodDetails.reduce((sum, item) => sum + item.amount, 0);
+                count = foodLasted?.foodDetails.length
+              }
             }
-          }
-          this.items.push({corral:key,amount:sumAmount,qty:sumQty,count:count,foods})
+            this.items.push({corral:key,amount:sumAmount,qty:sumQty,count:count,foods}) 
         }
       }
       this.getCorrals();
@@ -277,11 +291,14 @@ export default {
         const cows = resp.data.cows
         const corrals = _.groupBy(cows,'corral')
         for(let key of Object.keys(corrals)){
-          this.ddlCorral.push({id:key,label:key})
-          const index = this.items.map(item => item.corral).indexOf(key);
-          if(index < 0){
-            this.items.push({corral:key})
+          if(key != 'undefined'){
+            this.ddlCorral.push({id:key,label:key})
+            const index = this.items.map(item => item.corral).indexOf(key);
+            if(index < 0){
+              this.items.push({corral:key})
+            }
           }
+          
         }
 
       }
@@ -296,7 +313,6 @@ export default {
       });
     },
     reset(){
-      this.search.recipe = null
       this.search.corral = ''
       this.getDatas()
     },

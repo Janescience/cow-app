@@ -425,7 +425,9 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
             const cows = resp.data.cows
             this.corrals = _.groupBy(cows,'corral')
             for(let key of Object.keys(this.corrals)){
-              this.ddlCorral.push({id:key,label:key})
+              if(key != 'undefined'){
+                this.ddlCorral.push({id:key,label:key})
+              }
             }
           }
         },

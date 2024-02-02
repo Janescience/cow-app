@@ -38,7 +38,7 @@
             hoverable
           >
               <div class="text-center font-extrabold">
-                {{item.corral}}
+                {{item.corral || '-' }}
               </div>
               <BaseLevel type="justify-center">
 
