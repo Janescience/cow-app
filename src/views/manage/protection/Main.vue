@@ -4,7 +4,7 @@
 
       <SectionTitleBarSub 
         icon="needle" 
-        title="การป้องกัน/บำรุง"
+        title="การป้องกัน/บำรุง (แยกตามวัคซีน)"
         has-btn-add
         @openModal="add"
         btnText="เพิ่มการป้องกัน/บำรุง"
@@ -29,30 +29,47 @@
           @click="history(item)"
           hoverable
         >
-          <BaseLevel type="justify-center mt-3">
-            <div class="bg-blue-900 rounded-full w-20 h-20 justify-center flex text-2xl items-center">
-              {{ item.vaccine?.code.split('_')[1] }}
-              <!-- <BaseIcon
-                  path="needle"
-                  size="50"
-                  class="text-sky-500 "
-                /> -->
+          <BaseLevel type="justify-center mt-1">
+            <div class="bg-blue-900 rounded-full lg:text-base text-md p-2  flex justify-center ">
+              {{ item.vaccine?.name }} 
             </div>
-            
           </BaseLevel>
-          <div class="text-center mt-2">
-            <h4 class="lg:text-2xl text-xl">
-               {{ item.vaccine?.name }} 
-            </h4>
-            <p v-if="item.count" class="lg:text-md dark:text-gray-400 text-sm flex justify-center">
-               จำนวนรวม <div class="underline decoration-2 ml-1 mr-1">{{ item.count }}</div> ครั้ง
+
+          <div class="mt-2 h-18 mb-1">
+            <div v-if="item.count" class="dark:text-gray-400  grid grid-cols-2 ">
+              <div>
+                จำนวนรวม
+              </div>
+              <div class="flex justify-end">
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ item.count }}</div>  
+                ครั้ง
+              </div>
+               <!-- จำนวนรวม <div class="underline decoration-2 ml-1 mr-1">{{ item.count }}</div> ครั้ง -->
+            </div>
+            <p v-if="item.amount" class= " dark:text-gray-400  grid grid-cols-2  ">
+              <div>
+                ราคารวม
+              </div>
+              <div class="flex justify-end">
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ $filters.currency(item.amount) }}</div>  
+                บาท
+              </div>
             </p>
-            <p v-if="item.amount" class="lg:text-md dark:text-gray-400 flex text-sm justify-center ">
-               ราคารวม <div class="underline decoration-2 ml-1 mr-1">{{ $filters.currency(item.amount) }}  </div>
+            <p class="dark:text-gray-400  grid grid-cols-3">
+              <div>
+                ล่าสุด
+              </div>
+              <div class="flex justify-end col-span-2">
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{formatDate(item.vaccine?.currentDate) }}</div>  
+              </div>
             </p>
-            <p class="lg:text-md dark:text-gray-400 flex text-sm justify-center ">
-               ล่าสุด <div class="underline decoration-2 ml-1 mr-1">{{ formatDate(item.vaccine?.currentDate) }}  </div> |
-               ต่อไป <div class="underline decoration-2 ml-1 mr-1">{{ formatDate(item.vaccine?.nextDate) }}  </div>
+            <p class="dark:text-gray-400 grid grid-cols-3">
+              <div>
+                ต่อไป
+              </div>
+              <div class="flex justify-end col-span-2">
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{formatDate(item.vaccine?.nextDate) }}</div>  
+              </div>
             </p>
           </div>
         </CardBox>
@@ -195,7 +212,7 @@ export default {
         if(!date){
             return null
         }
-        return moment(date).format('DD/MM/YYYY');
+        return moment(date).format('dddd d MMMM YYYY');
     },
     reset(){
       this.search.vaccine = null
