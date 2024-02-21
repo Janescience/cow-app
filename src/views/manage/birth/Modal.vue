@@ -38,7 +38,7 @@
             <FormCheckRadioPicker
               v-model="birth.status"
               type="radio"
-              :options="{ B: 'คลอดแล้ว', P: 'ตั้งครรภ์' }"
+              :options="{ B: 'คลอดแล้ว', P: 'ตั้งครรภ์' , A : 'แท้ง'}"
             />
           </FormField>
           <FormField v-if="birth.status == 'B'" label="เพศ" >

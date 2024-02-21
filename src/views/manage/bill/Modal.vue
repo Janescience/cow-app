@@ -29,15 +29,23 @@
               required
             />
           </FormField>
-          <FormField label="วันที่"  help="* ห้ามว่าง" >
+          <FormField label="เดือน" help="* ห้ามว่าง" >
             <FormControl
-              v-model="bill.date"
+              v-model="bill.month"
               icon="calendar"
-              type="date"
+              :options="months"
               required
             />
           </FormField>
-          <FormField label="จำนวน" help="* ห้ามว่าง" >
+          <FormField label="ปี" help="* ห้ามว่าง" >
+            <FormControl
+              v-model="bill.year"
+              icon="calendar"
+              :options="years"
+              required
+            />
+          </FormField>
+          <FormField label="จำนวนเงิน" help="* ห้ามว่าง" >
             <FormControl
               v-model="bill.amount"
               type="number"
@@ -92,7 +100,8 @@ import { Toast } from "@/utils/alert";
 
 import Service from '@/services/bill'
 import { expenses } from '@/constants/bill'
-import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
+import { months,years } from '@/constants/date'
+
   
   export default {
     data () {
@@ -104,6 +113,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           amount : '',
           remark : ''
         },
+        months : months(),
+        years : years(),
         expenses : expenses('create'),
         loading : false,
         alert : ""
@@ -188,7 +199,6 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       FormControl,
       NotificationBar,
       BaseLevel,
-      FormCheckRadioPicker,
       BaseIcon
     },
     props : {

@@ -29,14 +29,11 @@
 
       <Table
         title="รายการค่าใช้จ่ายเพิ่มเติม" 
-        has-checkbox
-        :checked-data="checked" 
         :items="items" 
         :datas="datas" 
         :buttons="buttons" 
         @edit="edit" 
         @delete="remove" 
-        @deleteSelected="removeSelected"
         :loading="loading"
       />
 
@@ -57,6 +54,8 @@ import Service from '@/services/bill'
 
 import { Toast } from "@/utils/alert";
 import { expenses } from '@/constants/bill'
+import { months,years } from '@/constants/date'
+
 
 export default {
   data (){
@@ -66,8 +65,16 @@ export default {
       items : [],
       forms : [
         {
-          label : 'สถานะ',
-          value : 'status'
+          label : 'ค่าใช้จ่าย',
+          options : expenses()
+        }, 
+        {
+          label : 'เดือน',
+          options : months()
+        }, 
+        {
+          label : 'ปี',
+          options : years()
         }, 
       ],
       search : {
@@ -76,24 +83,18 @@ export default {
       loading : false,
       mode : "create",
       dataEdit : null,
-      checked : {
-        code : {
-          value : 'code',
-        },
-        label : {
-          value : 'name'
-        }
-      },
       datas : [
         {
           label : "รายการ",
           value : 'name',
         },
         {
-          label : "วันที่",
-          class : 'text-center',
-          value : 'date',
-          type : 'date'
+          label : "เดือน",
+          value : 'month',
+        },
+        {
+          label : "ปี",
+          value : 'year',
         },
         {
           label : "ค่าใช้จ่าย",
@@ -156,22 +157,6 @@ export default {
         icon: 'success',
         title: 'ลบข้อมูลสำเร็จ'
       })
-    },
-    async removeSelected(datas){
-      this.loading = true
-      let ids = []
-      for(let data of datas){
-        ids.push(data._id)
-      }
-      const resp = await Service.deletes(ids);
-      if(resp.data){
-        this.getDatas()
-        Toast.fire({
-          icon: 'success',
-          title: 'ลบข้อมูลสำเร็จ'
-        })
-      }
-      this.loading = false
     },
     edit(obj){
       this.modalData = obj;
