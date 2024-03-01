@@ -54,6 +54,9 @@
             <FormField label="น้ำหนัก (กก.)">
               <FormControl v-model="cow.weight" icon="weight" />
             </FormField>
+            <FormField label="ราคานำเข้า (บาท)">
+              <FormControl v-model="cow.amount" icon="cash" />
+            </FormField>
             <FormField label="วันเกิด" help="* ห้ามว่าง">
               <FormControl
                 v-model="cow.birthDate"
