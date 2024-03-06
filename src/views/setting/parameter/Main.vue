@@ -3,11 +3,11 @@
     <SectionMain>
 
       <SectionTitleBarSub 
-        icon="applicationVariableOutline" 
-        title="พารามิเตอร์"
+        icon="cash" 
+        title="ราคาน้ำนมดิบ"
         has-btn-add
         @openModal="mode='create';openModal = true;modalData = null"
-        btnText="เพิ่มพารามิเตอร์"
+        btnText="เพิ่มราคาน้ำนมดิบ"
       />
 
       <Modal
@@ -26,15 +26,12 @@
       />
 
       <Table
-        title="รายการพารามิเตอร์" 
-        has-checkbox
-        :checked-data="checked" 
+        title="รายการราคาน้ำนมดิบ" 
         :items="items" 
         :datas="datas" 
         :buttons="buttons" 
         @edit="edit" 
         @delete="remove" 
-        @deleteSelected="removeSelected"
         :loading="loading"
       />
 
@@ -62,27 +59,27 @@ export default {
       modalData : null,
       items : [],
       forms : [
-      {
-          label : "กลุ่ม",
-          value : 'group',
-        },
+        // {
+        //   label : "กลุ่ม",
+        //   value : 'group',
+        // },
+        // {
+        //   label : "รหัส",
+        //   value : 'code',
+        // },
         {
-          label : "รหัส",
-          value : 'code',
-        },
-        {
-          label : "ชื่อ",
+          label : "ชื่อรายการ",
           value : 'name',
         },
         {
-          label : "ข้อมูล(ตัวเลข)",
+          label : "ราคา/กก. (บาท)",
           value : 'valueNumber',
           type : 'number'
         },
-        {
-          label : "ข้อมูล(ตัวหนังสือ)",
-          value : 'valueString',
-        }
+        // {
+        //   label : "ข้อมูล(ตัวหนังสือ)",
+        //   value : 'valueString',
+        // }
       ],
       search : {
         name : '',
@@ -94,36 +91,30 @@ export default {
       loading : false,
       mode : "create",
       dataEdit : null,
-      checked : {
-        code : {
-          value : 'code',
-        },
-        label : {
-          value : 'name'
-        }
-      },
       datas : [
       
+        // {
+        //   label : "กลุ่ม",
+        //   value : 'group',
+        // },
+        // {
+        //   label : "รหัส",
+        //   value : 'code',
+        // },
         {
-          label : "กลุ่ม",
-          value : 'group',
-        },
-        {
-          label : "รหัส",
-          value : 'code',
-        },
-        {
-          label : "ชื่อ",
+          label : "ชื่อรายการ",
           value : 'name',
         },
         {
-          label : "ข้อมูล(ตัวเลข)",
+          label : "ราคา/กก. (บาท)",
           value : 'valueNumber',
+          type : 'currency',
+          class : 'text-right'
         },
-        {
-          label : "ข้อมูล(ตัวหนังสือ)",
-          value : 'valueString',
-        }
+        // {
+        //   label : "ข้อมูล(ตัวหนังสือ)",
+        //   value : 'valueString',
+        // }
       ],
       buttons : [
         {

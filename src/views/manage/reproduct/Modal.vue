@@ -72,10 +72,17 @@
               :options="status"
             />
           </FormField>
-          <FormField label="พ่อพันธุ์" help="">
+          <FormField label="สถานะ" >
+            <FormCheckRadioPicker
+              v-model="birth.status"
+              type="radio"
+              :options="{ B: 'พ่อพัน', P: 'ตั้งครรภ์' , A : 'แท้ง'}"
+            />
+          </FormField>
+          <FormField label="รายละเอียดพ่อพันธุ์/น้ำเชื้อ" help="">
             <FormControl
               v-model="reproduct.dad"
-              icon="genderMale"
+              icon=""
             />
           </FormField>
         </div>
@@ -117,6 +124,7 @@
   import OverlayLayer from '@/components/OverlayLayer.vue'
   import FormField from '@/components/FormField.vue'
   import FormControl from '@/components/FormControl.vue'
+  import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
   import NotificationBar from '@/components/NotificationBar.vue'
   import BaseLevel from '@/components/BaseLevel.vue'
   import DDLCow from '@/components/DDL/Cow.vue'
@@ -253,6 +261,7 @@
       NotificationBar,
       BaseLevel,
       DDLCow,
+      FormCheckRadioPicker
     },
     props : {
         modelValue: {

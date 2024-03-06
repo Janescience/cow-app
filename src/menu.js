@@ -5,6 +5,27 @@ export default [
       to: '/dashboard',
       icon: 'chartPie',
       label: 'ภาพรวมฟาร์ม'
+    },
+    {
+      icon: 'messageBadgeOutline',
+      label: 'การแจ้งเตือน',
+      menu : [
+        {
+          to: '/setting/notification/log',
+          icon: 'clipboardTextClockOutline',
+          label: 'ประวัติการแจ้งเตือน'
+        },
+        {
+          to: '/setting/notification/calendar',
+          icon: 'calendar',
+          label: 'ปฏิทินกำหนดการ'
+        },
+        {
+          to: '/setting/notification/parameter',
+          icon: 'bellCogOutline',
+          label: 'ตั้งค่าแจ้งเตือน'
+        }
+      ]
     }
   ]
   ,
@@ -18,12 +39,12 @@ export default [
     {
       to: '/manage/reproduct',
       icon: 'reproduction',
-      label: 'การสืบพันธุ์/ผสมพันธุ์'
+      label: 'ผสมพันธุ์'
     },
     {
       to: '/manage/birth',
-      icon: 'babyFaceOutline',
-      label: 'การคลอดลูก'
+      icon: 'humanPregnant',
+      label: 'ติดตามโคท้อง/คลอดลูก'
     },
     
   ],
@@ -37,7 +58,7 @@ export default [
     {
       to: '/manage/protection',
       icon: 'needle',
-      label: 'การป้องกัน/บำรุง'
+      label: 'ฉีดวัคซีน'
     },
     {
       to: '/manage/food',
@@ -51,6 +72,11 @@ export default [
       to: '/manage/milk',
       icon: 'cupWater',
       label: 'น้ำนมดิบ (การรีดนม)'
+    },
+    {
+      to: '/setting/parameter',
+      icon: 'cash',
+      label: 'ราคาน้ำนมดิบ/กก.'
     },
   ],
   'ต้นทุน',
@@ -95,23 +121,23 @@ export default [
   [
     {
       to: '/report/raw-milk',
-      icon: 'water',
-      label: 'ผลผลิตน้ำนมดิบ'
+      icon: 'microsoftExcel',
+      label: 'รายงานผลผลิตน้ำนมดิบ'
     },
     {
       to: '/report/cow',
-      icon: 'cow',
-      label: 'ข้อมูลโค'
+      icon: 'microsoftExcel',
+      label: 'รายงานข้อมูลโค'
     },
     {
       to: '/report/reproduct',
-      icon: 'reproduction',
-      label: 'ข้อมูลการสืบพันธุ์'
+      icon: 'microsoftExcel',
+      label: 'รายงานข้อมูลการสืบพันธุ์'
     },
     {
       to: '/report/heal',
-      icon: 'doctor',
-      label: 'ข้อมูลการรักษา'
+      icon: 'microsoftExcel',
+      label: 'รายงานข้อมูลการรักษา'
     }
     
     // {
@@ -149,34 +175,4 @@ export default [
     // },
     
   ],
-  'ตั้งค่า',
-  [
-    {
-      icon: 'messageBadgeOutline',
-      label: 'การแจ้งเตือน',
-      menu : [
-        {
-          to: '/setting/notification/log',
-          icon: 'clipboardTextClockOutline',
-          label: 'ประวัติการแจ้งเตือน'
-        },
-        {
-          to: '/setting/notification/calendar',
-          icon: 'calendar',
-          label: 'ปฏิทินกำหนดการ'
-        },
-        {
-          to: '/setting/notification/parameter',
-          icon: 'bellCogOutline',
-          label: 'ตั้งค่าแจ้งเตือน'
-        }
-      ]
-    },
-    {
-      to: '/setting/parameter',
-      icon: 'applicationVariableOutline',
-      label: 'พารามิเตอร์'
-    },
-  ],
-  
 ]
