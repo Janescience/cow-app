@@ -34,8 +34,9 @@
               :disabled="mode == 'edit'"
             />
           </FormField>
+          
         </div>
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 p-4">
+          <div  class="grid grid-cols-2 lg:grid-cols-5 gap-5 p-4">
             <FormField label="โค" help="* ห้ามว่าง" class="col-span-2">
                 <DDLCow v-model="milkDetail.cow" valueType="object"/>
             </FormField>
@@ -46,15 +47,25 @@
                 icon="scale"
               />
             </FormField>
-            <FormField label="คิดเป็นเงิน" :help="'ราคาน้ำนมดิบ/กก. '+priceRawMilk+' บาท'">
+            <FormField label="ราคา/กก." help="* ห้ามว่าง">
+              <FormControl
+                v-model="priceRawMilk"
+                type="number"
+                icon="cash"
+              />
+            </FormField>
+            <FormField label="คิดเป็นเงิน" >
               <FormControl
                 v-model="calAmount"
                 type="number"
                 icon="cashMultiple"
               />
             </FormField>
-            <BaseButtons
-            class="lg:col-span-4 col-span-2"
+            
+          </div>
+
+          <BaseButtons
+            class="lg:col-span-4 col-span-2 mb-1"
             type="justify-center"
             >
               
@@ -69,7 +80,6 @@
                 @click="add()"
               />
             </BaseButtons>
-          </div>
 
           <NotificationBar 
             v-if="alert?.text" 
@@ -85,7 +95,7 @@
           </BaseLevel>
           
           <Table
-            :title="'รายการรีดนม ('+milkDetails.length+' รายการ)'"
+            :title="'รายการโครีดนม ('+milkDetails.length+' ตัว)'"
             icon="cupWater"
             :items="milkDetails"
             :datas="milkDetailColumns"
@@ -132,6 +142,7 @@
   import DDLCow from '@/components/DDL/Cow.vue'
 
   import MilkingService from '@/services/milking'
+  import CowService from '@/services/cow'
   import ParamService from '@/services/param'
   import { Toast } from "@/utils/alert";
   import moment from 'moment';
@@ -139,6 +150,8 @@
   export default {
     data () {
       return {
+        cowAll : false,
+        cowOne : false,
         milk : {
           date : new Date(),
           time : this.checkTime(),
@@ -163,6 +176,7 @@
             label:'น้ำนมดิบ (กก.)',
             value:'qty',
             class: 'text-center',
+            object : 'text-box',
             type:'number'
           },
           {
@@ -231,6 +245,18 @@
       this.getPriceRawMilk()
     },
     methods: {
+        async milkDetailInit(){
+          this.milkDetails = []
+          const resp = await CowService.all();
+          if(resp.data){
+            const cows = resp.data.cows;
+            for(let cow of cows){
+              if(cow.status == 1 || cow.status == 3){
+                this.milkDetails.push({cow:{code:cow.code,name:cow.name}})
+              }
+            } 
+          }
+        },
         clear(){
           this.milk = {}
           this.milk.date = new Date()

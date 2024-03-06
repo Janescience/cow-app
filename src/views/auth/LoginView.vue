@@ -54,7 +54,7 @@ const submit = () => {
       bg="login"
     >
       <CardBox
-        :class="cardClass"
+        class="w-11/12 md:w-7/12 lg:w-6/12 xl:w-3/12 shadow-2xl p-2"
         form
         title=""
         header-icon=""

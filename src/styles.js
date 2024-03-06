@@ -31,5 +31,5 @@ export const white = {
   navBarItemLabelHover: 'hover:text-black',
   navBarItemLabelActiveColor: 'text-black',
   navBarMenuListUpperLabel: 'bg-gray-50',
-  overlay: 'from-white via-gray-100 to-white'
+  overlay: 'from-white via-gray-300 to-white'
 }
