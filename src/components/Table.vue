@@ -84,6 +84,16 @@
                         :class="getStyle(obj,row)"
                         size="18"
                     />
+                    <a v-else-if="row.link && row.link == 'cowDetail'"
+                        :href="'/manage/cow/detail/'+obj.cow.id" 
+                        class="text-blue-500 underline">
+                        {{  getValue(obj,row) }}
+                    </a>
+                    <!-- <FormControl
+                        v-else-if="row.object === 'text-box'"
+                        :v-model="getValue(obj,row)"
+                        :type="row.type"
+                    /> -->
                     <span v-else >{{ getValue(obj,row) }}</span>
                   </td>
                   <td v-if="buttons.length > 0" class="lg:w-6 whitespace-nowrap" >
@@ -149,6 +159,7 @@ import CardBox from "@/components/CardBox.vue";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
+import FormControl from "@/components/FormControl.vue";
 import moment from "moment";
 import numeral from "numeral";
 
@@ -234,6 +245,7 @@ export default {
         UserAvatar,
         BaseLevel,
         BaseIcon,
+        FormControl,
     },
     methods : {
         getValue(obj,row){

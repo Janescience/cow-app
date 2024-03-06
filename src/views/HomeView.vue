@@ -304,6 +304,9 @@
 
       <CardBox icon="cashRegister" class="lg:col-span-3 mb-1 lg:text-base text-sm lg:mb-5" title="ภาพรวมผลประกอบการทั้งหมด" header-icon="">
         <div class="grid lg:grid-cols-3 grid-cols-1 gap-5">
+          <div  class="text-2xl col-span-2" v-if="sumExpense().profit > 0">กำไร {{ $filters.currency(sumExpense().profit)   }} คิดเป็น {{ sumExpense().percent  }} %</div>
+          <div class="text-2xl col-span-2 text-center" v-if="sumExpense().profit < 0">ขาดทุน {{ $filters.currency(sumExpense().profit)  }} ({{ sumExpense().percent  }} %)</div>
+          <div class="text-2xl  text-center">ระดับฟาร์ม {{ farmLevel(sumExpense().percent).description }}<BaseIcon size="30" :path="farmLevel(sumExpense().percent).icon"/></div>
           <CardBox icon="accountCashOutline" class="border-gray-400 border-2 shadow" title="ต้นทุน" header-icon="">
             <div class="grid grid-cols-1">
               <p class="dark:text-gray-300">อุปกรณ์</p>
@@ -327,6 +330,13 @@
                 }}
               </p>
               <hr class="dark:border-gray-700"/>
+              <p class="dark:text-gray-300">ค่านำเข้าโค</p>
+              <p class="text-right font-extrabold">
+                {{
+                  $filters.currency(expense?.cost?.cow)
+                }}
+              </p>
+              <hr class="dark:border-gray-700"/>
               <p class="dark:text-gray-300">ค่าใช้จ่ายเพิ่มเติม</p>
               <p class="text-right font-extrabold">
                 {{
@@ -336,7 +346,7 @@
               <hr class="dark:border-gray-700"/>
               <p class="dark:text-gray-300">รวมต้นทุน</p>
 
-              <div class="text-red-500 text-right text-xl underline decoration-4 font-extrabold">
+              <div class="text-red-500 text-right text-xl underline decoration-2 font-extrabold">
                 {{
                   $filters.currency(sumExpense().sumCost) 
                 }}
@@ -376,7 +386,7 @@
               <hr class="dark:border-gray-700"/>
                   <p class="dark:text-gray-300">รวมค่าดูแล</p>
 
-                  <div class="text-red-500 text-right text-xl underline decoration-4 font-extrabold">
+                  <div class="text-red-500 text-right text-xl underline decoration-2 font-extrabold">
                     {{
                       $filters.currency(sumExpense().sumCare) 
                     }}
@@ -404,7 +414,7 @@
               <hr class="dark:border-gray-700"/>
               <p class="dark:text-gray-300">รวมผลผลิต</p>
 
-              <div class="text-green-500 text-right text-xl underline decoration-4 font-extrabold">
+              <div class="text-green-500 text-right text-xl underline decoration-2 font-extrabold">
                 {{ $filters.currency(income.rawMilk)  }}
               </div>
             </div>
@@ -574,6 +584,7 @@ export default {
         {
           label: "ชื่อโค",
           value: "cow.name",
+          link : "cowDetail"
         },
         {
           label: "น้ำนมดิบ (กก.)",
@@ -938,6 +949,7 @@ export default {
       let sumCost = 0,
         sumCare = 0;
       let profit = 0;
+      let percent = 0;
       if (this.expense?.care) {
         for (let key of Object.keys(this.expense?.care)) {
           const amount = this.expense.care[key];
@@ -959,7 +971,43 @@ export default {
         profit = this.income?.rawMilk - (sumCare + sumCost);
       }
 
-      return { sumCare, sumCost, profit };
+      if(profit >= 0){
+        percent = ((profit / this.income?.rawMilk) * 100).toFixed(2)
+      }else{
+        percent = ((profit / (sumCare + sumCost)) * 100).toFixed(2)
+      }
+
+      return { sumCare, sumCost, profit , percent};
+    },
+    farmLevel(percent){
+      const result = {}
+      if (percent < (-50) && percent >= (-80)) {
+        result.icon = 'emoticon-dead-outline';
+        result.description = 'ขาดทุนมากที่สุด';
+      }else if (percent < (-20) && percent >= (-50)) {
+        result.icon = 'emoticon-cry-outline';
+        result.description = 'ขาดทุนมาก';
+      }else if (percent < 0 && percent >= (-20)) {
+        result.icon = 'emoticon-frown-outline';
+        result.description = 'ขาดทุนเล็กน้อย';
+      }else if (percent == 0) {
+        result.icon = 'emoticon-sad-outline';
+        result.description = 'เท่าทุน ไม่มีกำไร';
+      } else if (percent > 0 && percent <= 30) {
+        result.icon = 'emoticon-neutral-outline';
+        result.description = 'กำไรเล็กน้อย';
+      } else if (percent > 30 && percent <= 50) {
+        result.icon = 'emoticon-happy-outline';
+        result.description = 'กำไรปกติ';
+      } else if (percent > 50 && percent <= 80) {
+        result.icon = 'emoticon-outline';
+        result.description = 'กำไรดี';
+      } else if (percent > 80) {
+        result.icon = 'emoticon-excited-outline';
+        result.description = 'กำไรดีมาก';
+      }
+
+      return result;
     },
     formatDate(date) {
       if (!date) {
