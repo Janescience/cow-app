@@ -11,7 +11,7 @@
             size="26"
             
           />
-            รายละเอียดการป้องกัน/บำรุง {{ (this.$route.params.id != 'add' ?'(แก้ไข)' : '') }}
+            รายละเอียดการฉีดวัคซีน {{ (this.$route.params.id != 'add' ?'(แก้ไข)' : '') }}
           </h1>
         </div>
         <BaseButtons class="text-sm  lg:text-base " type="justify-end">
@@ -32,13 +32,13 @@
       </section>
 
       <CardBox
-        title="ข้อมูลการป้องกัน/บำรุง"
+        title="ข้อมูลการฉีดวัคซีน"
         class="shadow-lg w-full mb-3"
         header-icon=""
         form
       >
         
-          <div class="grid grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-5">
+          <div class="grid grid-cols-2 lg:grid-cols-5 grid-flow-row-dense gap-5">
             <FormField label="วันที่" help="* ห้ามว่าง" >
               <FormControl
                 v-model="protection.date"

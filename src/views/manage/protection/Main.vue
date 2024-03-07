@@ -4,10 +4,10 @@
 
       <SectionTitleBarSub 
         icon="needle" 
-        title="การป้องกัน/บำรุง (แยกตามวัคซีน)"
+        title="ฉีดวัคซีน"
         has-btn-add
         @openModal="add"
-        btnText="เพิ่มการป้องกัน/บำรุง"
+        btnText="เพิ่มการฉีดวัคซีน"
       />
 
       <Criteria
