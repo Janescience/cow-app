@@ -106,6 +106,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'ประวัติการผสมพันธุ์',
+      loginRequired : true
+    },
+    path: '/manage/reproduct/history/:cow',
+    name: 'reproductHistory',
+    component: () => import('@/views/manage/reproduct/History.vue')
+  },
+  {
+    meta: {
       title: 'การคลอดลูก',
       loginRequired : true
     },

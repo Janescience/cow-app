@@ -72,13 +72,6 @@
               :options="status"
             />
           </FormField>
-          <FormField label="สถานะ" >
-            <FormCheckRadioPicker
-              v-model="birth.status"
-              type="radio"
-              :options="{ B: 'พ่อพัน', P: 'ตั้งครรภ์' , A : 'แท้ง'}"
-            />
-          </FormField>
           <FormField label="รายละเอียดพ่อพันธุ์/น้ำเชื้อ" help="">
             <FormControl
               v-model="reproduct.dad"
