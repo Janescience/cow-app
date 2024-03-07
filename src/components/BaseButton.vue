@@ -117,7 +117,7 @@ const componentClass = computed(() => {
     <BaseIcon
       v-if="icon"
       :path="icon"
-      size="18"
+      size="20"
     />
     <span
       v-if="label"

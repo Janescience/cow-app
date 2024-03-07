@@ -4,8 +4,8 @@
 
       <SectionTitleBarSub 
         icon="reproduction" 
-        title="การสืบพันธุ์"
-        btnText="เพิ่มการสืบพันธุ์"
+        title="การผสมพันธุ์"
+        btnText="เพิ่มการผสมพันธุ์"
         has-btn-add
         @openModal="mode='create';openModal = true;"
       />
@@ -27,18 +27,80 @@
         :btnLoading="loading"
       />
 
-      <Table
-        title="รายการสืบพันธุ์" 
-        has-checkbox
-        :checked-data="checked" 
-        :items="items" 
-        :datas="datas" 
-        :buttons="buttons" 
-        @edit="edit" 
-        @delete="remove" 
-        @deleteSelected="removeSelected"
-        :loading="loading"
-      />
+      <div
+        v-if="!loading"
+        class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-2 lg:grid-cols-5 md:grid-cols-3"
+      >
+        <CardBox
+          v-for="item in itemsPaginated"
+          :key="item?.cow?._id"
+          class="bg-gray-200 p-2"
+            has-table
+            hoverable
+        >
+          <BaseLevel type="justify-center">
+            <UserAvatar
+              username="profile-card"
+              class="lg:w-24 lg:h-24 w-16 h-16 mt-2"
+              :avatar="item?.cow?.image"
+            />
+          </BaseLevel>
+          <div class="text-center mt-2">
+            <h4 class="lg:text-lg text-xs flex justify-center">
+              <p class="dark:text-gray-400 text-orange-600 mr-1">{{ item?.cow?.code }}</p> - {{ item?.cow?.name }} 
+            </h4>
+          </div>
+
+
+          <div class="grid grid-cols-2 gap-1 text-sm">
+            <div class="dark:text-gray-400">
+              ผสมทั้งหมด
+            </div>
+            <div>
+              <div class="text-orange-600 font-extrabold">{{ item.count }}</div>  
+            </div>
+            <div class="dark:text-gray-400">
+              ผสมล่าสุด
+            </div>
+            <h4 class="dark:text-gray-100">{{ formatDate(item.reproducts[0].matingDate) }}</h4>  
+            <div class="dark:text-gray-400">
+              ผลล่าสุด
+            </div>
+            <div class="dark:text-gray-100">{{ mapReproductStatus(item.reproducts[0].status) }}</div>  
+          </div>
+        </CardBox>
+      </div>
+      <div
+          v-else
+          class="text-center py-10 text-gray-500 dark:text-gray-400 "
+        >
+          <BaseIcon
+            path="dotsCircle"
+            size="22"
+            class="animate-spin"
+          />
+          <p> กำลังโหลดข้อมูล...</p>
+      </div>
+
+      <div
+          class="p-3 mt-2 border-t border-gray-100 dark:border-gray-800 dark:bg-gray-900 lg:rounded-lg shadow-lg "
+        >
+          <BaseLevel>
+              <BaseButtons>
+                <BaseButton
+                    v-for="page in pagesList"
+                    :key="page"
+                    :active="page === currentPage"
+                    :label="page + 1"
+                    teeny
+                    @click="currentPage = page"
+                />
+              </BaseButtons>
+              <small>หน้า {{ currentPageHuman }} จาก {{ numPages }}</small>
+          </BaseLevel>
+        </div>
+
+    
 
     </SectionMain>
   </LayoutAuthenticated>
@@ -48,7 +110,11 @@
 import SectionMain from '@/components/SectionMain.vue';
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
-
+import UserAvatar from "@/components/UserAvatar.vue"
+import CardBox from "@/components/CardBox.vue"
+import BaseLevel from "@/components/BaseLevel.vue"
+import BaseButton from "@/components/BaseButton.vue"
+import BaseButtons from "@/components/BaseButtons.vue"
 import Table from "@/components/Table.vue";
 import Criteria from "@/components/Criteria.vue";
 
@@ -57,11 +123,14 @@ import ReproductionService from '@/services/reproduction'
 
 import { reproductStatus,reproductResult } from '@/constants/reproduct'
 import { Toast } from "@/utils/alert";
-
+import _ from "lodash";
+import moment from "moment"
 
 export default {
   data (){
     return {
+      perPage :12,
+      currentPage : 0,
       openModal : false,
       items : [],
       forms : [
@@ -212,9 +281,32 @@ export default {
     SectionTitleBarSub,
     Table,
     Modal,
-    Criteria
+    Criteria,
+    UserAvatar,
+    CardBox,
+    BaseLevel,
+    BaseButtons,
+    BaseButton
   },
   computed : {
+    itemsPaginated() {
+        return this.items ? this.items.slice(this.perPage * this.currentPage, this.perPage * (this.currentPage + 1)) : []
+    },
+    numPages(){
+        return Math.ceil((this.items ? this.items.length : 0) / this.perPage);
+    },
+    currentPageHuman() {
+        return this.currentPage + 1
+    },
+    pagesList() {
+        const pagesList = []
+
+        for (let i = 0; i < this.numPages; i++) {
+            pagesList.push(i)
+        }
+
+        return pagesList
+    },
     getDataCopy() {
       return {...this.modalData};
     }
@@ -228,7 +320,14 @@ export default {
       const resp = await ReproductionService.all(this.search);
       this.items = []
       if(resp.data){
-        this.items = resp.data.reproducts
+        const datas = resp.data.reproducts;
+        const groupCow = _.groupBy(datas,'cow._id')
+        for(let key of Object.keys(groupCow)){
+          const reproducts = groupCow[key];
+          let count = reproducts.length
+          this.items.push({cow:reproducts[0].cow,count:count,reproducts})
+          
+        }
       }
       this.loading = false
     },
@@ -277,6 +376,15 @@ export default {
     },
     resetData(){
       this.modalData = null
+    },
+    formatDate(date){
+      return moment(date).format('DD/MM/YYYY')
+    },
+    mapReproductResult(result){
+      return reproductResult()[result].label
+    },
+    mapReproductStatus(status){
+      return reproductStatus()[status].label
     }
   }
 }

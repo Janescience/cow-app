@@ -31,7 +31,7 @@
         >
           <CardBox
             v-for="item in itemsPaginated"
-            :key="item.name"
+            :key="item.name"  
             @click="detail(item)"
             class="bg-gray-200"
             has-table

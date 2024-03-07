@@ -4,7 +4,7 @@
     >
       <CardBox
         v-show="value"
-        :title="mode === 'create' ? 'เพิ่มการสืบพันธุ์' : 'แก้ไขการสืบพันธุ์'"
+        :title="mode === 'create' ? 'เพิ่มการผสมพันธุ์' : 'แก้ไขการผสมพันธุ์'"
         class="shadow-lg w-full lg:w-1/2 z-50"
         header-icon="close"
         modal

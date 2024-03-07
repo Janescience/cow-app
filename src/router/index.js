@@ -97,7 +97,7 @@ const routes = [
   },
   {
     meta: {
-      title: 'การสืบพันธุ์/ผสมพันธุ์',
+      title: 'ผสมพันธุ์',
       loginRequired : true
     },
     path: '/manage/reproduct',
@@ -259,7 +259,7 @@ const routes = [
   },
   {
     meta: {
-      title: 'รายงานการสืบพันธุ์',
+      title: 'รายงานการผสมพันธุ์',
       loginRequired : true
     },
     path: '/report/reproduct',

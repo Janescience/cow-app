@@ -475,7 +475,7 @@
               </h1>
             </div>
           </CardBox>
-          <CardBox title="การสืบพันธุ์/ผสมพันธุ์" header-icon="" class="dark:border-gray-800 border">
+          <CardBox title="การผสมพันธุ์/ผสมพันธุ์" header-icon="" class="dark:border-gray-800 border">
             <div class="grid grid-cols-2 gap-5">
               <p class="mt-1"><BaseIcon class="bg-teal-900 text-green-500 rounded-full p-1 mr-2" path="check" size="16" />สำเร็จ</p>
               <h1 class="lg:text-xl text-lg text-yellow-600 text-center">

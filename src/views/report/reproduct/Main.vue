@@ -4,7 +4,7 @@
 
       <SectionTitleBarSub 
         icon="reproduction" 
-        title="รายงานการสืบพันธุ์"
+        title="รายงานการผสมพันธุ์"
       />
 
       <Criteria
@@ -21,7 +21,7 @@
 
       <Table
         v-if="items.length > 0"
-        title="ข้อมูลการสืบพันธุ์" 
+        title="ข้อมูลการผสมพันธุ์" 
         :items="items" 
         :datas="datas" 
         :loading="viewLoading"
@@ -234,7 +234,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([resp.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'ข้อมูลการสืบพันธุ์ '+moment().format('DDMMYYYYHHmm')+'.xlsx');
+        link.setAttribute('download', 'ข้อมูลการผสมพันธุ์ '+moment().format('DDMMYYYYHHmm')+'.xlsx');
         document.body.appendChild(link);
         link.click();
         link.remove();

@@ -301,7 +301,7 @@
             class="lg:col-span-2 dark:border-gray-800 border-4"
             :loading="loading.reproduct"
             v-if="reproduct().login.count > 0"
-            title="การสืบพันธุ์/ผสมพันธุ์"
+            title="การผสมพันธุ์/ผสมพันธุ์"
             header-icon=""
           >
             <div class="overflow-x-auto">
@@ -342,7 +342,7 @@
             </div>
           </CardBox>
           <CardBox
-            title="การสืบพันธุ์/ผสมพันธุ์"
+            title="การผสมพันธุ์/ผสมพันธุ์"
             header-icon=""
             icon="babyFace"
             class="dark:border-gray-800 border-4 text-center h-28"

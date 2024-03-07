@@ -55,12 +55,11 @@ const openModal = () => confirmOpenModal('openModal')
         small
       />
       <BaseButton
-        class="text-right"
+        class="text-right text-orange-600 bg-gray-200 dark:bg-gray-900"
         v-if="hasBtnAdd"
-        :label="btnText"
-        color="success"
+        icon="plusThick"
         @click="openModal"
-        small
+        
       />
     </div>
     
