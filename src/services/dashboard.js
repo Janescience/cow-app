@@ -4,6 +4,9 @@ class DashboardService{
     getCow(){
         return http.get('/dashboard/cow');
     }
+    getFood(){
+        return http.get('/dashboard/food');
+    }
     getQuality(){
         return http.get('/dashboard/quality');
     }

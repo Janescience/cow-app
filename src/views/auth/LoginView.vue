@@ -37,7 +37,7 @@ const submit = () => {
   alert.message = ''
   store.dispatch('auth/login',{username:form.login,password:form.pass})
     .then((res) => {
-      router.push("/dashboard")
+      router.push("/overview/farm")
       loading.value = false;
     })
     .catch((error) => {

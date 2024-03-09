@@ -5,7 +5,7 @@
       <CardBox
         v-show="value"
         :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การให้อาหาร'"
-        class="shadow-lg w-full  lg:w-1/2 z-50"
+        class="shadow-lg w-full lg:w-3/4 z-50"
         header-icon="close"
         modal
         form
@@ -14,7 +14,7 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid lg:grid-cols-3 grid-cols-2 gap-5">
+        <div class="grid lg:grid-cols-5 grid-cols-2 gap-5">
           <FormField label="ปี พ.ศ." help="* ห้ามว่าง" >
             <FormControl
               v-model="food.year"
@@ -30,6 +30,13 @@
           <FormField label="คอก"  >
             <FormControl 
               v-model="food.corral"
+              required
+              disabled
+            />
+          </FormField>
+          <FormField label="จำนวนโค"  >
+            <FormControl 
+              v-model="food.numCow"
               required
               disabled
             />
@@ -93,22 +100,22 @@
                   <thead>
                     <tr>
                       <th/>
-                      <th class=" whitespace-nowrap ">จำนวน/วัน </th>
+                      <th class=" whitespace-nowrap ">จำนวน/วัน (กก.) </th>
                       <th class=" whitespace-nowrap">ราคา/วัน </th>
-                      <th class=" whitespace-nowrap">จำนวน/เดือน</th>
+                      <th class=" whitespace-nowrap">จำนวน/เดือน (กก.)</th>
                       <th class=" whitespace-nowrap">ราคา/เดือน</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td class=" whitespace-nowrap ">เฉลี่ยโค 1 ตัว</td>
-                      <td>{{   $filters.currency(sum().qtyPerCow) }}</td>
+                      <td class=" whitespace-nowrap ">โค 1 ตัว</td>
+                      <td>{{   $filters.number(sum().qtyPerCow) }}</td>
                       <td>{{   $filters.currency(sum().amountPerCow) }}</td>
-                      <td>{{   $filters.currency(sum().qtyPerCow * daysOfMonth()) }}</td>
+                      <td>{{   $filters.number(sum().qtyPerCow * daysOfMonth()) }}</td>
                       <td>{{   $filters.currency(sum().amountPerCow * daysOfMonth()) }}</td>
                     </tr>
                     <tr>
-                      <td>โคทั้งคอก</td>
+                      <td>โค {{ numCowCorral }} ตัว</td>
                       <td>{{ $filters.number(sum().qty) }}</td>
                       <td>{{ $filters.currency(sum().amount) }}</td>
                       <td>{{ $filters.number(sum().qty * daysOfMonth()) }}</td>
@@ -252,6 +259,8 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
       'food.corral'(n){
         if(n){
           this.numCowCorral = this.corrals[n].length > 0 ? this.corrals[n].length : null
+          if(this.mode !== 'edit')
+            this.food.numCow = this.numCowCorral
         }
       }
     },

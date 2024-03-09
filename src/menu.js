@@ -2,9 +2,14 @@
 export default [
   [
     {
-      to: '/dashboard',
+      to: '/overview/farm',
       icon: 'chartPie',
       label: 'ภาพรวมฟาร์ม'
+    },
+    {
+      to: '/overview/cow',
+      icon: 'chartPie',
+      label: 'ภาพรวมโค'
     },
     {
       icon: 'messageBadgeOutline',

@@ -12,7 +12,7 @@ export default (to, from, next) => {
         }
     } else {
         if (user && user.accessToken) {
-            next('/dashboard')
+            next('/overview/farm')
         }else{
             next()
         }

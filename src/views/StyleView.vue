@@ -21,7 +21,7 @@ const router = useRouter()
 const click = slug => {
   styleStore.setStyle(slug)
   styleStore.setDarkMode(false)
-  router.push('/dashboard')
+  router.push('/overview/farm')
 }
 </script>
 

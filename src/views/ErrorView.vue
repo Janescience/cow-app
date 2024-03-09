@@ -29,7 +29,7 @@ import LayoutGuest from '@/layouts/LayoutGuest.vue'
         <BaseButtons>
           <BaseButton
             label="Done"
-            to="/dashboard"
+            to="/overview/farm"
             color="danger"
           />
         </BaseButtons>

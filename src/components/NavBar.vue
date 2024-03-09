@@ -26,6 +26,8 @@ const toggleLightDark = () => {
   styleStore.setDarkMode()
 }
 
+const avatar = "https://api.dicebear.com/7.x/avataaars/svg?seed="+farmCode+farmName
+
 const layoutStore = useLayoutStore()
 
 const isAsideMobileExpanded = computed(() => layoutStore.isAsideMobileExpanded)
@@ -159,7 +161,7 @@ const logout = () => {
         </NavBarMenu> -->
         <NavBarMenu has-divider>
           <NavBarItemLabel :label="farmName">
-            <UserAvatarCurrentUser :username="farmCode" avatar="/image/profile.png" class="w-6 h-6 mr-3 inline-flex" />
+            <UserAvatarCurrentUser :username="farmCode" :avatar="avatar" class="w-6 h-6 mr-3 inline-flex" />
           </NavBarItemLabel>
 
           <template #dropdown>

@@ -18,7 +18,7 @@
 
       <div
         v-if="!loading"
-        class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-2 lg:grid-cols-5 md:grid-cols-4"
+        class="grid lg:gap-3 md:gap-2 gap-1 grid-cols-2 lg:grid-cols-4 md:grid-cols-3"
       >
         <CardBox
           v-for="item in itemsPaginated"
@@ -32,22 +32,40 @@
             </div>
             
           </BaseLevel>
-          <div class="mt-2 h-12 lg:text-sm text-xs mb-1">
-            <div v-if="item.qty" class=" dark:text-gray-400  grid grid-cols-2 ">
+          <div class="mt-2 h-18 lg:text-sm text-xs mb-1">
+            <div v-if="item.qtyDay" class=" dark:text-gray-400  grid grid-cols-2 ">
               <div>
-                จำนวนรวม
+                จำนวนรวม/วัน
               </div>
               <div class="flex justify-end">
-                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ $filters.number(item.qty) }}</div>  
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ $filters.number(item.qtyDay) }}</div>  
                 กก.
               </div>
             </div>
-            <p v-if="item.amount" class="dark:text-gray-400 grid grid-cols-2">
+            <p  v-if="item.qtyDay" class="dark:text-gray-400 grid grid-cols-2">
                <div>
-                ราคารวม
+                ราคารวม/วัน
                </div> 
                <div class="flex justify-end">
-                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ $filters.currency(item.amount) }}  </div> 
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ $filters.currency(item.amountDay) }}  </div> 
+                บาท
+               </div>
+            </p>
+            <div   v-if="item.qtyDay" class=" dark:text-gray-400  grid grid-cols-2 ">
+              <div>
+                จำนวนรวม/เดือน
+              </div>
+              <div class="flex justify-end">
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ $filters.number(item.qtyMonth) }}</div>  
+                กก.
+              </div>
+            </div>
+            <p   v-if="item.qtyDay" class="dark:text-gray-400 grid grid-cols-2">
+               <div>
+                ราคารวม/เดือน
+               </div> 
+               <div class="flex justify-end">
+                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ $filters.currency(item.amountMonth) }}  </div> 
                 บาท
                </div>
             </p>
@@ -61,7 +79,7 @@
                 เดือน
                </div>
             </p>
-            <p v-if="!item.qty" class="dark:text-gray-600 text-center pt-5">
+            <p v-if="!item.qtyDay" class="dark:text-gray-600 text-center pt-5">
                (ไม่ได้บันทึกการให้อาหาร)
             </p>
           </div>
@@ -241,18 +259,23 @@ export default {
         const groupCorrals = _.groupBy(foods,'corral')
         for(let key of Object.keys(groupCorrals)){
             const foods = groupCorrals[key];
-            let sumQty = null;
-            let sumAmount = null;
-            let count = null
-            if(foods.length > 0){
-              const foodLasted = foods[0]
-              if(foodLasted &&  foodLasted.foodDetails.length > 0){
-                sumQty = foodLasted.foodDetails.reduce((sum, item) => sum + item.qty, 0);
-                sumAmount = foodLasted.foodDetails.reduce((sum, item) => sum + item.amount, 0);
-                count = foodLasted?.foodDetails.length
-              }
+            let sumDayQty = 0,sumMonthQty = 0;
+            let sumDayAmount = 0,sumMonthAmount = 0;
+            let count = 0
+            for(let food of foods){
+              sumDayQty += food.foodDetails.reduce((sum, item) => sum + item.qty, 0);
+              sumMonthQty += sumDayQty * new Date(food.year,food.month,0).getDate();
+              sumDayAmount += food.foodDetails.reduce((sum, item) => sum + item.amount, 0);
+              sumMonthAmount += sumDayAmount * new Date(food.year,food.month,0).getDate();
+              count += food.foodDetails.length
             }
-            this.items.push({corral:key,amount:sumAmount,qty:sumQty,count:count,foods}) 
+              
+            this.items.push({corral:key,
+              amountDay:sumDayAmount,
+              amountMonth : sumMonthAmount,
+              qtyDay:sumDayQty,
+              qtyMonth : sumMonthQty,
+              count:count,foods}) 
         }
       }
       this.getCorrals();

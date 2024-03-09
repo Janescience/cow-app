@@ -5,7 +5,7 @@
       <section class="px-4 sm:px-0 mb-4 flex items-center justify-between">
         <div class="flex items-center justify-start">
           <BaseIcon
-            path="foodDrumstickOutline"
+            path="corn"
             size="30"
             class="mr-3"
           />

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Style from '@/views/StyleView.vue'
-import Home from '@/views/HomeView.vue'
+import Home from '@/views/FarmOverview.vue'
 import AuthGuard from '@/utils/auth-guard'
 
 const routes = [
@@ -28,9 +28,31 @@ const routes = [
       title: 'ภาพรวมฟาร์ม',
       loginRequired : true
     },
-    path: '/dashboard',
-    name: 'dashboard',
-    component: Home
+    path: '/overview/farm',
+    name: 'farmDashboard',
+    component: () => import('@/views//FarmOverview.vue')
+  },
+  {
+    // Document title tag
+    // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
+    meta: {
+      title: 'ภาพรวมโค',
+      loginRequired : true
+    },
+    path: '/overview/cow',
+    name: 'cowDashboard',
+    component: () => import('@/views//CowOverview.vue')
+  },
+  {
+    // Document title tag
+    // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
+    meta: {
+      title: 'รายการที่ต้องทำ',
+      loginRequired : true
+    },
+    path: '/todolist',
+    name: 'todoList',
+    component: () => import('@/views/TodoList.vue')
   },
   {
     meta: {

@@ -50,7 +50,7 @@ const login = () => {
   alert.message = ''
   store.dispatch('auth/login',{username:form.username,password:form.password})
     .then((res) => {
-      router.push("/dashboard")
+      router.push("/overview/farm")
     })
     .catch((error) => {
       alert.message = error.response.data.message
