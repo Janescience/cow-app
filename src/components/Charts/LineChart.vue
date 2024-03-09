@@ -22,22 +22,27 @@ onMounted(() => {
     type: 'line',
     data: props.data,
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          display: true
-        },
-        x: {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+      },
+    },
+    scales: {
+      x: {
+        display: true,
+        title: {
           display: true
         }
       },
-      plugins: {
-        legend: {
-          display: true
-        }
+      y: {
+        display: true,
+        
+        suggestedMin: 0,
+        suggestedMax: 200
       }
     }
+  },
   })
 })
 

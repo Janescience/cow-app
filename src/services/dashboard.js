@@ -4,14 +4,14 @@ class DashboardService{
     getCow(){
         return http.get('/dashboard/cow');
     }
-    getFood(){
-        return http.get('/dashboard/food');
+    getFood(year){
+        return http.get('/dashboard/food?year='+year);
     }
     getQuality(){
         return http.get('/dashboard/quality');
     }
-    getMilks(){
-        return http.get('/dashboard/milks');
+    getMilks(year){
+        return http.get('/dashboard/milks?year='+year);
     }
     getEvents(){
         return http.get('/dashboard/events');

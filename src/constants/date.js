@@ -15,6 +15,10 @@ export const months = () => {
     ]
 }
 
+export const monthMini = () => {
+    return ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+}
+
 export const years = () => {
     return getYears();
 }
