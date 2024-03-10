@@ -127,6 +127,18 @@ const login = () => {
           />
         </FormField>
 
+        <FormField
+          label="วันที่เริ่มกิจการ"
+          help="* ห้ามว่าง"
+        >
+          <FormControl
+            v-model="form.businessDate"
+            type="date"
+            icon="calendar"
+            required
+          />
+        </FormField>
+
         <NotificationBar 
           v-if="alert.message" 
           color="danger" 

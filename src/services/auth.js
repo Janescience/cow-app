@@ -26,7 +26,8 @@ class AuthService {
         return http.post("/auth/signup", {
             username : user.username,
             password : user.password,
-            farmName : user.farmName
+            farmName : user.farmName,
+            businessDate : user.businessDate
         })
     }
 

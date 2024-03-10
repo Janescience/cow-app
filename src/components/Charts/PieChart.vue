@@ -18,21 +18,18 @@ Chart.register(...registerables);
 
 onMounted(() => {
   chart = new Chart(root.value, {
-    type: 'doughnut',
+    type: 'pie',
     data: props.data,
     options: {
       responsive: true,
       maintainAspectRatio: false,
-
       plugins: {
         legend: {
           position: 'top',
-        },
-        title: {
-          display: true,
+          display: true
         }
       }
-    },
+    }
   })
 })
 
