@@ -149,39 +149,29 @@
         <CardBox :title="'ผลประกอบการ (ปี พ.ศ. ' + (businessYear + 543) + ')'" icon="cashRegister" header-icon="magnifyExpand"
         @header-icon-click="() => { this.businessYearSearch = !this.businessYearSearch }"
         >
-        <div v-if="businessYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3 mb-5">
+          <div v-if="businessYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3 mb-5">
             <FormField label="ปี พ.ศ." help="เลือกปีแสดงผล">
               <FormControl v-model="businessYear" :options="years" />
             </FormField>
-
           </div>
+          <div  v-if="this.incomeSum?.rawMilk" class="h-80 mt-5 col-span-2">
+            <bar-chart :data="businessAllChart" />
+          </div>
+          <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
           <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
             
             <CardBox title="รายจ่าย"  class="lg:col-span-2" header-icon="">
-              <div class="grid lg:grid-cols-4 grid-cols-1 gap-5 text-center">
+              <div class="grid lg:grid-cols-3 grid-cols-1 gap-5 text-center">
 
                 <div>
-                  <p >ต้นทุนคงที่</p>
+                  <p >ต้นทุน</p>
                   <div class="text-red-500 underline decoration-2 font-extrabold">
                     {{
-                      $filters.currency(sumExpense().sumFixedCost)
+                      $filters.currency(sumExpense().sumCost)
                     }}
                   </div>
-                  <div v-if="sumExpense().sumFixedCost > 0" class="h-80">
-                    <pie-chart :data="doughnutFixedCostChartData" />
-                  </div>
-                  <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
-                </div>
-
-                <div>
-                  <p >ต้นทุนผันผวน</p>
-                  <div class="text-red-500 underline decoration-2 font-extrabold">
-                      {{
-                      $filters.currency(sumExpense().sumVaryCost)
-                    }}
-                  </div>
-                  <div v-if="sumExpense().sumVaryCost > 0" class="h-80">
-                    <pie-chart :data="doughnutVaryCostChartData" />
+                  <div v-if="sumExpense().sumCost > 0" class="h-80">
+                    <pie-chart :data="doughnutCostChartData" />
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </div>
@@ -199,7 +189,7 @@
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </div>
 
-                <div>
+                <div >
                   <p >ค่าใช้จ่ายเพิ่มเติม</p>
                   <div class="text-red-500 underline decoration-2 font-extrabold">
                     {{
@@ -392,8 +382,8 @@ export default {
       foodMonthChart: null,
       milkAllQtyChart: null,
       milkAllAmtChart: null,
-      doughnutFixedCostChartData: null,
-      doughnutVaryCostChartData: null,
+      businessAllChart : null,
+      doughnutCostChartData: null,
       doughnutBillChartData: null,
       doughnutCareChartData: null,
       doughnutIncomeChartData: null,
@@ -452,9 +442,11 @@ export default {
           value: "count",
         },
       ],
-      years: years(),
+      years: years('search'),
       expense: {},
+      expenseSum: {},
       income: {},
+      incomeSum: {},
       loading: {
         milks: true,
         expense: true,
@@ -493,10 +485,16 @@ export default {
       }
     },
     businessYear(n) {
-      if (n) {
+      if(n){
+        this.incomeSum = {}
+        this.expenseSum = {}
         this.getExpense(n);
         this.getIncome(n);
+      }else{
+        this.getExpenseAll();
+        this.getIncomeAll();
       }
+      
     },
   },
   computed: {
@@ -608,10 +606,23 @@ export default {
         this.expense = resp.data;
       }
       this.loading.expense = false;
-      this.doughnutFixedCostChartData = this.createDoughnutChart('fixedCost')
-      this.doughnutVaryCostChartData = this.createDoughnutChart('varyCost')
+      this.doughnutCostChartData = this.createDoughnutChart('cost')
       this.doughnutBillChartData = this.createDoughnutChart('bill')
       this.doughnutCareChartData = this.createDoughnutChart('care')
+    },
+    async getExpenseAll() {
+      this.loading.expense = true;
+      const resp = await DashboardService.getExpenseAll();
+      if (resp) {
+        this.expense = resp.data.expenseDetail;
+        this.expenseSum = resp.data.expenseSum;
+      }
+      this.loading.expense = false;
+      this.doughnutCostChartData = this.createDoughnutChart('cost')
+      this.doughnutBillChartData = this.createDoughnutChart('bill')
+      this.doughnutCareChartData = this.createDoughnutChart('care')
+
+
     },
     async getIncome(year) {
       this.loading.income = true;
@@ -620,6 +631,18 @@ export default {
         this.income = resp.data;
       }
       this.loading.income = false;
+      this.doughnutIncomeChartData = this.createDoughnutChart('income')
+
+    },
+    async getIncomeAll() {
+      this.loading.income = true;
+      const resp = await DashboardService.getIncomeAll();
+      if (resp) {
+        this.income = resp.data.incomeDetail;
+        this.incomeSum = resp.data.incomeSum;
+      }
+      this.loading.income = false;
+      this.businessAllChart = this.createBusinessAllChart()
       this.doughnutIncomeChartData = this.createDoughnutChart('income')
     },
     async getCorrals() {
@@ -754,6 +777,82 @@ export default {
         cubicInterpolationMode: "monotone",
       };
     },
+    createBusinessAllChart(){
+      const labels = [];
+
+      let allYears = new Set([
+        ...Object.keys(this.expenseSum.bill), 
+        ...Object.keys(this.expenseSum.care), 
+        ...Object.keys(this.expenseSum.cost),
+        ...Object.keys(this.incomeSum.rawMilk),
+      ]);
+      allYears = Array.from(allYears);
+
+      Object.keys(this.incomeSum).forEach(key => {
+        let obj = this.incomeSum[key];
+        allYears.forEach(year => {
+            if (!obj.hasOwnProperty(year)) {
+              obj[year] = 0;
+          }
+        });
+      });
+
+      Object.keys(this.expenseSum).forEach(key => {
+        let obj = this.expenseSum[key];
+        allYears.forEach(year => {
+            if (!obj.hasOwnProperty(year)) {
+              obj[year] = 0;
+          }
+        });
+      });
+
+      Object.keys(this.expenseSum.bill).forEach((m) => {
+        labels.push(`${m}`);
+      });
+
+      return {
+        labels,
+        datasets: [
+          this.businessAllChartObj('rawMilk'), 
+          this.businessAllChartObj('cost'),
+          this.businessAllChartObj('bill'),
+          this.businessAllChartObj('care'),
+        ],
+      };
+    },
+    businessAllChartObj(type) {
+      return {
+        label: type == 'cost' ? "ต้นทุน" : type == 'bill' ? "ค่าใช้จ่ายเพิ่มเติม" :  type == 'care' ? "ค่าดูแลโค" : "ผลผลิต",
+        data: this.businessAllChartData(type),
+        borderWidth: 2,
+        weight: 2,
+        backgroundColor: type == 'cost' ? "#d1d5db" : type == 'bill' ? "#fca5a5" : type == 'care' ? "#fcd34d" : "#bbf7d0",
+        hoverOffset: 4,
+      };
+    },
+    businessAllChartData(type) {
+      const datas = [];
+      if (type == 'cost') {
+        Object.keys(this.expenseSum.cost).forEach((key) => {
+          datas.push(this.expenseSum.cost[key]);
+        });
+      } else if (type == 'bill') {
+        Object.keys(this.expenseSum.bill).forEach((key) => {
+          datas.push(this.expenseSum.bill[key]);
+        });
+      }else if (type == 'care') {
+        Object.keys(this.expenseSum.care).forEach((key) => {
+          datas.push(this.expenseSum.care[key]);
+        });
+      } else if (type == 'rawMilk') {
+        Object.keys(this.incomeSum.rawMilk).forEach((key) => {
+          datas.push(this.incomeSum.rawMilk[key]);
+        });
+      }
+
+      return datas;
+    },
+    
     createFoodMonthChart() {
       const labels = [];
 
@@ -794,15 +893,11 @@ export default {
     },
     getDoughnutChartData(type) {
       const datas = [];
-      if (type == 'fixedCost') {
-        Object.keys(this.expense.fixedCost).forEach((key) => {
-          datas.push(this.expense.fixedCost[key]);
+      if (type == 'cost') {
+        Object.keys(this.expense.cost).forEach((key) => {
+          datas.push(this.expense.cost[key]);
         });
-      } else if (type == 'varyCost') {
-        Object.keys(this.expense.varyCost).forEach((key) => {
-          datas.push(this.expense.varyCost[key]);
-        });
-      }else if (type == 'bill') {
+      } else if (type == 'bill') {
         Object.keys(this.expense.bill).forEach((key) => {
           datas.push(this.expense.bill[key]);
         });
@@ -823,14 +918,7 @@ export default {
         data: this.getDoughnutChartData(type),
         borderWidth: 2,
         weight: 2,
-        backgroundColor: type === 'cost' || type === 'income' ?
-          [
-            "#84cc16",
-            "#f59e0b",
-            "#34d399",
-            "#38bdf8",
-            "#fb7185"
-          ] : [
+        backgroundColor: [
             "#d1d5db",
             "#fca5a5",
             "#fcd34d",
@@ -844,12 +932,8 @@ export default {
     },
     createDoughnutChart(type) {
       const labels = [];
-      if (type == 'fixedCost') {
-        Object.keys(this.expense.fixedCost).forEach((item) => {
-          labels.push(`${this.mapText(type)[item]}`);
-        });
-      } else if (type == 'varyCost') {
-        Object.keys(this.expense.varyCost).forEach((item) => {
+      if (type == 'cost') {
+        Object.keys(this.expense.cost).forEach((item) => {
           labels.push(`${this.mapText(type)[item]}`);
         });
       }else if (type == 'bill') {
@@ -872,10 +956,8 @@ export default {
       };
     },
     mapText(type) {
-      if (type == 'fixedCost') {
-        return { building: 'สิ่งปลูกสร้าง', equipment: 'อุปกรณ์' }
-      }else if (type == 'varyCost') {
-        return {  cow: 'ค่านำเข้าโค', maintenance: 'ซ่อมบำรุง' }
+      if (type == 'cost') {
+        return { building: 'สิ่งปลูกสร้าง', equipment: 'อุปกรณ์', cow: 'ค่านำเข้าโค', maintenance: 'ซ่อมบำรุง' }
       } else if (type == 'bill') {
         return { water: 'ค่าน้ำ', electric: 'ค่าไฟ', accom: 'ค่าที่พักคนงาน', rent: 'ค่าเช่า', internet: 'ค่าอินเทอร์เน็ต',waste : 'ค่าของเสีย',oth : 'อื่นๆ' }
       }else if (type == 'care') {
@@ -885,8 +967,7 @@ export default {
       }
     },
     sumExpense() {
-      let sumFixedCost = 0,
-      sumVaryCost = 0,
+      let sumCost = 0,
         sumCare = 0,
         sumBill = 0;
       let percent = 0;
@@ -898,20 +979,11 @@ export default {
           }
         }
       }
-      if (this.expense?.fixedCost) {
-        for (let key of Object.keys(this.expense?.fixedCost)) {
-          const amount = this.expense.fixedCost[key];
+      if (this.expense?.cost) {
+        for (let key of Object.keys(this.expense?.cost)) {
+          const amount = this.expense.cost[key];
           if (amount) {
-            sumFixedCost += amount;
-          }
-        }
-      }
-
-      if (this.expense?.varyCost) {
-        for (let key of Object.keys(this.expense?.varyCost)) {
-          const amount = this.expense.varyCost[key];
-          if (amount) {
-            sumVaryCost += amount;
+            sumCost += amount;
           }
         }
       }
@@ -925,7 +997,7 @@ export default {
         }
       }
 
-      let sumExpense = sumCare + sumFixedCost + sumVaryCost + sumBill
+      let sumExpense = sumCare + sumCost + sumBill
 
       let  profit = this.income.rawMilk - sumExpense;
       
@@ -936,7 +1008,7 @@ export default {
         percent = ((profit / sumExpense) * 100);
       }
 
-      return { sumExpense,sumCare, sumFixedCost,sumVaryCost,sumBill, profit, percent };
+      return { sumExpense,sumCare, sumCost,sumBill, profit, percent };
     },
     formatDate(date) {
       if (!date) {

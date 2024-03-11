@@ -19,22 +19,26 @@ export const monthMini = () => {
     return ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
 }
 
-export const years = () => {
-    return getYears();
+export const years = (type) => {
+    return getYears(type);
 }
 
-const getYears = () => {
+const getYears = (type) => {
     let years = []
     const currentYearTh = new Date().getFullYear() + 543
     const currentYear = new Date().getFullYear()
 
-    for(let i = 5 ; i>0;i--){
-        years.push({id:currentYear+i,label:currentYearTh+i})
+    if(type == 'search'){
+        years.push({id:null,label:'ทุกปี'})
     }
+
+    // for(let i = 10 ; i>0;i--){
+    //     years.push({id:currentYear+i,label:currentYearTh+i})
+    // }
 
     years.push({id:currentYear,label:currentYearTh})
 
-    for(let i = 1 ; i<6;i++){
+    for(let i = 1 ; i<11;i++){
         years.push({id:currentYear-i,label:currentYearTh-i})
     }
     return years;

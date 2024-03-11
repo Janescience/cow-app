@@ -19,8 +19,14 @@ class DashboardService{
     getExpense(year){
         return http.get('/dashboard/expense?year='+year);
     }
+    getExpenseAll(){
+        return http.get('/dashboard/expense/all');
+    }
     getIncome(year){
         return http.get('/dashboard/income?year='+year);
+    }
+    getIncomeAll(){
+        return http.get('/dashboard/income/all');
     }
     getRawMilkDescSort(){
         return http.get('/dashboard/rawMilkDescSort');
