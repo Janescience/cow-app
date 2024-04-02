@@ -17,8 +17,8 @@
           <Table title="คอก" icon="barn" :items="food.corral" :datas="foodColumns" perPage="5"
             :loading="loading.food" />
 
-          <div v-if="foodMonthChart?.datasets[0]?.data.length > 0" class="h-52 mt-5">
-            <bar-chart :data="foodMonthChart" />
+          <div v-if="chart.food.year" class="h-52 mt-5">
+            <bar-chart :data="chart.food.year" />
           </div>
           <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
 
@@ -29,13 +29,13 @@
 
         <CardBox title="น้ำนมดิบ" icon="water" class="lg:p-4 md:p-4" has-table header-icon="">
           <div class="grid grid-cols-1 gap-5">
-            <CardBox :title="'รายเดือน (ปี พ.ศ. ' + (milkYear + 543) + ')'" icon="chartBellCurveCumulative" class=""
+            <CardBox :title="'รายเดือน (ปี พ.ศ. ' + (milkYearValue + 543) + ')'" icon="chartBellCurveCumulative" class=""
               :loading="loading.milks" @header-icon-click="() => { this.milkYearSearch = !this.milkYearSearch }"
               header-icon="magnifyExpand">
               <div class="grid lg:grid-cols-2 grid-cols-1 gap-5 ">
                 <div v-if="milkYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3">
                   <FormField label="ปี พ.ศ." help="เลือกปีแสดงผล">
-                    <FormControl v-model="milkYear" :options="years" />
+                    <FormControl v-model="milkYearValue" :options="years" />
                   </FormField>
 
                 </div>
@@ -51,16 +51,16 @@
                       </thead>
                       <tbody>
                         <tr class="font-extrabold text-2xl">
-                          <td class="text-center"> {{ milkLast.count }}</td>
-                          <td class="text-center">{{ $filters.number(milkLast.sumQty) }}</td>
-                          <td class="text-center">{{ $filters.number(milkLast.avgQty) }}</td>
+                          <td class="text-center"> {{ milkYear.count }}</td>
+                          <td class="text-center">{{ $filters.number(milkYear.sumQty) }}</td>
+                          <td class="text-center">{{ $filters.number(milkYear.avgQty) }}</td>
                         </tr>
 
                       </tbody>
                     </table>
                   </div>
-                  <div class="mt-3 h-60 mb-5" v-if="milkLastQtyChart?.datasets[0]?.data[0] > 0">
-                    <bar-chart :data="milkLastQtyChart" />
+                  <div class="mt-3 h-60 mb-5" v-if="chart.milk.year.qty?.datasets[0]?.data[0] > 0">
+                    <bar-chart :data="chart.milk.year.qty" />
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </CardBox>
@@ -75,15 +75,15 @@
                       </thead>
                       <tbody>
                         <tr class="font-extrabold text-2xl">
-                          <td class="text-center">{{ $filters.currency(milkLast.sumAmt) }}</td>
-                          <td class="text-center">{{ $filters.currency(milkLast.avgAmt) }}</td>
+                          <td class="text-center">{{ $filters.currency(milkYear.sumAmt) }}</td>
+                          <td class="text-center">{{ $filters.currency(milkYear.avgAmt) }}</td>
                         </tr>
 
                       </tbody>
                     </table>
                   </div>
-                  <div class="mt-3 h-60" v-if="milkLastAmtChart?.datasets[0]?.data[0] > 0">
-                    <bar-chart :data="milkLastAmtChart" />
+                  <div class="mt-3 h-60" v-if="chart.milk.year.amt?.datasets[0]?.data[0] > 0">
+                    <bar-chart :data="chart.milk.year.amt" />
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </CardBox>
@@ -112,8 +112,8 @@
                       </tbody>
                     </table>
                   </div>
-                  <div class="lg:h-62" v-if="milkAllQtyChart?.datasets[0]?.data[0] > 0">
-                    <line-chart :data="milkAllQtyChart" />
+                  <div class="lg:h-62" v-if="chart.milk.all.qty?.datasets[0]?.data[0] > 0">
+                    <line-chart :data="chart.milk.all.qty" />
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </CardBox>
@@ -135,8 +135,8 @@
                       </tbody>
                     </table>
                   </div>
-                  <div class="lg:h-62" v-if="milkAllAmtChart?.datasets[0]?.data[0] > 0">
-                    <line-chart :data="milkAllAmtChart" />
+                  <div class="lg:h-62" v-if="chart.milk.all.amt?.datasets[0]?.data[0] > 0">
+                    <line-chart :data="chart.milk.all.amt" />
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </CardBox>
@@ -154,10 +154,10 @@
               <FormControl v-model="businessYear" :options="years" />
             </FormField>
           </div>
-          <div  v-if="this.incomeSum?.rawMilk" class="h-80 mt-5 col-span-2">
-            <bar-chart :data="businessAllChart" />
+          <div  v-if="chart.business.all" class="h-80 mt-5 col-span-2 mb-5">
+            <bar-chart :data="chart.business.all" />
           </div>
-          <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
+
           <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
             
             <CardBox title="รายจ่าย"  class="lg:col-span-2" header-icon="">
@@ -167,11 +167,11 @@
                   <p >ต้นทุน</p>
                   <div class="text-red-500 underline decoration-2 font-extrabold">
                     {{
-                      $filters.currency(sumExpense().sumCost)
+                      $filters.currency(sumExpense().cost)
                     }}
                   </div>
-                  <div v-if="sumExpense().sumCost > 0" class="h-80">
-                    <pie-chart :data="doughnutCostChartData" />
+                  <div v-if="sumExpense().cost > 0" class="h-80">
+                    <pie-chart :data="chart.expense.cost" />
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </div>
@@ -180,11 +180,11 @@
                   <p>ค่าดูแลโค</p>
                   <div class="text-red-500 underline decoration-2 font-extrabold">
                     {{
-                      $filters.currency(sumExpense().sumCare)
+                      $filters.currency(sumExpense().care)
                     }}
                   </div>
-                  <div v-if="sumExpense().sumCare > 0" class="h-80">
-                    <pie-chart :data="doughnutCareChartData" />
+                  <div v-if="sumExpense().care > 0" class="h-80">
+                    <pie-chart :data="chart.expense.care" />
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </div>
@@ -193,11 +193,11 @@
                   <p >ค่าใช้จ่ายเพิ่มเติม</p>
                   <div class="text-red-500 underline decoration-2 font-extrabold">
                     {{
-                      $filters.currency(sumExpense().sumBill)
+                      $filters.currency(sumExpense().bill)
                     }}
                   </div>
-                  <div v-if="doughnutBillChartData?.datasets[0]?.data[0] > 0" class="h-80">
-                    <pie-chart :data="doughnutBillChartData" />
+                  <div v-if="sumExpense().bill > 0" class="h-80">
+                    <pie-chart :data="chart.expense.bill" />
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>                
                 </div>
@@ -211,11 +211,11 @@
                   <p >ผลผลิต</p>
                   <div class="text-lime-500  underline decoration-2 font-extrabold">
                     {{
-                      $filters.currency(income.rawMilk)
+                      $filters.currency(sumIncome().total)
                     }}
                   </div>
-                  <div v-if="income.rawMilk > 0" class="h-80">
-                    <pie-chart :data="doughnutIncomeChartData" />
+                  <div v-if="sumIncome().total > 0" class="h-80">
+                    <pie-chart :data="chart.income" />
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </div>
@@ -230,7 +230,7 @@
                   </div>
                   <div class="font-extrabold text-2xl">
                     {{
-                      $filters.currency(this.income.rawMilk)
+                      $filters.currency(sumIncome().total)
                     }}
                   </div>
                   <div class=" dark:text-gray-300">
@@ -238,23 +238,23 @@
                   </div>
                   <div class="font-extrabold text-2xl">
                     {{
-                      $filters.currency(sumExpense().sumExpense)
+                      $filters.currency(sumExpense().total)
                     }}
                   </div>
                   <div class=" dark:text-gray-300">
                     {{
-                      sumExpense().profit > 0 ? 'กำไร' : 'ขาดทุน' 
+                      sumProfit().profit > 0 ? 'กำไร' : 'ขาดทุน' 
                     }}
                     </div>
                   <div class="font-extrabold text-2xl">
                     {{
-                      $filters.currency(sumExpense()?.profit)
+                      $filters.currency(sumProfit()?.profit)
                     }}
 
                   </div>
                   <div class=" font-extrabold text-2xl">
                     {{
-                      $filters.number(sumExpense().percent | 0) 
+                      $filters.number(sumProfit().percent | 0) 
                     }} %
                   </div>
 
@@ -377,29 +377,42 @@ import { months, years, monthMini } from "@/constants/date";
 export default {
   data() {
     return {
-      milkLastQtyChart: null,
-      milkLastAmtChart: null,
-      foodMonthChart: null,
-      milkAllQtyChart: null,
-      milkAllAmtChart: null,
-      businessAllChart : null,
-      doughnutCostChartData: null,
-      doughnutBillChartData: null,
-      doughnutCareChartData: null,
-      doughnutIncomeChartData: null,
-      lineChartColors: { primary: "#00D1B2", danger: "#FF3860" },
-      milkLasts: [],
+      chart : {
+        milk : {
+          all : {
+            qty : null,
+            amt : null
+          },
+          year : {
+            qty : null,
+            amt : null
+          }
+        },
+        business :{
+          all : null
+        },
+        expense : {
+          cost : null,
+          bill : null,
+          care : null
+        },
+        income : null,
+        food : {
+          year : null
+        }
+      },
+      milkYears: [],
       milkAlls: [],
       statistics: {},
       corrals: [],
       food: {},
       foodYear: new Date().getFullYear(),
-      milkYear: new Date().getFullYear(),
+      milkYearValue: new Date().getFullYear(),
       businessYear: new Date().getFullYear(),
       milkYearSearch: false,
       foodYearSearch: false,
       businessYearSearch: false,
-      milkLast: {},
+      milkYear : {},
       milkAll: {},
       cow: {},
       corralColumns: [
@@ -479,7 +492,7 @@ export default {
         this.getFood(n);
       }
     },
-    milkYear(n) {
+    milkYearValue(n) {
       if (n) {
         this.getMilks(n);
       }
@@ -513,40 +526,40 @@ export default {
   methods: {
     async getMilks(year) {
       this.loading.milks = true;
-      const resp = await DashboardService.getMilks(year ? year : this.milkYear);
+      const resp = await DashboardService.getMilks(year ? year : this.milkYearValue);
       if (resp) {
-        //Last Year
-        const milkLasts = resp.data.last;
-        this.milkLast.sumQty = 0;
-        this.milkLast.sumAmt = 0;
-        for (let milk of milkLasts) {
+        //Year
+        const milkYears = resp.data.last;
+        this.milkYear.sumQty = 0;
+        this.milkYear.sumAmt = 0;
+        for (let milk of milkYears) {
           milk.month = moment(milk.date, "DD-MM-YYYY").format("M");
           let sumQty = milk.milkDetails.reduce((prev, cur) => prev + cur.qty, 0);
           let sumAmt = milk.milkDetails.reduce((prev, cur) => prev + cur.amount, 0);
-          this.milkLast.sumQty += sumQty;
-          this.milkLast.sumAmt += sumAmt;
+          this.milkYear.sumQty += sumQty;
+          this.milkYear.sumAmt += sumAmt;
         }
-        const milkLastGroupDate = _.groupBy(milkLasts, "date");
-        this.milkLast.avgQty =
-          this.milkLast.sumQty > 0
-            ? this.milkLast.sumQty / Object.keys(milkLastGroupDate).length
+        const milkLastGroupDate = _.groupBy(milkYears, "date");
+        this.milkYear.avgQty =
+          this.milkYear.sumQty > 0
+            ? this.milkYear.sumQty / Object.keys(milkLastGroupDate).length
             : 0;
-        this.milkLast.avgAmt =
-          this.milkLast.sumAmt > 0
-            ? this.milkLast.sumAmt / Object.keys(milkLastGroupDate).length
+        this.milkYear.avgAmt =
+          this.milkYear.sumAmt > 0
+            ? this.milkYear.sumAmt / Object.keys(milkLastGroupDate).length
             : 0;
-        this.milkLast.count = Object.keys(milkLastGroupDate).length;
+        this.milkYear.count = Object.keys(milkLastGroupDate).length;
 
-        this.milkLasts = _.groupBy(milkLasts, "month");
+        this.milkYears = _.groupBy(milkYears, "month");
 
         //Rename key
-        for (let key of Object.keys(this.milkLasts)) {
-          this.milkLasts[key][0].date = moment(
-            this.milkLasts[key][0].date,
+        for (let key of Object.keys(this.milkYears)) {
+          this.milkYears[key][0].date = moment(
+            this.milkYears[key][0].date,
             "DD-MM-YYYY"
           ).format("MMM");
-          this.milkLasts[this.milkLasts[key][0].date] = this.milkLasts[key];
-          delete this.milkLasts[key];
+          this.milkYears[this.milkYears[key][0].date] = this.milkYears[key];
+          delete this.milkYears[key];
         }
 
         //All
@@ -580,14 +593,14 @@ export default {
           this.milkAll.sumAmt > 0
             ? this.milkAll.sumAmt / this.milkAll.count
             : 0;
-
-
       }
 
-      this.milkLastQtyChart = this.createMilkLastChart('qty');
-      this.milkLastAmtChart = this.createMilkLastChart('amt');
-      this.milkAllQtyChart = this.createMilkAllChart('qty');
-      this.milkAllAmtChart = this.createMilkAllChart('amt');
+      this.chart.milk.year.qty = this.milkChart('qty',this.milkYears,'year');
+      this.chart.milk.year.amt = this.milkChart('amount',this.milkYears,'year');
+
+      this.chart.milk.all.qty = this.milkChart('qty',this.milkAlls,'all');
+      this.chart.milk.all.amt = this.milkChart('amount',this.milkAlls,'all');
+
       this.loading.milks = false;
     },
     async getFood(year) {
@@ -595,7 +608,7 @@ export default {
       const resp = await DashboardService.getFood(year || this.foodYear);
       if (resp.data) {
         this.food = resp.data;
-        this.foodMonthChart = this.createFoodMonthChart();
+        this.chart.food.year = this.foodChart();
       }
       this.loading.food = false;
     },
@@ -605,10 +618,12 @@ export default {
       if (resp) {
         this.expense = resp.data;
       }
+
+      this.chart.expense.cost = this.expenseChart('cost')
+      this.chart.expense.bill = this.expenseChart('bill')
+      this.chart.expense.care = this.expenseChart('care')
+
       this.loading.expense = false;
-      this.doughnutCostChartData = this.createDoughnutChart('cost')
-      this.doughnutBillChartData = this.createDoughnutChart('bill')
-      this.doughnutCareChartData = this.createDoughnutChart('care')
     },
     async getExpenseAll() {
       this.loading.expense = true;
@@ -617,12 +632,12 @@ export default {
         this.expense = resp.data.expenseDetail;
         this.expenseSum = resp.data.expenseSum;
       }
+
+      this.chart.expense.cost = this.expenseChart('cost')
+      this.chart.expense.bill = this.expenseChart('bill')
+      this.chart.expense.care = this.expenseChart('care')
+
       this.loading.expense = false;
-      this.doughnutCostChartData = this.createDoughnutChart('cost')
-      this.doughnutBillChartData = this.createDoughnutChart('bill')
-      this.doughnutCareChartData = this.createDoughnutChart('care')
-
-
     },
     async getIncome(year) {
       this.loading.income = true;
@@ -631,7 +646,7 @@ export default {
         this.income = resp.data;
       }
       this.loading.income = false;
-      this.doughnutIncomeChartData = this.createDoughnutChart('income')
+      this.chart.income = this.incomeChart()
 
     },
     async getIncomeAll() {
@@ -642,8 +657,9 @@ export default {
         this.incomeSum = resp.data.incomeSum;
       }
       this.loading.income = false;
-      this.businessAllChart = this.createBusinessAllChart()
-      this.doughnutIncomeChartData = this.createDoughnutChart('income')
+      
+      this.chart.business.all = this.businessAllChart()
+      this.chart.income = this.incomeChart()
     },
     async getCorrals() {
       this.loading.corral = true;
@@ -661,125 +677,114 @@ export default {
       }
       this.loading.statistic = false;
     },
-    milkLastChartAnlyz(type) {
-      const datas = [];
-      if (type == "qty") {
-        Object.keys(this.milkLasts).forEach((key) => {
-          let milks = this.milkLasts[key];
-          let sum = 0;
-          milks.map((m) => {
-            m.milkDetails.map((d) => {
-              sum += d.qty;
-            });
+    milkChart(field,datas,type) {
+      //Prepare datas
+      const chartDatas = [];
+      Object.keys(datas).forEach((key) => {
+        let milks = datas[key];
+        let sum = 0;
+        milks.map((m) => {
+          m.milkDetails.map((d) => {
+            sum += d[field];
           });
-          datas.push(sum);
         });
-      } else {
-        Object.keys(this.milkLasts).forEach((key) => {
-          let milks = this.milkLasts[key];
-          let sum = 0;
-          milks.map((m) => {
-            m.milkDetails.map((d) => {
-              sum += d.amount;
-            });
-          });
-          datas.push(sum);
-        });
-      }
-
-      return datas;
-    },
-    milkAllChartAnlyz(type) {
-      const datas = [];
-      if (type === 'qty') {
-        Object.keys(this.milkAlls).forEach((key) => {
-          let milks = this.milkAlls[key];
-          let sum = 0;
-          milks.map((m) => {
-            m.milkDetails.map((d) => {
-              sum += d.qty;
-            });
-          });
-          datas.push(sum);
-        });
-      } else {
-        Object.keys(this.milkAlls).forEach((key) => {
-          let milks = this.milkAlls[key];
-          let sum = 0;
-          milks.map((m) => {
-            m.milkDetails.map((d) => {
-              sum += d.amount;
-            });
-          });
-          datas.push(sum);
-        });
-      }
-
-      return datas;
-    },
-    foodMonthChartAnlyz(type) {
-      const amts = [],
-        qtys = [];
-      let foods = this.food.month;
-      foods.map((m) => {
-        amts.push(m.sumAmount);
-        qtys.push(m.sumQty);
+        chartDatas.push(sum);
       });
 
-      return { amount: amts, qty: qtys };
-    },
-    foodMonthAmountChartObj(color, type) {
-      return {
-        label: "ค่าอาหาร",
-        borderColor: "#566573",
-        borderWidth: 2,
-        borderRadius: 5,
-        borderSkipped: true,
-        backgroundColor: "#5D6D7E",
-        data: this.foodMonthChartAnlyz().amount,
-        tension: 0.5,
-      };
-    },
-    foodMonthQtyChartObj(color, type) {
-      return {
-        label: "จำนวน (กก.)",
-        borderColor: "#E83105",
-        borderWidth: 2,
-        borderRadius: 5,
-        borderSkipped: true,
-        backgroundColor: "#F6461C",
-        data: this.foodMonthChartAnlyz().qty,
-        tension: 0.5,
-      };
-    },
-    milkLastChartObj(color, type) {
-      return {
-        label: type == 'qty' ? "น้ำนมดิบ" : "รายได้",
-        borderColor: type == 'qty' ? "#e11d48" : "#16a34a",
+      const label = {qty:'น้ำนมดิบ',amount:'รายได้'}
+      const borderColor = {qty:'#e11d48',amount:'#16a34a'}
+      const backgroundColor = {qty:'#db2777',amount:'#65a30d'}
+
+      const obj = {
+        label: label[field],
+        borderColor: borderColor[field],
         borderWidth: 2,
         borderRadius: 5,
         borderSkipped: true,
         barPercentage: 0.5,
-        backgroundColor: type == 'qty' ? "#db2777" : "#65a30d",
-        data: this.milkLastChartAnlyz(type),
+        backgroundColor: backgroundColor[field],
+        data: chartDatas,
         tension: 0.5,
-      };
-    },
-    milkAllChartObj(color, type) {
+      }
+
+      const labels = [];
+      
+      if(type == 'year'){
+        monthMini().forEach((m) => {
+          labels.push(`${m}`);
+        });
+      }else{
+        Object.keys(datas).forEach((m) => {
+          labels.push(`${m}`);
+        });
+      }
+
       return {
-        label: type == 'qty' ? "น้ำนมดิบ" : "รายได้",
-        fill: false,
-        borderColor: type == 'qty' ? "#e11d48" : "#16a34a",
-        backgroundColor: type == 'qty' ? "#db2777" : "#65a30d",
-        borderWidth: 3,
-        data: this.milkAllChartAnlyz(type),
-        tension: 0.4,
-        cubicInterpolationMode: "monotone",
+        labels,
+        datasets: [
+          obj
+        ],
       };
     },
-    createBusinessAllChart(){
+    foodChart(){
+
+      const qtyDatas = [],amtDatas = [];
+      this.food?.month.map((m) => {
+        qtyDatas.push(m.sumQty);
+        amtDatas.push(m.sumAmount);
+      });
+
       const labels = [];
 
+      monthMini().forEach((m) => {
+        labels.push(`${m}`);
+      });
+
+      return {
+        labels,
+        datasets: [
+          {
+            label: 'จำนวน (กก.)',
+            borderColor:'#E83105',
+            borderWidth: 2,
+            borderRadius: 5,
+            borderSkipped: true,
+            backgroundColor: '#F6461C',
+            data: qtyDatas,
+            tension: 0.5,
+          },{
+            label:'ค่าอาหาร',
+            borderColor:'#566573',
+            borderWidth: 2,
+            borderRadius: 5,
+            borderSkipped: true,
+            backgroundColor: '#5D6D7E',
+            data: amtDatas,
+            tension: 0.5,
+          }
+        ],
+      };
+    },
+    businessAllChart(){
+      const costDatas = [],billDatas = [],careDatas = [],incomeDatas = [];
+
+      Object.keys(this.expenseSum.cost).forEach((key) => {
+        costDatas.push(this.expenseSum.cost[key]);
+      });
+
+      Object.keys(this.expenseSum.bill).forEach((key) => {
+        billDatas.push(this.expenseSum.bill[key]);
+      });
+
+      Object.keys(this.expenseSum.care).forEach((key) => {
+        careDatas.push(this.expenseSum.care[key]);
+      });
+
+      Object.keys(this.incomeSum.rawMilk).forEach((key) => {
+        incomeDatas.push(this.incomeSum.rawMilk[key]);
+      });
+      
+      const labels = [];
       let allYears = new Set([
         ...Object.keys(this.expenseSum.bill), 
         ...Object.keys(this.expenseSum.care), 
@@ -813,109 +818,51 @@ export default {
       return {
         labels,
         datasets: [
-          this.businessAllChartObj('rawMilk'), 
-          this.businessAllChartObj('cost'),
-          this.businessAllChartObj('bill'),
-          this.businessAllChartObj('care'),
+          {
+            label:"ผลผลิต",
+            data: incomeDatas,
+            borderWidth: 2,
+            weight: 2,
+            backgroundColor:  "#bbf7d0",
+            hoverOffset: 4,
+          },
+          {
+            label: "ต้นทุน" ,
+            data: costDatas,
+            borderWidth: 2,
+            weight: 2,
+            backgroundColor: "#d1d5db",
+            hoverOffset: 4,
+          },
+          {
+            label: "ค่าใช้จ่ายเพิ่มเติม",
+            data: billDatas,
+            borderWidth: 2,
+            weight: 2,
+            backgroundColor: "#fca5a5" ,
+            hoverOffset: 4,
+          },
+          {
+            label: "ค่าดูแลโค",
+            data: careDatas,
+            borderWidth: 2,
+            weight: 2,
+            backgroundColor: "#fcd34d" ,
+            hoverOffset: 4,
+          }
         ],
       };
     },
-    businessAllChartObj(type) {
-      return {
-        label: type == 'cost' ? "ต้นทุน" : type == 'bill' ? "ค่าใช้จ่ายเพิ่มเติม" :  type == 'care' ? "ค่าดูแลโค" : "ผลผลิต",
-        data: this.businessAllChartData(type),
-        borderWidth: 2,
-        weight: 2,
-        backgroundColor: type == 'cost' ? "#d1d5db" : type == 'bill' ? "#fca5a5" : type == 'care' ? "#fcd34d" : "#bbf7d0",
-        hoverOffset: 4,
-      };
-    },
-    businessAllChartData(type) {
+    incomeChart(){
+
       const datas = [];
-      if (type == 'cost') {
-        Object.keys(this.expenseSum.cost).forEach((key) => {
-          datas.push(this.expenseSum.cost[key]);
-        });
-      } else if (type == 'bill') {
-        Object.keys(this.expenseSum.bill).forEach((key) => {
-          datas.push(this.expenseSum.bill[key]);
-        });
-      }else if (type == 'care') {
-        Object.keys(this.expenseSum.care).forEach((key) => {
-          datas.push(this.expenseSum.care[key]);
-        });
-      } else if (type == 'rawMilk') {
-        Object.keys(this.incomeSum.rawMilk).forEach((key) => {
-          datas.push(this.incomeSum.rawMilk[key]);
-        });
-      }
 
-      return datas;
-    },
-    
-    createFoodMonthChart() {
-      const labels = [];
-
-      monthMini().forEach((m) => {
-        labels.push(`${m}`);
+      Object.keys(this.income).forEach((key) => {
+        datas.push(this.income[key]);
       });
 
-      return {
-        labels,
-        datasets: [this.foodMonthAmountChartObj(), this.foodMonthQtyChartObj()],
-      };
-    },
-    createMilkLastChart(type) {
-      const labels = [];
-      const milks = Object.keys(this.milkLasts)
-      monthMini().forEach((m) => {
-        labels.push(`${m}`);
-      });
-
-      return {
-        labels,
-        datasets: [
-          this.milkLastChartObj("primary", type)
-        ],
-      };
-    },
-    createMilkAllChart(type) {
-      const labels = [];
-
-      Object.keys(this.milkAlls).forEach((m) => {
-        labels.push(`${m}`);
-      });
-
-      return {
-        labels,
-        datasets: [this.milkAllChartObj("danger", type)],
-      };
-    },
-    getDoughnutChartData(type) {
-      const datas = [];
-      if (type == 'cost') {
-        Object.keys(this.expense.cost).forEach((key) => {
-          datas.push(this.expense.cost[key]);
-        });
-      } else if (type == 'bill') {
-        Object.keys(this.expense.bill).forEach((key) => {
-          datas.push(this.expense.bill[key]);
-        });
-      }else if (type == 'care') {
-        Object.keys(this.expense.care).forEach((key) => {
-          datas.push(this.expense.care[key]);
-        });
-      } else if (type == 'income') {
-        Object.keys(this.income).forEach((key) => {
-          datas.push(this.income[key]);
-        });
-      }
-
-      return datas;
-    },
-    getDoughnutChartObject(type) {
-      return {
-        data: this.getDoughnutChartData(type),
+      const obj = {
+        data: datas,
         borderWidth: 2,
         weight: 2,
         backgroundColor: [
@@ -928,54 +875,71 @@ export default {
             "#fbcfe8",
           ],
         hoverOffset: 4,
-      };
-    },
-    createDoughnutChart(type) {
-      const labels = [];
-      if (type == 'cost') {
-        Object.keys(this.expense.cost).forEach((item) => {
-          labels.push(`${this.mapText(type)[item]}`);
-        });
-      }else if (type == 'bill') {
-        Object.keys(this.expense.bill).forEach((item) => {
-          labels.push(`${this.mapText(type)[item]}`);
-        });
-      }else if (type == 'care') {
-        Object.keys(this.expense.care).forEach((item) => {
-          labels.push(`${this.mapText(type)[item]}`);
-        });
-      } else if (type == 'income') {
-        Object.keys(this.income).forEach((item) => {
-          labels.push(`${this.mapText(type)[item]}`);
-        });
       }
+
+      const desc = { rawMilk: 'น้ำนมดิบ', cowExport: 'จำหน่ายโค', pasteuri: 'นมพาสเจอไรซ์', dung: 'มูลสัตว์', meat: 'จำหน่ายเนื้อโค' }
+
+
+      const labels = [];
+      Object.keys(this.income).forEach((item) => {
+        labels.push(`${desc[item]}`);
+      });
 
       return {
         labels,
-        datasets: [this.getDoughnutChartObject(type)],
+        datasets: [
+          obj
+        ],
       };
     },
-    mapText(type) {
-      if (type == 'cost') {
-        return { building: 'สิ่งปลูกสร้าง', equipment: 'อุปกรณ์', cow: 'ค่านำเข้าโค', maintenance: 'ซ่อมบำรุง' }
-      } else if (type == 'bill') {
-        return { water: 'ค่าน้ำ', electric: 'ค่าไฟ', accom: 'ค่าที่พักคนงาน', rent: 'ค่าเช่า', internet: 'ค่าอินเทอร์เน็ต',waste : 'ค่าของเสีย',oth : 'อื่นๆ' }
-      }else if (type == 'care') {
-        return { food: 'ค่าอาหาร', heal: 'ค่ารักษา', protection: 'ค่าวัคซีน', worker: 'ค่าจ้างคนงาน' }
-      } else if (type == 'income') {
-        return { rawMilk: 'น้ำนมดิบ', cowExport: 'จำหน่ายโค', pasteuri: 'นมพาสเจอไรซ์', dung: 'มูลสัตว์', meat: 'จำหน่ายเนื้อโค' }
+    expenseChart(field){
+      const datas = [];
+      Object.keys(this.expense[field]).forEach((key) => {
+        datas.push(this.expense[field][key]);
+      });
+
+      const obj = {
+        data: datas,
+        borderWidth: 2,
+        weight: 2,
+        backgroundColor: [
+            "#d1d5db",
+            "#fca5a5",
+            "#fcd34d",
+            "#bbf7d0",
+            "#a5f3fc",
+            "#c7d2fe",
+            "#fbcfe8",
+          ],
+        hoverOffset: 4,
       }
+      const desc =  {
+        cost : { building: 'สิ่งปลูกสร้าง', equipment: 'อุปกรณ์', cow: 'ค่านำเข้าโค', maintenance: 'ซ่อมบำรุง' },
+        bill : { water: 'ค่าน้ำ', electric: 'ค่าไฟ', accom: 'ค่าที่พักคนงาน', rent: 'ค่าเช่า', internet: 'ค่าอินเทอร์เน็ต',waste : 'ค่าของเสีย',oth : 'อื่นๆ' },
+        care : { food: 'ค่าอาหาร', heal: 'ค่ารักษา', protection: 'ค่าวัคซีน', worker: 'ค่าจ้างคนงาน' },
+      }
+
+      const labels = [];
+      Object.keys(this.expense[field]).forEach((item) => {
+        labels.push(`${desc[field][item]}`);
+      });
+
+      return {
+        labels,
+        datasets: [
+          obj
+        ],
+      };
     },
     sumExpense() {
-      let sumCost = 0,
-        sumCare = 0,
-        sumBill = 0;
-      let percent = 0;
+      let cost = 0,
+        care = 0,
+        bill = 0;
       if (this.expense?.care) {
         for (let key of Object.keys(this.expense?.care)) {
           const amount = this.expense.care[key];
           if (amount) {
-            sumCare += amount;
+            care += amount;
           }
         }
       }
@@ -983,7 +947,7 @@ export default {
         for (let key of Object.keys(this.expense?.cost)) {
           const amount = this.expense.cost[key];
           if (amount) {
-            sumCost += amount;
+            cost += amount;
           }
         }
       }
@@ -992,23 +956,39 @@ export default {
         for (let key of Object.keys(this.expense?.bill)) {
           const amount = this.expense.bill[key];
           if (amount) {
-            sumBill += amount;
+            bill += amount;
           }
         }
       }
 
-      let sumExpense = sumCare + sumCost + sumBill
+      const total = care + cost + bill
 
-      let  profit = this.income.rawMilk - sumExpense;
-      
+      return { total,care,cost,bill };
+    },
+    sumIncome(){
+      let total = 0
+      for (let key of Object.keys(this.income)) {
+        const amount = this.income[key];
+        if (amount) {
+          total += amount;
+        }
+      }
+      return {total}
+    },
+    sumProfit(){
+      const expense = this.sumExpense().total;
+      const income = this.sumIncome().total;
+
+      let profit = income - expense;
+      let percent = 0;
 
       if (profit >= 0) {
-        percent = ((profit / this.income?.rawMilk) * 100);
+        percent = ((profit / income) * 100);
       } else {
-        percent = ((profit / sumExpense) * 100);
+        percent = ((profit / expense) * 100);
       }
 
-      return { sumExpense,sumCare, sumCost,sumBill, profit, percent };
+      return {profit,percent}
     },
     formatDate(date) {
       if (!date) {
