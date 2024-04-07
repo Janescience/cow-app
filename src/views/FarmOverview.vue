@@ -46,14 +46,16 @@
                         <tr>
                           <th class=" whitespace-nowrap text-center">รีดนมแล้ว (วัน)</th>
                           <th class=" whitespace-nowrap text-center">ทั้งหมด (กก.)</th>
+                          <th class=" whitespace-nowrap text-center">เฉลี่ย/เดือน (กก.)</th>
                           <th class=" whitespace-nowrap text-center">เฉลี่ย/วัน (กก.)</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr class="font-extrabold text-2xl">
-                          <td class="text-center"> {{ milkYear.count }}</td>
+                          <td class="text-center"> {{ milkYear.countDate }}</td>
                           <td class="text-center">{{ $filters.number(milkYear.sumQty) }}</td>
-                          <td class="text-center">{{ $filters.number(milkYear.avgQty) }}</td>
+                          <td class="text-center">{{ $filters.number(milkYear.avgMonthQty) }}</td>
+                          <td class="text-center">{{ $filters.number(milkYear.avgDayQty) }}</td>
                         </tr>
 
                       </tbody>
@@ -70,13 +72,15 @@
                       <thead>
                         <tr>
                           <th class=" whitespace-nowrap text-center">รายได้ทั้งหมด (บาท)</th>
+                          <th class=" whitespace-nowrap text-center">รายได้เฉลี่ย/เดือน (บาท)</th>
                           <th class=" whitespace-nowrap text-center">รายได้เฉลี่ย/วัน (บาท)</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr class="font-extrabold text-2xl">
                           <td class="text-center">{{ $filters.currency(milkYear.sumAmt) }}</td>
-                          <td class="text-center">{{ $filters.currency(milkYear.avgAmt) }}</td>
+                          <td class="text-center">{{ $filters.currency(milkYear.avgMonthAmt) }}</td>
+                          <td class="text-center">{{ $filters.currency(milkYear.avgDayAmt) }}</td>
                         </tr>
 
                       </tbody>
@@ -100,13 +104,15 @@
                           <th class=" whitespace-nowrap text-center">รีดนมแล้ว (ปี)</th>
                           <th class=" whitespace-nowrap text-center">ทั้งหมด (กก.)</th>
                           <th class=" whitespace-nowrap text-center">เฉลี่ย/เดือน (กก.)</th>
+                          <th class=" whitespace-nowrap text-center">เฉลี่ย/ปี (กก.)</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr class="font-extrabold text-2xl">
-                          <td class="text-center"> {{ milkAll.count }}</td>
+                          <td class="text-center"> {{ milkAll.countYear}}</td>
                           <td class="text-center">{{ $filters.number(milkAll.sumQty) }}</td>
-                          <td class="text-center">{{ $filters.number(milkAll.avgQty) }}</td>
+                          <td class="text-center">{{ $filters.number(milkAll.avgMonthQty) }}</td>
+                          <td class="text-center">{{ $filters.number(milkAll.avgYearQty) }}</td>
                         </tr>
 
                       </tbody>
@@ -123,13 +129,15 @@
                       <thead>
                         <tr>
                           <th class=" whitespace-nowrap text-center">รายได้ทั้งหมด (บาท)</th>
+                          <th class=" whitespace-nowrap text-center">รายได้เฉลี่ย/เดือน (บาท)</th>
                           <th class=" whitespace-nowrap text-center">รายได้เฉลี่ย/ปี (บาท)</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr class="font-extrabold text-2xl">
                           <td class="text-center">{{ $filters.currency(milkAll.sumAmt) }}</td>
-                          <td class="text-center">{{ $filters.currency(milkAll.avgAmt) }}</td>
+                          <td class="text-center">{{ $filters.currency(milkAll.avgMonthAmt) }}</td>
+                          <td class="text-center">{{ $filters.currency(milkAll.avgYearAmt) }}</td>
                         </tr>
 
                       </tbody>
@@ -526,83 +534,85 @@ export default {
   methods: {
     async getMilks(year) {
       this.loading.milks = true;
-      const resp = await DashboardService.getMilks(year ? year : this.milkYearValue);
+      const resp = await DashboardService.getMilks(year || this.milkYearValue);
       if (resp) {
-        //Year
-        const milkYears = resp.data.last;
-        this.milkYear.sumQty = 0;
-        this.milkYear.sumAmt = 0;
-        for (let milk of milkYears) {
-          milk.month = moment(milk.date, "DD-MM-YYYY").format("M");
-          let sumQty = milk.milkDetails.reduce((prev, cur) => prev + cur.qty, 0);
-          let sumAmt = milk.milkDetails.reduce((prev, cur) => prev + cur.amount, 0);
-          this.milkYear.sumQty += sumQty;
-          this.milkYear.sumAmt += sumAmt;
-        }
-        const milkLastGroupDate = _.groupBy(milkYears, "date");
-        this.milkYear.avgQty =
-          this.milkYear.sumQty > 0
-            ? this.milkYear.sumQty / Object.keys(milkLastGroupDate).length
-            : 0;
-        this.milkYear.avgAmt =
-          this.milkYear.sumAmt > 0
-            ? this.milkYear.sumAmt / Object.keys(milkLastGroupDate).length
-            : 0;
-        this.milkYear.count = Object.keys(milkLastGroupDate).length;
-
-        this.milkYears = _.groupBy(milkYears, "month");
-
-        //Rename key
-        for (let key of Object.keys(this.milkYears)) {
-          this.milkYears[key][0].date = moment(
-            this.milkYears[key][0].date,
-            "DD-MM-YYYY"
-          ).format("MMM");
-          this.milkYears[this.milkYears[key][0].date] = this.milkYears[key];
-          delete this.milkYears[key];
-        }
-
-        //All
-        const milkAlls = resp.data.all;
-        this.milkAll.sumQty = 0;
-        this.milkAll.sumAmt = 0;
-        for (let milkAll of milkAlls) {
-          milkAll.year = moment(milkAll.date, "YYYY-MM-DD").format("YYYY");
-          milkAll.month = moment(milkAll.date, "YYYY-MM-DD").format("M");
-          let sumQty = milkAll.milkDetails.reduce(
-            (prev, cur) => prev + cur.qty,
-            0
-          );
-          let sumAmt = milkAll.milkDetails.reduce(
-            (prev, cur) => prev + cur.amount,
-            0
-          );
-          this.milkAll.sumQty += sumQty;
-          this.milkAll.sumAmt += sumAmt;
-        }
-        const milkAllGroupMonth = _.groupBy(milkAlls, "month");
-        this.milkAlls = _.groupBy(milkAlls, "year");
-        this.milkAll.count = Object.keys(this.milkAlls).length;
-
-
-        this.milkAll.avgQty =
-          this.milkAll.sumQty > 0
-            ? this.milkAll.sumQty / Object.keys(milkAllGroupMonth).length
-            : 0;
-        this.milkAll.avgAmt =
-          this.milkAll.sumAmt > 0
-            ? this.milkAll.sumAmt / this.milkAll.count
-            : 0;
+        this.processMilkYears(resp.data.last);
+        this.processMilkAlls(resp.data.all);
       }
 
       this.chart.milk.year.qty = this.milkChart('qty',this.milkYears,'year');
       this.chart.milk.year.amt = this.milkChart('amount',this.milkYears,'year');
-
       this.chart.milk.all.qty = this.milkChart('qty',this.milkAlls,'all');
       this.chart.milk.all.amt = this.milkChart('amount',this.milkAlls,'all');
 
       this.loading.milks = false;
     },
+    processMilkYears(datas) {
+      let sumQty = 0, sumAmt = 0;
+      datas.forEach(milk => {
+        milk.month = moment(milk.date, "YYYY-MM-DD").format("M");
+        sumQty += milk.milkDetails.reduce((prev, cur) => prev + cur.qty, 0);
+        sumAmt += milk.milkDetails.reduce((prev, cur) => prev + cur.amount, 0);
+      })
+
+      const groupByDate = _.groupBy(datas, "date");
+      const countDate = Object.keys(groupByDate).length;
+      const avgDayQty = sumQty > 0 ? sumQty / countDate : 0;
+      const avgDayAmt = sumAmt > 0 ? sumAmt / countDate : 0;
+
+      const groupByMonth = _.groupBy(datas, "month");
+      const countMonth = Object.keys(groupByMonth).length; 
+      const avgMonthQty = sumQty > 0 ? sumQty / countMonth : 0;
+      const avgMonthAmt = sumAmt > 0 ? sumAmt / countMonth : 0;
+
+      this.milkYears = _.orderBy(groupByMonth,'ASC')
+      this.milkYear = {
+        sumQty,
+        sumAmt,
+        avgDayQty,
+        avgDayAmt,
+        avgMonthQty,
+        avgMonthAmt,
+        countDate,
+        countMonth
+      }
+    },
+    processMilkAlls(datas) {
+      let sumQty = 0, sumAmt = 0;
+
+      datas.forEach(milk => {
+        const date = moment(milk.date, "YYYY-MM-DD");
+        milk.year = date.format("YYYY");
+        milk.month = date.format("M");
+
+        sumQty += milk.milkDetails.reduce((prev, cur) => prev + cur.qty,0);
+        sumAmt += milk.milkDetails.reduce((prev, cur) => prev + cur.amount,0);
+      });
+      const groupByMonth = _.groupBy(datas, "month");
+      const groupByYear = _.groupBy(datas, "year");
+
+      const countMonth = Object.keys(groupByMonth).length;
+      const countYear = Object.keys(groupByYear).length;
+
+      const avgMonthQty = sumQty > 0 ? sumQty / countMonth : 0;
+      const avgYearQty = sumQty > 0 ? sumQty / countYear : 0;
+
+      const avgMonthAmt = sumAmt > 0 ? sumAmt / countMonth : 0;
+      const avgYearAmt = sumAmt > 0 ? sumAmt / countYear : 0;
+
+      this.milkAll = {
+        sumQty,
+        sumAmt,
+        avgMonthQty,
+        avgYearQty,
+        avgMonthAmt,
+        avgYearAmt,
+        countMonth,
+        countYear
+      }
+      this.milkAlls = _.orderBy(groupByYear,'ASC')
+    },
+    
     async getFood(year) {
       this.loading.food = true;
       const resp = await DashboardService.getFood(year || this.foodYear);
