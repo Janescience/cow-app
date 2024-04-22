@@ -45,6 +45,9 @@ class DashboardService{
     getTodoList(){
         return http.get('/dashboard/todolist');
     }
+    getReproduction(year){
+        return http.get('/dashboard/reproduction?year='+year);
+    }
 }
 
 export default new DashboardService();

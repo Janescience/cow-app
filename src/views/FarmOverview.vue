@@ -5,11 +5,11 @@
       <div class="grid grid-cols-1 gap-5 ">
 
         <!-- การให้อาหาร -->
-        <CardBox :title="'การให้อาหาร (ปี พ.ศ. ' + (foodYear + 543) + ')'" icon="corn"
+        <CardBoxCollapse :title="'การให้อาหาร (ปี พ.ศ. ' + (foodYear + 543) + ')'" icon="corn"
           @header-icon-click="() => { this.foodYearSearch = !this.foodYearSearch }" header-icon="magnifyExpand">
           <div v-if="foodYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3 mb-5">
             <FormField label="ปี พ.ศ." help="เลือกปีแสดงผล">
-              <FormControl v-model="foodYear" :options="years" />
+              <FormControl v-model="foodYear" :options="years()" />
             </FormField>
 
           </div>
@@ -22,12 +22,28 @@
           </div>
           <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
 
-        </CardBox>
+        </CardBoxCollapse>
+
         <!-- การผสมพันธุ์ -->
+        <CardBox :title="'การผสมพันธุ์ (ปี พ.ศ. ' + (reproYearValue + 543) + ')'" icon="reproduction"
+          @header-icon-click="() => { this.reproYearSearch = !this.reproYearSearch }" header-icon="magnifyExpand">
+          <div v-if="reproYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3 mb-5">
+            <FormField label="ปี พ.ศ." help="เลือกปีแสดงผล">
+              <FormControl v-model="reproYearValue" :options="years()" />
+            </FormField>
+
+          </div>
+
+          <div v-if="chart.reproduct.year" class="h-52 mt-5">
+            <bar-chart :data="chart.reproduct.year" />
+          </div>
+          <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
+
+        </CardBox>
         <!-- การฉีดวัคซีน -->
         <!-- ยอดการส่งน้ำนมดิบให้สหกร แบ่งเช้า บ่าย และ รวม -->
 
-        <CardBox title="น้ำนมดิบ" icon="water" class="lg:p-4 md:p-4" has-table header-icon="">
+        <CardBoxCollapse title="น้ำนมดิบ" icon="water"  has-table header-icon="">
           <div class="grid grid-cols-1 gap-5">
             <CardBox :title="'รายเดือน (ปี พ.ศ. ' + (milkYearValue + 543) + ')'" icon="chartBellCurveCumulative" class=""
               :loading="loading.milks" @header-icon-click="() => { this.milkYearSearch = !this.milkYearSearch }"
@@ -35,7 +51,7 @@
               <div class="grid lg:grid-cols-2 grid-cols-1 gap-5 ">
                 <div v-if="milkYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3">
                   <FormField label="ปี พ.ศ." help="เลือกปีแสดงผล">
-                    <FormControl v-model="milkYearValue" :options="years" />
+                    <FormControl v-model="milkYearValue" :options="years()" />
                   </FormField>
 
                 </div>
@@ -152,14 +168,14 @@
             </CardBox>
           </div>
 
-        </CardBox>
+        </CardBoxCollapse>
 
-        <CardBox :title="'ผลประกอบการ (ปี พ.ศ. ' + (businessYear + 543) + ')'" icon="cashRegister" header-icon="magnifyExpand"
+        <CardBoxCollapse :title="'ผลประกอบการ (ปี พ.ศ. ' + (businessYear + 543) + ')'" icon="cashRegister" header-icon="magnifyExpand"
         @header-icon-click="() => { this.businessYearSearch = !this.businessYearSearch }"
         >
           <div v-if="businessYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3 mb-5">
             <FormField label="ปี พ.ศ." help="เลือกปีแสดงผล">
-              <FormControl v-model="businessYear" :options="years" />
+              <FormControl v-model="businessYear" :options="years('search')" />
             </FormField>
           </div>
           <div  v-if="chart.business.all" class="h-80 mt-5 col-span-2 mb-5">
@@ -270,10 +286,17 @@
               </div>
             </CardBox>
           </div>
-        </CardBox>
+        </CardBoxCollapse>
 
-        <CardBox icon="poll" title="สถิติ" header-icon="" class=" mb-1 lg:mb-5">
+        <CardBoxCollapse icon="poll" :title="'สถิติ (ปี พ.ศ. ' + (statYearValue + 543) + ')'" header-icon="magnifyExpand"
+        @header-icon-click="() => { this.statYearSearch = !this.statYearSearch }" class=" mb-1 lg:mb-5">
           <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
+            <div v-if="statYearSearch" class="lg:col-span-4 grid lg:grid-cols-6 grid-cols-1">
+              <FormField label="ปี พ.ศ." help="เลือกปีแสดงผล">
+                <FormControl v-model="statYearValue" :options="years()" />
+              </FormField>
+
+            </div>
             <CardBox title="การรักษา" header-icon="" class="dark:border-gray-800 border">
               <div class="grid grid-cols-2 gap-5">
                 <p class="mt-1">
@@ -348,7 +371,7 @@
             </CardBox>
 
           </div>
-        </CardBox>
+        </CardBoxCollapse>
       </div>
 
 
@@ -368,6 +391,7 @@ import PieChart from "@/components/Charts/PieChart.vue";
 
 import SectionTitleBar from "@/components/SectionTitleBar.vue";
 import CardBox from "@/components/CardBox.vue";
+import CardBoxCollapse from "@/components/CardBoxCollapse.vue";
 import BaseIcon from "@/components/BaseIcon.vue";
 import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
@@ -407,16 +431,25 @@ export default {
         income : null,
         food : {
           year : null
+        },
+        reproduct : {
+          year:null,
+          all:null
         }
       },
       milkYears: [],
+      reproducts : [],
       milkAlls: [],
       statistics: {},
       corrals: [],
       food: {},
       foodYear: new Date().getFullYear(),
       milkYearValue: new Date().getFullYear(),
+      statYearValue: new Date().getFullYear(),
       businessYear: new Date().getFullYear(),
+      reproYearValue: 2023,
+      reproYearSearch : false,
+      statYearSearch: false,
       milkYearSearch: false,
       foodYearSearch: false,
       businessYearSearch: false,
@@ -463,7 +496,6 @@ export default {
           value: "count",
         },
       ],
-      years: years('search'),
       expense: {},
       expenseSum: {},
       income: {},
@@ -485,6 +517,7 @@ export default {
     SectionMain,
     SectionTitleBar,
     CardBox,
+    CardBoxCollapse,
     SectionTitleBarSub,
     LayoutAuthenticated,
     BaseIcon,
@@ -530,6 +563,7 @@ export default {
     this.getExpense();
     this.getCorrals();
     this.getStatistics();
+    this.getReproduction();
   },
   methods: {
     async getMilks(year) {
@@ -679,13 +713,80 @@ export default {
       }
       this.loading.corral = false;
     },
-    async getStatistics() {
+    async getStatistics(year) {
       this.loading.statistic = true;
-      const resp = await DashboardService.getStatistics();
+      const resp = await DashboardService.getStatistics(year || this.statYearValue);
       if (resp) {
         this.statistics = resp.data;
       }
       this.loading.statistic = false;
+    },
+    async getReproduction(year){
+      this.loading.reproduct = true;
+      const resp = await DashboardService.getReproduction(year || this.reproYearValue);
+      if (resp) {
+        this.reproducts = this.processReproductYear(resp.data.reproductions);
+      }
+      this.chart.reproduct.year = this.reproductChart()
+      this.loading.reproduct = false;
+    },
+    processReproductYear(datas) {
+      const results = [];
+      datas.forEach(repro => {
+        repro.month = moment(repro.matingDate, "YYYY-MM-DD").format("M");
+      })
+
+      const groupByMonth = _.groupBy(datas, "month");
+      const reproductKeys = Object.keys(groupByMonth); 
+
+      reproductKeys.forEach((key)=>{
+        const reproducts = groupByMonth[key];
+
+        const success = reproducts.filter(r => r.type === 'F' && r.status !== 4).length;
+        const fail = reproducts.filter(r => r.type === 'F' && r.status == 4).length;
+
+        results[key] = {success,fail} ;
+      })
+
+      return results
+    },
+    reproductChart() {
+      const successDatas = [],failDatas = [];
+      this.reproducts.map((r) => {
+        successDatas.push(r.success);
+        failDatas.push(r.fail);
+      });
+
+      const labels = [];
+
+      monthMini().forEach((m) => {
+        labels.push(`${m}`);
+      });
+
+      return {
+        labels,
+        datasets: [
+          {
+            label: 'สำเร็จ',
+            borderColor:'#16a34a',
+            borderWidth: 2,
+            borderRadius: 5,
+            borderSkipped: true,
+            backgroundColor: '#65a30d',
+            data: successDatas,
+            tension: 0.5,
+          },{
+            label:'ล้มเหลว',
+            borderColor:'#e11d48',
+            borderWidth: 2,
+            borderRadius: 5,
+            borderSkipped: true,
+            backgroundColor: '#db2777',
+            data: failDatas,
+            tension: 0.5,
+          }
+        ],
+      };
     },
     milkChart(field,datas,type) {
       //Prepare datas
@@ -736,6 +837,7 @@ export default {
         ],
       };
     },
+
     foodChart(){
 
       const qtyDatas = [],amtDatas = [];
@@ -1006,6 +1108,9 @@ export default {
       }
       return moment(new Date(date)).format("DD/MM/YYYY");
     },
+    years(type){
+      return years(type)
+    }
   },
 };
 </script>

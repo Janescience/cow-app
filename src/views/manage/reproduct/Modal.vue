@@ -27,16 +27,16 @@
               required
             />
           </FormField>
-          <FormField label="ผล" >
+          <FormField label="ผลการเข้าระบบ" >
             <FormControl
               v-model="reproduct.result"
               :options="result"
             />
           </FormField>
-          <FormField label="วิธีการรักษา" help="" v-if="reproduct.result == 1">
+          <FormField label="การรักษา/สาเหตุ" class="col-span-2" help="" v-if="reproduct.result == 1">
             <FormControl
               v-model="reproduct.howTo"
-              icon="doctor"
+              type="textarea"
             />
           </FormField>
           <FormField label="วันที่เป็นสัด" help="* ห้ามว่าง (วันที่เข้าระบบสืบพันธุ์ + 21 วัน)" v-if="reproduct.result == 2">
@@ -66,15 +66,23 @@
               required
             />
           </FormField>
-          <FormField label="สถานะ" >
+          <FormField label="สถานะ"  v-if="reproduct.result == 2">
             <FormControl
               v-model="reproduct.status"
               :options="status"
             />
           </FormField>
-          <FormField label="รายละเอียดพ่อพันธุ์/น้ำเชื้อ" help="">
+          <FormField label="ประเภท" v-if="reproduct.result == 2">
+            <FormCheckRadioPicker
+              v-model="reproduct.type"
+              type="radio"
+              :options="{ F: 'ผสมจริง', A: 'ผสมเทียม' }"
+            />
+          </FormField>
+          <FormField label="รายละเอียด" v-if="reproduct.result == 2" help="">
             <FormControl
-              v-model="reproduct.dad"
+              v-model="reproduct.remark"
+              type="textarea"
               icon=""
             />
           </FormField>
@@ -137,8 +145,9 @@
           estrusDate : addDays(new Date(),21),
           matingDate : addDays(new Date(),22),
           checkDate : addMonths(addDays(new Date(),22),2),
-          dad : "",
+          remark : "",
           howTo : "",
+          type : 'F',
           status : 1,
           result : 2,
         },

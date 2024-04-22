@@ -153,7 +153,7 @@ export default {
           type : 'date',
         },
         {
-          label : 'ผล',
+          label : 'ผลการเข้าระบบ',
           func : (obj) => {
             return reproductResult()[obj.result].label
           },
@@ -177,8 +177,8 @@ export default {
           type : 'date',
         },
         {
-          label : "พ่อพันธุ์",
-          value : 'dad',
+          label : "รายละเอียด",
+          value : 'remark',
         },
         {
           label : 'สถานะ',
@@ -187,7 +187,11 @@ export default {
           },
         },
         {
-          label : "วิธีรักษา",
+          label : "ประเภท",
+          value : 'type', 
+        },
+        {
+          label : "การรักษา/สาเหตุ",
           value : 'howTo',
         },
       ],
