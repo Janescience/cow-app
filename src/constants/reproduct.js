@@ -28,3 +28,7 @@ export const reproductResult = (action) => {
     ]
 }
 
+export const reproductType = (action) => {
+    return {'F':'พ่อพันธุ์','A':'ผสมเทียม'}
+}
+

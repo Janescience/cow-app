@@ -59,7 +59,7 @@ import Criteria from "@/components/Criteria.vue";
 import Modal from './Modal.vue'
 import ReproductionService from '@/services/reproduction'
 
-import { reproductStatus,reproductResult } from '@/constants/reproduct'
+import { reproductStatus,reproductResult,reproductType } from '@/constants/reproduct'
 import { Toast } from "@/utils/alert";
 import _ from "lodash";
 import moment from "moment"
@@ -188,7 +188,9 @@ export default {
         },
         {
           label : "ประเภท",
-          value : 'type', 
+          func : (obj) => {
+            return reproductType()[obj.type]
+          },
         },
         {
           label : "การรักษา/สาเหตุ",

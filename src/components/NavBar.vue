@@ -165,7 +165,7 @@ const logout = () => {
           </NavBarItemLabel>
 
           <template #dropdown>
-            <!-- <NavBarItem to="/profile">
+             <NavBarItem to="/profile">
               <NavBarItemLabel
                 icon="account"
                 label="ข้อมูลส่วนตัว"
@@ -177,7 +177,7 @@ const logout = () => {
                 label="ตั้งค่า"
               />
             </NavBarItem>
-            <BaseDivider nav-bar /> -->
+            <BaseDivider nav-bar />
             <NavBarItem
               @click="showModal"
             >  

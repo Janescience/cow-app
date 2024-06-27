@@ -250,7 +250,11 @@ import { handleError } from 'vue'
             } catch (error) {
               console.error('Error : ',error)
               this.loading = false  
-              this.alert = error.response.data.message
+              // this.alert = error.response.data.message
+              Toast.fire({
+                icon: 'error',
+                title: error.response.data.err.message
+              })
             }
             
         },

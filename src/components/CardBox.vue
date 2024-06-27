@@ -65,7 +65,7 @@ const submit = e => {
   <component
     :is="is"
     :class="componentClass"
-    class=" shadow-lg "
+    class=" shadow"
     @submit="submit"
   >
     <header

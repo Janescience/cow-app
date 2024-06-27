@@ -1021,6 +1021,28 @@ export default {
         });
       }
     },
+    async remove() {
+      this.loading.cow = true;
+      this.alert = "";
+      try {
+        const resp = await CowService.delete(this.cow._id);
+        if (resp) {
+          Toast.fire({
+            icon: "success",
+            title: "ลบข้อมูลสำเร็จ",
+          });
+          this.$router.push('/manage/cow')
+        }
+      } catch (error) {
+        console.error("Error : ", error);
+        this.loading = false;
+        this.alert = error.response.data.message;
+        Toast.fire({
+          icon: "error",
+          title: "ลบข้อมูลไม่สำเร็จ",
+        });
+      }
+    },
     reproduct() {
       let now = moment();
 

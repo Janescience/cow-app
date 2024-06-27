@@ -26,24 +26,37 @@
 
         <!-- การผสมพันธุ์ -->
         <CardBox :title="'การผสมพันธุ์ (ปี พ.ศ. ' + (reproYearValue + 543) + ')'" icon="reproduction"
-          @header-icon-click="() => { this.reproYearSearch = !this.reproYearSearch }" header-icon="magnifyExpand">
-          <div v-if="reproYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3 mb-5">
-            <FormField label="ปี พ.ศ." help="เลือกปีแสดงผล">
-              <FormControl v-model="reproYearValue" :options="years()" />
-            </FormField>
+          @header-icon-click="() => { this.reproYearSearch = !this.reproYearSearch }"  has-table   header-icon="magnifyExpand">
+          <div class="lg:p-4">
+            <div v-if="reproYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3 p-4">
+              <FormField label="ปี พ.ศ." help="เลือกปีแสดงผล">
+                <FormControl v-model="reproYearValue" :options="years()" />
+              </FormField>
 
-          </div>
+            </div>
 
-          <div v-if="chart.reproduct.year" class="h-52 mt-5">
-            <bar-chart :data="chart.reproduct.year" />
+            <CardBox title="พ่อพันธุ์" class="mb-5">
+              <div v-if="chart.reproduct.breeder.year" class="h-52 ">
+                <bar-chart :data="chart.reproduct.breeder.year" />
+              </div>
+              <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
+            </CardBox>
+
+            <CardBox title="ผสมเทียม">
+              <div v-if="chart.reproduct.artificial.year" class="h-52 ">
+                <bar-chart :data="chart.reproduct.artificial.year" />
+              </div>
+              <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
+            </CardBox>
           </div>
-          <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
+          
+          
 
         </CardBox>
         <!-- การฉีดวัคซีน -->
         <!-- ยอดการส่งน้ำนมดิบให้สหกร แบ่งเช้า บ่าย และ รวม -->
 
-        <CardBoxCollapse title="น้ำนมดิบ" icon="water"  has-table header-icon="">
+        <CardBoxCollapse title="น้ำนมดิบ" icon="water" has-table header-icon="" class="lg:p-4">
           <div class="grid grid-cols-1 gap-5">
             <CardBox :title="'รายเดือน (ปี พ.ศ. ' + (milkYearValue + 543) + ')'" icon="chartBellCurveCumulative" class=""
               :loading="loading.milks" @header-icon-click="() => { this.milkYearSearch = !this.milkYearSearch }"
@@ -55,7 +68,7 @@
                   </FormField>
 
                 </div>
-                <CardBox title="ปริมาณ" header-icon="" has-table class="">
+                <CardBox title="ปริมาณ" header-icon="" has-table class="lg:p-4">
                   <div class="overflow-x-auto">
                     <table>
                       <thead>
@@ -82,7 +95,7 @@
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </CardBox>
-                <CardBox title="จำนวนเงิน" header-icon="" has-table class="">
+                <CardBox title="จำนวนเงิน" header-icon="" has-table class="lg:p-4">
                   <div class="overflow-x-auto">
                     <table>
                       <thead>
@@ -112,7 +125,7 @@
 
             <CardBox title="รายปี" icon="chartBellCurveCumulative" header-icon="">
               <div class="grid lg:grid-cols-2 grid-cols-1 gap-5 ">
-                <CardBox title="ปริมาณ" header-icon="" has-table class="">
+                <CardBox title="ปริมาณ" header-icon="" has-table class="lg:p-4">
                   <div class="overflow-x-auto">
                     <table>
                       <thead>
@@ -139,7 +152,7 @@
                   </div>
                   <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
                 </CardBox>
-                <CardBox title="จำนวนเงิน" header-icon="" has-table class="">
+                <CardBox title="จำนวนเงิน" header-icon="" has-table class="lg:p-4">
                   <div class="overflow-x-auto">
                     <table>
                       <thead>
@@ -433,12 +446,19 @@ export default {
           year : null
         },
         reproduct : {
-          year:null,
-          all:null
+          breeder : {
+            year:null,
+            all:null
+          },
+          artificial : {
+            year:null,
+            all:null
+          }
         }
       },
       milkYears: [],
-      reproducts : [],
+      reproBreeders : [],
+      reproArtificials : [],
       milkAlls: [],
       statistics: {},
       corrals: [],
@@ -447,7 +467,7 @@ export default {
       milkYearValue: new Date().getFullYear(),
       statYearValue: new Date().getFullYear(),
       businessYear: new Date().getFullYear(),
-      reproYearValue: 2023,
+      reproYearValue: new Date().getFullYear(),
       reproYearSearch : false,
       statYearSearch: false,
       milkYearSearch: false,
@@ -536,6 +556,11 @@ export default {
     milkYearValue(n) {
       if (n) {
         this.getMilks(n);
+      }
+    },
+    reproYearValue(n) {
+      if (n) {
+        this.getReproduction(n);
       }
     },
     businessYear(n) {
@@ -725,9 +750,11 @@ export default {
       this.loading.reproduct = true;
       const resp = await DashboardService.getReproduction(year || this.reproYearValue);
       if (resp) {
-        this.reproducts = this.processReproductYear(resp.data.reproductions);
+        this.reproBreeders = this.processReproductYear(resp.data.breeder);
+        this.reproArtificials = this.processReproductYear(resp.data.artificial);
       }
-      this.chart.reproduct.year = this.reproductChart()
+      this.chart.reproduct.breeder.year = this.reproChart('F')
+      this.chart.reproduct.artificial.year = this.reproChart('A')
       this.loading.reproduct = false;
     },
     processReproductYear(datas) {
@@ -742,17 +769,18 @@ export default {
       reproductKeys.forEach((key)=>{
         const reproducts = groupByMonth[key];
 
-        const success = reproducts.filter(r => r.type === 'F' && r.status !== 4).length;
-        const fail = reproducts.filter(r => r.type === 'F' && r.status == 4).length;
+        const success = reproducts.filter(r =>  r.status !== 4).length;
+        const fail = reproducts.filter(r => r.status == 4).length;
 
         results[key] = {success,fail} ;
       })
 
       return results
     },
-    reproductChart() {
+    reproChart(type) {
       const successDatas = [],failDatas = [];
-      this.reproducts.map((r) => {
+      const datas = type === 'F' ? this.reproBreeders : this.reproArtificials
+      datas.map((r) => {
         successDatas.push(r.success);
         failDatas.push(r.fail);
       });

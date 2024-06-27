@@ -69,7 +69,7 @@ const collapseClick = () => {
   <component
     :is="is"
     :class="componentClass"
-    class="bg-white border shadow-lg border-gray-300 dark:border-gray-900"
+    class="bg-white border shadow-md border-gray-300 dark:border-gray-900"
     @submit="submit"
   >
     <header

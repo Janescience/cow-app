@@ -33,7 +33,7 @@
               :options="result"
             />
           </FormField>
-          <FormField label="การรักษา/สาเหตุ" class="col-span-2" help="" v-if="reproduct.result == 1">
+          <FormField label="การรักษา/สาเหตุ" class="col-span-2" help="" v-if="reproduct.result == 1 ">
             <FormControl
               v-model="reproduct.howTo"
               type="textarea"
@@ -72,14 +72,14 @@
               :options="status"
             />
           </FormField>
-          <FormField label="ประเภท" v-if="reproduct.result == 2">
+          <FormField label="ประเภท" v-if="reproduct.result == 2" class="lg:col-span-2">
             <FormCheckRadioPicker
               v-model="reproduct.type"
               type="radio"
-              :options="{ F: 'ผสมจริง', A: 'ผสมเทียม' }"
+              :options="{ F: 'พ่อพันธุ์', A: 'ผสมเทียม' }"
             />
           </FormField>
-          <FormField label="รายละเอียด" v-if="reproduct.result == 2" help="">
+          <FormField label="รายละเอียด" v-if="reproduct.result == 2" help="" class="col-span-3">
             <FormControl
               v-model="reproduct.remark"
               type="textarea"
