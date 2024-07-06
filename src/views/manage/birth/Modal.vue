@@ -4,7 +4,7 @@
     >
       <CardBox
         v-show="value"
-        :title="(this.mode === 'create' ?'บันทึก' : 'แก้ไข') + 'การคลอดลูก'"
+        :title="'บันทึกการติดตามโคท้อง/คลอดลูก'"
         class="shadow-lg w-full lg:w-3/5 z-50"
         header-icon="close"
         modal
@@ -13,20 +13,35 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-2 lg:grid-cols-3 gap-8">
-          <BaseLevel type="justify-start" >
-            <BaseIcon path="cow" size="24" class="mr-3"/> {{ birth.cow?.code }} - {{ birth.cow?.name }}
-          </BaseLevel>
-          <BaseLevel type="justify-start" >
-            สืบพันธุ์ครั้งที่  {{ birth?.reproduction?.seq }}
-          </BaseLevel>
-          <BaseLevel type="justify-start" >
-            ตั้งครรภ์ {{ formatDate(birth?.pregnantDate) }}
-          </BaseLevel>
-          <BaseLevel type="justify-start" >
-            อายุครรภ์ {{ calAge(birth?.pregnantDate,birth.birthDate) }}
-          </BaseLevel>
-          <FormField label="คลอด" help="* ห้ามว่าง" >
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-5 bg-gray-600 rounded p-2 text-center" >
+          
+          <FormField label="รหัสโค"  class="text-black">
+            <div class="text-gray-300">{{ birth.cow?.code }}</div>
+          </FormField>
+          <FormField label="ชื่อโค" class="text-black" >
+            <div class="text-gray-300">{{ birth.cow?.name }}</div>
+          </FormField>
+          <FormField label="ครั้งที่"  class="text-black">
+            <div class="text-gray-300">{{ birth?.reproduction?.seq }}</div>
+          </FormField>
+          <FormField label="วันที่ตั้งครรภ์"  class="text-black">
+            <div class="text-gray-300">{{ formatDate(birth?.pregnantDate) }}</div>          
+          </FormField>
+          <FormField label="อายุครรภ์" class="text-black" help="วันที่ตั้งครรภ์-ปัจจุบัน" >
+            <div class="text-gray-300">{{ calAge(birth?.pregnantDate,new Date()) }}</div>          
+          </FormField>
+        </div>
+        <BaseDivider />
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          <FormField label="ผลการตั้งครรภ์" >
+            <FormCheckRadioPicker
+              v-model="birth.status"
+              type="radio"
+              :options="{ B: 'คลอด' , A : 'แท้ง'}"
+            />
+          </FormField>
+          <FormField :label="'วันที่'+(birth.status === 'B' ? 'คลอด':'แท้ง')" help="Default อายุครรภ์ 9.15 เดือน" v-if="birth.status === 'B' || birth.status === 'A'"> 
             <FormControl
               v-model="birth.birthDate"
               icon="calendar"
@@ -34,31 +49,27 @@
               required
             />
           </FormField>
-          <FormField label="สถานะ" >
-            <FormCheckRadioPicker
-              v-model="birth.status"
-              type="radio"
-              :options="{ B: 'คลอดแล้ว', P: 'ตั้งครรภ์' , A : 'แท้ง'}"
-            />
+          <FormField label="อายุครรภ์"  help="วันที่ตั้งครรภ์-วันที่คลอด" v-if="birth.status === 'B' || birth.status === 'A'">
+            {{ calAge(birth?.pregnantDate,birth.birthDate) }}       
           </FormField>
-          <FormField v-if="birth.status == 'B'" label="เพศ" >
+          <FormField v-if="birth.status === 'B' || birth.status === 'A'" label="เพศ" help="* ห้ามว่าง">
             <FormCheckRadioPicker
               v-model="birth.sex"
               type="radio"
-              :options="{ M: 'เพศผู้', F: 'เพศเมีย' }"
+              :options="{ M: 'ตัวผู้', F: 'ตัวเมีย' }"
             />
           </FormField>
-          <FormField label="ชื่อลูก" v-if="birth.status == 'B' && birth.sex == 'F' && !birth.calf?._id" help="* ห้ามว่าง">
+          <FormField label="ชื่อลูก" v-if="(birth.status == 'B' || birth.status === 'A') && birth.sex == 'F' && !birth.calf?._id" help="* ห้ามว่าง">
             <FormControl
               v-model="birth.calf.name"
               icon="babyFaceOutline"
               required
             />
           </FormField>
-          <FormField label="ลูก" v-else-if="birth.status == 'B' && birth.sex == 'F' && birth.calf?._id" >
+          <FormField label="ลูก" v-else-if="(birth.status == 'B' || birth.status === 'A') && birth.sex == 'F' && birth.calf?._id" >
             <a :href="'/manage/cow/detail/'+birth.calf._id" class="underline">{{ birth.calf.code +' : '+birth.calf.name }}</a>
           </FormField>
-          <FormField v-if="birth.status == 'B'" label="รก" help="* ห้ามว่าง" >
+          <FormField v-if="birth.status == 'B' || birth.status === 'A'" label="รก" help="* ห้ามว่าง" >
             <FormCheckRadioPicker
               v-model="birth.overgrown"
               type="radio"
@@ -82,7 +93,12 @@
               :lower-limit="birth.drugDate"
             />
           </FormField>
-          
+          <FormField label="สาเหตุ" v-if="birth.status === 'A'">
+            <FormControl
+              v-model="birth.reason"
+              type="textarea"
+            />
+          </FormField>
         </div>
 
         <NotificationBar 
@@ -258,8 +274,8 @@ import { handleError } from 'vue'
             }
             
         },
-        calAge(checkDate){
-          return getAge(checkDate).ageString;
+        calAge(fromDate,toDate){
+          return getAge(fromDate,toDate).ageString;
         },
         formatDate(date){
           return moment(date).format('DD/MM/YYYY')

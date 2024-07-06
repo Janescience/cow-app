@@ -5,16 +5,18 @@ export const status = (mode) => {
         return [
             { id: 1, label: 'โคท้อง' },
             { id: 2, label: 'โคดราย' },
-            { id: 3, label: 'โครีดนม' },
-            { id: 4, label: 'โคเด็ก' }
+            { id: 3, label: 'โคสาว' },
+            { id: 4, label: 'โคเด็ก' },
+            { id: 5, label: 'โคพักนม' }
         ]
     }else{
         return [
             { id: "", label: 'ทั้งหมด' },
             { id: 1, label: 'โคท้อง' },
             { id: 2, label: 'โคดราย' },
-            { id: 3, label: 'โครีดนม' },
-            { id: 4, label: 'โคเด็ก' }
+            { id: 3, label: 'โคสาว' },
+            { id: 4, label: 'โคเด็ก' },
+            { id: 5, label: 'โคพักนม' }
         ]
     }
 }

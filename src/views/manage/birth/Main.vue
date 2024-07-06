@@ -4,7 +4,7 @@
 
       <SectionTitleBarSub 
         icon="babyFaceOutline" 
-        title="การคลอดลูก"
+        title="การติดตามโคท้อง/คลอดลูก"
       />
 
       <Modal
