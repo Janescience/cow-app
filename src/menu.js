@@ -8,8 +8,13 @@ export default [
     },
     {
       to: '/overview/cow',
-      icon: 'chartPie',
+      icon: 'graph',
       label: 'ภาพรวมโค'
+    },
+    {
+      to: '/todolist',
+      icon: 'formatListChecks',
+      label: 'รายการที่ต้องทำ'
     },
     {
       icon: 'messageBadgeOutline',

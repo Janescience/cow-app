@@ -25,6 +25,8 @@
         </CardBoxCollapse>
 
         <!-- การผสมพันธุ์ -->
+        <!-- ผสมจากพ่อพันธ์ (สำเร็จ ไม่สำเร็จ รอผล) -->
+        <!-- ผสมจากน้ำเชื้อ (สำเร็จ ไม่สำเร็จ รอผล) -->
         <CardBox :title="'การผสมพันธุ์ (ปี พ.ศ. ' + (reproYearValue + 543) + ')'" icon="reproduction"
           @header-icon-click="() => { this.reproYearSearch = !this.reproYearSearch }"  has-table   header-icon="magnifyExpand">
           <div class="lg:p-4">
@@ -35,14 +37,14 @@
 
             </div>
 
-            <CardBox title="พ่อพันธุ์" class="mb-5">
+            <CardBox title="พ่อพันธุ์" class="mb-5" header-icon="">
               <div v-if="chart.reproduct.breeder.year" class="h-52 ">
                 <bar-chart :data="chart.reproduct.breeder.year" />
               </div>
               <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
             </CardBox>
 
-            <CardBox title="ผสมเทียม">
+            <CardBox title="ผสมเทียม" header-icon="">
               <div v-if="chart.reproduct.artificial.year" class="h-52 ">
                 <bar-chart :data="chart.reproduct.artificial.year" />
               </div>
@@ -769,20 +771,22 @@ export default {
       reproductKeys.forEach((key)=>{
         const reproducts = groupByMonth[key];
 
-        const success = reproducts.filter(r =>  r.status !== 4).length;
+        const success = reproducts.filter(r =>  r.status == 2 || r.status == 3).length;
         const fail = reproducts.filter(r => r.status == 4).length;
+        const wait = reproducts.filter(r => r.status == 1).length;
 
-        results[key] = {success,fail} ;
+        results[key] = {success,fail,wait} ;
       })
 
       return results
     },
     reproChart(type) {
-      const successDatas = [],failDatas = [];
+      const successDatas = [],failDatas = [],waitDatas = [];
       const datas = type === 'F' ? this.reproBreeders : this.reproArtificials
       datas.map((r) => {
         successDatas.push(r.success);
         failDatas.push(r.fail);
+        waitDatas.push(r.wait);
       });
 
       const labels = [];
@@ -791,30 +795,44 @@ export default {
         labels.push(`${m}`);
       });
 
-      return {
-        labels,
-        datasets: [
-          {
-            label: 'สำเร็จ',
-            borderColor:'#16a34a',
-            borderWidth: 2,
-            borderRadius: 5,
-            borderSkipped: true,
-            backgroundColor: '#65a30d',
-            data: successDatas,
-            tension: 0.5,
-          },{
-            label:'ล้มเหลว',
-            borderColor:'#e11d48',
-            borderWidth: 2,
-            borderRadius: 5,
-            borderSkipped: true,
-            backgroundColor: '#db2777',
-            data: failDatas,
-            tension: 0.5,
-          }
-        ],
-      };
+      if(successDatas.length == 0 && failDatas.length == 0 && waitDatas.length == 0){
+        return null
+      }else{
+        return {
+          labels,
+          datasets: [
+            {
+              label: 'สำเร็จ',
+              borderColor:'#16a34a',
+              borderWidth: 2,
+              borderRadius: 5,
+              borderSkipped: true,
+              backgroundColor: '#65a30d',
+              data: successDatas,
+              tension: 0.5,
+            },{
+              label:'ล้มเหลว',
+              borderColor:'#e11d48',
+              borderWidth: 2,
+              borderRadius: 5,
+              borderSkipped: true,
+              backgroundColor: '#db2777',
+              data: failDatas,
+              tension: 0.5,
+            },{
+              label:'รอผล',
+              borderColor:'#E8A317',
+              borderWidth: 2,
+              borderRadius: 5,
+              borderSkipped: true,
+              backgroundColor: '#FFA500',
+              data: waitDatas,
+              tension: 0.5,
+            }
+          ],
+        };
+      }
+      
     },
     milkChart(field,datas,type) {
       //Prepare datas
