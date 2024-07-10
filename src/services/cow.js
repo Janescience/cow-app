@@ -6,6 +6,9 @@ async function getSearchQuery (opts = {}) {
     if (opts.flag) {
         query = query + `flag=${opts.flag}&`;
     } 
+    if (opts.sex) {
+        query = query + `sex=${opts.sex}&`;
+    } 
     if (opts.code) {
         query = query + `code=${opts.code}&`;
     } 

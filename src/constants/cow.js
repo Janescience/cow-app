@@ -1,5 +1,6 @@
 
-
+import CowService from '@/services/cow'
+import _ from 'lodash'
 export const status = (mode) => {
     if(mode === 'create'){
         return [
@@ -39,6 +40,22 @@ export const quality = (mode) => {
         ]
     }
 }
+
+export const sex = (mode) => {
+    if(mode === 'create'){
+        return [
+            { id: 'M', label: 'ตัวผู้' },
+            { id: 'F', label: 'ตัวเมีย' },
+        ]
+    }else{
+        return [
+            { id: "", label: 'ทั้งหมด' },
+            { id: 'M', label: 'ตัวผู้' },
+            { id:'F', label: 'ตัวเมีย' },
+        ]
+    }
+}
+
 
 export const flag = () => {
     return [

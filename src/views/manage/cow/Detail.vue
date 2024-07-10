@@ -51,6 +51,14 @@
             <FormField label="ชื่อโค" help="* ห้ามว่าง">
               <FormControl v-model="cow.name" icon="cow" required />
             </FormField>
+            <FormField label="เพศ" help="* ห้ามว่าง">
+              <FormControl
+                v-model="cow.sex"
+                :options="sex"
+                icon=""
+                required
+              />
+            </FormField>
             <FormField label="น้ำหนัก (กก.)">
               <FormControl v-model="cow.weight" icon="weight" />
             </FormField>
@@ -81,13 +89,12 @@
                 required
               />
             </FormField>
-            <FormField label="คุณภาพน้ำนม" >
+            <FormField label="คุณภาพน้ำนม" v-if="cow.sex != 'M'">
               <FormControl v-model="cow.quality" :options="qualityMilk" icon="" />
             </FormField>
             <FormField label="คอก">
-              <FormControl v-model="cow.corral" icon="barn" />
+              <DDLCorral v-model="cow.corral" icon="barn"/>
             </FormField>
-            
             <FormField label="พ่อพันธุ์">
               <FormControl v-model="cow.dad" icon="genderMale" />
             </FormField>
@@ -102,6 +109,7 @@
          title="คุณภาพ/ความคุ้มค่า"
           class="mb-5"
           header-icon=""
+          v-if="cow.sex != 'M'"
         > 
           <div class="grid grid-cols-3 gap-5">
             <p :class="filterColor()?.grade+'  text-center text-7xl font-extrabold mt-3'">
@@ -115,23 +123,25 @@
             
           </div>
           <div class="grid grid-cols-1 gap-5 mt-5">
-            <div class="grid grid-cols-2 gap-5">
-              <p class="mt-1">อายุ</p>
+            <hr class="border-t border-gray-300 dark:border-gray-600"/>
+
+            <div class="grid grid-cols-4 gap-5">
+              <p class="">อายุโค</p>
               <p class=" text-center rounded-lg ">{{ calAge(cow?.birthDate) }}</p>
-              <p class="mt-1">อยู่ฟาร์ม</p>
+              <p class="m">เลี้ยงดู</p>
               <p class="  text-center rounded-lg ">{{ calAge(cow?.adopDate) }}</p>
             </div>
-            <hr class="border-t border-gray-100 dark:border-gray-600"/>
+            <hr class="border-t border-gray-300 dark:border-gray-600"/>
 
             <div class="grid grid-cols-2 gap-5">
-              <p class="mt-1">รายได้ทั้งหมด</p>
-              <p class="bg-teal-900 p-1 text-lg text-center rounded-lg text-green-500">{{ $filters.currency(quality?.income?.sum) }}</p>
+              <p class="mt-1">รายได้</p>
+              <p class="underline decoration-2 p-1 text-lg text-center rounded-lg text-green-500 font-bold">{{ $filters.currency(quality?.income?.sum) }}</p>
             </div>
             <div class="grid grid-cols-2 gap-5">
-              <p class="mt-1">ค่าใช้จ่ายทั้งหมด</p>
-              <p class="bg-red-900 p-1 text-lg text-center rounded-lg text-rose-400">{{ $filters.currency(quality?.expense?.sum) }}</p>
+              <p class="mt-1">ค่าใช้จ่าย</p>
+              <p class="underline decoration-2  p-1 font-bold text-lg text-center rounded-lg text-red-500">{{ $filters.currency(quality?.expense?.sum) }}</p>
             </div>
-            <hr class="border-t border-gray-100 dark:border-gray-600"/>
+            <hr class="border-1 border-gray-300 dark:border-gray-600"/>
             <div class="grid grid-cols-2 gap-5">
               <p class="mt-1">กำไร </p>
               <p :class="filterColor()?.profit + ' p-1 text-lg text-center rounded-lg'">{{ $filters.currency(quality?.profit?.amount) }}</p>
@@ -147,6 +157,7 @@
         title="ข้อมูลน้ำนมดิบ"
         class="mb-5"
         header-icon=""
+        v-if="cow.sex != 'M'"
       >
         <div class="overflow-x-auto">
           <table>
@@ -225,7 +236,7 @@
             class="dark:border-gray-800 border-4"
             :loading="loading.birth"
             title="การคลอดลูก"
-            v-if="birth().count > 0"
+            v-if="birth().count > 0 && cow.sex != 'M'"
             header-icon=""
           >
             <table>
@@ -300,7 +311,7 @@
             icon="reproduction"
             class="lg:col-span-2 dark:border-gray-800 border-4"
             :loading="loading.reproduct"
-            v-if="reproduct().login.count > 0"
+            v-if="reproduct().login.count > 0 && cow.sex != 'M'"
             title="การผสมพันธุ์/ผสมพันธุ์"
             header-icon=""
           >
@@ -370,7 +381,7 @@
         icon="messageBadgeOutline"
         class="transition-position mb-5"
         :loading="loading.notification"
-        v-if="notifications.length > 0"
+        v-if="notifications.length > 0 && cow.sex != 'M'"
         title="การแจ้งเตือน"
         header-icon=""
         has-table
@@ -400,12 +411,13 @@
             :items="historyMilks"
             :datas="milkDatas"
             :loading="loading.milk"
+            v-if="cow.sex != 'M'"
             icon="waterCheck"
             perPage="5"
           />
 
           <Table
-            v-if="!loading.reproduct && reproducts.length > 0"
+            v-if="!loading.reproduct && reproducts.length > 0 && cow.sex != 'M'"
             title="ประวัติการสืบพันธ์ุ/ผสมพันธ์ุ"
             icon="reproduction"
             :items="reproducts"
@@ -415,7 +427,7 @@
           />
 
           <Table
-            v-if="!loading.birth && births.length > 0"
+            v-if="!loading.birth && births.length > 0 && cow.sex != 'M'"
             title="ประวัติการคลอดลูก"
             :items="births"
             :datas="birthDatas"
@@ -455,6 +467,7 @@ import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import ImageUpload from "@/components/ImageUpload.vue";
 import Table from "@/components/Table.vue";
+import DDLCorral from "@/components/DDL/Corral.vue";
 
 import CowService from "@/services/cow";
 import MilkService from "@/services/milking";
@@ -501,6 +514,7 @@ export default {
       alert: "",
       newCow: false,
       status: status("create"),
+      sex: [{id:'M',label:'ตัวผู้'},{id:'F',label:'ตัวเมีย'}],
       qualityMilk: quality("create"),
       milkDatas: [
         {
@@ -799,7 +813,8 @@ export default {
     ImageUpload,
     Table,
     CardBoxCollapse,
-    BaseDivider
+    BaseDivider,
+    DDLCorral
   },
   computed: {
     canRemove() {
@@ -1150,7 +1165,7 @@ export default {
       }else if(grade === 'C'){
         return { grade : 'text-orange-500 p-1',profit : 'bg-orange-900 text-yellow-500'}
       }else if(grade === 'D'){
-        return { grade : 'text-red-500 p-1 ',profit : 'bg-red-900 text-rose-400 '}
+        return { grade : 'text-red-500 p-1 ',profit : 'bg-rose-300 text-red-700 font-bold'}
       }
     },
     filterText(){

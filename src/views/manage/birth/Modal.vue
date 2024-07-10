@@ -13,22 +13,22 @@
         @header-icon-click="cancel"
       >
       
-        <div class="grid grid-cols-2 lg:grid-cols-5 gap-5 bg-gray-600 rounded p-2 text-center" >
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-5 dark:bg-gray-600 bg-gray-200 rounded p-2 text-center" >
           
-          <FormField label="รหัสโค"  class="text-black">
-            <div class="text-gray-300">{{ birth.cow?.code }}</div>
+          <FormField label="รหัสโค"  class="text-black ">
+            <div class="dark:text-gray-300">{{ birth.cow?.code }}</div>
           </FormField>
           <FormField label="ชื่อโค" class="text-black" >
-            <div class="text-gray-300">{{ birth.cow?.name }}</div>
+            <div class="dark:text-gray-300">{{ birth.cow?.name }}</div>
           </FormField>
           <FormField label="ครั้งที่"  class="text-black">
-            <div class="text-gray-300">{{ birth?.reproduction?.seq }}</div>
+            <div class="dark:text-gray-300">{{ birth?.reproduction?.seq }}</div>
           </FormField>
           <FormField label="วันที่ตั้งครรภ์"  class="text-black">
-            <div class="text-gray-300">{{ formatDate(birth?.pregnantDate) }}</div>          
+            <div class="dark:text-gray-300">{{ formatDate(birth?.pregnantDate) }}</div>          
           </FormField>
           <FormField label="อายุครรภ์" class="text-black" help="วันที่ตั้งครรภ์-ปัจจุบัน" >
-            <div class="text-gray-300">{{ calAge(birth?.pregnantDate,new Date()) }}</div>          
+            <div class="dark:text-gray-300">{{ calAge(birth?.pregnantDate,new Date()) }}</div>          
           </FormField>
         </div>
         <BaseDivider />
@@ -59,14 +59,35 @@
               :options="{ M: 'ตัวผู้', F: 'ตัวเมีย' }"
             />
           </FormField>
-          <FormField label="ชื่อลูก" v-if="(birth.status == 'B' || birth.status === 'A') && birth.sex == 'F' && !birth.calf?._id" help="* ห้ามว่าง">
+          <FormField label="พ่อพันธุ์/น้ำเชื้อ" v-if="birth.status == 'B' && !birth.calf?._id" help="* ห้ามว่าง">
+            <FormControl
+              v-model="birth.dad"
+              icon="babyFaceOutline"
+              required
+            />
+          </FormField>
+          <FormField label="รหัสลูกโค" v-if="birth.status == 'B' && !birth.calf?._id" help="* ห้ามว่าง">
+            <FormControl
+              v-model="birth.calf.code"
+              icon="babyFaceOutline"
+              required
+            />
+          </FormField>
+          <FormField label="ชื่อลูกโค" v-if="birth.status == 'B' && !birth.calf?._id" help="* ห้ามว่าง">
             <FormControl
               v-model="birth.calf.name"
               icon="babyFaceOutline"
               required
             />
           </FormField>
-          <FormField label="ลูก" v-else-if="(birth.status == 'B' || birth.status === 'A') && birth.sex == 'F' && birth.calf?._id" >
+          <FormField label="คอกลูกโค" v-if="birth.status == 'B' && !birth.calf?._id" help="* ห้ามว่าง">
+            <FormControl
+              v-model="birth.calf.corral"
+              icon="barn"
+              required
+            />
+          </FormField>
+          <FormField label="ลูกโค" v-else-if="birth.status == 'B' && birth.calf?._id" >
             <a :href="'/manage/cow/detail/'+birth.calf._id" class="underline">{{ birth.calf.code +' : '+birth.calf.name }}</a>
           </FormField>
           <FormField v-if="birth.status == 'B' || birth.status === 'A'" label="รก" help="* ห้ามว่าง" >

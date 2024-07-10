@@ -32,6 +32,13 @@
               required
             />
           </FormField>
+          <FormField label="เพศ" help="* ห้ามว่าง">
+            <FormControl
+              v-model="cow.sex"
+              :options="sex"
+              required
+            />
+          </FormField>
           <FormField label="น้ำหนัก(กก.)" >
             <FormControl
               v-model="cow.weight"
@@ -134,7 +141,7 @@
   import ImageUpload from '@/components/ImageUpload.vue'
   
   import CowService from '@/services/cow'
-  import { status , quality } from "@/constants/cow";
+  import { status , quality,sex } from "@/constants/cow";
   import { Toast } from '@/utils/alert'
 
   export default {
@@ -152,10 +159,12 @@
           dad : "",
           mom : "",
           quality : 1,
-          weight : null
+          weight : null,
+          sex : 'F'
         },
         status : status('create'),
         quality : quality('create'),
+        sex : sex('create'),
         loading : false,
         alert : ""
       }
@@ -200,6 +209,7 @@
           this.cow.dad = ""
           this.cow.mom = ""
           this.cow.weight = null
+          this.cow.sex = 'F'
           delete this.cow._id
         },
         confirmCancel(mode){
