@@ -3,7 +3,7 @@
         class="relative "
     >
         <v-select 
-            class="ddl-dark ddl-white"
+            class="ddl-dark ddl-white max-w-full"
             :clearable="clear"
             :disabled="disabled"
             :options="datas"
@@ -57,7 +57,15 @@ export default {
 
             const opts = {
                 farm : this.user.farm._id,
-                flag : 'Y'
+                flag : 'Y',
+            }
+
+            if(this.filter?.sex){
+                opts.sex = this.filter.sex
+            }
+
+            if(this.filter?.status){
+                opts.status = this.filter.status
             }
 
             try {
@@ -104,7 +112,8 @@ export default {
             type: [String, Number, Boolean, Array, Object],
             default: {}
         },
-        multiple : { default: false, type: Boolean }
+        multiple : { default: false, type: Boolean },
+        filter : { default : null , type : Object }
     }
 }
 </script>

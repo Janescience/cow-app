@@ -162,7 +162,6 @@ import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
-import DDLCow from '@/components/DDL/Cow.vue'
 
 import { addDays } from 'date-fns'
 import moment from 'moment';
@@ -312,7 +311,6 @@ import { handleError } from 'vue'
     FormControl,
     NotificationBar,
     BaseLevel,
-    DDLCow,
     FormCheckRadioPicker,
     BaseIcon
 },

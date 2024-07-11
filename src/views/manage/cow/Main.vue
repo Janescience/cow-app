@@ -179,7 +179,6 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
 import CreateCowModal from './Modal.vue'
 
-import DDLCow from '@/components/DDL/Cow.vue'
 import CowService from '@/services/cow'
 import getAge from "@/utils/age-calculate";
 import { status,quality,sex } from '@/constants/cow'
@@ -270,7 +269,6 @@ export default {
     FormControl,
     FormField,
     BaseDivider,
-    DDLCow,
     CreateCowModal,
     Table,
     SectionTitleBarSub,

@@ -38,7 +38,7 @@
         </div>
           <div  class="grid grid-cols-2 lg:grid-cols-5 gap-5 p-4">
             <FormField label="โค" help="* ห้ามว่าง" class="col-span-2">
-                <DDLCow v-model="milkDetail.cow" valueType="object"/>
+                <DDLCow v-model="milkDetail.cow" valueType="object" :filter="{sex:'F',status:[1,3]}"/>
             </FormField>
             <FormField label="น้ำนมดิบ (กก.)" help="* ห้ามว่าง">
               <FormControl
@@ -157,7 +157,7 @@
           time : this.checkTime(),
         },
         milkDetail : {
-          cow : {},
+          cow : null,
           qty : null,
           amount : null
         },

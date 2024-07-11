@@ -16,7 +16,7 @@
       
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-1">
           <FormField label="โค" help="* ห้ามว่าง" >
-            <DDLCow v-model="reproduct.cow" valueType="object" />
+            <DDLCow v-model="reproduct.cow" valueType="object" :filter="{sex:'F',status:[3,4,6]}" />
           </FormField>
           
           

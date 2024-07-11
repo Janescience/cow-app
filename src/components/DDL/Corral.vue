@@ -3,7 +3,7 @@
         class="relative "
     >
         <v-select 
-            class="ddl-dark ddl-white"
+            class="ddl-dark ddl-white max-w-full"
             :clearable="clear"
             :disabled="disabled"
             :options="datas"

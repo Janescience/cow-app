@@ -21,7 +21,7 @@
           /> -->
         </BaseButtons>
       </section>
-      <div class="grid lg:grid-cols-3 grid-cols-1 gap-5">
+      <div :class="cow.sex == 'F' ? 'grid lg:grid-cols-3 grid-cols-1 gap-5' : 'grid lg:grid-cols-2 grid-cols-1 gap-5'">
         <CardBox
           class="lg:col-span-2 lg:mb-5"
           :loading="loading.cow"
@@ -260,7 +260,7 @@
               </tbody>
             </table>
           </CardBox>
-          <CardBox
+          <!-- <CardBox
             title="การคลอดลูก"
             header-icon=""
             icon="babyFace"
@@ -268,7 +268,7 @@
             v-else
           >
             <p class="text-gray-500 text-sm">ไม่เคยคลอดลูก</p>
-          </CardBox>
+          </CardBox> -->
           <CardBox
             icon="doctor"
             :loading="loading.heal"
@@ -298,7 +298,7 @@
               </tbody>
             </table>
           </CardBox>
-          <CardBox
+          <!-- <CardBox
             title="การรักษา"
             header-icon=""
             icon="babyFace"
@@ -306,7 +306,7 @@
             v-else
           >
             <p class="text-gray-500 text-sm">ไม่เคยรักษา</p>
-          </CardBox>
+          </CardBox> -->
           <CardBox
             icon="reproduction"
             class="lg:col-span-2 dark:border-gray-800 border-4"
@@ -352,7 +352,7 @@
               </table>
             </div>
           </CardBox>
-          <CardBox
+          <!-- <CardBox
             title="การผสมพันธุ์/ผสมพันธุ์"
             header-icon=""
             icon="babyFace"
@@ -360,13 +360,14 @@
             v-else
           >
             <p class="text-gray-500 text-sm">ไม่เคยสืบพันธุ์/ผสมพันธุ์</p>
-          </CardBox>
+          </CardBox> -->
           <div class="lg:col-span-2">
             <Table
               title="การป้องกัน/บำรุง"
               :items="protections"
               :datas="protectionDatas"
               :loading="loading.protection"
+              v-if="protections.length > 0"
               perPage="5"
               icon="pillMultiple"
             />

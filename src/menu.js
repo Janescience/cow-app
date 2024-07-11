@@ -56,7 +56,11 @@ export default [
       icon: 'humanPregnant',
       label: 'ติดตามโคท้อง/คลอดลูก'
     },
-    
+    {
+      to: '/manage/cow',
+      icon: 'cow',
+      label: 'จัดการโคตัวผู้'
+    },
   ],
   'ดูแล',
   [
