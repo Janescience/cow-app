@@ -64,10 +64,10 @@
             {{ vaccine.amount  ? vaccine.amount  : '-' }}
           </FormField>
           <FormField v-if="this.mode === 'edit'" label="ฉีดวัคซีนล่าสุด"  >
-            {{ vaccine.dateCurrent ? vaccine.dateCurrent : '-' }}
+            {{ vaccine.currentDate ? vaccine.currentDate : '-' }}
           </FormField>
           <FormField v-if="this.mode === 'edit'" label="ฉีดวัคซีนครั้งต่อไป"  >
-            {{ vaccine.dateNext ? vaccine.dateNext : '-' }}
+            {{ vaccine.nextDate ? vaccine.nextDate : '-' }}
           </FormField>
           <FormField label="หมายเหตุ"  class="col-span-2">
             <FormControl
@@ -124,14 +124,16 @@ import _ from 'lodash';
 import moment from 'moment';
 
 import VaccineService from '@/services/vaccine'
+import ProtectionService from '@/services/protection'
+
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
   
   export default {
     data () {
       return {
         vaccine : {
-          dateCurrent :null,
-          dateNext : null,
+          currentDate :null,
+          nextDate : null,
           code : '',
           name : '',
           price : null,
@@ -139,6 +141,7 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
           amount : null,
           frequency : null,
           remark : '',
+          protections : []
         },
         loading : false,
         alert : ""
@@ -159,16 +162,21 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         }
     },
     watch:{
-      data(n){
-        if(n && this.mode === 'edit'){
+      async data(n){
+        if(n){
           this.vaccine = n;
-          if(this.vaccine.protections.length > 0){
-            const sorted = _.orderBy(this.vaccine.protections,'date','desc');
-            if(sorted.length > 0){
-              this.vaccine.dateCurrent = moment(sorted[0].date).format('DD/MM/YYYY');
-              this.vaccine.dateNext = moment(sorted[0].date).add(this.vaccine.frequency,'months').format('DD/MM/YYYY');
+          if(!this.vaccine.currentDate){
+            await this.getProtections();
+            if(this.vaccine.protections.length > 0){
+              const sorted = _.orderBy(this.vaccine.protections,'date','desc');
+              if(sorted.length > 0){
+                this.vaccine.currentDate =  moment(sorted[0].date).format('DD/MM/YYYY');
+                this.vaccine.nextDate = moment(sorted[0].date).add(this.vaccine.frequency,'months').format('DD/MM/YYYY');
+              }
             }
-            
+          }else{
+            this.vaccine.currentDate =  moment(this.vaccine.currentDate).format('DD/MM/YYYY');
+            this.vaccine.nextDate = moment(this.vaccine.nextDate).format('DD/MM/YYYY');
           }
         }
       },
@@ -190,17 +198,13 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
     },
     methods: {
         clear(){
-          this.vaccine.dateCurrent = new Date()
-          this.vaccine.dateNext = null 
-          this.vaccine.code = ''
-          this.vaccine.name = ''
-          this.vaccine.amount = null
-          this.vaccine.frequency = ''
-          this.vaccine.remark = ''
+          this.vaccine = {}
+          this.vaccine.protections = []
         },
         confirmCancel(mode){
             this.value = false
             this.$emit(mode)
+            this.$emit('update:data',null)
         },
         confirm(){
             this.clear()
@@ -209,6 +213,12 @@ import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
         cancel(){
             this.clear()
             this.confirmCancel('cancel')
+        },
+        async getProtections(){
+          const resp = await ProtectionService.all({vaccine:this.vaccine._id});
+          if(resp){
+            this.vaccine.protections = resp.data.protections
+          }
         },
         async submit(){
             this.loading = true

@@ -20,6 +20,7 @@
                     v-if="form.type === 'ddl' && form.module === 'cow' " 
                     v-model="search[form.value]"
                     :valueType="form.valueType"
+                    :filter="form.filter"
                 />
                 <DDLCow 
                     v-else-if="form.type === 'ddl-multiple' && form.module === 'cow' " 

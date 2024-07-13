@@ -57,7 +57,7 @@ export default [
       label: 'ติดตามโคท้อง/คลอดลูก'
     },
     {
-      to: '/manage/cow',
+      to: '/manage/cow/ox',
       icon: 'cow',
       label: 'จัดการโคตัวผู้'
     },

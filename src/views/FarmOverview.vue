@@ -58,8 +58,8 @@
         <!-- การฉีดวัคซีน -->
         <!-- ยอดการส่งน้ำนมดิบให้สหกร แบ่งเช้า บ่าย และ รวม -->
 
-        <CardBoxCollapse title="น้ำนมดิบ" icon="water" has-table header-icon="" class="lg:p-4">
-          <div class="grid grid-cols-1 gap-5">
+        <CardBoxCollapse title="น้ำนมดิบ" icon="water" has-table header-icon="" >
+          <div class="grid grid-cols-1 gap-5 lg:p-4">
             <CardBox :title="'รายเดือน (ปี พ.ศ. ' + (milkYearValue + 543) + ')'" icon="chartBellCurveCumulative" class=""
               :loading="loading.milks" @header-icon-click="() => { this.milkYearSearch = !this.milkYearSearch }"
               header-icon="magnifyExpand">

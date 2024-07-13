@@ -12,9 +12,10 @@
 
       <Modal
         v-model="openModal"
-        :data="modalData"
+        :data="getDataCopy"
         :mode="mode"
-        @confirm="getDatas"         
+        @confirm="getDatas"
+        @cancel="resetData"         
       />
 
       <Criteria
@@ -142,18 +143,23 @@ export default {
         {
           label : "ฉีดวัคซีนล่าสุด",
           class : 'text-center',
-          func : (obj) => {
-            const sorted = _.orderBy(obj.protections,'date','desc');
-            return sorted.length > 0 ? moment(sorted[0].date).format('DD/MM/YYYY') : null
-          },
+          value : 'currentDate',
+          type : 'date'
+
+          // func : (obj) => {
+          //   const sorted = _.orderBy(obj.protections,'date','desc');
+          //   return sorted.length > 0 ? moment(sorted[0].date).format('DD/MM/YYYY') : null
+          // },
         },
         {
           label : "ฉีดวัคซีนครั้งต่อไป",
           class : 'text-center',
-          func : (obj) => {
-            const sorted = _.orderBy(obj.protections,'date','desc');
-            return sorted.length > 0 ? moment(sorted[0].date).add(obj.frequency,'months').format('DD/MM/YYYY') : null
-          },
+          value : 'nextDate',
+          type : 'date'
+          // func : (obj) => {
+          //   const sorted = _.orderBy(obj.protections,'date','desc');
+          //   return sorted.length > 0 ? moment(sorted[0].date).add(obj.frequency,'months').format('DD/MM/YYYY') : null
+          // },
         },
         {
           label : "หมายเหตุ",
@@ -188,7 +194,7 @@ export default {
           color : 'info',
           func : (obj) => {
             this.$router.push({
-                name: "protection",
+                name: "protectionHistory",
                 params : {
                     vaccine: obj._id ,
                 }
@@ -209,6 +215,9 @@ export default {
   computed : {
     user() {
       return this.$store.state.auth.user;
+    },
+    getDataCopy() {
+      return {...this.modalData};
     }
   },
   created() {
@@ -240,6 +249,9 @@ export default {
       this.modalData = obj;
       this.mode = 'edit';
       this.openModal = true;
+    },
+    resetData(){
+      this.modalData = null
     },
     reset(){
       this.search.dateCurrent = null

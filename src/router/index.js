@@ -101,6 +101,15 @@ const routes = [
   },
   {
     meta: {
+      title: 'จัดการโคตัวผู้',
+      loginRequired : true
+    },
+    path: '/manage/cow/ox',
+    name: 'cow',
+    component: () => import('@/views/manage/cow/Ox.vue')
+  },
+  {
+    meta: {
       title: 'รายละเอียดโค',
       loginRequired : true
     },

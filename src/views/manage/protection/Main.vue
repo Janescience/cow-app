@@ -30,7 +30,7 @@
           hoverable
         >
           <BaseLevel type="justify-center mt-1">
-            <div class="bg-blue-900 rounded-full lg:text-base text-md p-2  flex justify-center ">
+            <div class="bg-gray-600 rounded-md lg:text-base text-md p-2  flex justify-center ">
               {{ item.vaccine?.name }} 
             </div>
           </BaseLevel>
@@ -41,7 +41,7 @@
                 จำนวนรวม
               </div>
               <div class="flex justify-end">
-                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ item.count }}</div>  
+                <div class="dark:text-gray-100 mr-1">{{ item.count }}</div>  
                 ครั้ง
               </div>
                <!-- จำนวนรวม <div class="underline decoration-2 ml-1 mr-1">{{ item.count }}</div> ครั้ง -->
@@ -52,7 +52,7 @@
               </div>
               <div class="flex justify-end">
                 <div class="underline decoration-2 dark:text-gray-100 mr-1">{{ $filters.currency(item.amount) }}</div>  
-                บาท
+                
               </div>
             </p>
             <p class="dark:text-gray-400  grid grid-cols-3">
@@ -60,7 +60,7 @@
                 ล่าสุด
               </div>
               <div class="flex justify-end col-span-2">
-                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{formatDate(item.vaccine?.currentDate) }}</div>  
+                <div class=" dark:text-gray-100 mr-1">{{formatDate(item.vaccine?.currentDate) }}</div>  
               </div>
             </p>
             <p class="dark:text-gray-400 grid grid-cols-3">
@@ -68,7 +68,7 @@
                 ต่อไป
               </div>
               <div class="flex justify-end col-span-2">
-                <div class="underline decoration-2 dark:text-gray-100 mr-1">{{formatDate(item.vaccine?.nextDate) }}</div>  
+                <div class=" dark:text-gray-100 mr-1">{{formatDate(item.vaccine?.nextDate) }}</div>  
               </div>
             </p>
           </div>
@@ -212,7 +212,7 @@ export default {
         if(!date){
             return null
         }
-        return moment(date).format('dddd d MMMM YYYY');
+        return moment(date).format('DD/MM/YYYY');
     },
     reset(){
       this.search.vaccine = null
