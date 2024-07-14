@@ -51,6 +51,10 @@ class MilkingService{
     update(id,payload){
         return http.put(`/milking/${id}`,payload);
     }
+
+    mock(){
+        return http.get(`/milking/mock`);
+    }
 }
 
 export default new MilkingService();

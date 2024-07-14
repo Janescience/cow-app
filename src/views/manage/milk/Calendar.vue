@@ -34,22 +34,23 @@
               :key="evt.title"
               class="hidden md:block"
             >
-              <div
-                class="w-full px-2 py-1 flex space-x-1 items-center whitespace-nowrap overflow-hidden hover:border hover:border-gray-200 cursor-pointer rounded-lg"
-                @click="togglePopover($event, evt)"
-              >
-                <div class="w-1/12">
-                  <div class="h-2 w-2 rounded-full bg-orange-600"></div>
+                <div
+                  class="w-full  flex p-1 shadow-lg border border-gray-800 shadow cursor-pointer rounded-md"
+                  @click="openModal(day, allTodaysEvent(day, events,false,evt.time),evt.time,evt.id)"
+                >
+                  
+                    <p class="text-sm  text-clip overflow-hidden items-center ">
+                      <BaseIcon 
+                        size="14"
+                        :path="evt.time === 'M' ? 'clockTimeSevenOutline' : 'clockTimeThreeOutline'"
+                        :class="evt.time === 'M' ? 'text-yellow-400' : 'text-orange-500'"
+                        />
+                      {{ evt.time == 'M' ? 'เช้า' : 'บ่าย' }} ({{ evt.sumQty }})
+                    </p>
                 </div>
-                <div class="w-11/12">
-                  <h5 class="text-xs tracking-tight text-clip overflow-hidden">
-                    {{ evt.title }}
-                  </h5>
-                </div>
-              </div>
             </div>
   
-            <div
+            <!-- <div
               v-if="allTodaysEvent(daysInPrevMonth - (firstDayOfCurrentMonth - day), events, true).length > 0"
               class="flex md:hidden h-2/3 w-full justify-center items-center"
               @click="openModal(daysInPrevMonth - (firstDayOfCurrentMonth - day), allTodaysEvent(daysInPrevMonth - (firstDayOfCurrentMonth - day), events, true))"
@@ -61,7 +62,7 @@
                   {{ allTodaysEvent(daysInPrevMonth - (firstDayOfCurrentMonth - day), events, true).length }}
                 </h3>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
   
@@ -74,7 +75,7 @@
           <div
             class="w-full h-full text-xs md:text-sm lg:text-base text-center transition-colors  p-1"
             :class="{
-              'bg-gray-600 text-gray-900 font-medium  ': isToday(day),
+              'dark:bg-gray-600 bg-orange-600 text-gray-900 font-medium  ': isToday(day),
               'hover:bg-gray-100 hover:text-gray-700': !isToday(day),
             }"
           >
@@ -103,6 +104,8 @@
                 </div>
               </div>
             </div>
+
+            
 
             
             

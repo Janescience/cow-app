@@ -108,7 +108,11 @@
         <BaseButtons
           type="justify-center mt-3"
         >
-          
+        <BaseButton
+            label="ลบ"
+            color="danger"
+            @click="milkDeleteConfirm"
+          />
           <BaseButton
             label="ยกเลิก"
             color="danger"
@@ -122,6 +126,16 @@
             :loading="loading"
           />
         </BaseButtons>
+        <CardBoxModal
+            v-model="confirmObj.modal"
+            title="ยืนยันอีกครั้ง"
+            button-label="ยืนยัน"
+            @confirm="confirmObj.func"
+            has-cancel
+            has-button
+          >
+          <p>{{ confirmObj.text }}</p>
+      </CardBoxModal>
       </CardBox>
     </OverlayLayer>
   </template>
@@ -130,6 +144,8 @@
   import BaseButton from '@/components/BaseButton.vue'
   import BaseButtons from '@/components/BaseButtons.vue'
   import CardBox from '@/components/CardBox.vue'
+  import CardBoxModal from '@/components/CardBoxModal.vue'
+
   import BaseDivider from '@/components/BaseDivider.vue'
   import OverlayLayer from '@/components/OverlayLayer.vue'
   import FormField from '@/components/FormField.vue'
@@ -194,7 +210,14 @@
           },
         ],
         loading : false,
-        alert : {}
+        alert : {},
+        confirmObj : {
+          text : '',
+          func : null,
+          id : null,
+          dataSelected : null,
+          modal : false
+        },
       }
     },
     emits:['update:modelValue', 'cancel', 'confirm'],
@@ -307,6 +330,21 @@
               this.alert.color = 'warning'
           }
         },
+        async milkDeleteConfirm(){
+          this.confirm('ยืนยันลบรายการรีดนมใช่หรือไม่ ?',null,null,this.milkDelete);
+        },
+        async milkDelete(){
+          this.loading = true
+          const resp = await MilkingService.delete(this.milk._id);
+          if(resp){
+              this.loading = false  
+              this.confirm()
+              Toast.fire({
+                icon: 'success',
+                title: 'ลบข้อมูลสำเร็จ'
+              })
+          }
+        },
         async submit(){
             this.loading = true
             this.alert = {}
@@ -358,7 +396,14 @@
         },
         formatDate(date){
           return moment(date).format('DD/MM/YYYY')
-        }
+        },
+        confirm(text,id,datas,func){
+            this.confirmObj.text = text
+            this.confirmObj.func = func
+            this.confirmObj.id = id
+            this.confirmObj.dataSelected = datas
+            this.confirmObj.modal = true
+        },
     },
     components : {
       BaseButton,
@@ -373,7 +418,8 @@
       DDLCow,
       FormCheckRadioPicker,
       BaseIcon,
-      Table
+      Table,
+      CardBoxModal
     },
     props : {
         modelValue: {

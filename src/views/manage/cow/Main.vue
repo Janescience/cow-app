@@ -9,6 +9,8 @@
         has-btn-add
         @openModal="mode='create';modalCow = true;"
       />
+
+      <BaseButton v-if="user.username === 'devTeam'" icon="plus" @click="updateGrade" label="Update Grade"/>
       
       <CreateCowModal 
         v-model="modalCow" 
@@ -280,7 +282,9 @@ export default {
     this.getCows();
   },
   methods : {
-
+    async updateGrade(){
+      await CowService.calGrade();
+    },
     async getCows(){
       this.loading = true
       const resp = await CowService.all(this.search);

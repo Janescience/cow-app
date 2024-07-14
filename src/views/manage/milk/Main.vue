@@ -10,6 +10,8 @@
         @openModal="mode='create';modalMilk = true;"
       />
 
+      <BaseButton v-if="user.username === 'devTeam'" icon="plus" @click="mockData" label="Mock"/>
+
       <MilkModal
         v-model="modalMilk"
         :mode="mode" 
@@ -35,6 +37,7 @@ import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionMain from '@/components/SectionMain.vue';
 import Table from "@/components/Table.vue";
 import SectionTitleBarSub from "@/components/SectionTitleBarSub.vue";
+import BaseButton from '@/components/BaseButton.vue';
 
 import MilkModal from './Modal.vue'
 import MilkingService from '@/services/milking'
@@ -137,7 +140,8 @@ export default {
     SectionTitleBarSub,
     MilkModal,
     Calendar,
-    CardBox
+    CardBox,
+    BaseButton
   },
   computed : {
     user() {
@@ -156,6 +160,9 @@ export default {
     }
   },
   methods : {
+    async mockData(){
+      const resp = await MilkingService.mock();
+    },
     async getMilks(){
       this.loading = true
       const resp = await MilkingService.all({month:this.monthMilk,year:this.yearMilk});
