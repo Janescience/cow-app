@@ -62,8 +62,8 @@ class CowService{
     delete(id){
         return http.delete(`/cow/${id}`);
     }
-    calGrade(id){
-        return http.post(`/cow/grade`);
+    async calGrade(){
+        return http.get('/cow/grade');
     }
     update(id,payload){
         return http.post(`/cow/${id}`,payload);

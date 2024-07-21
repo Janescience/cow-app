@@ -105,7 +105,7 @@ const routes = [
       loginRequired : true
     },
     path: '/manage/cow/ox',
-    name: 'cow',
+    name: 'cowOx',
     component: () => import('@/views/manage/cow/Ox.vue')
   },
   {
