@@ -10,7 +10,7 @@
         @openModal="mode='create';modalCow = true;"
       />
 
-      <BaseButton v-if="user.username === 'devTeam'" icon="plus" @click="updateGrade" label="Update Grade"/>
+      <BaseButton v-if="user.username === 'devTeam'" icon="calculator" @click="updateGrade" label="Update Grade"/>
       
       <CreateCowModal 
         v-model="modalCow" 
@@ -193,7 +193,7 @@ export default {
       perPage :18,
       currentPage : 0,
       modalCow : false,
-      cowStatus : status(),
+      cowStatus : status('search','F'),
       items : [],
       forms : [
         {
@@ -201,7 +201,8 @@ export default {
           value : 'code',
           type : 'ddl',
           module : 'cow',
-          valueType : 'code'
+          valueType : 'code',
+          filter : {sex : 'F'}
         },
         {
           label : 'เพศ',
@@ -211,7 +212,7 @@ export default {
         {
           label : 'สถานะ',
           value : 'status',
-          options : status()
+          options : status('search','F')
         },
         // {
         //   label : 'คุณภาพน้ำนม',
