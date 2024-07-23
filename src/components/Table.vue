@@ -117,19 +117,59 @@
               </table>
             </div>           
             <div
-              class="p-2  static border-t border-gray-100 dark:border-gray-800 shadow-lg "
+              class="p-2  static border-t border-gray-100 dark:border-gray-800 shadow md:rounded-xl"
               v-if="!noPaging"
             >
-              <BaseLevel >
-                  <BaseButtons>
+              <BaseLevel class="md:flex-nowrap flex-wrap" type="md:justify-between justify-center">
+                  <BaseButtons classAddon="mr-2 last:mr-0 mb-3" >
                     <BaseButton
-                        v-for="page in pagesList"
+                        v-if="numPages > 6"
+                        icon="chevronDoubleLeft"
+                        teeny
+                        class="p-0 text-xs dark:bg-gray-900 border dark:border-gray-800 border-gray-300 dark:text-gray-500 "
+                        @click="currentPage = 0"
+                    />
+                    <BaseButton
+                        v-if="numPages > 6"
+                        icon="chevronLeft"
+                        teeny
+                        class="p-0 text-xs dark:bg-gray-900 border dark:border-gray-800 border-gray-300 dark:text-gray-500 "
+                        @click="currentPage = (currentPage > 0 ? currentPage - 1 : currentPage)"
+                    />
+                    <BaseButton
+                        v-show="numPages > 6 ? currentPage < (numPages - 3) : true"
+                        v-for="page in pagesListFirst"
                         :key="page"
                         :active="page === currentPage"
                         :label="page + 1"
                         teeny
-                        class="p-0 text-sm "
+                        class="p-0 text-xs dark:bg-gray-900 dark:text-gray-500 border dark:border-gray-800 border-gray-300 "
                         @click="currentPage = page"
+                    />
+                    <p v-if="numPages > 6 ? currentPage < (numPages - 6) : false" class="text-lg">...</p>
+                    <BaseButton
+                        v-show="numPages > 6"
+                        v-for="page in pagesListLast"
+                        :key="page"
+                        :active="page === currentPage"
+                        :label="page + 1"
+                        teeny
+                        class="p-0 text-xs dark:bg-gray-900 dark:text-gray-500 border dark:border-gray-800 border-gray-300"
+                        @click="currentPage = page"
+                    />
+                    <BaseButton
+                        v-if="numPages > 6"
+                        icon="chevronRight"
+                        teeny
+                        class="p-0 text-xs dark:bg-gray-900 dark:text-gray-500 border dark:border-gray-800 border-gray-300"
+                        @click="currentPage = (currentPage == (numPages-1) ? currentPage : currentPage + 1)"
+                    />
+                    <BaseButton
+                        v-if="numPages > 6"
+                        icon="chevronDoubleRight"
+                        teeny
+                        class="p-0 text-xs dark:bg-gray-900 border dark:border-gray-800 border-gray-300 dark:text-gray-500 "
+                        @click="currentPage = (numPages-1)"
                     />
                   </BaseButtons>
                   <small>หน้า {{ currentPageHuman }} จาก {{ numPages }}</small>
@@ -226,13 +266,36 @@ export default {
         currentPageHuman() {
             return this.currentPage + 1
         },
-        pagesList() {
+        pagesListFirst() {
             const pagesList = []
 
-            for (let i = 0; i < this.numPages; i++) {
+            if(this.numPages < 7){
+                for (let i = 0; i < this.numPages; i++) {
+                    pagesList.push(i)
+                }
+            }else{
+                if((this.currentPage + 3) > (this.numPages - 3)){
+                    for (let i = this.currentPage ; i < (this.numPages - 3) ; i++) {
+                        pagesList.push(i)
+                    }
+                }else{
+                    for (let i = this.currentPage ; i < (this.currentPage + 3) ; i++) {
+                        pagesList.push(i)
+                    }
+                }
+                
+            }
+            
+
+            return pagesList
+        },
+        pagesListLast() {
+            const pagesList = []
+
+            for (let i = this.numPages - 3 ; i < this.numPages ; i++) {
                 pagesList.push(i)
             }
-
+            
             return pagesList
         }
     },

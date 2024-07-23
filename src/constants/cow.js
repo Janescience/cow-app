@@ -32,8 +32,8 @@ export const status = (mode,sex) => {
         return status;
     }
 
-    status.push(statusF);
-    status.push(statusM);
+    status = statusF;
+    status.push(...statusM);
 
     if(mode !== 'create'){
         status.push({ id: "", label: 'ทั้งหมด' })

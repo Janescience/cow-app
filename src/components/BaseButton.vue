@@ -83,9 +83,9 @@ const componentClass = computed(() => {
     'focus:ring',
     'duration-150',
     'shadow-lg',
-    'rounded-md',
+    'rounded',
     'text-sm',
-    props.active ? 'ring ring-gray-400 dark:ring-white' : 'ring-blue-500',
+    props.active ? 'ring-2 ring-gray-300 dark:ring-gray-600' : 'ring-blue-500',
     props.small ? 'p-1' :  props.teeny ? 'p-0' : 'p-2',
     getButtonColor(props.color, props.outline, !props.disabled)
   ]
@@ -117,7 +117,7 @@ const componentClass = computed(() => {
     <BaseIcon
       v-if="icon"
       :path="icon"
-      size="20"
+      size="16"
     />
     <span
       v-if="label"
