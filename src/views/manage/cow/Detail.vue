@@ -21,14 +21,12 @@
           /> -->
         </BaseButtons>
       </section>
-      <div :class="cow.sex == 'F' ? 'grid lg:grid-cols-3 grid-cols-1 gap-5' : 'grid lg:grid-cols-2 grid-cols-1 gap-5'">
+      <div class="grid lg:grid-cols-3 grid-cols-1 gap-5">
         <CardBox
         icon="cow"
          title="ข้อมูลโค"
           class="mb-5"
           header-icon=""
-          v-if="cow.sex != 'M'"
-
         > 
           <div class="grid grid-cols-1 grap-5">
             <ImageUpload v-model="cow.image" class="mr-2" @file="getFile"/>

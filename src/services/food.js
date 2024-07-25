@@ -4,7 +4,13 @@ async function getSearchQuery (opts = {}) {
     let query = "?";
     if (opts.corral) {
         query = query + `corral=${opts.corral}&`;
+    }
+    if (opts.year) {
+        query = query + `year=${opts.year}&`;
     } 
+    if (opts.month) {
+        query = query + `month=${opts.month}&`;
+    }  
     if (opts.recipe) {
         query = query + `recipe=${opts.recipe}&`;
     } 
