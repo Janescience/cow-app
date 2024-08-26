@@ -51,6 +51,9 @@ export default (dob,n) => {
         
     var  ageString = "";
     let ageNumber = 0;
+
+    age.months = age.months.toString().padStart(2, "0")
+    age.days = age.days.toString().padStart(2, "0")
        
     if ( (age.years > 0) && (age.months > 0) && (age.days > 0) )  
        ageString = age.years + "." + age.months + " ปี " 
@@ -70,6 +73,7 @@ export default (dob,n) => {
       ageString = age.months + " เดือน";  
 
     ageNumber = age.years + "." + age.months + "." + age.days;
+    var number = Number(age.years + "." + age.months)
 
-    return {ageString,ageNumber}; 
+    return {ageString,ageNumber,number}; 
 }

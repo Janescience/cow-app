@@ -21,44 +21,141 @@
           /> -->
         </BaseButtons>
       </section>
-      <div :class="cow.sex == 'F' ? 'grid lg:grid-cols-3 grid-cols-1 gap-5' : 'grid lg:grid-cols-2 grid-cols-1 gap-5'">
+      <div class="grid lg:grid-cols-3 grid-cols-1 gap-5">
+        <CardBox
+        icon="cow"
+         title="ข้อมูลโค"
+          class="mb-5"
+          header-icon=""
+        > 
+          <div class="grid grid-cols-1 grap-5">
+            <ImageUpload v-model="cow.image" class="mr-2" @file="getFile"/>
+              <BaseLevel type="justify-center text-xs font-thin text-slate-500">
+                อัพโหลดรูปภาพ (คลิกที่รูป)
+              </BaseLevel>
+          </div>
+          <div class="grid grid-cols-2 gap-5 mt-3 mb-3 text-center">
+            <div class="border dark:border-gray-800 border-gray-100 rounded-lg p-2 shadow">
+              <BaseIcon
+                :class="filter(cow)?.style"
+                :path="filter(cow)?.icon"
+                w="w-4 lg:w-6"
+                h="h-4 lg:h-6"
+              />
+              {{ filter(cow)?.desc }}
+            </div>
+            <div class="border dark:border-gray-800 border-gray-100 rounded-lg p-2 shadow">
+              <BaseIcon 
+                class="text-rose-600 bg-red-300 rounded-full p-1 mr-1 "
+                w="w-4 lg:w-6"
+                h="h-4 lg:h-6" 
+                path="genderFemale"/>
+                {{ cow.sex == 'F' ? 'ตัวเมีย' : 'ตัวผู้' }}
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-5">
+            <!-- <FormField label="เพศ" >
+              {{ cow.sex == 'F' ? 'ตัวเมีย' : 'ตัวผู้' }}
+            </FormField> -->
+            <FormField label="อายุ" >
+              {{ calAge(cow?.birthDate) }}
+            </FormField>
+            <FormField label="เลี้ยง" >
+              {{ calAge(cow?.adopDate) }}
+            </FormField>
+          </div>
+          <CardBox class="text-sm" title="" header-icon="" icon="trophyVariantOutline">
+            <div class="text-center font-bold text-base">เกรด/ความคุ้มค่า</div>
+            <div class="grid grid-cols-3 gap-5">
+              <p :class="filterColor()?.grade+'  text-center text-7xl font-extrabold mt-5'">
+                {{ quality?.grade }}
+              </p>
+              <div class="row-span-3 col-span-2 text-center mt-4">
+                <p :class="filterColor()?.grade + ' text-xl font-extrabold'">{{ $filters.number(quality?.profit?.percent) }}%</p>
+                <p class="p-2">ผลผลิตอยู่ในเกณฑ์ <p :class="filterColor()?.grade">{{  quality?.description }} </p></p>
+                <p class="text-gray-500 text-xs">{{  filterText()?.percent }} </p>
+              </div>  
+            </div>
+          </CardBox>
+
+          <CardBox title="" header-icon="" class="mt-5">
+              <div class="grid grid-cols-2  ">
+                
+                  <div class=" dark:text-gray-300">
+                      รายได้
+                  </div>
+                  <div class="font-bold text-lg text-green-500 text-center">
+                    {{
+                      $filters.currency(quality?.income?.sum)
+                    }}
+                  </div>
+                  <div class=" dark:text-gray-300">
+                      ค่าใช้จ่าย
+                  </div>
+                  <div class="font-bold text-lg text-red-500 text-center">
+                    {{
+                      $filters.currency(quality?.expense?.sum)
+                    }}
+                  </div>
+                  <div class=" dark:text-gray-300">
+                    {{
+                      quality?.profit?.amount > 0 ? 'กำไร' : 'ขาดทุน' 
+                    }}
+                    </div>
+                  <div class="font-bold text-lg text-center">
+                    {{
+                      $filters.currency(quality?.profit?.amount)
+                    }}
+
+                  </div>
+              </div>
+            </CardBox>
+          
+          <!-- <div class="grid grid-cols-1 gap-5 mt-5">
+
+            <hr class="border-t border-gray-300 dark:border-gray-600"/>
+
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1">รายได้</p>
+              <p class="underline decoration-2 p-1 text-lg text-center rounded-lg text-green-500 font-bold">{{ $filters.currency(quality?.income?.sum) }}</p>
+            </div>
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1">ค่าใช้จ่าย</p>
+              <p class="underline decoration-2  p-1 font-bold text-lg text-center rounded-lg text-red-500">{{ $filters.currency(quality?.expense?.sum) }}</p>
+            </div>
+            <hr class="border-1 border-gray-300 dark:border-gray-600"/>
+            <div class="grid grid-cols-2 gap-5">
+              <p class="mt-1">{{ quality?.profit?.amount > 0 ? 'กำไร' : 'ขาดทุน' }}</p>
+              <p :class="filterColor()?.profit + ' p-1 text-lg text-center rounded-lg'">{{ $filters.currency(quality?.profit?.amount) }}</p>
+            </div>
+          </div> -->
+        </CardBox>
         <CardBox
           class="lg:col-span-2 lg:mb-5"
           :loading="loading.cow"
-          title="ข้อมูลโค"
+          title="รายละเอียดโค"
           header-icon=""
           icon="cardTextOutline"
         >
           <div
             class="grid gap-5 grid-cols-2 lg:grid-cols-4 md:grid-cols-6"
           >
-            <div class="lg:row-span-4 col-span-2 lg:col-span-1">
-              <ImageUpload v-model="cow.image" class="lg:mt-12 mr-2" @file="getFile"/>
-              <BaseLevel type="justify-center text-xs font-thin text-slate-500">
-                อัพโหลดรูปภาพ (คลิกที่รูป)
-              </BaseLevel>
-              <BaseButtons
-              type="justify-center"
-              class="mt-5"
-            >
-              <BaseButton label="ลบ" color="danger" @click="remove()" small/>
-              <BaseButton label="บันทึก" color="success" @click="update()" small/>
-            </BaseButtons>
-            </div>
+            
             <FormField label="รหัสโค" help="* ห้ามว่าง">
               <FormControl v-model="cow.code" icon="barcode" required />
             </FormField>
             <FormField label="ชื่อโค" help="* ห้ามว่าง">
               <FormControl v-model="cow.name" icon="cow" required />
             </FormField>
-            <FormField label="เพศ" help="* ห้ามว่าง">
+            <!-- <FormField label="เพศ" help="* กรณีบันทึกเพศผิดให้ลบและสร้างโคใหม่ เพศห้ามแก้ไข">
               <FormControl
                 v-model="cow.sex"
                 :options="sex"
+                disabled
                 icon=""
                 required
               />
-            </FormField>
+            </FormField> -->
             <FormField label="น้ำหนัก (กก.)">
               <FormControl v-model="cow.weight" icon="weight" />
             </FormField>
@@ -81,18 +178,11 @@
                 required
               />
             </FormField>
-            <FormField label="สถานะ" >
-              <FormControl
-                v-model="cow.status"
-                :options="status"
-                icon=""
-                required
-              />
-            </FormField>
+            
             <FormField label="คุณภาพน้ำนม" v-if="cow.sex != 'M'">
               <FormControl v-model="cow.quality" :options="qualityMilk" icon="" />
             </FormField>
-            <FormField label="คอก">
+            <FormField label="คอก" help="* การย้ายคอก มีผลต่อการคำนวณความคุ้มค่า">
               <DDLCorral v-model="cow.corral" icon="barn"/>
             </FormField>
             <FormField label="พ่อพันธุ์">
@@ -101,53 +191,24 @@
             <FormField label="แม่พันธุ์">
               <FormControl v-model="cow.mom" icon="genderFemale" />
             </FormField>
-           
-          </div>
-        </CardBox>
-        <CardBox
-        icon="trophyVariantOutline"
-         title="คุณภาพ/ความคุ้มค่า"
-          class="mb-5"
-          header-icon=""
-          v-if="cow.sex != 'M'"
-        > 
-          <div class="grid grid-cols-3 gap-5">
-            <p :class="filterColor()?.grade+'  text-center text-7xl font-extrabold mt-3'">
-              {{ quality?.grade }}
-            </p>
-            <div class="row-span-3 col-span-2 text-center p-2">
-              <p :class="filterColor()?.grade + ' text-xl font-extrabold'">{{ $filters.number(quality?.profit?.percent) }}%</p>
-              <p class="p-2">ผลผลิตอยู่ในเกณฑ์ <p :class="filterColor()?.grade">{{  quality?.description }} </p></p>
-              <p class="text-gray-500 text-xs">{{  filterText()?.percent }} </p>
-            </div>  
+            <FormField label="รายละเอียดเพิ่มเติม" class="md:col-span-4 col-span-2">
+              <FormControl v-model="cow.remark" type="textarea" />
+            </FormField>
+            <BaseLevel
+              type="justify-center"
+              class="md:col-span-4 col-span-2"
+            >
+              <BaseButtons
+                class="mt-5"
+              >
+                <BaseButton label="ลบ" color="danger" @click="remove()" small/>
+                <BaseButton label="บันทึก" color="success" @click="update()" small/>
+              </BaseButtons>
+            </BaseLevel>
             
           </div>
-          <div class="grid grid-cols-1 gap-5 mt-5">
-            <hr class="border-t border-gray-300 dark:border-gray-600"/>
-
-            <div class="grid grid-cols-4 gap-5">
-              <p class="">อายุโค</p>
-              <p class=" text-center rounded-lg ">{{ calAge(cow?.birthDate) }}</p>
-              <p class="m">เลี้ยงดู</p>
-              <p class="  text-center rounded-lg ">{{ calAge(cow?.adopDate) }}</p>
-            </div>
-            <hr class="border-t border-gray-300 dark:border-gray-600"/>
-
-            <div class="grid grid-cols-2 gap-5">
-              <p class="mt-1">รายได้</p>
-              <p class="underline decoration-2 p-1 text-lg text-center rounded-lg text-green-500 font-bold">{{ $filters.currency(quality?.income?.sum) }}</p>
-            </div>
-            <div class="grid grid-cols-2 gap-5">
-              <p class="mt-1">ค่าใช้จ่าย</p>
-              <p class="underline decoration-2  p-1 font-bold text-lg text-center rounded-lg text-red-500">{{ $filters.currency(quality?.expense?.sum) }}</p>
-            </div>
-            <hr class="border-1 border-gray-300 dark:border-gray-600"/>
-            <div class="grid grid-cols-2 gap-5">
-              <p class="mt-1">กำไร </p>
-              <p :class="filterColor()?.profit + ' p-1 text-lg text-center rounded-lg'">{{ $filters.currency(quality?.profit?.amount) }}</p>
-            </div>
-          </div>
         </CardBox>
+        
       </div>
       
 
@@ -414,7 +475,7 @@
             :loading="loading.milk"
             v-if="cow.sex != 'M'"
             icon="waterCheck"
-            perPage="5"
+            perPage="10"
           />
 
           <Table
@@ -1172,15 +1233,15 @@ export default {
     filterText(){
       const grade = this.quality?.grade
       if(grade === 'A+'){
-        return { percent : '(กำไร > 80%)'}
+        return { percent : '*กำไร > 80%'}
       }else if(grade === 'A'){
-        return { percent : '(กำไร 51% - 80%)'}
+        return { percent : '*กำไร 51% - 80%'}
       }else if(grade === 'B'){
-        return { percent : '(กำไร 31% - 50%)'}
+        return { percent : '*กำไร 31% - 50%'}
       }else if(grade === 'C'){
-        return { percent : '(กำไร 0% - 30%)'}
+        return { percent : '*กำไร 0% - 30%'}
       }else if(grade === 'D'){
-        return { percent : '(กำไร <= 0%)'}
+        return { percent : '*กำไร <= 0%'}
       }
     },
     formatDate(date) {
@@ -1191,6 +1252,27 @@ export default {
     },
     calAge(bdDate) {
       return getAge(bdDate).ageString;
+    },
+    filter(item){
+      const cowStatus = {}
+
+      if (item.status == 1) {
+        cowStatus.icon ='humanPregnant'
+        cowStatus.style = 'text-blue-500 bg-indigo-900 rounded-full  p-1 mr-1'
+      }else if (item.status == 2) {
+        cowStatus.icon ='waterOff'
+        cowStatus.style = 'text-rose-500 bg-red-900 rounded-full p-1 mr-1'
+      }else if (item.status == 3) {
+        cowStatus.icon ='water'
+        cowStatus.style = 'text-white bg-teal-700 rounded-full p-1 mr-1'
+      }else if (item.status == 4) {
+        cowStatus.icon ='babyFaceOutline'
+        cowStatus.style = 'text-yellow-400 bg-amber-900 rounded-full mr-1'
+      }
+
+      cowStatus.desc = this.status.filter(x => x.id === item.status)[0]?.label
+
+      return cowStatus
     },
   },
 };

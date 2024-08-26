@@ -120,6 +120,7 @@ onMounted(() => {
     <select
       v-if="computedType === 'select'"
       :id="id"
+      :disabled="disabled"
       v-model="computedValue"
       :name="name"
       :class="inputElClass"
@@ -135,6 +136,7 @@ onMounted(() => {
     <textarea
       v-else-if="computedType === 'textarea'"
       :id="id"
+      :disabled="disabled"
       v-model="computedValue"
       :class="inputElClass"
       :name="name"

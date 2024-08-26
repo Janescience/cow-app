@@ -10,7 +10,7 @@
             class="mr-3"
           />
           <h1 class="text-base lg:text-2xl">
-            รายละเอียดการให้อาหาร - คอก {{ this.$route.params.corral }}
+            รายละเอียดการให้อาหาร (คอก {{ this.$route.params.corral }})
           </h1>
         </div>
         <BaseButtons class="text-sm lg:text-base " type="justify-end">
@@ -51,7 +51,7 @@
           :items="foods"
           :datas="foodColumns"
           :buttons="buttons"
-          perPage="5" 
+          perPage="10" 
           @delete="remove"
           @edit="edit" 
         /> 
@@ -93,21 +93,20 @@ import {months,years} from '@/constants/date'
         corral :null,
         search : {
           corral : this.$route.params.corral,
-          year : new Date().getFullYear(),
-          month : new Date().getMonth() + 1
+          year : null,
+          month : null
         },
         forms : [
           {
             label : 'ปี',
             value : 'year',
-            type : 'ddl',
-            module : 'year'
+            options : years('search')
           },
           {
             label : 'เดือน',
             value : 'month',
-            type : 'ddl',
-            module : 'month'
+            options : months('search')
+
           }, 
         ],
         foodColumns : [
@@ -207,8 +206,14 @@ import {months,years} from '@/constants/date'
         async getDatas(){
           this.loading = true
           const resp = await FoodService.all(this.search);
-          if(resp.data){
+          if(resp.data && resp.data.foods.length > 0){
             this.foods = resp.data.foods
+          }else{
+            this.foods = resp.data.foods
+            Toast.fire({
+              icon: 'warning',
+              title: 'ไม่พบข้อมูล'
+            })
           }
           this.loading = false
         },
@@ -240,6 +245,14 @@ import {months,years} from '@/constants/date'
         },
         resetData(){
           this.modalData = null
+        },
+        reset(){
+          this.search =  {
+            corral : this.$route.params.corral,
+            year : null,
+            month : null
+          }
+          this.getDatas()
         },
         remove(obj){
           let index = this.cows.indexOf(obj);

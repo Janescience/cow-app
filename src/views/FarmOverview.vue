@@ -5,7 +5,7 @@
       <div class="grid grid-cols-1 gap-5 ">
 
         <!-- การให้อาหาร -->
-        <CardBoxCollapse :title="'การให้อาหาร (ปี พ.ศ. ' + (foodYear + 543) + ')'" icon="corn"
+        <CardBox :title="'การให้อาหาร (ปี พ.ศ. ' + (foodYear + 543) + ')'" icon="corn"
           @header-icon-click="() => { this.foodYearSearch = !this.foodYearSearch }" header-icon="magnifyExpand">
           <div v-if="foodYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3 mb-5">
             <FormField label="ปี พ.ศ." help="เลือกปีแสดงผล">
@@ -22,7 +22,7 @@
           </div>
           <div v-else class="text-gray-500">ไม่มีข้อมูล...</div>
 
-        </CardBoxCollapse>
+        </CardBox>
 
         <!-- การผสมพันธุ์ -->
         <!-- ผสมจากพ่อพันธ์ (สำเร็จ ไม่สำเร็จ รอผล) -->
@@ -58,7 +58,7 @@
         <!-- การฉีดวัคซีน -->
         <!-- ยอดการส่งน้ำนมดิบให้สหกร แบ่งเช้า บ่าย และ รวม -->
 
-        <CardBoxCollapse title="น้ำนมดิบ" icon="water" has-table header-icon="" >
+        <CardBox title="น้ำนมดิบ" icon="water" has-table header-icon="" >
           <div class="grid grid-cols-1 gap-5 lg:p-4">
             <CardBox :title="'รายเดือน (ปี พ.ศ. ' + (milkYearValue + 543) + ')'" icon="chartBellCurveCumulative" class=""
               :loading="loading.milks" @header-icon-click="() => { this.milkYearSearch = !this.milkYearSearch }"
@@ -183,9 +183,9 @@
             </CardBox>
           </div>
 
-        </CardBoxCollapse>
+        </CardBox>
 
-        <CardBoxCollapse :title="'ผลประกอบการ (ปี พ.ศ. ' + (businessYear + 543) + ')'" icon="cashRegister" header-icon="magnifyExpand"
+        <CardBox :title="'ผลประกอบการ (ปี พ.ศ. ' + (businessYear + 543) + ')'" icon="cashRegister" header-icon="magnifyExpand"
         @header-icon-click="() => { this.businessYearSearch = !this.businessYearSearch }"
         >
           <div v-if="businessYearSearch" class="lg:col-span-2 grid lg:grid-cols-6 grid-cols-3 mb-5">
@@ -301,9 +301,9 @@
               </div>
             </CardBox>
           </div>
-        </CardBoxCollapse>
+        </CardBox>
 
-        <CardBoxCollapse icon="poll" :title="'สถิติ (ปี พ.ศ. ' + (statYearValue + 543) + ')'" header-icon="magnifyExpand"
+        <CardBox icon="poll" :title="'สถิติ (ปี พ.ศ. ' + (statYearValue + 543) + ')'" header-icon="magnifyExpand"
         @header-icon-click="() => { this.statYearSearch = !this.statYearSearch }" class=" mb-1 lg:mb-5">
           <div class="grid lg:grid-cols-4 grid-cols-1 gap-5">
             <div v-if="statYearSearch" class="lg:col-span-4 grid lg:grid-cols-6 grid-cols-1">
@@ -386,7 +386,7 @@
             </CardBox>
 
           </div>
-        </CardBoxCollapse>
+        </CardBox>
       </div>
 
 

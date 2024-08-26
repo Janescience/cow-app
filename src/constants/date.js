@@ -1,5 +1,11 @@
-export const months = () => {
-    return [
+export const months = (type) => {
+    const months = []
+
+    if(type == 'search'){
+        months.push({id:null,label:'ทุกเดือน'})
+    }
+
+    months.push(...[
         {id:1,label:'มกราคม'},
         {id:2,label:'กุมภาพันธ์'},
         {id:3,label:'มีนาคม'},
@@ -12,7 +18,9 @@ export const months = () => {
         {id:10,label:'ตุลาคม'},
         {id:11,label:'พฤศจิกายน'},
         {id:12,label:'ธันวาคม'},
-    ]
+    ])
+    
+    return months 
 }
 
 export const monthMini = () => {
